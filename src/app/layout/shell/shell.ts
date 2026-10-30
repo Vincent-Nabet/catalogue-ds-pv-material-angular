@@ -16,6 +16,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { filter, map, skip } from 'rxjs';
 import { CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
 import { ContrastOverlay } from '../contrast-inspector/contrast-overlay';
+import { ContrastPanel } from '../contrast-inspector/contrast-panel';
 import { ContrastToggle } from '../contrast-inspector/contrast-toggle';
 import { ThemePicker } from '../theme-picker/theme-picker';
 
@@ -37,6 +38,7 @@ import { ThemePicker } from '../theme-picker/theme-picker';
     RouterLinkActive,
     RouterOutlet,
     ContrastOverlay,
+    ContrastPanel,
     ContrastToggle,
     ThemePicker,
   ],

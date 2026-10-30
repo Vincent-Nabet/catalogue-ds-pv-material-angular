@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { MatButton } from '@angular/material/button';
 import { ContrastInspector } from '../../core/a11y/contrast-inspector';
 import { ContrastItem, badgeLabel, describeItem } from '../../core/a11y/contrast-items';
 
@@ -14,13 +13,13 @@ interface Badge {
 }
 
 /**
- * Calque fixe qui affiche, au-dessus de chaque texte mesuré, son rapport de contraste,
- * et panneau récapitulatif. Les positions suivent les éléments (défilement de n'importe quel
- * conteneur, redimensionnement). Le calque et le panneau sont hors de `<main>` : axe ne les mesure pas.
+ * Calque fixe qui affiche, au-dessus de chaque texte mesuré, son rapport de contraste. Les
+ * positions suivent les éléments (défilement de n'importe quel conteneur, redimensionnement).
+ * Le calque est rogné à la zone de contenu : un badge ne déborde jamais sur le header ou le menu.
+ * Hors de `<main>`, il n'est pas mesuré par axe.
  */
 @Component({
   selector: 'app-contrast-overlay',
-  imports: [MatButton],
   templateUrl: './contrast-overlay.html',
   styleUrl: './contrast-overlay.scss',
 })
@@ -57,6 +56,19 @@ export class ContrastOverlay {
       });
   });
 
+  /**
+   * Zone visible du contenu : sous le header et le panneau, à droite du menu. Au-delà, les badges
+   * sont rognés (ils ne débordent ni sur le header, ni sur le menu, ni sur le panneau).
+   */
+  protected readonly clipPath = computed(() => {
+    this.layout();
+    this.inspector.items();
+    const area = document.querySelector('mat-sidenav-content')?.getBoundingClientRect();
+    if (!area) return 'none';
+    const panel = document.querySelector('app-contrast-panel .panneau')?.getBoundingClientRect();
+    return `inset(${Math.max(area.top, panel?.bottom ?? 0)}px 0 0 ${area.left}px)`;
+  });
+
   constructor() {
     effect((onCleanup) => {
       if (!this.inspector.active()) return;
@@ -71,10 +83,6 @@ export class ContrastOverlay {
         this.pendingFrame = 0;
       });
     });
-  }
-
-  protected setShowPassing(event: Event): void {
-    this.inspector.showPassing.set((event.target as HTMLInputElement).checked);
   }
 
   private scheduleLayout(): void {

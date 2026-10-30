@@ -1,0 +1,28 @@
+@if (inspector.active()) {
+  <section class="panneau" aria-label="Inspecteur de contraste">
+    <h2>Inspecteur de contraste</h2>
+    @if (inspector.error(); as erreur) {
+      <p class="erreur" role="alert">Analyse impossible : {{ erreur }}</p>
+    } @else if (inspector.running()) {
+      <p role="status">Analyse en cours…</p>
+    } @else {
+      <p role="status">
+        <strong>{{ inspector.failing() }}</strong> échec(s) ·
+        <strong>{{ inspector.passing() }}</strong> conforme(s) ·
+        <strong>{{ inspector.unknown() }}</strong> à vérifier
+      </p>
+    }
+    <label class="option">
+      <input
+        type="checkbox"
+        [checked]="inspector.showPassing()"
+        (change)="setShowPassing($event)"
+      />
+      Afficher les conformes
+    </label>
+    <div class="actions">
+      <button matButton type="button" (click)="inspector.refresh()">Relancer</button>
+      <button matButton type="button" (click)="inspector.toggle()">Fermer</button>
+    </div>
+  </section>
+}

@@ -1,0 +1,62 @@
+// Collé en haut de la zone de contenu ; transparent aux clics hors de la carte, pour ne pas
+// bloquer le contenu qui défile dessous.
+:host {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 2;
+  display: block;
+  pointer-events: none;
+}
+
+.panneau {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 16px;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: calc(100% - 32px);
+  margin: 8px 16px 0;
+  padding: 4px 8px 4px 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-highest);
+  box-shadow: var(--mat-sys-level3);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  pointer-events: auto;
+
+  h2 {
+    margin: 0;
+    font: var(--mat-sys-title-small);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.erreur {
+  color: var(--mat-sys-error);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    accent-color: var(--mat-sys-primary);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+// Aligné sur le retrait de <main>
+@media (min-width: 600px) {
+  .panneau {
+    margin-inline-start: 32px;
+  }
+}
