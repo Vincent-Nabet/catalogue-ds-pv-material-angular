@@ -96,6 +96,86 @@ export const CATALOG: readonly CatalogEntry[] = [
     loadComponent: () =>
       import('../../pages/composants/ripple/ripple.page').then((m) => m.RipplePage),
   },
+  {
+    id: 'champ-saisie',
+    label: 'Champ de saisie',
+    category: 'formulaires',
+    icon: 'input',
+    loadComponent: () =>
+      import('../../pages/composants/champ-saisie/champ-saisie.page').then((m) => m.ChampSaisiePage),
+  },
+  {
+    id: 'autocompletion',
+    label: 'Autocomplétion',
+    category: 'formulaires',
+    icon: 'manage_search',
+    loadComponent: () =>
+      import('../../pages/composants/autocompletion/autocompletion.page').then((m) => m.AutocompletionPage),
+  },
+  {
+    id: 'liste-deroulante',
+    label: 'Liste déroulante',
+    category: 'formulaires',
+    icon: 'arrow_drop_down_circle',
+    loadComponent: () =>
+      import('../../pages/composants/liste-deroulante/liste-deroulante.page').then((m) => m.ListeDeroulantePage),
+  },
+  {
+    id: 'case-a-cocher',
+    label: 'Case à cocher',
+    category: 'formulaires',
+    icon: 'check_box',
+    loadComponent: () =>
+      import('../../pages/composants/case-a-cocher/case-a-cocher.page').then((m) => m.CaseACocherPage),
+  },
+  {
+    id: 'bouton-radio',
+    label: 'Bouton radio',
+    category: 'formulaires',
+    icon: 'radio_button_checked',
+    loadComponent: () =>
+      import('../../pages/composants/bouton-radio/bouton-radio.page').then((m) => m.BoutonRadioPage),
+  },
+  {
+    id: 'interrupteur',
+    label: 'Interrupteur',
+    category: 'formulaires',
+    icon: 'toggle_off',
+    loadComponent: () =>
+      import('../../pages/composants/interrupteur/interrupteur.page').then((m) => m.InterrupteurPage),
+  },
+  {
+    id: 'curseur',
+    label: 'Curseur',
+    category: 'formulaires',
+    icon: 'tune',
+    loadComponent: () =>
+      import('../../pages/composants/curseur/curseur.page').then((m) => m.CurseurPage),
+  },
+  {
+    id: 'selecteur-date',
+    label: 'Sélecteur de date',
+    category: 'formulaires',
+    icon: 'calendar_month',
+    loadComponent: () =>
+      import('../../pages/composants/selecteur-date/selecteur-date.page').then((m) => m.SelecteurDatePage),
+  },
+  {
+    id: 'selecteur-heure',
+    label: 'Sélecteur d’heure',
+    category: 'formulaires',
+    icon: 'schedule',
+    loadComponent: () =>
+      import('../../pages/composants/selecteur-heure/selecteur-heure.page').then((m) => m.SelecteurHeurePage),
+  },
+  {
+    id: 'chips',
+    label: 'Chips',
+    category: 'formulaires',
+    icon: 'label',
+    loadComponent: () =>
+      import('../../pages/composants/chips/chips.page').then((m) => m.ChipsPage),
+  },
 ];
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({
