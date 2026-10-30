@@ -16,8 +16,7 @@ interface Badge {
 /**
  * Calque fixe qui affiche, au-dessus de chaque texte mesuré, son rapport de contraste,
  * et panneau récapitulatif. Les positions suivent les éléments (défilement de n'importe quel
- * conteneur, redimensionnement). Le calque et le panneau portent `data-inspecteur-contraste`
- * (cf. `INSPECTOR_ATTRIBUTE`) : axe les ignore.
+ * conteneur, redimensionnement). Le calque et le panneau sont hors de `<main>` : axe ne les mesure pas.
  */
 @Component({
   selector: 'app-contrast-overlay',
@@ -44,7 +43,17 @@ export class ContrastOverlay {
         const outside =
           bottom < 0 || right < 0 || top > window.innerHeight || left > window.innerWidth;
         if (width === 0 || height === 0 || outside) return [];
-        return [{ item, label: badgeLabel(item), description: describeItem(item), top, left, width, height }];
+        return [
+          {
+            item,
+            label: badgeLabel(item),
+            description: describeItem(item),
+            top,
+            left,
+            width,
+            height,
+          },
+        ];
       });
   });
 

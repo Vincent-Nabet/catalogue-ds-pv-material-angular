@@ -1,5 +1,5 @@
 @if (inspector.active()) {
-  <div class="calque" aria-hidden="true" data-inspecteur-contraste>
+  <div class="calque" aria-hidden="true">
     @for (badge of badges(); track badge.item.element) {
       @if (badge.item.status === 'fail') {
         <div
@@ -23,7 +23,7 @@
     }
   </div>
 
-  <section class="panneau" aria-label="Inspecteur de contraste" data-inspecteur-contraste>
+  <section class="panneau" aria-label="Inspecteur de contraste">
     <h2>Inspecteur de contraste</h2>
     @if (inspector.error(); as erreur) {
       <p class="erreur" role="alert">Analyse impossible : {{ erreur }}</p>

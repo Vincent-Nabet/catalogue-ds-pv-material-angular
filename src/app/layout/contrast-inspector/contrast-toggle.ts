@@ -7,17 +7,19 @@ import { ContrastInspector } from '../../core/a11y/contrast-inspector';
   selector: 'app-contrast-toggle',
   imports: [MatIconButton, MatIcon],
   template: `
-    <button
-      mat-icon-button
-      type="button"
-      aria-label="Inspecteur de contraste"
-      title="Inspecteur de contraste"
-      [attr.aria-pressed]="inspector.active()"
-      [class.actif]="inspector.active()"
-      (click)="inspector.toggle()"
-    >
-      <mat-icon>contrast</mat-icon>
-    </button>
+    @if (inspector.available()) {
+      <button
+        mat-icon-button
+        type="button"
+        aria-label="Inspecteur de contraste"
+        title="Inspecteur de contraste"
+        [attr.aria-pressed]="inspector.active()"
+        [class.actif]="inspector.active()"
+        (click)="inspector.toggle()"
+      >
+        <mat-icon>contrast</mat-icon>
+      </button>
+    }
   `,
   styles: `
     .actif {

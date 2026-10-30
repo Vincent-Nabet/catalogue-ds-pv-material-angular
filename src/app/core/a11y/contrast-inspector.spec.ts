@@ -1,8 +1,9 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import type { NodeResult, Result } from 'axe-core';
 import { afterEach, beforeEach, vi } from 'vitest';
-import { AXE_LOADER, ContrastInspector, INSPECTOR_ATTRIBUTE } from './contrast-inspector';
+import { AXE_LOADER, ContrastInspector } from './contrast-inspector';
 import { ThemeService } from '../theme/theme.service';
 
 function violation(element: HTMLElement): Result {
@@ -15,18 +16,30 @@ function violation(element: HTMLElement): Result {
   return { id: 'color-contrast', nodes: [node] } as Result;
 }
 
+@Component({ template: '' })
+class PageStub {}
+
 describe('ContrastInspector', () => {
   const element = document.createElement('p');
   let run: ReturnType<typeof vi.fn>;
+  let router: Router;
   let inspector: ContrastInspector;
 
-  beforeEach(() => {
-    vi.useFakeTimers();
+  beforeEach(async () => {
     localStorage.clear();
     run = vi.fn().mockResolvedValue({ violations: [violation(element)], passes: [], incomplete: [] });
     TestBed.configureTestingModule({
-      providers: [provideRouter([]), { provide: AXE_LOADER, useValue: async () => ({ run }) }],
+      providers: [
+        provideRouter([
+          { path: '', component: PageStub },
+          { path: 'composants/:id', component: PageStub },
+        ]),
+        { provide: AXE_LOADER, useValue: async () => ({ run }) },
+      ],
     });
+    router = TestBed.inject(Router);
+    await router.navigateByUrl('/composants/bouton');
+    vi.useFakeTimers();
     inspector = TestBed.inject(ContrastInspector);
     TestBed.tick();
   });
@@ -45,7 +58,7 @@ describe('ContrastInspector', () => {
     expect(run).not.toHaveBeenCalled();
   });
 
-  it('should measure the color-contrast rule once activated, excluding its own overlay', async () => {
+  it('should measure the color-contrast rule on the page content only, once activated', async () => {
     inspector.toggle();
     TestBed.tick();
     expect(inspector.running()).toBe(true);
@@ -54,7 +67,7 @@ describe('ContrastInspector', () => {
 
     expect(run).toHaveBeenCalledTimes(1);
     const [context, options] = run.mock.calls[0];
-    expect(context).toEqual({ exclude: [`[${INSPECTOR_ATTRIBUTE}]`] });
+    expect(context).toEqual({ include: ['main'] });
     expect(options).toMatchObject({
       runOnly: { type: 'rule', values: ['color-contrast'] },
       elementRef: true,
@@ -89,6 +102,32 @@ describe('ContrastInspector', () => {
     await settle();
 
     expect(inspector.running()).toBe(false);
+    expect(inspector.items()).toEqual([]);
+  });
+
+  it('should only be available on component pages', async () => {
+    expect(inspector.available()).toBe(true);
+
+    vi.useRealTimers();
+    await router.navigateByUrl('/');
+    TestBed.tick();
+    expect(inspector.available()).toBe(false);
+
+    inspector.toggle();
+    expect(inspector.active()).toBe(false);
+  });
+
+  it('should switch off and clear when leaving the component pages', async () => {
+    inspector.toggle();
+    await settle();
+    expect(inspector.items().length).toBe(1);
+
+    vi.useRealTimers();
+    await router.navigateByUrl('/');
+    TestBed.tick();
+    TestBed.tick();
+
+    expect(inspector.active()).toBe(false);
     expect(inspector.items()).toEqual([]);
   });
 
