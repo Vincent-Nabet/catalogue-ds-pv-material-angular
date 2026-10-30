@@ -19,6 +19,10 @@ const SNIPPETS = {
   matTooltip="Une infobulle plus longue, qui s’affiche sur plusieurs lignes lorsque le texte dépasse la largeur disponible."
 >Texte long</button>`,
   desactive: `<button matButton="outlined" matTooltip="Jamais affichée" [matTooltipDisabled]="true">Désactivée</button>`,
+  masquage: `<button matButton="outlined" matTooltip="Reste affichée 2 s" [matTooltipHideDelay]="2000">Masquage différé</button>`,
+  origine: `<button matButton="outlined" matTooltip="Suit le point d'entrée du curseur" [matTooltipPositionAtOrigin]="true">Au curseur</button>`,
+  avantApres: `<button matButton="outlined" matTooltip="Avant (selon le sens d'écriture)" matTooltipPosition="before">Avant</button>
+<button matButton="outlined" matTooltip="Après (selon le sens d'écriture)" matTooltipPosition="after">Après</button>`,
 };
 
 @Component({
@@ -58,6 +62,25 @@ const SNIPPETS = {
         >
           Texte long
         </button>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Réglages avancés">
+      <app-specimen label="Masquage différé" api="matTooltipHideDelay" [snippet]="snippets.masquage">
+        <button matButton="outlined" matTooltip="Reste affichée 2 s" [matTooltipHideDelay]="2000">Masquage différé</button>
+      </app-specimen>
+      <app-specimen label="Au point d’entrée du curseur" api="matTooltipPositionAtOrigin" [snippet]="snippets.origine">
+        <button
+          matButton="outlined"
+          matTooltip="Suit le point d’entrée du curseur"
+          [matTooltipPositionAtOrigin]="true"
+        >
+          Au curseur
+        </button>
+      </app-specimen>
+      <app-specimen label="Avant / après" api="matTooltipPosition before / after" [snippet]="snippets.avantApres">
+        <button matButton="outlined" matTooltip="Avant (selon le sens d’écriture)" matTooltipPosition="before">Avant</button>
+        <button matButton="outlined" matTooltip="Après (selon le sens d’écriture)" matTooltipPosition="after">Après</button>
       </app-specimen>
     </app-specimen-section>
   `,

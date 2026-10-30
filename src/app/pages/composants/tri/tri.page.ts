@@ -65,6 +65,12 @@ const SNIPPETS = {
     …
   </ng-container>
 </table>`,
+  premierDecroissant: `<table mat-table [dataSource]="lignes()" matSort matSortStart="desc" (matSortChange)="tri.set($event)">
+  <!-- colonnes avec mat-sort-header -->
+</table>`,
+  inactif: `<table mat-table [dataSource]="lignes()" matSort [matSortDisabled]="true">
+  <!-- colonnes avec mat-sort-header : aucune ne trie -->
+</table>`,
 };
 
 @Component({
@@ -135,6 +141,52 @@ const SNIPPETS = {
         </table>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section minWidth="320px" title="Comportements globaux">
+      <app-specimen label="Premier clic décroissant" api='matSortStart="desc"' [snippet]="snippets.premierDecroissant">
+        <table
+          mat-table
+          [dataSource]="lignesDecroissant()"
+          matSort
+          matSortStart="desc"
+          (matSortChange)="triDecroissant.set($event)"
+          aria-label="Produits, premier tri décroissant"
+        >
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prix">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Prix</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.prix }}</td>
+          </ng-container>
+          <ng-container matColumnDef="stock">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.stock }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+        </table>
+      </app-specimen>
+      <app-specimen label="Tri désactivé" api="matSortDisabled" [snippet]="snippets.inactif">
+        <table mat-table [dataSource]="donnees" matSort [matSortDisabled]="true" aria-label="Produits, tri désactivé">
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prix">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Prix</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.prix }}</td>
+          </ng-container>
+          <ng-container matColumnDef="stock">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.stock }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+        </table>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
     table {
@@ -151,4 +203,7 @@ export class TriPage {
 
   protected readonly triOptions = signal<Sort>({ active: 'prix', direction: 'desc' });
   protected readonly lignesOptions = computed(() => trier(DONNEES, this.triOptions()));
+  protected readonly triDecroissant = signal<Sort>({ active: '', direction: '' });
+  protected readonly lignesDecroissant = computed(() => trier(DONNEES, this.triDecroissant()));
+  protected readonly donnees = DONNEES;
 }

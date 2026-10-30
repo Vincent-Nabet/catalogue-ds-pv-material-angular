@@ -2,22 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CurrencyPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
-import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatFooterCell,
-  MatFooterCellDef,
-  MatFooterRow,
-  MatFooterRowDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable,
-} from '@angular/material/table';
+import { MatCell, MatCellDef, MatColumnDef, MatFooterCell, MatFooterCellDef, MatFooterRow, MatFooterRowDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable, MatNoDataRow, MatTextColumn } from '@angular/material/table';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -77,6 +62,31 @@ const SNIPPETS = {
   <tr mat-header-row *matHeaderRowDef="colonnesSelection"></tr>
   <tr mat-row *matRowDef="let row; columns: colonnesSelection"></tr>
 </table>`,
+  vide: `<table mat-table [dataSource]="[]">
+  <!-- colonnes -->
+  <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+  <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" [attr.colspan]="colonnes.length">Aucune donnée</td>
+  </tr>
+</table>`,
+  texte: `<table mat-table [dataSource]="produits">
+  <mat-text-column name="reference" headerText="Référence" />
+  <mat-text-column name="nom" headerText="Nom" />
+  <tr mat-header-row *matHeaderRowDef="['reference', 'nom']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['reference', 'nom']"></tr>
+</table>`,
+  figee: `<div style="overflow: auto" tabindex="0">
+  <table mat-table [dataSource]="produits" style="min-width: 640px">
+    <ng-container matColumnDef="reference" [sticky]="true">
+      <th mat-header-cell *matHeaderCellDef>Référence</th>
+      <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+    </ng-container>
+    <!-- autres colonnes -->
+    <tr mat-header-row *matHeaderRowDef="colonnesLarges"></tr>
+    <tr mat-row *matRowDef="let row; columns: colonnesLarges"></tr>
+  </table>
+</div>`,
 };
 
 @Component({
@@ -100,6 +110,8 @@ const SNIPPETS = {
     MatTable,
     Specimen,
     SpecimenSection,
+    MatNoDataRow,
+    MatTextColumn,
   ],
   template: `
     <h1>Tableau</h1>
@@ -190,6 +202,64 @@ const SNIPPETS = {
         </table>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section minWidth="360px" title="Autres variantes">
+      <app-specimen label="Aucune donnée" api="matNoDataRow" [snippet]="snippets.vide">
+        <table mat-table [dataSource]="vide" aria-label="Tableau vide">
+          <ng-container matColumnDef="reference">
+            <th mat-header-cell *matHeaderCellDef>Référence</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prix">
+            <th mat-header-cell *matHeaderCellDef>Prix</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.prix | currency: 'EUR' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell vide" [attr.colspan]="colonnes.length">Aucune donnée</td>
+          </tr>
+        </table>
+      </app-specimen>
+      <app-specimen label="Colonnes de texte simples" api="mat-text-column" [snippet]="snippets.texte">
+        <table mat-table [dataSource]="produits" aria-label="Produits (colonnes de texte)">
+          <mat-text-column name="reference" headerText="Référence" />
+          <mat-text-column name="nom" headerText="Nom" />
+          <tr mat-header-row *matHeaderRowDef="colonnesTexte"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnesTexte"></tr>
+        </table>
+      </app-specimen>
+      <app-specimen label="Première colonne figée" api="matColumnDef sticky" [snippet]="snippets.figee">
+        <div class="defilement" tabindex="0" role="region" aria-label="Tableau large défilant">
+          <table mat-table class="large" [dataSource]="produits" aria-label="Produits (colonne figée)">
+            <ng-container matColumnDef="reference" [sticky]="true">
+              <th mat-header-cell *matHeaderCellDef>Référence</th>
+              <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+            </ng-container>
+            <ng-container matColumnDef="nom">
+              <th mat-header-cell *matHeaderCellDef>Nom</th>
+              <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+            </ng-container>
+            <ng-container matColumnDef="prix">
+              <th mat-header-cell *matHeaderCellDef>Prix</th>
+              <td mat-cell *matCellDef="let produit">{{ produit.prix | currency: 'EUR' }}</td>
+            </ng-container>
+            @for (colonne of colonnesSupp; track colonne) {
+              <ng-container [matColumnDef]="colonne">
+                <th mat-header-cell *matHeaderCellDef>{{ colonne }}</th>
+                <td mat-cell *matCellDef="let produit">{{ colonne }} {{ produit.reference }}</td>
+              </ng-container>
+            }
+            <tr mat-header-row *matHeaderRowDef="colonnesLarges"></tr>
+            <tr mat-row *matRowDef="let row; columns: colonnesLarges"></tr>
+          </table>
+        </div>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
     table {
@@ -213,6 +283,19 @@ const SNIPPETS = {
     .selectionnee {
       background: var(--mat-sys-secondary-container);
     }
+    .vide {
+      padding: 16px;
+      text-align: center;
+      color: var(--mat-sys-on-surface-variant);
+    }
+
+    .large {
+      min-width: 640px;
+    }
+
+    .large .mat-column-reference {
+      background: var(--mat-sys-surface);
+    }
   `,
 })
 export class TableauPage {
@@ -227,4 +310,8 @@ export class TableauPage {
   ];
   protected readonly total = this.produits.reduce((somme, produit) => somme + produit.prix, 0);
   protected readonly selection = new SelectionModel<Produit>(true, [this.produits[1]]);
+  protected readonly vide: Produit[] = [];
+  protected readonly colonnesTexte = ['reference', 'nom'];
+  protected readonly colonnesSupp = ['categorie', 'stock', 'fournisseur'];
+  protected readonly colonnesLarges = ['reference', 'nom', 'prix', 'categorie', 'stock', 'fournisseur'];
 }

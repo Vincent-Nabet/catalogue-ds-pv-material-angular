@@ -46,6 +46,52 @@ const SNIPPETS = {
   <a mat-tab-link href="#">Détails</a>
 </nav>
 <mat-tab-nav-panel #panneau>Contenu de l’onglet actif</mat-tab-nav-panel>`,
+  centres: `<mat-tab-group mat-align-tabs="center" [mat-stretch-tabs]="false">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>`,
+  nonEtires: `<mat-tab-group [mat-stretch-tabs]="false">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>`,
+  fin: `<mat-tab-group mat-align-tabs="end" [mat-stretch-tabs]="false">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>`,
+  bas: `<mat-tab-group headerPosition="below">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>`,
+  barreAjustee: `<mat-tab-group [fitInkBarToContent]="true" [mat-stretch-tabs]="false">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails du dossier">…</mat-tab>
+</mat-tab-group>`,
+  initial: `<mat-tab-group [selectedIndex]="1">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>`,
+  hauteur: `<mat-tab-group dynamicHeight>
+  <mat-tab label="Court">Peu de contenu</mat-tab>
+  <mat-tab label="Long">Beaucoup de contenu…</mat-tab>
+</mat-tab-group>`,
+  defilement: `<mat-tab-group>
+  @for (onglet of onglets; track onglet) {
+    <mat-tab [label]="onglet">…</mat-tab>
+  }
+</mat-tab-group>`,
+  sansPagination: `<mat-tab-group [disablePagination]="true">
+  @for (onglet of onglets; track onglet) {
+    <mat-tab [label]="onglet">…</mat-tab>
+  }
+</mat-tab-group>`,
+  sansAnimation: `<mat-tab-group animationDuration="0ms">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>`,
+  navAjustee: `<nav mat-tab-nav-bar [tabPanel]="panneau" [fitInkBarToContent]="true">
+  <a mat-tab-link active>Général</a>
+  <a mat-tab-link>Détails du dossier</a>
+</nav>`,
 };
 
 @Component({
@@ -90,7 +136,7 @@ const SNIPPETS = {
           </mat-tab>
         </mat-tab-group>
       </app-specimen>
-      <app-specimen label="Onglets étirés" api='mat-stretch-tabs="true"' [snippet]="snippets.etire">
+      <app-specimen label="Onglets étirés (défaut)" api='mat-stretch-tabs="true"' [snippet]="snippets.etire">
         <mat-tab-group class="onglets" mat-stretch-tabs="true">
           <mat-tab label="Général"><p>Contenu général</p></mat-tab>
           <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
@@ -115,6 +161,78 @@ const SNIPPETS = {
         </div>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section minWidth="340px" title="Alignement et position">
+      <app-specimen label="Centrés" api='mat-align-tabs="center"' [snippet]="snippets.centres">
+        <mat-tab-group class="onglets" mat-align-tabs="center" [mat-stretch-tabs]="false">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Non étirés" api='[mat-stretch-tabs]="false"' [snippet]="snippets.nonEtires">
+        <mat-tab-group class="onglets" [mat-stretch-tabs]="false">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="À la fin" api='mat-align-tabs="end"' [snippet]="snippets.fin">
+        <mat-tab-group class="onglets" mat-align-tabs="end" [mat-stretch-tabs]="false">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="En-tête en bas" api='headerPosition="below"' [snippet]="snippets.bas">
+        <mat-tab-group class="onglets" headerPosition="below">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Barre ajustée au texte" api="fitInkBarToContent" [snippet]="snippets.barreAjustee">
+        <mat-tab-group class="onglets" [fitInkBarToContent]="true" [mat-stretch-tabs]="false">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails du dossier"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section minWidth="340px" title="Comportements">
+      <app-specimen label="Onglet initial" api="selectedIndex" [snippet]="snippets.initial">
+        <mat-tab-group class="onglets" [selectedIndex]="1">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Onglet sélectionné au chargement</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Hauteur dynamique" api="dynamicHeight" [snippet]="snippets.hauteur">
+        <mat-tab-group class="onglets" dynamicHeight>
+          <mat-tab label="Court"><p>Peu de contenu</p></mat-tab>
+          <mat-tab label="Long">
+            <p>Beaucoup de contenu.</p>
+            <p>La hauteur s’adapte à l’onglet actif.</p>
+            <p>Troisième ligne.</p>
+          </mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Sans animation" api='animationDuration="0ms"' [snippet]="snippets.sansAnimation">
+        <mat-tab-group class="onglets" animationDuration="0ms">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Nombreux onglets (défilement)" api="pagination automatique" [snippet]="snippets.defilement">
+        <mat-tab-group class="onglets">
+          @for (onglet of onglets; track onglet) {
+            <mat-tab [label]="onglet"><p>Contenu de {{ onglet }}</p></mat-tab>
+          }
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Sans flèches de défilement" api="disablePagination" [snippet]="snippets.sansPagination">
+        <mat-tab-group class="onglets" [disablePagination]="true">
+          @for (onglet of onglets; track onglet) {
+            <mat-tab [label]="onglet"><p>Contenu de {{ onglet }}</p></mat-tab>
+          }
+        </mat-tab-group>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
     .onglets {
@@ -124,4 +242,5 @@ const SNIPPETS = {
 })
 export class OngletsPage {
   protected readonly snippets = SNIPPETS;
+  protected readonly onglets = Array.from({ length: 12 }, (_, index) => `Onglet ${index + 1}`);
 }

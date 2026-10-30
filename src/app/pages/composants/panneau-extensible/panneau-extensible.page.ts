@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelActionRow, MatExpansionPanelContent } from '@angular/material/expansion';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { MatButton } from '@angular/material/button';
 
 const SNIPPETS = {
   simple: `<mat-expansion-panel>
@@ -52,6 +47,46 @@ const SNIPPETS = {
     <mat-panel-title>Désactivé</mat-panel-title>
   </mat-expansion-panel-header>
 </mat-expansion-panel>`,
+  avant: `<mat-expansion-panel togglePosition="before">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Indicateur avant le titre</mat-panel-title>
+  </mat-expansion-panel-header>
+  <p>Contenu du panneau.</p>
+</mat-expansion-panel>`,
+  plat: `<mat-accordion displayMode="flat">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header><mat-panel-title>Premier</mat-panel-title></mat-expansion-panel-header>
+    <p>Contenu.</p>
+  </mat-expansion-panel>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header><mat-panel-title>Second</mat-panel-title></mat-expansion-panel-header>
+    <p>Contenu.</p>
+  </mat-expansion-panel>
+</mat-accordion>`,
+  actions: `<mat-expansion-panel expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Avec actions</mat-panel-title>
+  </mat-expansion-panel-header>
+  <p>Contenu du panneau.</p>
+  <mat-action-row>
+    <button matButton>Annuler</button>
+    <button matButton="filled">Valider</button>
+  </mat-action-row>
+</mat-expansion-panel>`,
+  hauteurs: `<mat-expansion-panel>
+  <mat-expansion-panel-header collapsedHeight="64px" expandedHeight="80px">
+    <mat-panel-title>En-tête plus haut</mat-panel-title>
+  </mat-expansion-panel-header>
+  <p>Contenu du panneau.</p>
+</mat-expansion-panel>`,
+  differe: `<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Contenu différé</mat-panel-title>
+  </mat-expansion-panel-header>
+  <ng-template matExpansionPanelContent>
+    <p>Rendu à la première ouverture.</p>
+  </ng-template>
+</mat-expansion-panel>`,
 };
 
 @Component({
@@ -64,6 +99,9 @@ const SNIPPETS = {
     MatExpansionPanelTitle,
     Specimen,
     SpecimenSection,
+    MatButton,
+    MatExpansionPanelActionRow,
+    MatExpansionPanelContent,
   ],
   template: `
     <h1>Panneau extensible</h1>
@@ -135,6 +173,59 @@ const SNIPPETS = {
             <p>Contenu du second panneau.</p>
           </mat-expansion-panel>
         </mat-accordion>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section minWidth="420px" title="Autres variantes">
+      <app-specimen label="Indicateur avant le titre" api='togglePosition="before"' [snippet]="snippets.avant">
+        <mat-expansion-panel togglePosition="before">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Indicateur avant le titre</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Contenu du panneau.</p>
+        </mat-expansion-panel>
+      </app-specimen>
+      <app-specimen label="Accordéon plat" api='displayMode="flat"' [snippet]="snippets.plat">
+        <mat-accordion displayMode="flat">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header><mat-panel-title>Premier</mat-panel-title></mat-expansion-panel-header>
+            <p>Contenu.</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header><mat-panel-title>Second</mat-panel-title></mat-expansion-panel-header>
+            <p>Contenu.</p>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </app-specimen>
+      <app-specimen label="Barre d’actions" api="mat-action-row" [snippet]="snippets.actions">
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Avec actions</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Contenu du panneau.</p>
+          <mat-action-row>
+            <button matButton>Annuler</button>
+            <button matButton="filled">Valider</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </app-specimen>
+      <app-specimen label="Hauteurs d’en-tête" api="collapsedHeight / expandedHeight" [snippet]="snippets.hauteurs">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header collapsedHeight="64px" expandedHeight="80px">
+            <mat-panel-title>En-tête plus haut</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Contenu du panneau.</p>
+        </mat-expansion-panel>
+      </app-specimen>
+      <app-specimen label="Contenu différé" api="matExpansionPanelContent" [snippet]="snippets.differe">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Contenu différé</mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <p>Rendu à la première ouverture.</p>
+          </ng-template>
+        </mat-expansion-panel>
       </app-specimen>
     </app-specimen-section>
   `,

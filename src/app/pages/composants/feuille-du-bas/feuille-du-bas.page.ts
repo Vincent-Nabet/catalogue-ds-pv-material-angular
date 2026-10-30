@@ -72,6 +72,8 @@ ouvrir() {
 }`,
   texte: `this.feuille.open(MonContenu);`,
   sansFond: `this.feuille.open(MesActions, { hasBackdrop: false });`,
+  bloquee: `this.feuille.open(MesActions, { disableClose: true });
+// Échap et le clic à l'extérieur ne ferment plus la feuille.`,
 };
 
 @Component({
@@ -91,6 +93,12 @@ ouvrir() {
         <button matButton="outlined" (click)="ouvrirSansFond()">Ouvrir</button>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section title="Comportement">
+      <app-specimen label="Fermeture bloquée" api="disableClose" [snippet]="snippets.bloquee">
+        <button matButton="outlined" (click)="ouvrirBloquee()">Ouvrir</button>
+      </app-specimen>
+    </app-specimen-section>
   `,
 })
 export class FeuilleDuBasPage {
@@ -107,5 +115,9 @@ export class FeuilleDuBasPage {
 
   protected ouvrirSansFond(): void {
     this.feuille.open(ActionsFeuille, { hasBackdrop: false });
+  }
+
+  protected ouvrirBloquee(): void {
+    this.feuille.open(ActionsFeuille, { disableClose: true });
   }
 }

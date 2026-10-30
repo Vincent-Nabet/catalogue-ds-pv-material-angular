@@ -19,6 +19,10 @@ export class PaginatorIntlFr extends MatPaginatorIntl {
 }
 
 providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
+  grandVolume: `<mat-paginator [length]="12345" [pageSize]="50" [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons aria-label="Pagination" />`,
+  unePage: `<mat-paginator [length]="5" [pageSize]="10" aria-label="Pagination" />`,
+  panneau: `<mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
+  [selectConfig]="{ disableOptionCentering: true }" aria-label="Pagination" />`,
 };
 
 @Component({
@@ -49,6 +53,24 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
       </app-specimen>
       <app-specimen label="Traduction" api="MatPaginatorIntl" [snippet]="snippets.traduction">
         <p>Les libellés de cette page sont fournis en français via MatPaginatorIntl.</p>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section minWidth="440px" title="Volumes et liste de tailles">
+      <app-specimen label="Grand volume" api="length: 12345" [snippet]="snippets.grandVolume">
+        <mat-paginator [length]="12345" [pageSize]="50" [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons aria-label="Pagination grand volume" />
+      </app-specimen>
+      <app-specimen label="Une seule page" api="length: 5" [snippet]="snippets.unePage">
+        <mat-paginator [length]="5" [pageSize]="10" aria-label="Pagination une page" />
+      </app-specimen>
+      <app-specimen label="Liste de tailles sous le champ" api="selectConfig" [snippet]="snippets.panneau">
+        <mat-paginator
+          [length]="100"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25]"
+          [selectConfig]="{ disableOptionCentering: true }"
+          aria-label="Pagination liste sous le champ"
+        />
       </app-specimen>
     </app-specimen-section>
   `,

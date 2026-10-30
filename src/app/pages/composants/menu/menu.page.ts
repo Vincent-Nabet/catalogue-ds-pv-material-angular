@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenu, MatMenuItem, MatMenuTrigger, MatContextMenuTrigger, MatMenuContent } from '@angular/material/menu';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -46,11 +46,28 @@ const SNIPPETS = {
   <button mat-menu-item>Modifier</button>
   <button mat-menu-item>Supprimer</button>
 </mat-menu>`,
+  contextuel: `<div [matContextMenuTriggerFor]="menu" tabindex="0">Clic droit ici</div>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Copier</button>
+  <button mat-menu-item>Coller</button>
+</mat-menu>`,
+  inactifFocalisable: `<mat-menu #menu="matMenu">
+  <button mat-menu-item>Modifier</button>
+  <button mat-menu-item [disabledInteractive]="true" disabled>Supprimer</button>
+</mat-menu>`,
+  paresseux: `<mat-menu #menu="matMenu">
+  <ng-template matMenuContent>
+    <button mat-menu-item>Rendu à l'ouverture</button>
+  </ng-template>
+</mat-menu>`,
+  sansFond: `<mat-menu #menu="matMenu" [hasBackdrop]="false">
+  <button mat-menu-item>Modifier</button>
+</mat-menu>`,
 };
 
 @Component({
   selector: 'app-menu-page',
-  imports: [MatButton, MatIconButton, MatDivider, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, Specimen, SpecimenSection],
+  imports: [MatButton, MatIconButton, MatDivider, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, Specimen, SpecimenSection, MatContextMenuTrigger, MatMenuContent],
   template: `
     <h1>Menu</h1>
 
@@ -110,6 +127,48 @@ const SNIPPETS = {
         </mat-menu>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section title="Autres variantes">
+      <app-specimen label="Menu contextuel" api="matContextMenuTriggerFor" [snippet]="snippets.contextuel">
+        <div class="zone-contexte" [matContextMenuTriggerFor]="contexte" tabindex="0">Clic droit ici</div>
+        <mat-menu #contexte="matMenu">
+          <button mat-menu-item>Copier</button>
+          <button mat-menu-item>Coller</button>
+        </mat-menu>
+      </app-specimen>
+      <app-specimen label="Option désactivée mais focalisable" api="disabledInteractive" [snippet]="snippets.inactifFocalisable">
+        <button matButton="outlined" [matMenuTriggerFor]="focalisable">Ouvrir</button>
+        <mat-menu #focalisable="matMenu">
+          <button mat-menu-item>Modifier</button>
+          <button mat-menu-item [disabledInteractive]="true" disabled>Supprimer</button>
+        </mat-menu>
+      </app-specimen>
+      <app-specimen label="Contenu rendu à l’ouverture" api="matMenuContent" [snippet]="snippets.paresseux">
+        <button matButton="outlined" [matMenuTriggerFor]="paresseux">Ouvrir</button>
+        <mat-menu #paresseux="matMenu">
+          <ng-template matMenuContent>
+            <button mat-menu-item>Rendu à l’ouverture</button>
+          </ng-template>
+        </mat-menu>
+      </app-specimen>
+      <app-specimen label="Sans fond" api="hasBackdrop" [snippet]="snippets.sansFond">
+        <button matButton="outlined" [matMenuTriggerFor]="sansFond">Ouvrir</button>
+        <mat-menu #sansFond="matMenu" [hasBackdrop]="false">
+          <button mat-menu-item>Modifier</button>
+        </mat-menu>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    .zone-contexte {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 80px;
+      border: 1px dashed var(--mat-sys-outline);
+      border-radius: var(--mat-sys-corner-small);
+    }
   `,
 })
 export class MenuPage {

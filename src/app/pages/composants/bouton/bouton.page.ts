@@ -88,8 +88,8 @@ const SNIPPETS = {
   --mat-button-filled-container-shape: 8px;
 }`,
   pilule: `<button matButton="filled">Pilule (défaut)</button>`,
-  chargement: `<button matButton="filled" [showProgress]="true">
-  <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-label="Chargement" />
+  chargement: `<button matButton="filled" [showProgress]="true" aria-label="Enregistrement en cours">
+  <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-hidden="true" [attr.tabindex]="null" />
   Enregistrer
 </button>`,
   inactifFocalisable: `<button matButton="filled" disabledInteractive>Désactivé, focalisable</button>`,
@@ -214,12 +214,12 @@ const SNIPPETS = {
         <button matButton="outlined">Suivant<mat-icon iconPositionEnd>arrow_forward</mat-icon></button>
       </app-specimen>
       <app-specimen label="Chargement" api="showProgress + progressIndicator" [snippet]="snippets.chargement">
-        <button matButton="filled" [showProgress]="true">
-          <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-label="Chargement" />
+        <button matButton="filled" [showProgress]="true" aria-label="Enregistrement en cours">
+          <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-hidden="true" [attr.tabindex]="null" />
           Enregistrer
         </button>
-        <button matButton="outlined" [showProgress]="true">
-          <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-label="Chargement" />
+        <button matButton="outlined" [showProgress]="true" aria-label="Enregistrement en cours">
+          <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-hidden="true" [attr.tabindex]="null" />
           Enregistrer
         </button>
       </app-specimen>

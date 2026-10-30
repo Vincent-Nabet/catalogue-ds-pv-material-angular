@@ -33,6 +33,18 @@ const SNIPPETS = {
   <mat-grid-tile>2</mat-grid-tile>
   <mat-grid-tile>3</mat-grid-tile>
 </mat-grid-list>`,
+  ajustee: `<mat-grid-list cols="3" rowHeight="fit" gutterSize="8px" style="height: 160px">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+  <mat-grid-tile>3</mat-grid-tile>
+  <mat-grid-tile>4</mat-grid-tile>
+  <mat-grid-tile>5</mat-grid-tile>
+  <mat-grid-tile>6</mat-grid-tile>
+</mat-grid-list>`,
+  ratioPaysage: `<mat-grid-list cols="2" rowHeight="4:1" gutterSize="8px">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+</mat-grid-list>`,
 };
 
 @Component({
@@ -80,6 +92,25 @@ const SNIPPETS = {
         </mat-grid-list>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section minWidth="360px" title="Hauteur des lignes">
+      <app-specimen label="Ajustée au conteneur" api='rowHeight="fit"' [snippet]="snippets.ajustee">
+        <mat-grid-list class="fixe" cols="3" rowHeight="fit" gutterSize="8px">
+          <mat-grid-tile>1</mat-grid-tile>
+          <mat-grid-tile>2</mat-grid-tile>
+          <mat-grid-tile>3</mat-grid-tile>
+          <mat-grid-tile>4</mat-grid-tile>
+          <mat-grid-tile>5</mat-grid-tile>
+          <mat-grid-tile>6</mat-grid-tile>
+        </mat-grid-list>
+      </app-specimen>
+      <app-specimen label="Ratio largeur:hauteur" api='rowHeight="4:1"' [snippet]="snippets.ratioPaysage">
+        <mat-grid-list cols="2" rowHeight="4:1" gutterSize="8px">
+          <mat-grid-tile>1</mat-grid-tile>
+          <mat-grid-tile>2</mat-grid-tile>
+        </mat-grid-list>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
     mat-grid-list {
@@ -94,6 +125,9 @@ const SNIPPETS = {
     mat-grid-tile .mat-grid-tile-header {
       background: var(--mat-sys-primary);
       color: var(--mat-sys-on-primary);
+    }
+    .fixe {
+      height: 160px;
     }
   `,
 })

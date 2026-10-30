@@ -10,6 +10,7 @@ import {
   MatListItemMeta,
   MatListItemTitle,
   MatListOption,
+  MatNavList,
   MatSelectionList,
 } from '@angular/material/list';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -61,6 +62,32 @@ const SNIPPETS = {
   <mat-list-option selected>Moyenne</mat-list-option>
   <mat-list-option>Grande</mat-list-option>
 </mat-selection-list>`,
+  navigation: `<mat-nav-list aria-label="Exemple de navigation">
+  <a mat-list-item [activated]="true">Accueil</a>
+  <a mat-list-item>Documents</a>
+  <a mat-list-item>Paramètres</a>
+</mat-nav-list>`,
+  troisLignes: `<mat-list>
+  <mat-list-item lines="3">
+    <span matListItemTitle>Titre</span>
+    <span matListItemLine>Deuxième ligne</span>
+    <span matListItemLine>Troisième ligne</span>
+  </mat-list-item>
+</mat-list>`,
+  caseAvant: `<mat-selection-list aria-label="Ingrédients">
+  <mat-list-option togglePosition="before">Farine</mat-list-option>
+  <mat-list-option togglePosition="before" selected>Sucre</mat-list-option>
+</mat-selection-list>`,
+  metaIcone: `<mat-list>
+  <mat-list-item>
+    <span matListItemTitle>Message</span>
+    <mat-icon matListItemMeta>chevron_right</mat-icon>
+  </mat-list-item>
+</mat-list>`,
+  sansCoche: `<mat-selection-list aria-label="Taille" [multiple]="false" hideSingleSelectionIndicator>
+  <mat-list-option>Petite</mat-list-option>
+  <mat-list-option selected>Moyenne</mat-list-option>
+</mat-selection-list>`,
 };
 
 @Component({
@@ -76,6 +103,7 @@ const SNIPPETS = {
     MatListItemMeta,
     MatListItemTitle,
     MatListOption,
+    MatNavList,
     MatSelectionList,
     Specimen,
     SpecimenSection,
@@ -144,6 +172,45 @@ const SNIPPETS = {
           <mat-list-option>Petite</mat-list-option>
           <mat-list-option selected>Moyenne</mat-list-option>
           <mat-list-option>Grande</mat-list-option>
+        </mat-selection-list>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section minWidth="360px" title="Autres variantes">
+      <app-specimen label="Liste de navigation (élément actif)" api="mat-nav-list / activated" [snippet]="snippets.navigation">
+        <mat-nav-list aria-label="Exemple de navigation">
+          <a mat-list-item [activated]="true">Accueil</a>
+          <a mat-list-item>Documents</a>
+          <a mat-list-item>Paramètres</a>
+        </mat-nav-list>
+      </app-specimen>
+      <app-specimen label="Trois lignes" api="matListItemLine ×2" [snippet]="snippets.troisLignes">
+        <mat-list>
+          <mat-list-item lines="3">
+            <span matListItemTitle>Titre</span>
+            <span matListItemLine>Deuxième ligne</span>
+            <span matListItemLine>Troisième ligne</span>
+          </mat-list-item>
+        </mat-list>
+      </app-specimen>
+      <app-specimen label="Méta en icône" api="matListItemMeta" [snippet]="snippets.metaIcone">
+        <mat-list>
+          <mat-list-item>
+            <span matListItemTitle>Message</span>
+            <mat-icon matListItemMeta>chevron_right</mat-icon>
+          </mat-list-item>
+        </mat-list>
+      </app-specimen>
+      <app-specimen label="Case avant le libellé" api='togglePosition="before"' [snippet]="snippets.caseAvant">
+        <mat-selection-list aria-label="Ingrédients, case avant">
+          <mat-list-option togglePosition="before">Farine</mat-list-option>
+          <mat-list-option togglePosition="before" selected>Sucre</mat-list-option>
+        </mat-selection-list>
+      </app-specimen>
+      <app-specimen label="Choix unique sans coche" api="hideSingleSelectionIndicator" [snippet]="snippets.sansCoche">
+        <mat-selection-list aria-label="Taille sans coche" [multiple]="false" hideSingleSelectionIndicator>
+          <mat-list-option>Petite</mat-list-option>
+          <mat-list-option selected>Moyenne</mat-list-option>
         </mat-selection-list>
       </app-specimen>
     </app-specimen-section>
