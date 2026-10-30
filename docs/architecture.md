@@ -126,6 +126,6 @@ Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, fo
 | Budget | Avertissement | Erreur |
 |---|---|---|
 | Bundle initial | **880 kB** | 1 MB |
-| Style d'un composant | 4 kB | 8 kB |
+| Style d'un composant | **5 kB** | 8 kB |
 
-Le bundle initial pèse environ 867 kB (≈ 167 kB transférés). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse environ 867 kB (≈ 167 kB transférés). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB. Les pages sont toutes en lazy loading ; garder les styles de page légers.

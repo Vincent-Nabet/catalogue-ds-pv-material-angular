@@ -46,7 +46,7 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 ### Boutons et indicateurs (7)
 | Page | Id | Variantes principales |
 |---|---|---|
-| Bouton | `bouton` | 5 apparences × normal/désactivé/icône ; boutons icône ; FAB, mini FAB, FAB étendu ; **tailles** (petit, standard, grand, très grand) et **formes** par surcharge de jetons CSS ; chargement (`showProgress`) ; icône à droite ; lien ; désactivé mais focalisable |
+| Bouton | `bouton` | 5 apparences × normal/désactivé/icône ; boutons icône ; FAB, mini FAB, FAB étendu ; **tailles** (petit, standard, grand, très grand) et **formes** et **couleurs** (primaire, secondaire, tertiaire, erreur × 5 apparences, boutons icône, FAB, mini FAB, FAB étendu) par surcharge de jetons CSS ; chargement (`showProgress`) ; icône à droite ; lien ; désactivé mais focalisable |
 | Bouton bascule | `bouton-bascule` | choix unique/multiple, icônes, sans coche, vertical, désactivé, apparence standard/legacy, sans coche multiple, désactivé focalisable |
 | Badge | `badge` | tailles, pastille, positions, sur bouton, masqué, désactivé, description accessible, texte long |
 | Icône | `icone` | tailles, couleurs, remplie, accessibilité, dans le texte (`inline`), axes de la police (graisse, taille optique) |
@@ -104,5 +104,5 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 
 ## Ce que le catalogue ne montre volontairement pas
 
-- Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici.
+- Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici. Les rôles de couleur M3 sont montrés par surcharge de jetons (page Bouton, section « Couleurs »).
 - Les cartes avec image (nécessiteraient un asset et `NgOptimizedImage`).
