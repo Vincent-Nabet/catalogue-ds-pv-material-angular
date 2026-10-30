@@ -36,7 +36,7 @@ src/
     layout/
       shell/                 barre d'outils + sidenav + <router-outlet>
       theme-picker/          bouton + menu thème / mode / densité
-      contrast-inspector/    bouton de la barre d'outils + calque de badges (inspecteur de contraste)
+      contrast-inspector/    bouton « Contraste », panneau collant et calque de badges (inspecteur de contraste)
     shared/
       specimen/              cadre d'une variante + bouton snippet
       specimen-section/      titre + grille de specimens
