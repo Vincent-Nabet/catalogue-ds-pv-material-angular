@@ -38,6 +38,7 @@ Détail : [inspecteur-contraste.md](inspecteur-contraste.md).
 | Mesure | `axe-core` (règle `color-contrast`) exécuté dans le navigateur | Fonds composites et transparence gérés ; mêmes résultats que `npm run a11y` |
 | Chargement | `import()` à la première analyse (chunk ≈ 675 kB) | Aucun coût pour le bundle initial, déjà proche de son budget |
 | Activation | Désactivé au chargement, non persisté | L'analyse prend 1 à 2 s ; ne doit pas fausser `a11y` / `captures` |
+| Périmètre | `<main>` des pages de composants ; shell et accueil exclus, bouton absent ailleurs | Le shell est propre au catalogue (et donnait des résultats indéterminés) ; l'outil sert à juger les composants dans un thème |
 | Rôle | Mesure et affiche, ne corrige rien | Un contraste insuffisant venant des tokens du design system doit rester visible pour être remonté aux designers |
 
 ## Budget initial
@@ -66,7 +67,7 @@ L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 
 - Polices et icônes chargées depuis Google Fonts (hors ligne : police par défaut et noms d'icônes en texte).
 - États de survol et d'appui non forçables, donc non montrés.
 - Pas de cartes avec image, pas de formulaires complets, pas de validation asynchrone.
-- Inspecteur de contraste : texte seulement (pas les éléments d'interface à 3 : 1), pas les états survol/focus, résultats « à vérifier » (`?`) pour les fonds en dégradé, en image ou recouverts (dont les entrées du menu latéral).
+- Inspecteur de contraste : contenu des pages de composants seulement (ni shell, ni accueil, ni menus/dialogues ouverts depuis un specimen), texte seulement (pas les éléments d'interface à 3 : 1), pas les états survol/focus, résultats « à vérifier » (`?`) pour les fonds en dégradé, en image ou recouverts.
 - Les scripts `a11y` et `captures` nécessitent Chrome ou Chromium installé (`CHROME_PATH` sinon) ; ils ne tournent pas en CI par défaut.
 - Seuls les tests du shell, du registre, du service de thème et du specimen existent (plus ceux du script de génération, via `node --test scripts/themes/`).
 - **Thèmes du design system : violations axe `color-contrast` dues aux tokens**, volontairement **non corrigées** (le thème est reproduit tel que défini, à remonter aux designers). Audit `npm run a11y -- --themes=app,app-contraste-moyen,app-contraste-eleve,app-monochrome` : `app` et `app-contraste-moyen` en clair (primaire olive utilisé en texte pour les catégories du menu latéral, sous-titre de la barre à 85 % d'opacité) ; `app-contraste-eleve` en clair et en sombre (ligne sélectionnée du tableau : `on-surface` sur `secondary-container`) ; aucune en sombre pour `app` / `app-contraste-moyen`, aucune pour `app-monochrome`.

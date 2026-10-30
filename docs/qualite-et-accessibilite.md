@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (25, Vitest)
+## Tests (27, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -22,7 +22,7 @@
 | `core/theme/theme.service.spec.ts` | classes par défaut sur `<html>` (`theme-azur`, `scheme-light`, `density-0`), changement de classes, persistance et restauration, valeurs invalides ignorées |
 | `shared/specimen/specimen.spec.ts` | bouton snippet présent seulement avec un snippet, ouverture du dialog |
 | `core/a11y/contrast-items.spec.ts` | conversion des résultats axe (statuts, tri, éléments ignorés), formatage et libellés de l'inspecteur de contraste |
-| `core/a11y/contrast-inspector.spec.ts` | service de l'inspecteur : activation, appel d'axe, relance au changement de thème, fermeture pendant l'analyse, erreur |
+| `core/a11y/contrast-inspector.spec.ts` | service de l'inspecteur : activation, appel d'axe sur `main`, disponibilité limitée aux pages de composants, relance au changement de thème, fermeture pendant l'analyse, erreur |
 
 ### Tests du script de génération des thèmes (`node:test`)
 

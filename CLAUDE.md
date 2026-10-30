@@ -12,7 +12,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 | thèmes, densité, polices, icônes, jetons CSS | `docs/themes-et-styles.md` |
 | lint, tests, axe, méthode de vérification, commits | `docs/qualite-et-accessibilite.md` |
 | générer/régénérer les thèmes du design system depuis `tokens/` | `docs/generation-themes.md` |
-| voir le rapport de contraste de chaque texte (bouton ◐ de la barre d'outils) | `docs/inspecteur-contraste.md` |
+| voir le rapport de contraste de chaque texte d'une page de composant (bouton ◐ de la barre d'outils) | `docs/inspecteur-contraste.md` |
 | comprendre un choix ou un comportement inattendu | `docs/decisions-et-limites.md` |
 
 ### Essentiel
