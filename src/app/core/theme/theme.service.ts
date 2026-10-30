@@ -16,7 +16,7 @@ export class ThemeService {
   private readonly stored = this.read();
 
   readonly theme = signal<ThemeId>(this.stored.theme ?? 'azur');
-  readonly scheme = signal<Scheme>(this.stored.scheme ?? 'system');
+  readonly scheme = signal<Scheme>(this.stored.scheme ?? 'light');
   readonly density = signal<Density>(this.stored.density ?? 0);
 
   constructor() {

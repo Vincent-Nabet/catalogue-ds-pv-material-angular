@@ -13,7 +13,7 @@ describe('ThemeService', () => {
     TestBed.inject(ThemeService);
     TestBed.tick();
     expect(html.classList).toContain('theme-azur');
-    expect(html.classList).toContain('scheme-system');
+    expect(html.classList).toContain('scheme-light');
     expect(html.classList).toContain('density-0');
   });
 
@@ -27,7 +27,7 @@ describe('ThemeService', () => {
     expect(html.classList).toContain('theme-violet');
     expect(html.classList).not.toContain('theme-azur');
     expect(html.classList).toContain('scheme-dark');
-    expect(html.classList).not.toContain('scheme-system');
+    expect(html.classList).not.toContain('scheme-light');
     expect(html.classList).toContain('density-3');
     expect(html.classList).not.toContain('density-0');
   });
@@ -35,14 +35,14 @@ describe('ThemeService', () => {
   it('should persist and restore preferences', () => {
     const service = TestBed.inject(ThemeService);
     service.theme.set('vert');
-    service.scheme.set('light');
+    service.scheme.set('dark');
     service.density.set(2);
     TestBed.tick();
 
     TestBed.resetTestingModule();
     const restored = TestBed.inject(ThemeService);
     expect(restored.theme()).toBe('vert');
-    expect(restored.scheme()).toBe('light');
+    expect(restored.scheme()).toBe('dark');
     expect(restored.density()).toBe(2);
   });
 
@@ -53,7 +53,7 @@ describe('ThemeService', () => {
     );
     const service = TestBed.inject(ThemeService);
     expect(service.theme()).toBe('azur');
-    expect(service.scheme()).toBe('system');
+    expect(service.scheme()).toBe('light');
     expect(service.density()).toBe(0);
   });
 });
