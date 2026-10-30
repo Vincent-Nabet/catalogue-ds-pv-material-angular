@@ -208,6 +208,62 @@ export const CATALOG: readonly CatalogEntry[] = [
     loadComponent: () =>
       import('../../pages/composants/onglets/onglets.page').then((m) => m.OngletsPage),
   },
+  {
+    id: 'carte',
+    label: 'Carte',
+    category: 'mise-en-page',
+    icon: 'crop_landscape',
+    loadComponent: () =>
+      import('../../pages/composants/carte/carte.page').then((m) => m.CartePage),
+  },
+  {
+    id: 'separateur',
+    label: 'Séparateur',
+    category: 'mise-en-page',
+    icon: 'horizontal_rule',
+    loadComponent: () =>
+      import('../../pages/composants/separateur/separateur.page').then((m) => m.SeparateurPage),
+  },
+  {
+    id: 'liste',
+    label: 'Liste',
+    category: 'mise-en-page',
+    icon: 'list',
+    loadComponent: () =>
+      import('../../pages/composants/liste/liste.page').then((m) => m.ListePage),
+  },
+  {
+    id: 'grille',
+    label: 'Grille',
+    category: 'mise-en-page',
+    icon: 'grid_view',
+    loadComponent: () =>
+      import('../../pages/composants/grille/grille.page').then((m) => m.GrillePage),
+  },
+  {
+    id: 'panneau-extensible',
+    label: 'Panneau extensible',
+    category: 'mise-en-page',
+    icon: 'expand_circle_down',
+    loadComponent: () =>
+      import('../../pages/composants/panneau-extensible/panneau-extensible.page').then((m) => m.PanneauExtensiblePage),
+  },
+  {
+    id: 'etapes',
+    label: 'Étapes',
+    category: 'mise-en-page',
+    icon: 'linear_scale',
+    loadComponent: () =>
+      import('../../pages/composants/etapes/etapes.page').then((m) => m.EtapesPage),
+  },
+  {
+    id: 'arbre',
+    label: 'Arbre',
+    category: 'mise-en-page',
+    icon: 'account_tree',
+    loadComponent: () =>
+      import('../../pages/composants/arbre/arbre.page').then((m) => m.ArbrePage),
+  },
 ];
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({
