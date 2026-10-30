@@ -37,18 +37,53 @@ Les pages de composants ne sont pas testées unitairement (démonstration visuel
 
 **Sélecteur de date, calendrier intégré** : le bouton de période du `mat-calendar` natif a un `aria-label` fixe (« Choisir le mois et l'année ») qui ne contient pas le texte visible (« oct. 2026 ») → règle `label-content-name-mismatch`. Défaut du composant Material, non corrigeable proprement. Le champ de date avec popup n'est pas concerné au chargement.
 
-## Méthode de vérification visuelle et axe
+## Scripts de vérification
 
-Les scripts utilisés pendant le développement n'ont pas été conservés dans le dépôt. La méthode, à reproduire dans un dossier temporaire **hors du dépôt** :
+Deux scripts Node (`scripts/`), qui s'appuient sur `puppeteer-core` (Chrome déjà installé) et `axe-core`, tous deux en dépendances de développement. Ils démarrent eux-mêmes `ng serve` (port 4300) s'il ne tourne pas, puis l'arrêtent. Si un serveur répond déjà sur ce port, il est réutilisé.
 
-1. Lancer `ng serve --port 4300`.
-2. Installer `puppeteer-core` et `axe-core` dans le dossier temporaire ; utiliser Chrome installé (`C:/Program Files/Google/Chrome/Application/chrome.exe`, `headless: true`, `--no-sandbox`).
-3. **Forcer thème et mode** avant le chargement : `page.evaluateOnNewDocument(() => localStorage.setItem('catalogue-material-theme', JSON.stringify({ theme: 'violet', scheme: 'dark', density: 0 })))`.
-4. **Console** : écouter `console` (error/warning) et `pageerror` sur les 36 routes (accueil + 35 pages).
-5. **axe** : injecter `axe.min.js`, `axe.run(document, { runOnly: ['wcag2a','wcag2aa','wcag21a','wcag21aa','best-practice'] })`, en clair et en sombre.
-6. **Débordements** : pour chaque `app-specimen`, comparer le rectangle de chaque descendant de `.rendu` à celui du specimen (faux positifs connus : sidenavs fermés, onglets défilants, barres de progression indéterminées).
-7. **Captures** : agrandir le viewport à la hauteur de `mat-sidenav-content` pour capturer toute la page ; au minimum Bouton, Champ de saisie, Tableau dans deux thèmes, clair et sombre.
-8. **Fonctionnel** : ouvrir un snippet (`button[aria-label="Voir le code : Rempli"]`), cliquer « Copier » (snackbar « Code copié »), Échap, changer thème / mode / densité via le menu, recharger (persistance), vérifier le focus sur `<main>` après navigation.
+### `npm run a11y` : accessibilité et erreurs console
+
+Ouvre chaque page (accueil + 35 composants) avec un thème et un mode imposés, exécute axe-core (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `best-practice`) et relève les messages console de niveau erreur ou avertissement. Affiche `ok` / `ÉCHEC` par page, un résumé, et **retourne le code 1** s'il reste une violation ou une erreur console.
+
+```bash
+npm run a11y                                              # azur, clair + sombre, toutes les pages
+npm run a11y -- --themes=azur,violet --schemes=dark       # thèmes et modes précis
+npm run a11y -- --themes=tous                             # les 6 thèmes
+npm run a11y -- --routes=accueil,bouton,carte             # quelques pages
+npm run a11y -- --strict                                  # sans tolérer l'exception connue
+```
+
+L'exception connue (calendrier natif, voir plus haut) est déclarée dans le tableau `EXCEPTIONS` de `scripts/a11y.mjs` et signalée à la fin de l'exécution. Toute nouvelle tolérance doit y être ajoutée avec sa raison.
+
+### `npm run captures` : captures pleine page
+
+Enregistre une image PNG par page, thème et mode dans `captures/` (dossier ignoré par git), nommée `<page>-<thème>-<mode>.png`.
+
+```bash
+npm run captures                                                          # toutes les pages, azur clair
+npm run captures -- --routes=bouton,champ-saisie,tableau --themes=azur,violet --schemes=light,dark
+npm run captures -- --width=480 --density=4 --out=captures/mobile        # mobile, densité maximale
+```
+
+### Options communes
+
+| Option | Rôle | Défaut |
+|---|---|---|
+| `--themes=a,b` | thèmes (`tous` = les 6) | `azur` |
+| `--schemes=light,dark` | modes | `light,dark` (a11y), `light` (captures) |
+| `--routes=a,b` | pages (`accueil` ou l'id d'un composant) | toutes |
+| `--density=0..4` | densité (captures) | `0` |
+| `--width=N` | largeur du viewport en px (captures) | `1280` |
+| `--out=dossier` | dossier de sortie (captures) | `captures` |
+| `--strict` | ne tolère aucune exception connue (a11y) | désactivé |
+
+Variables d'environnement : `BASE_URL` (utiliser un serveur déjà lancé, ex. `http://localhost:4200`), `PORT` (port du serveur démarré par les scripts), `CHROME_PATH` (Chrome ou Chromium si non détecté automatiquement).
+
+Les identifiants de pages et de thèmes sont lus dans `catalog.registry.ts` et `themes.ts` : un nouveau composant ou thème est pris en compte sans modifier les scripts.
+
+### Contrôle manuel complémentaire
+
+Les scripts ne remplacent pas un coup d'œil : parcourir au moins Bouton, Champ de saisie et Tableau dans deux thèmes, en clair et en sombre (`npm run captures`). Vérifier à la main : ouverture d'un snippet, « Copier » (snackbar « Code copié »), Échap, changement de thème / mode / densité puis rechargement (persistance), focus sur `<main>` après navigation, tiroir sur mobile.
 
 Résultat de référence : 36 routes sans erreur console ; axe : 0 violation partout sauf l'exception ci-dessus.
 

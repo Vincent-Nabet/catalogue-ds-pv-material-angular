@@ -42,7 +42,7 @@ L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 
 - Polices et icônes chargées depuis Google Fonts (hors ligne : police par défaut et noms d'icônes en texte).
 - États de survol et d'appui non forçables, donc non montrés.
 - Pas de cartes avec image, pas de formulaires complets, pas de validation asynchrone.
-- Pas de scripts de vérification (axe, captures) conservés dans le dépôt : la méthode est décrite, à rejouer à la demande.
+- Les scripts `a11y` et `captures` nécessitent Chrome ou Chromium installé (`CHROME_PATH` sinon) ; ils ne tournent pas en CI par défaut.
 - Seuls les tests du shell, du registre, du service de thème et du specimen existent.
 
 ## Hors périmètre

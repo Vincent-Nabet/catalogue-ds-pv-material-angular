@@ -10,7 +10,7 @@ Catalogue visuel des composants **Angular Material 22**, destiné aux designers 
 | [architecture.md](architecture.md) | Arborescence, registre, routage, shell, services, composants partagés, build et budgets | on touche à la structure, au routage ou au shell |
 | [ajouter-un-composant.md](ajouter-un-composant.md) | Pas-à-pas pour ajouter une page ou une variante, gabarit, pièges de template | on ajoute ou modifie une page de composant |
 | [themes-et-styles.md](themes-et-styles.md) | Thèmes Material, modes, densité, polices, icônes, jetons CSS, styles du shell | on touche aux couleurs, à la typographie ou à `styles.scss` |
-| [qualite-et-accessibilite.md](qualite-et-accessibilite.md) | Lint, tests, budgets, accessibilité (axe-core), méthode de vérification visuelle | on valide un changement ou on corrige une violation |
+| [qualite-et-accessibilite.md](qualite-et-accessibilite.md) | Lint, tests, budgets, accessibilité (axe-core), scripts `a11y` et `captures` | on valide un changement ou on corrige une violation |
 | [decisions-et-limites.md](decisions-et-limites.md) | Décisions prises, particularités d'Angular Material 22, limites connues, hors périmètre | on s'étonne d'un choix ou on rencontre un comportement inattendu |
 
 ## En une minute
@@ -29,6 +29,8 @@ npm start            # ng serve, http://localhost:4200
 npm run build        # ng build (production, budgets appliqués)
 npm run lint         # ng lint
 npm test             # ng test (Vitest) ; ajouter -- --watch=false pour un seul passage
+npm run a11y         # audit axe-core + erreurs console sur toutes les pages
+npm run captures     # captures pleine page par thème et mode (dossier captures/)
 ```
 
 Avant tout commit : `ng build`, `ng lint` et `ng test --watch=false` doivent passer.

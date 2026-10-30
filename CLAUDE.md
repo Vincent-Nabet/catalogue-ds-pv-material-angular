@@ -32,7 +32,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 
 ### Vérifier un changement
 
-`ng build`, `ng lint`, `ng test --watch=false` au vert ; accessibilité : 0 violation axe-core (seule exception connue : bouton de période du calendrier natif de `selecteur-date`) ; contrôle visuel dans ≥ 2 thèmes, clair et sombre. Commits : Conventional Commits en français, branche `feat/catalogue-material`.
+`ng build`, `ng lint`, `ng test --watch=false` au vert ; `npm run a11y` (axe-core + erreurs console sur toutes les pages, clair et sombre ; seule exception tolérée : bouton de période du calendrier natif de `selecteur-date`) ; `npm run captures` pour le contrôle visuel dans ≥ 2 thèmes, clair et sombre (options : `docs/qualite-et-accessibilite.md`). Commits : Conventional Commits en français, branche `feat/catalogue-material`.
 
 ## TypeScript Best Practices
 

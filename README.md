@@ -17,6 +17,8 @@ npm start          # http://localhost:4200
 | `npm run build` | build de production, budgets appliqués (sortie dans `dist/`) |
 | `npm run lint` | ESLint (angular-eslint) |
 | `npm test` | tests unitaires Vitest (`-- --watch=false` pour un seul passage) |
+| `npm run a11y` | audit d'accessibilité (axe-core) et erreurs console sur toutes les pages, clair et sombre |
+| `npm run captures` | captures pleine page par thème et mode, dans `captures/` (voir `docs/qualite-et-accessibilite.md` pour les options) |
 
 Avant tout commit : build, lint et tests doivent passer.
 
