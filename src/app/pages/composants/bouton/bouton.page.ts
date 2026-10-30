@@ -87,6 +87,123 @@ const SNIPPETS = {
 .arrondi {
   --mat-button-filled-container-shape: 8px;
 }`,
+  couleurPrimaire: `<button matButton="filled">Rempli</button>
+
+/* Couleur primaire : défaut du thème, aucune surcharge */`,
+  couleurSecondaire: `<button matButton="filled" class="secondaire">Rempli</button>
+
+.secondaire {
+  --mat-button-filled-container-color: var(--mat-sys-secondary);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-secondary);
+  --mat-button-filled-state-layer-color: var(--mat-sys-on-secondary);
+
+  --mat-button-tonal-container-color: var(--mat-sys-secondary-container);
+  --mat-button-tonal-label-text-color: var(--mat-sys-on-secondary-container);
+  --mat-button-tonal-state-layer-color: var(--mat-sys-on-secondary-container);
+
+  --mat-button-outlined-label-text-color: var(--mat-sys-secondary);
+  --mat-button-outlined-outline-color: var(--mat-sys-secondary);
+  --mat-button-outlined-state-layer-color: var(--mat-sys-secondary);
+
+  --mat-button-text-label-text-color: var(--mat-sys-secondary);
+  --mat-button-text-state-layer-color: var(--mat-sys-secondary);
+
+  --mat-button-protected-label-text-color: var(--mat-sys-secondary);
+  --mat-button-protected-state-layer-color: var(--mat-sys-secondary);
+}`,
+  couleurTertiaire: `<button matButton="filled" class="tertiaire">Rempli</button>
+
+.tertiaire {
+  --mat-button-filled-container-color: var(--mat-sys-tertiary);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-tertiary);
+  --mat-button-filled-state-layer-color: var(--mat-sys-on-tertiary);
+
+  --mat-button-tonal-container-color: var(--mat-sys-tertiary-container);
+  --mat-button-tonal-label-text-color: var(--mat-sys-on-tertiary-container);
+  --mat-button-tonal-state-layer-color: var(--mat-sys-on-tertiary-container);
+
+  --mat-button-outlined-label-text-color: var(--mat-sys-tertiary);
+  --mat-button-outlined-outline-color: var(--mat-sys-tertiary);
+  --mat-button-outlined-state-layer-color: var(--mat-sys-tertiary);
+
+  --mat-button-text-label-text-color: var(--mat-sys-tertiary);
+  --mat-button-text-state-layer-color: var(--mat-sys-tertiary);
+
+  --mat-button-protected-label-text-color: var(--mat-sys-tertiary);
+  --mat-button-protected-state-layer-color: var(--mat-sys-tertiary);
+}`,
+  couleurErreur: `<button matButton="filled" class="erreur">Rempli</button>
+
+.erreur {
+  --mat-button-filled-container-color: var(--mat-sys-error);
+  --mat-button-filled-label-text-color: var(--mat-sys-on-error);
+  --mat-button-filled-state-layer-color: var(--mat-sys-on-error);
+
+  --mat-button-tonal-container-color: var(--mat-sys-error-container);
+  --mat-button-tonal-label-text-color: var(--mat-sys-on-error-container);
+  --mat-button-tonal-state-layer-color: var(--mat-sys-on-error-container);
+
+  --mat-button-outlined-label-text-color: var(--mat-sys-error);
+  --mat-button-outlined-outline-color: var(--mat-sys-error);
+  --mat-button-outlined-state-layer-color: var(--mat-sys-error);
+
+  --mat-button-text-label-text-color: var(--mat-sys-error);
+  --mat-button-text-state-layer-color: var(--mat-sys-error);
+
+  --mat-button-protected-label-text-color: var(--mat-sys-error);
+  --mat-button-protected-state-layer-color: var(--mat-sys-error);
+}`,
+  couleurIcone: `<button matIconButton aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+<button matIconButton class="secondaire" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+<button matIconButton class="tertiaire" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+<button matIconButton class="erreur" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+
+.secondaire {
+  --mat-icon-button-icon-color: var(--mat-sys-secondary);
+  --mat-icon-button-state-layer-color: var(--mat-sys-secondary);
+}
+
+.tertiaire {
+  --mat-icon-button-icon-color: var(--mat-sys-tertiary);
+  --mat-icon-button-state-layer-color: var(--mat-sys-tertiary);
+}
+
+.erreur {
+  --mat-icon-button-icon-color: var(--mat-sys-error);
+  --mat-icon-button-state-layer-color: var(--mat-sys-error);
+}`,
+  couleurFab: `<button matFab aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+<button matFab class="secondaire" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+<button matFab class="tertiaire" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+<button matFab class="erreur" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+
+/* Mêmes classes et jetons pour matMiniFab et matFab extended */
+.secondaire {
+  --mat-fab-container-color: var(--mat-sys-secondary-container);
+  --mat-fab-foreground-color: var(--mat-sys-on-secondary-container);
+  --mat-fab-state-layer-color: var(--mat-sys-on-secondary-container);
+  --mat-fab-small-container-color: var(--mat-sys-secondary-container);
+  --mat-fab-small-foreground-color: var(--mat-sys-on-secondary-container);
+  --mat-fab-small-state-layer-color: var(--mat-sys-on-secondary-container);
+}
+
+.tertiaire {
+  --mat-fab-container-color: var(--mat-sys-tertiary-container);
+  --mat-fab-foreground-color: var(--mat-sys-on-tertiary-container);
+  --mat-fab-state-layer-color: var(--mat-sys-on-tertiary-container);
+  --mat-fab-small-container-color: var(--mat-sys-tertiary-container);
+  --mat-fab-small-foreground-color: var(--mat-sys-on-tertiary-container);
+  --mat-fab-small-state-layer-color: var(--mat-sys-on-tertiary-container);
+}
+
+.erreur {
+  --mat-fab-container-color: var(--mat-sys-error-container);
+  --mat-fab-foreground-color: var(--mat-sys-on-error-container);
+  --mat-fab-state-layer-color: var(--mat-sys-on-error-container);
+  --mat-fab-small-container-color: var(--mat-sys-error-container);
+  --mat-fab-small-foreground-color: var(--mat-sys-on-error-container);
+  --mat-fab-small-state-layer-color: var(--mat-sys-on-error-container);
+}`,
   pilule: `<button matButton="filled">Pilule (défaut)</button>`,
   chargement: `<button matButton="filled" [showProgress]="true" aria-label="Enregistrement en cours">
   <mat-progress-spinner progressIndicator mode="indeterminate" diameter="18" aria-hidden="true" [attr.tabindex]="null" />
@@ -193,6 +310,56 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
+    <app-specimen-section
+      title="Couleurs"
+      description="L’entrée color est réservée aux thèmes M2 et reste sans effet ici. Les rôles de couleur M3 s’obtiennent en surchargeant les jetons --mat-button-* avec les jetons système --mat-sys-* (fond et texte ensemble, pour garder le contraste)."
+    >
+      <app-specimen label="Primaire (défaut)" api="--mat-sys-primary" [snippet]="snippets.couleurPrimaire">
+        <button matButton="text">Texte</button>
+        <button matButton="filled">Rempli</button>
+        <button matButton="tonal">Tonal</button>
+        <button matButton="elevated">Relevé</button>
+        <button matButton="outlined">Contour</button>
+      </app-specimen>
+      <app-specimen label="Secondaire" api="--mat-sys-secondary" [snippet]="snippets.couleurSecondaire">
+        <button matButton="text" class="secondaire">Texte</button>
+        <button matButton="filled" class="secondaire">Rempli</button>
+        <button matButton="tonal" class="secondaire">Tonal</button>
+        <button matButton="elevated" class="secondaire">Relevé</button>
+        <button matButton="outlined" class="secondaire">Contour</button>
+      </app-specimen>
+      <app-specimen label="Tertiaire" api="--mat-sys-tertiary" [snippet]="snippets.couleurTertiaire">
+        <button matButton="text" class="tertiaire">Texte</button>
+        <button matButton="filled" class="tertiaire">Rempli</button>
+        <button matButton="tonal" class="tertiaire">Tonal</button>
+        <button matButton="elevated" class="tertiaire">Relevé</button>
+        <button matButton="outlined" class="tertiaire">Contour</button>
+      </app-specimen>
+      <app-specimen label="Erreur" api="--mat-sys-error" [snippet]="snippets.couleurErreur">
+        <button matButton="text" class="erreur">Texte</button>
+        <button matButton="filled" class="erreur">Rempli</button>
+        <button matButton="tonal" class="erreur">Tonal</button>
+        <button matButton="elevated" class="erreur">Relevé</button>
+        <button matButton="outlined" class="erreur">Contour</button>
+      </app-specimen>
+      <app-specimen label="Boutons icône" api="--mat-icon-button-icon-color" [snippet]="snippets.couleurIcone">
+        <button matIconButton aria-label="Favori primaire"><mat-icon>favorite</mat-icon></button>
+        <button matIconButton class="secondaire" aria-label="Favori secondaire"><mat-icon>favorite</mat-icon></button>
+        <button matIconButton class="tertiaire" aria-label="Favori tertiaire"><mat-icon>favorite</mat-icon></button>
+        <button matIconButton class="erreur" aria-label="Favori erreur"><mat-icon>favorite</mat-icon></button>
+      </app-specimen>
+      <app-specimen label="FAB" api="--mat-fab-container-color" [snippet]="snippets.couleurFab">
+        <button matFab aria-label="Modifier primaire"><mat-icon>edit</mat-icon></button>
+        <button matFab class="secondaire" aria-label="Modifier secondaire"><mat-icon>edit</mat-icon></button>
+        <button matFab class="tertiaire" aria-label="Modifier tertiaire"><mat-icon>edit</mat-icon></button>
+        <button matFab class="erreur" aria-label="Modifier erreur"><mat-icon>edit</mat-icon></button>
+        <button matMiniFab class="secondaire" aria-label="Modifier secondaire"><mat-icon>edit</mat-icon></button>
+        <button matMiniFab class="tertiaire" aria-label="Modifier tertiaire"><mat-icon>edit</mat-icon></button>
+        <button matMiniFab class="erreur" aria-label="Modifier erreur"><mat-icon>edit</mat-icon></button>
+        <button matFab extended class="erreur"><mat-icon>edit</mat-icon>Modifier</button>
+      </app-specimen>
+    </app-specimen-section>
+
     <app-specimen-section title="Formes" description="Rayon des angles via le jeton --mat-button-*-container-shape.">
       <app-specimen label="Pilule (défaut)" api="corner-full" [snippet]="snippets.pilule">
         <button matButton="filled">Rempli</button>
@@ -264,6 +431,51 @@ const SNIPPETS = {
 
     .angulaire {
       @include forme(0);
+    }
+
+    .secondaire,
+    .tertiaire,
+    .erreur {
+      --mat-button-filled-container-color: var(--r-f);
+      --mat-button-filled-label-text-color: var(--r-sf);
+      --mat-button-filled-state-layer-color: var(--r-sf);
+      --mat-button-tonal-container-color: var(--r-c);
+      --mat-button-tonal-label-text-color: var(--r-sc);
+      --mat-button-tonal-state-layer-color: var(--r-sc);
+      --mat-button-outlined-label-text-color: var(--r-f);
+      --mat-button-outlined-outline-color: var(--r-f);
+      --mat-button-outlined-state-layer-color: var(--r-f);
+      --mat-button-text-label-text-color: var(--r-f);
+      --mat-button-text-state-layer-color: var(--r-f);
+      --mat-button-protected-label-text-color: var(--r-f);
+      --mat-button-protected-state-layer-color: var(--r-f);
+      --mat-icon-button-icon-color: var(--r-f);
+      --mat-icon-button-state-layer-color: var(--r-f);
+      --mat-fab-container-color: var(--r-c);
+      --mat-fab-foreground-color: var(--r-sc);
+      --mat-fab-state-layer-color: var(--r-sc);
+      --mat-fab-small-container-color: var(--r-c);
+      --mat-fab-small-foreground-color: var(--r-sc);
+      --mat-fab-small-state-layer-color: var(--r-sc);
+    }
+
+    @mixin role($role) {
+      --r-f: var(--mat-sys-#{$role});
+      --r-sf: var(--mat-sys-on-#{$role});
+      --r-c: var(--mat-sys-#{$role}-container);
+      --r-sc: var(--mat-sys-on-#{$role}-container);
+    }
+
+    .secondaire {
+      @include role(secondary);
+    }
+
+    .tertiaire {
+      @include role(tertiary);
+    }
+
+    .erreur {
+      @include role(error);
     }
 
     @mixin taille-icone($zone, $icone) {
