@@ -4,6 +4,7 @@
 // custom components at https://material.angular.dev/guide/theming
 @use 'sass:list';
 @use '@angular/material' as mat;
+@use './styles/themes-app/themes-app';
 
 $themes: (
   "azur": (
@@ -59,6 +60,17 @@ html {
   }
 }
 
+// Thèmes du design system, générés depuis les tokens (npm run themes) : les variables
+// --md-sys-* viennent de styles/themes-app/index.css (chargé par angular.json) et changent selon
+// la famille de contraste. Le mixin ne référence que ces variables : un seul bloc suffit pour
+// les quatre classes posées par ThemeService.
+html.theme-app,
+html.theme-app-contraste-moyen,
+html.theme-app-contraste-eleve,
+html.theme-app-monochrome {
+  @include themes-app.theme();
+}
+
 @for $i from 0 through 4 {
   html.density-#{$i} {
     @include mat.theme(
@@ -97,6 +109,11 @@ body {
 main h1 {
   margin: 0 0 24px;
   font: var(--mat-sys-headline-medium);
+}
+
+// Sélecteur de thème : libellés longs sur une seule ligne (Material limite le panneau à 280px)
+.menu-theme.mat-mdc-menu-panel {
+  max-width: min(360px, calc(100vw - 32px));
 }
 
 // Apparition douce de la page à chaque changement de route

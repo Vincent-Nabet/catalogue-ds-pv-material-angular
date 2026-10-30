@@ -5,18 +5,28 @@
   font: var(--mat-sys-label-large);
 }
 
+.ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  .mat-icon {
+    margin: 0;
+  }
+}
+
 .pastille {
-  display: inline-block;
   flex: none;
   width: 24px;
   height: 24px;
-  margin-inline-end: 12px;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 50%;
 }
 
 .coche {
-  margin-inline: auto 0;
+  flex: none;
+  margin-inline-start: auto;
 }
 
 .apercu {
