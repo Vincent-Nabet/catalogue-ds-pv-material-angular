@@ -12,6 +12,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 | thèmes, densité, polices, icônes, jetons CSS | `docs/themes-et-styles.md` |
 | lint, tests, axe, méthode de vérification, commits | `docs/qualite-et-accessibilite.md` |
 | générer/régénérer les thèmes du design system depuis `tokens/` | `docs/generation-themes.md` |
+| voir le rapport de contraste de chaque texte (bouton ◐ de la barre d'outils) | `docs/inspecteur-contraste.md` |
 | comprendre un choix ou un comportement inattendu | `docs/decisions-et-limites.md` |
 
 ### Essentiel
@@ -28,7 +29,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 - Angular Material 22 n'a **pas d'API de taille** pour les boutons (sizes/formes = surcharge de jetons `--mat-button-*`) ; `color` est **M2 uniquement** (sans effet) : ne pas l'utiliser.
 - Booléens en binding (`[disabledInteractive]="true"`), `&#64;` pour une arobase dans un template, `hasBackdrop` sur `mat-sidenav-container`, drawers `over`/`push` laissés fermés (piège de focus).
 - Couleurs uniquement via `--mat-sys-*` ; typographie via `--mat-sys-*` (pas de tailles/couleurs en dur).
-- Bundle initial ≈ 858 kB (avertissement à 880 kB, erreur à 1 MB) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
+- Bundle initial ≈ 867 kB (avertissement à 880 kB, erreur à 1 MB ; axe-core de l'inspecteur de contraste est un chunk différé, hors bundle initial) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
 - Thèmes du design system : générés par `npm run themes` dans `src/styles/themes-<nom>/` (défaut `themes-app`) : **ne pas éditer ces fichiers à la main**, relancer le script ; branchés au catalogue (4 entrées `app*` dans `themes.ts`, `angular.json`, `styles.scss`) ; tests : `node --test scripts/themes/`.
 - Hors périmètre : `tokens/` et `TOKENS-*.md` (design system distinct, **ne pas modifier**) ; ne pas committer `.mcp.json`, `.mcp.json.tmp`, `.claude/`, `.agents/`, `skills-lock.json` dans ce chantier.
 

@@ -14,6 +14,7 @@ Catalogue visuel des composants **Angular Material 22**, destiné aux designers 
 | [themes-et-styles.md](themes-et-styles.md) | Thèmes Material, modes, densité, polices, icônes, jetons CSS, styles du shell | on touche aux couleurs, à la typographie ou à `styles.scss` |
 | [qualite-et-accessibilite.md](qualite-et-accessibilite.md) | Lint, tests, budgets, accessibilité (axe-core), scripts `a11y` et `captures` | on valide un changement ou on corrige une violation |
 | [decisions-et-limites.md](decisions-et-limites.md) | Décisions prises, particularités d'Angular Material 22, limites connues, hors périmètre | on s'étonne d'un choix ou on rencontre un comportement inattendu |
+| [inspecteur-contraste.md](inspecteur-contraste.md) | Mode qui affiche le rapport de contraste de chaque texte (axe-core dans le navigateur) : usage, lecture des badges, fonctionnement, limites | on veut voir l'effet d'un thème sur le contraste, écran par écran |
 
 ### Construction des thèmes
 
@@ -31,6 +32,7 @@ Analyses de référence à la racine du dépôt (lecture seule) : `TOKENS-MD3.md
 - Chaque page présente des **specimens** (variantes et états) avec un bouton `</>` qui ouvre le code dans une boîte de dialogue avec bouton « Copier ».
 - 6 thèmes Material prédéfinis + 4 thèmes du design system (générés depuis `tokens/`) × 3 modes (clair, sombre, système) × 5 densités, modifiables en direct et mémorisés dans `localStorage`.
 - Police **Poppins**, icônes **Material Symbols Outlined** (les deux via Google Fonts).
+- Un **inspecteur de contraste** (bouton de la barre d'outils) affiche le rapport de contraste de chaque texte et signale ceux qui sont sous WCAG AA.
 - Les thèmes du design system sont **générés** par `npm run themes` dans `src/styles/themes-app/`  et branchés au sélecteur de thème du catalogue.
 
 ## Commandes

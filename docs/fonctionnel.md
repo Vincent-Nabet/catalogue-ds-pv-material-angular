@@ -12,7 +12,8 @@ Public : designers, intégrateurs, développeurs front. Langue de l'interface : 
 2. **Navigation latérale** : toujours visible sur ordinateur (`side`), tiroir sur mobile (`over`, ouvert par le bouton menu). Composants groupés par catégorie, lien actif mis en évidence (`aria-current="page"`).
 3. **Page de composant** (`/composants/<id>`) : un `<h1>` puis des sections de specimens.
 4. **Sélecteur de thème** (bouton « Thème : Azur » en haut à droite) : thème, mode, densité.
-5. **Code** : sur chaque specimen, un bouton icône `</>` (discret, opacité 0,4, plein au survol et au focus) ouvre une boîte de dialogue avec le code, un bouton « Copier » (suivi d'une snackbar « Code copié ») et « Fermer ».
+5. **Inspecteur de contraste** (bouton ◐ à gauche du sélecteur de thème) : affiche sur chaque texte son rapport de contraste et signale ceux qui sont sous WCAG AA. Voir [inspecteur-contraste.md](inspecteur-contraste.md).
+6. **Code** : sur chaque specimen, un bouton icône `</>` (discret, opacité 0,4, plein au survol et au focus) ouvre une boîte de dialogue avec le code, un bouton « Copier » (suivi d'une snackbar « Code copié ») et « Fermer ».
 
 ## Le sélecteur de thème
 

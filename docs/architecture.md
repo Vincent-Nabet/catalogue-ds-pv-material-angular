@@ -31,9 +31,12 @@ src/
       theme/themes.ts               types et listes (thèmes, modes, densités)
       theme/theme.service.ts        @Service : état du thème + persistance
       i18n/intl-fr.ts               libellés français (paginator, datepicker, stepper)
+      a11y/contrast-items.ts        résultats axe → éléments d'inspection (fonctions pures)
+      a11y/contrast-inspector.ts    @Service : état de l'inspecteur de contraste + exécution d'axe (chargé à la demande)
     layout/
       shell/                 barre d'outils + sidenav + <router-outlet>
       theme-picker/          bouton + menu thème / mode / densité
+      contrast-inspector/    bouton de la barre d'outils + calque de badges (inspecteur de contraste)
     shared/
       specimen/              cadre d'une variante + bouton snippet
       specimen-section/      titre + grille de specimens
@@ -125,4 +128,4 @@ Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, fo
 | Bundle initial | **880 kB** | 1 MB |
 | Style d'un composant | 4 kB | 8 kB |
 
-Le bundle initial pèse environ 858 kB (≈ 164 kB transférés). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse environ 867 kB (≈ 167 kB transférés). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). Les pages sont toutes en lazy loading ; garder les styles de page légers.

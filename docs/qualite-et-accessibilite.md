@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (11, Vitest)
+## Tests (25, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -21,6 +21,8 @@
 | `core/catalog/catalog.registry.spec.ts` | une route par entrée, `id` uniques, catégories connues, chaque entrée dans un groupe |
 | `core/theme/theme.service.spec.ts` | classes par défaut sur `<html>` (`theme-azur`, `scheme-light`, `density-0`), changement de classes, persistance et restauration, valeurs invalides ignorées |
 | `shared/specimen/specimen.spec.ts` | bouton snippet présent seulement avec un snippet, ouverture du dialog |
+| `core/a11y/contrast-items.spec.ts` | conversion des résultats axe (statuts, tri, éléments ignorés), formatage et libellés de l'inspecteur de contraste |
+| `core/a11y/contrast-inspector.spec.ts` | service de l'inspecteur : activation, appel d'axe, relance au changement de thème, fermeture pendant l'analyse, erreur |
 
 ### Tests du script de génération des thèmes (`node:test`)
 
@@ -40,6 +42,10 @@ Les pages de composants ne sont pas testées unitairement (démonstration visuel
 ## Accessibilité : exception connue
 
 **Sélecteur de date, calendrier intégré** : le bouton de période du `mat-calendar` natif a un `aria-label` fixe (« Choisir le mois et l'année ») qui ne contient pas le texte visible (« oct. 2026 ») → règle `label-content-name-mismatch`. Défaut du composant Material, non corrigeable proprement. Le champ de date avec popup n'est pas concerné au chargement.
+
+## Inspecteur de contraste (complément)
+
+L'inspecteur du catalogue ([inspecteur-contraste.md](inspecteur-contraste.md)) utilise le même moteur qu'`npm run a11y` (règle `color-contrast` d'axe-core) mais dans le navigateur de l'utilisateur : il montre le rapport de chaque texte, page par page, thème par thème. `npm run a11y` reste la référence pour la validation globale (toutes les règles, toutes les pages). L'inspecteur est désactivé au chargement : il n'influence pas les audits.
 
 ## Scripts de vérification
 

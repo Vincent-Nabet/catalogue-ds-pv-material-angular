@@ -103,6 +103,7 @@ avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <su
 - `core/theme/themes.ts` : 4 entrées `app*` dans `ThemeId` et `THEMES` ; `ThemeService` pose `theme-<id>` sans autre changement, le sélecteur et le compteur de l'accueil suivent.
 - Si `--nom` change, adapter ces trois endroits.
 - Coût : +34 kB au bundle initial (budget d'avertissement relevé à 880 kB).
+- Contrôle des contrastes obtenus : l'[inspecteur de contraste](inspecteur-contraste.md) du catalogue les affiche écran par écran.
 
 ## Utilisation hors Angular
 
