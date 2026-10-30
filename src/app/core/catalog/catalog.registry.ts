@@ -264,6 +264,38 @@ export const CATALOG: readonly CatalogEntry[] = [
     loadComponent: () =>
       import('../../pages/composants/arbre/arbre.page').then((m) => m.ArbrePage),
   },
+  {
+    id: 'boite-dialogue',
+    label: 'Boîte de dialogue',
+    category: 'popups-modales',
+    icon: 'chat_bubble',
+    loadComponent: () =>
+      import('../../pages/composants/boite-dialogue/boite-dialogue.page').then((m) => m.BoiteDialoguePage),
+  },
+  {
+    id: 'feuille-du-bas',
+    label: 'Feuille du bas',
+    category: 'popups-modales',
+    icon: 'call_to_action',
+    loadComponent: () =>
+      import('../../pages/composants/feuille-du-bas/feuille-du-bas.page').then((m) => m.FeuilleDuBasPage),
+  },
+  {
+    id: 'snackbar',
+    label: 'Snackbar',
+    category: 'popups-modales',
+    icon: 'notifications',
+    loadComponent: () =>
+      import('../../pages/composants/snackbar/snackbar.page').then((m) => m.SnackbarPage),
+  },
+  {
+    id: 'infobulle',
+    label: 'Infobulle',
+    category: 'popups-modales',
+    icon: 'info',
+    loadComponent: () =>
+      import('../../pages/composants/infobulle/infobulle.page').then((m) => m.InfobullePage),
+  },
 ];
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({
