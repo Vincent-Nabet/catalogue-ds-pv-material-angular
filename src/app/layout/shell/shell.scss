@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+.titre {
+  color: inherit;
+  text-decoration: none;
+  font: var(--mat-sys-title-large);
+}
+
+.espace {
+  flex: 1;
+}
+
+.conteneur {
+  flex: 1;
+  min-height: 0;
+}
+
+mat-sidenav {
+  width: 280px;
+}
+
+main {
+  padding: 24px;
+  outline: none;
+}
