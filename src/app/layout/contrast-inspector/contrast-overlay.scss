@@ -1,0 +1,89 @@
+// Au-dessus des overlays CDK (menus, dialogs : z-index 1000).
+$couche: 1100;
+
+.calque {
+  position: fixed;
+  inset: 0;
+  z-index: $couche;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cadre {
+  position: fixed;
+  box-sizing: border-box;
+  border: 2px dashed var(--mat-sys-error);
+  border-radius: var(--mat-sys-corner-extra-small);
+}
+
+// Badge posé sur le bord haut du texte ; l'info-bulle (title) détaille les couleurs mesurées.
+.badge {
+  position: fixed;
+  padding: 0 4px;
+  border-radius: var(--mat-sys-corner-extra-small);
+  font: var(--mat-sys-label-small);
+  line-height: 16px;
+  white-space: nowrap;
+  pointer-events: auto;
+  transform: translateY(-100%);
+}
+
+.echec {
+  background: var(--mat-sys-error);
+  color: var(--mat-sys-on-error);
+}
+
+.conforme {
+  background: var(--mat-sys-inverse-surface);
+  color: var(--mat-sys-inverse-on-surface);
+}
+
+.inconnu {
+  border: 1px solid var(--mat-sys-outline);
+  background: var(--mat-sys-surface-container-highest);
+  color: var(--mat-sys-on-surface);
+}
+
+.panneau {
+  position: fixed;
+  inset-block-end: 16px;
+  inset-inline-start: 16px;
+  z-index: $couche;
+  max-width: 320px;
+  padding: 12px 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-highest);
+  box-shadow: var(--mat-sys-level3);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  h2 {
+    margin: 0 0 8px;
+    font: var(--mat-sys-title-small);
+  }
+
+  p {
+    margin: 0 0 8px;
+  }
+}
+
+.erreur {
+  color: var(--mat-sys-error);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    accent-color: var(--mat-sys-primary);
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-block-start: 8px;
+}

@@ -1,0 +1,52 @@
+@if (inspector.active()) {
+  <div class="calque" aria-hidden="true" data-inspecteur-contraste>
+    @for (badge of badges(); track badge.item.element) {
+      @if (badge.item.status === 'fail') {
+        <div
+          class="cadre"
+          [style.top.px]="badge.top"
+          [style.left.px]="badge.left"
+          [style.width.px]="badge.width"
+          [style.height.px]="badge.height"
+        ></div>
+      }
+      <span
+        class="badge"
+        [class.echec]="badge.item.status === 'fail'"
+        [class.conforme]="badge.item.status === 'pass'"
+        [class.inconnu]="badge.item.status === 'unknown'"
+        [style.top.px]="badge.top"
+        [style.left.px]="badge.left"
+        [title]="badge.description"
+        >{{ badge.label }}</span
+      >
+    }
+  </div>
+
+  <section class="panneau" aria-label="Inspecteur de contraste" data-inspecteur-contraste>
+    <h2>Inspecteur de contraste</h2>
+    @if (inspector.error(); as erreur) {
+      <p class="erreur" role="alert">Analyse impossible : {{ erreur }}</p>
+    } @else if (inspector.running()) {
+      <p role="status">Analyse en cours…</p>
+    } @else {
+      <p role="status">
+        <strong>{{ inspector.failing() }}</strong> échec(s) ·
+        <strong>{{ inspector.passing() }}</strong> conforme(s) ·
+        <strong>{{ inspector.unknown() }}</strong> à vérifier
+      </p>
+    }
+    <label class="option">
+      <input
+        type="checkbox"
+        [checked]="inspector.showPassing()"
+        (change)="setShowPassing($event)"
+      />
+      Afficher les contrastes conformes
+    </label>
+    <div class="actions">
+      <button matButton type="button" (click)="inspector.refresh()">Relancer</button>
+      <button matButton type="button" (click)="inspector.toggle()">Fermer</button>
+    </div>
+  </section>
+}

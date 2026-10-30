@@ -53,6 +53,8 @@ export class ContrastInspector {
       this.theme.scheme();
       this.theme.density();
       this.navigated();
+      // Dès la planification : le panneau n'affiche pas de comptes périmés pendant l'attente.
+      this.running.set(true);
       const timer = setTimeout(() => void this.refresh(), ANALYSIS_DELAY_MS);
       onCleanup(() => clearTimeout(timer));
     });

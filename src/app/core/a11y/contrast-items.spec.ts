@@ -1,5 +1,5 @@
 import type { NodeResult, Result } from 'axe-core';
-import { formatRatio, toContrastItems } from './contrast-items';
+import { ContrastItem, badgeLabel, describeItem, formatRatio, toContrastItems } from './contrast-items';
 
 function node(element: HTMLElement | undefined, data: Record<string, unknown>): NodeResult {
   return {
@@ -92,5 +92,43 @@ describe('formatRatio', () => {
     expect(formatRatio(2.66)).toBe('2,66 : 1');
     expect(formatRatio(4.5)).toBe('4,50 : 1');
     expect(formatRatio(21)).toBe('21,00 : 1');
+  });
+});
+
+describe('badge texts', () => {
+  const item = (patch: Partial<ContrastItem>): ContrastItem => ({
+    element: span(),
+    status: 'fail',
+    ratio: 2.66,
+    expected: 4.5,
+    foreground: '#86a315',
+    background: '#f5f6ef',
+    reason: null,
+    ...patch,
+  });
+
+  it('should label with the ratio, or a question mark when unknown', () => {
+    expect(badgeLabel(item({}))).toBe('2,66 : 1');
+    expect(badgeLabel(item({ status: 'unknown', ratio: null }))).toBe('?');
+    expect(badgeLabel(item({ status: 'unknown', ratio: 0 }))).toBe('?');
+  });
+
+  it('should describe a failure with the required ratio and the measured colors', () => {
+    expect(describeItem(item({}))).toBe(
+      'Contraste insuffisant : 2,66 : 1 (minimum 4,50 : 1). Texte #86a315 sur fond #f5f6ef.',
+    );
+  });
+
+  it('should describe a pass, with or without details', () => {
+    expect(describeItem(item({ status: 'pass', ratio: 12.6 }))).toContain('Contraste conforme : 12,60 : 1');
+    expect(describeItem(item({ status: 'pass', foreground: null, expected: null }))).toBe(
+      'Contraste conforme : 2,66 : 1.',
+    );
+  });
+
+  it('should explain why an unknown result needs a manual check', () => {
+    expect(describeItem(item({ status: 'unknown', ratio: null, reason: 'fond en dégradé' }))).toBe(
+      'Contraste à vérifier à la main : fond en dégradé.',
+    );
   });
 });

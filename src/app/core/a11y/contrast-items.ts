@@ -88,3 +88,22 @@ const ratioFormat = new Intl.NumberFormat('fr-FR', {
 export function formatRatio(ratio: number): string {
   return `${ratioFormat.format(ratio)} : 1`;
 }
+
+/** Texte court du badge : le rapport mesuré, ou `?` quand axe ne peut pas conclure (il renvoie alors 0). */
+export function badgeLabel(item: ContrastItem): string {
+  return item.status === 'unknown' || item.ratio === null ? '?' : formatRatio(item.ratio);
+}
+
+/** Phrase complète (info-bulle du badge) : verdict, rapport exigé, couleurs mesurées. */
+export function describeItem(item: ContrastItem): string {
+  if (item.status === 'unknown' || item.ratio === null) {
+    return `Contraste à vérifier à la main : ${item.reason ?? 'contraste indéterminé'}.`;
+  }
+  const expected = item.expected === null ? '' : ` (minimum ${formatRatio(item.expected)})`;
+  const colors =
+    item.foreground && item.background
+      ? ` Texte ${item.foreground} sur fond ${item.background}.`
+      : '';
+  const verdict = item.status === 'fail' ? 'Contraste insuffisant' : 'Contraste conforme';
+  return `${verdict} : ${formatRatio(item.ratio)}${expected}.${colors}`;
+}

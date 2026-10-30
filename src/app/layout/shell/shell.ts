@@ -15,6 +15,8 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, map, skip } from 'rxjs';
 import { CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
+import { ContrastOverlay } from '../contrast-inspector/contrast-overlay';
+import { ContrastToggle } from '../contrast-inspector/contrast-toggle';
 import { ThemePicker } from '../theme-picker/theme-picker';
 
 @Component({
@@ -34,6 +36,8 @@ import { ThemePicker } from '../theme-picker/theme-picker';
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    ContrastOverlay,
+    ContrastToggle,
     ThemePicker,
   ],
   templateUrl: './shell.html',

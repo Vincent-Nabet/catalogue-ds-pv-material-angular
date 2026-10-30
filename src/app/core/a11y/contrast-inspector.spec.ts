@@ -47,6 +47,9 @@ describe('ContrastInspector', () => {
 
   it('should measure the color-contrast rule once activated, excluding its own overlay', async () => {
     inspector.toggle();
+    TestBed.tick();
+    expect(inspector.running()).toBe(true);
+    expect(run).not.toHaveBeenCalled();
     await settle();
 
     expect(run).toHaveBeenCalledTimes(1);
