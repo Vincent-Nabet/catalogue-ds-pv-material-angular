@@ -131,6 +131,10 @@ test('ecrireFichiers : idempotent, supprime les fichiers périmés, refuse un do
   assert.equal(statSync(join(sortie, 'a.css')).mtimeMs, fige);
   assert.match(readFileSync(join(sortie, 'a.css'), 'utf8'), /2026-01-01/);
 
+  // Fins de ligne CRLF (checkout Windows) : toujours inchangé.
+  writeFileSync(join(sortie, 'a.css'), readFileSync(join(sortie, 'a.css'), 'utf8').replaceAll('\n', '\r\n'));
+  assert.deepEqual(ecrireFichiers(sortie, jeu, 'tokens', '2026-02-02').ecrits, []);
+
   const modifie = ecrireFichiers(sortie, new Map([['a.css', ':root { --x: 1; }\n']]), 'tokens', '2026-03-03');
   assert.deepEqual(modifie.ecrits, ['a.css']);
   assert.deepEqual(modifie.supprimes, ['sous/b.css']);

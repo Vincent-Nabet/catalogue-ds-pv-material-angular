@@ -9,7 +9,8 @@ const ENTETE = /^\/\* Fichier généré par `npm run themes`[^]*?\*\/\n\n/;
 
 export const entete = (origine, date) => `/* ${MARQUEUR}\n * Source : ${basename(origine)} — ${date} */\n\n`;
 
-const corpsDe = (texte) => texte.replace(ENTETE, '');
+// Les fins de ligne CRLF (checkout Windows avec autocrlf) ne comptent pas comme une modification.
+const corpsDe = (texte) => texte.replaceAll('\r\n', '\n').replace(ENTETE, '');
 const estGenere = (texte) => texte.startsWith(`/* ${MARQUEUR}`);
 
 function listerFichiers(dossier, prefixe = '') {
