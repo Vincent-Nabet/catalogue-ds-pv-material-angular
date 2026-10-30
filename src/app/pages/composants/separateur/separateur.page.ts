@@ -32,7 +32,7 @@ const SNIPPETS = {
   template: `
     <h1>Séparateur</h1>
 
-    <app-specimen-section title="Orientations">
+    <app-specimen-section minWidth="340px" title="Orientations">
       <app-specimen label="Horizontal" api="mat-divider" [snippet]="snippets.horizontal">
         <div class="bloc">
           <p>Au-dessus</p>
@@ -49,7 +49,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Dans une liste">
+    <app-specimen-section minWidth="340px" title="Dans une liste">
       <app-specimen label="Décalé" api="inset" [snippet]="snippets.inset">
         <mat-list class="bloc">
           <mat-list-item>Premier</mat-list-item>

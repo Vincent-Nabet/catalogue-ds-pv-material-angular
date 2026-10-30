@@ -83,7 +83,7 @@ const SNIPPETS = {
   template: `
     <h1>Liste</h1>
 
-    <app-specimen-section title="Listes simples">
+    <app-specimen-section minWidth="360px" title="Listes simples">
       <app-specimen label="Simple" api="mat-list" [snippet]="snippets.simple">
         <mat-list>
           <mat-list-item>Photos</mat-list-item>
@@ -123,7 +123,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Listes interactives">
+    <app-specimen-section minWidth="360px" title="Listes interactives">
       <app-specimen label="Liste d’actions" api="mat-action-list" [snippet]="snippets.actions">
         <mat-action-list>
           <button mat-list-item>Modifier</button>

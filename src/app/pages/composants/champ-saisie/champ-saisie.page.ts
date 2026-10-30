@@ -72,7 +72,7 @@ const SNIPPETS = {
   template: `
     <h1>Champ de saisie</h1>
 
-    <app-specimen-section title="Apparences">
+    <app-specimen-section minWidth="340px" title="Apparences">
       <app-specimen label="Rempli" api='appearance="fill"' [snippet]="snippets.rempli">
         <mat-form-field appearance="fill">
           <mat-label>Nom</mat-label>
@@ -87,7 +87,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Contenu">
+    <app-specimen-section minWidth="340px" title="Contenu">
       <app-specimen label="Avec indice" api="mat-hint" [snippet]="snippets.indice">
         <mat-form-field>
           <mat-label>E-mail</mat-label>
@@ -124,7 +124,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="États">
+    <app-specimen-section minWidth="340px" title="États">
       <app-specimen label="Désactivé" api="disabled" [snippet]="snippets.desactive">
         <mat-form-field>
           <mat-label>Nom</mat-label>

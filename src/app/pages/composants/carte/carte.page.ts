@@ -72,7 +72,7 @@ const SNIPPETS = {
   template: `
     <h1>Carte</h1>
 
-    <app-specimen-section title="Apparences">
+    <app-specimen-section minWidth="360px" title="Apparences">
       <app-specimen label="Relevée" api='appearance="raised"' [snippet]="snippets.releve">
         <mat-card appearance="raised">
           <mat-card-header>
@@ -102,7 +102,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Contenu">
+    <app-specimen-section minWidth="360px" title="Contenu">
       <app-specimen label="Avec actions" api="mat-card-actions" [snippet]="snippets.actions">
         <mat-card appearance="outlined">
           <mat-card-header>

@@ -79,7 +79,7 @@ const SNIPPETS = {
   template: `
     <h1>Liste déroulante</h1>
 
-    <app-specimen-section title="Sélection" description="Cliquer sur le champ pour ouvrir la liste.">
+    <app-specimen-section minWidth="340px" title="Sélection" description="Cliquer sur le champ pour ouvrir la liste.">
       <app-specimen label="Simple" api="mat-select" [snippet]="snippets.simple">
         <mat-form-field>
           <mat-label>Fruit</mat-label>
@@ -124,7 +124,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="États">
+    <app-specimen-section minWidth="340px" title="États">
       <app-specimen label="Option désactivée" api="mat-option disabled" [snippet]="snippets.optionDesactivee">
         <mat-form-field>
           <mat-label>Fruit</mat-label>

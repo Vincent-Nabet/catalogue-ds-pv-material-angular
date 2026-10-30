@@ -32,7 +32,7 @@ import { Component, input } from '@angular/core';
 
     .grille {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--specimen-min, 220px)), 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--specimen-min, 300px)), 1fr));
       gap: 16px;
       margin-top: 12px;
     }
@@ -42,5 +42,5 @@ export class SpecimenSection {
   readonly title = input.required<string>();
   readonly description = input<string>();
   /** Largeur minimale d'une colonne de la grille. */
-  readonly minWidth = input('220px');
+  readonly minWidth = input('300px');
 }

@@ -41,7 +41,7 @@ const SNIPPETS = {
   template: `
     <h1>Grille</h1>
 
-    <app-specimen-section title="Dispositions">
+    <app-specimen-section minWidth="360px" title="Dispositions">
       <app-specimen label="Simple" api="mat-grid-list" [snippet]="snippets.simple">
         <mat-grid-list cols="3" rowHeight="64px" gutterSize="8px">
           <mat-grid-tile>1</mat-grid-tile>

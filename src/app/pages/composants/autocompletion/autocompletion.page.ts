@@ -60,7 +60,7 @@ const SNIPPETS = {
   template: `
     <h1>Autocomplétion</h1>
 
-    <app-specimen-section title="Suggestions" description="Cliquer dans le champ pour afficher la liste.">
+    <app-specimen-section minWidth="340px" title="Suggestions" description="Cliquer dans le champ pour afficher la liste.">
       <app-specimen label="Simple" api="matAutocomplete" [snippet]="snippets.simple">
         <mat-form-field>
           <mat-label>Ville</mat-label>
@@ -89,7 +89,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="États">
+    <app-specimen-section minWidth="340px" title="États">
       <app-specimen label="Désactivé" api="disabled" [snippet]="snippets.desactive">
         <mat-form-field>
           <mat-label>Ville</mat-label>

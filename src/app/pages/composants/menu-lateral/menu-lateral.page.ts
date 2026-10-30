@@ -24,7 +24,7 @@ const SNIPPETS = {
   template: `
     <h1>Menu latéral</h1>
 
-    <app-specimen-section
+    <app-specimen-section minWidth="400px"
       title="Positions"
       description="Aperçus en mode « side » : les modes « over » et « push » recouvrent ou poussent le contenu."
     >

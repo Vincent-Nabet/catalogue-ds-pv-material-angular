@@ -65,7 +65,7 @@ const SNIPPETS = {
   template: `
     <h1>Sélecteur de date</h1>
 
-    <app-specimen-section title="Champs" description="Locale française (fr-FR), via l’adaptateur de date natif.">
+    <app-specimen-section minWidth="360px" title="Champs" description="Locale française (fr-FR), via l’adaptateur de date natif.">
       <app-specimen label="Date" api="matDatepicker" [snippet]="snippets.simple">
         <mat-form-field>
           <mat-label>Date</mat-label>
@@ -96,7 +96,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Calendrier">
+    <app-specimen-section minWidth="360px" title="Calendrier">
       <app-specimen label="Calendrier intégré" api="mat-calendar" [snippet]="snippets.calendrier">
         <mat-calendar class="calendrier" />
       </app-specimen>

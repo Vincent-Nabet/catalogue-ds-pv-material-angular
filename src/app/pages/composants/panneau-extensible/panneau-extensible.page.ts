@@ -68,7 +68,7 @@ const SNIPPETS = {
   template: `
     <h1>Panneau extensible</h1>
 
-    <app-specimen-section title="Panneaux">
+    <app-specimen-section minWidth="420px" title="Panneaux">
       <app-specimen label="Simple" api="mat-expansion-panel" [snippet]="snippets.simple">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
@@ -103,7 +103,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Accordéons">
+    <app-specimen-section minWidth="420px" title="Accordéons">
       <app-specimen label="Un panneau à la fois" api="mat-accordion" [snippet]="snippets.accordeon">
         <mat-accordion>
           <mat-expansion-panel>

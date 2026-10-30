@@ -41,7 +41,7 @@ const SNIPPETS = {
   template: `
     <h1>Arbre</h1>
 
-    <app-specimen-section title="Hiérarchie">
+    <app-specimen-section minWidth="360px" title="Hiérarchie">
       <app-specimen label="Arbre à plusieurs niveaux" api="mat-tree" [snippet]="snippets.arbre">
         <mat-tree [dataSource]="donnees" [childrenAccessor]="enfants" #arbre>
           <mat-tree-node *matTreeNodeDef="let noeud" matTreeNodePadding>
