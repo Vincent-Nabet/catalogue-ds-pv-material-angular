@@ -16,6 +16,19 @@
 | Largeur des colonnes | `minWidth` par section, 300 px par défaut | Les composants larges (carte, tableau, onglets…) débordaient à 220 px |
 | Arbres | Dépliés au chargement (`afterNextRender` + `expandAll()`) | Sinon les variantes ne se distinguent pas |
 
+## Thèmes générés depuis les tokens
+
+Détail : [generation-themes.md](generation-themes.md).
+
+| Sujet | Décision | Pourquoi |
+|---|---|---|
+| Palette tonale MD3 | Non dérivable des `Shade-NNN` : surcharge des variables `--mat-sys-*` + palette Material prédéfinie en repli | Les tokens n'ont pas les tons 0 à 100 que `mat.theme()` attend |
+| Surcharges | Second argument de `mat.theme()` (pas `mat.theme-overrides()`) | `theme-overrides` ignore `neutral10` ; la table est vérifiée par compilation Sass |
+| Variables typo composites | Surchargées aussi (`--mat-sys-body-large`…) | Valeurs figées : surcharger `-size` ou `-weight` ne les met pas à jour |
+| State Layers | Ignorés ; opacités d'état MD3 posées en constantes | Ce sont des alias de couleur sans opacité |
+| Clair/sombre et contraste | `light-dark()` + une classe `theme-<nom>[-<contraste>]` par famille | Même mécanisme que Material et que le catalogue ; 4 blocs au lieu de 8 |
+| Intégration au catalogue | Non faite | Hors périmètre de ce chantier ; les fichiers sont prêts à importer |
+
 ## Budget initial
 
 L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 850 kB) au fil de l'ajout de pages. Cause mesurée : le shell importe des modules Material entiers (`list.mjs` ≈ 132 kB, `button.mjs` ≈ 67 kB, `forms`, overlay CDK) qui ne se découpent pas à la classe près, et que le bundler place dans le chunk initial. Déplacer le date adapter vers les pages n'économisait que ≈ 17 kB : abandonné pour garder `app.config.ts` fidèle au plan. Erreur à 1 MB inchangée. Une piste si le poids devient gênant : remplacer `mat-nav-list` du shell par une navigation maison (≈ −130 kB), au prix d'un rendu moins fidèle.
@@ -43,11 +56,12 @@ L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 
 - États de survol et d'appui non forçables, donc non montrés.
 - Pas de cartes avec image, pas de formulaires complets, pas de validation asynchrone.
 - Les scripts `a11y` et `captures` nécessitent Chrome ou Chromium installé (`CHROME_PATH` sinon) ; ils ne tournent pas en CI par défaut.
-- Seuls les tests du shell, du registre, du service de thème et du specimen existent.
+- Seuls les tests du shell, du registre, du service de thème et du specimen existent (plus ceux du script de génération, via `node --test scripts/themes/`).
+- Les thèmes générés (`src/styles/themes-app/`) ne sont validés que par compilation Sass et par tests : pas encore de contrôle visuel ni axe, faute d'intégration au catalogue.
 
 ## Hors périmètre
 
-- `tokens/` et `TOKENS-MD3.md`, `TOKENS-NON-APPLICABLES-MD3.md` : correspondances entre un design system externe (tokens DTCG) et les variables Material Design 3. Document pour le design, **non utilisé par l'application**.
+- `tokens/` et `TOKENS-MD3.md`, `TOKENS-NON-APPLICABLES-MD3.md` : design system externe (tokens DTCG) et analyses de correspondance avec les variables Material Design 3. Lus par `npm run themes` en lecture seule, **jamais modifiés** ni committés ; **non utilisés directement par l'application**.
 - Thème Isagri, niveaux de contraste du thème, internationalisation autre que le français.
 
 ## Fichiers d'outillage à ne pas toucher dans ce chantier

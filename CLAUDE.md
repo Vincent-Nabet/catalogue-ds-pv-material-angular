@@ -11,6 +11,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 | ajouter une page ou une variante (gabarit, pièges) | `docs/ajouter-un-composant.md` |
 | thèmes, densité, polices, icônes, jetons CSS | `docs/themes-et-styles.md` |
 | lint, tests, axe, méthode de vérification, commits | `docs/qualite-et-accessibilite.md` |
+| générer/régénérer les thèmes du design system depuis `tokens/` | `docs/generation-themes.md` |
 | comprendre un choix ou un comportement inattendu | `docs/decisions-et-limites.md` |
 
 ### Essentiel
@@ -28,6 +29,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 - Booléens en binding (`[disabledInteractive]="true"`), `&#64;` pour une arobase dans un template, `hasBackdrop` sur `mat-sidenav-container`, drawers `over`/`push` laissés fermés (piège de focus).
 - Couleurs uniquement via `--mat-sys-*` ; typographie via `--mat-sys-*` (pas de tailles/couleurs en dur).
 - Bundle initial ≈ 823 kB (avertissement à 850 kB, erreur à 1 MB) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
+- Thèmes du design system : générés par `npm run themes` dans `src/styles/themes-<nom>/` (défaut `themes-app`) : **ne pas éditer ces fichiers à la main**, relancer le script ; pas encore branchés au catalogue ; tests : `node --test scripts/themes/`.
 - Hors périmètre : `tokens/` et `TOKENS-*.md` (design system distinct, **ne pas modifier**) ; ne pas committer `.mcp.json`, `.mcp.json.tmp`, `.claude/`, `.agents/`, `skills-lock.json` dans ce chantier.
 
 ### Vérifier un changement

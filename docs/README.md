@@ -1,8 +1,10 @@
 # Documentation du projet
 
-Catalogue visuel des composants **Angular Material 22**, destiné aux designers et intégrateurs. Cette documentation décrit le projet assez en détail pour travailler dessus sans relire tout le code.
+Catalogue visuel des composants **Angular Material 22**, destiné aux designers et intégrateurs, et outillage de **génération de thèmes** depuis les tokens du design system. Cette documentation décrit le projet assez en détail pour travailler dessus sans relire tout le code.
 
 ## Index
+
+### Catalogue (site)
 
 | Fichier | Contenu | À lire quand… |
 |---|---|---|
@@ -13,6 +15,14 @@ Catalogue visuel des composants **Angular Material 22**, destiné aux designers 
 | [qualite-et-accessibilite.md](qualite-et-accessibilite.md) | Lint, tests, budgets, accessibilité (axe-core), scripts `a11y` et `captures` | on valide un changement ou on corrige une violation |
 | [decisions-et-limites.md](decisions-et-limites.md) | Décisions prises, particularités d'Angular Material 22, limites connues, hors périmètre | on s'étonne d'un choix ou on rencontre un comportement inattendu |
 
+### Construction des thèmes
+
+| Fichier | Contenu | À lire quand… |
+|---|---|---|
+| [generation-themes.md](generation-themes.md) | Script `npm run themes` : tokens (dossier ou zip) → variables CSS MD3 + custom et thème Angular Material ; options, fichiers produits, correspondance, choix | on régénère les thèmes, on change de source de tokens ou on branche les fichiers générés |
+
+Analyses de référence à la racine du dépôt (lecture seule) : `TOKENS-MD3.md` et `TOKENS-NON-APPLICABLES-MD3.md`.
+
 ## En une minute
 
 - Angular 22.2, Angular Material et CDK 22.2.5, application **zoneless**, SCSS, Vitest, ESLint (angular-eslint).
@@ -21,6 +31,7 @@ Catalogue visuel des composants **Angular Material 22**, destiné aux designers 
 - Chaque page présente des **specimens** (variantes et états) avec un bouton `</>` qui ouvre le code dans une boîte de dialogue avec bouton « Copier ».
 - 6 thèmes Material prédéfinis × 3 modes (clair, sombre, système) × 5 densités, modifiables en direct et mémorisés dans `localStorage`.
 - Police **Poppins**, icônes **Material Symbols Outlined** (les deux via Google Fonts).
+- Les thèmes du design system sont **générés** par `npm run themes` dans `src/styles/themes-app/` ; ils ne sont pas encore branchés au catalogue.
 
 ## Commandes
 
@@ -31,10 +42,12 @@ npm run lint         # ng lint
 npm test             # ng test (Vitest) ; ajouter -- --watch=false pour un seul passage
 npm run a11y         # audit axe-core + erreurs console sur toutes les pages
 npm run captures     # captures pleine page par thème et mode (dossier captures/)
+npm run themes       # génère les thèmes depuis tokens/ (ou --source design.zip --nom <nom>)
+node --test scripts/themes/   # tests du script de génération
 ```
 
 Avant tout commit : `ng build`, `ng lint` et `ng test --watch=false` doivent passer.
 
 ## Hors périmètre
 
-Le dossier `tokens/` et les fichiers `TOKENS-MD3.md` / `TOKENS-NON-APPLICABLES-MD3.md` concernent un design system distinct (tokens au format DTCG). Ils ne sont **pas** utilisés par l'application, qui s'appuie uniquement sur les palettes Material prédéfinies. Ne pas les modifier dans le cadre du catalogue.
+Le dossier `tokens/` et les fichiers `TOKENS-MD3.md` / `TOKENS-NON-APPLICABLES-MD3.md` concernent un design system distinct (tokens au format DTCG). L'application elle-même s'appuie uniquement sur les palettes Material prédéfinies ; seul le script `npm run themes` lit `tokens/` (en lecture seule). Ne jamais les modifier ni les committer dans le cadre du catalogue ou de la génération des thèmes.

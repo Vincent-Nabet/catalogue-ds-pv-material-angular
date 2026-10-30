@@ -22,6 +22,10 @@
 | `core/theme/theme.service.spec.ts` | classes par défaut sur `<html>` (`theme-azur`, `scheme-light`, `density-0`), changement de classes, persistance et restauration, valeurs invalides ignorées |
 | `shared/specimen/specimen.spec.ts` | bouton snippet présent seulement avec un snippet, ouverture du dialog |
 
+### Tests du script de génération des thèmes (`node:test`)
+
+`node --test scripts/themes/` (hors `ng test`, aucun navigateur) : lecture dossier/zip et résolution des alias (cycle, alias absent), classement de tous les tokens (0 inconnu), valeurs des 8 modes retrouvées dans les CSS générés (ex. primary clair `#86A315`), CSS valide (`sass.compileString`), compilation Sass d'une feuille témoin (aucune `--mat-sys-*` ne garde une valeur de la palette de repli hors les 7 variables documentées), sorties identiques depuis `tokens/` et depuis un zip, génération idempotente, CLI. Ils lisent `tokens/` en lecture seule. Voir [generation-themes.md](generation-themes.md).
+
 Les pages de composants ne sont pas testées unitairement (démonstration visuelle) : elles sont couvertes par la compilation stricte des templates et par le contrôle navigateur décrit ci-dessous.
 
 ## Accessibilité : acquis
@@ -95,4 +99,5 @@ Voir [architecture.md](architecture.md#build-et-budgets-angularjson). Ne relever
 
 - Branche de travail : `feat/catalogue-material` (non poussée ; `master` ne contient que le commit initial).
 - Messages en **Conventional Commits, en français** (`feat(theme): …`, `fix(a11y): …`), avec le trailer `Co-Authored-By` demandé par Claude Code.
-- Un commit par étape logique ; ne jamais inclure `.mcp.json`, `.mcp.json.tmp`, `tokens/`, `TOKENS-*.md`, `.claude/`, `.agents/`, `skills-lock.json` dans un commit de ce chantier.
+- Génération des thèmes : branche `feat/generation-themes`, mêmes conventions.
+- Un commit par étape logique ; ne jamais inclure `.mcp.json`, `.mcp.json.tmp`, `tokens/`, `tokens_bak/`, `TOKENS-*.md`, `plan.md`, `.claude/`, `.agents/`, `skills-lock.json` dans un commit de ce chantier.

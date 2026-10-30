@@ -41,8 +41,13 @@ src/
     pages/
       accueil/accueil.ts
       composants/<id>/<id>.page.ts   une page par composant (35)
+  styles/themes-<nom>/       GÉNÉRÉ par `npm run themes` (défaut : themes-app), ne pas éditer à la main :
+                             index.css, md3/*.css, <nom>.css, _themes-<nom>.scss ; pas encore importé
+scripts/
+  a11y.mjs, captures.mjs, lib.mjs   vérification du site (axe-core, captures)
+  themes/                    génération des thèmes depuis les tokens (voir docs/generation-themes.md)
 docs/                        cette documentation
-tokens/, TOKENS-*.md         HORS PÉRIMÈTRE (design system distinct)
+tokens/, TOKENS-*.md         design system distinct : lus (lecture seule) par scripts/themes, jamais modifiés
 ```
 
 Conventions de nommage : fichiers sans suffixe `.component` (`shell.ts`, `specimen.ts`), classes sans suffixe sauf les pages (`BoutonPage`), sélecteurs `app-…`. Les pages de composants utilisent `app-<id>-page`.
