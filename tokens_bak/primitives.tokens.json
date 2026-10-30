@@ -1,0 +1,976 @@
+{
+  "Number": {
+    "$type": "number",
+    "$value": 0
+  },
+  "Number 2": {
+    "$type": "number",
+    "$value": 0
+  },
+  "Font theme": {
+    "Static": {
+      "Font": {
+        "Brand": {
+          "$type": "fontFamily",
+          "$value": "Poppins"
+        },
+        "Plain": {
+          "$type": "fontFamily",
+          "$value": "Poppins"
+        }
+      },
+      "Weight": {
+        "Regular": {
+          "$type": "fontWeight",
+          "$value": "Regular"
+        },
+        "Medium": {
+          "$type": "fontWeight",
+          "$value": "Medium"
+        },
+        "Bold": {
+          "$type": "fontWeight",
+          "$value": "SemiBold"
+        }
+      }
+    },
+    "Tracking": {
+      "Small": {
+        "$type": "dimension",
+        "$value": "0.1px"
+      },
+      "None": {
+        "$type": "dimension",
+        "$value": "0px"
+      }
+    }
+  },
+  "Radius": {
+    "None": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "Extra-small": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "Small": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "Medium": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "Large": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "Extra-large": {
+      "$type": "dimension",
+      "$value": "28px"
+    },
+    "Full": {
+      "$type": "dimension",
+      "$value": "1000px"
+    },
+    "Large-increased": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "Extra-large-increased": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "Extra-extra-large": {
+      "$type": "dimension",
+      "$value": "48px"
+    }
+  },
+  "Spacing": {
+    "None": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "Extra-small": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "Small": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "Medium": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "Large": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "Large-increased": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "Extra-large": {
+      "$type": "dimension",
+      "$value": "40px"
+    },
+    "Extra-large-increased": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "Extra-extra-large": {
+      "$type": "dimension",
+      "$value": "56px"
+    },
+    "Full": {
+      "$type": "dimension",
+      "$value": "64px"
+    }
+  },
+  "Colors": {
+    "Olive": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#202900"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#253000"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#263000"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#2E3B00"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#303B08"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#3E4C0C"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#465900"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#4B5B08"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#53651B"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#536700"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#657C08"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#86A315"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#A2B653"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#AFC75E"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#BDCE80"
+      },
+      "Shade-016": {
+        "$type": "color",
+        "$value": "#BCD078"
+      },
+      "Shade-017": {
+        "$type": "color",
+        "$value": "#CADF87"
+      },
+      "Shade-018": {
+        "$type": "color",
+        "$value": "#D2E594"
+      },
+      "Shade-019": {
+        "$type": "color",
+        "$value": "#D8EB9A"
+      },
+      "Shade-020": {
+        "$type": "color",
+        "$value": "#E6F8A6"
+      },
+      "Shade-021": {
+        "$type": "color",
+        "$value": "#F0FFC0"
+      }
+    },
+    "Neutral": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#000000"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#0D0D0D"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#101010"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#121212"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#1A1A1A"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#1F1F1F"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#292929"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#303030"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#343434"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#383838"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#454545"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#474747"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#494949"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#4D4D4D"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#545454"
+      },
+      "Shade-016": {
+        "$type": "color",
+        "$value": "#5C5C5C"
+      },
+      "Shade-017": {
+        "$type": "color",
+        "$value": "#626262"
+      },
+      "Shade-018": {
+        "$type": "color",
+        "$value": "#747474"
+      },
+      "Shade-019": {
+        "$type": "color",
+        "$value": "#9F9F9F"
+      },
+      "Shade-020": {
+        "$type": "color",
+        "$value": "#A3A3A3"
+      },
+      "Shade-021": {
+        "$type": "color",
+        "$value": "#BDBDBD"
+      },
+      "Shade-022": {
+        "$type": "color",
+        "$value": "#C4C4C4"
+      },
+      "Shade-023": {
+        "$type": "color",
+        "$value": "#C6C6C6"
+      },
+      "Shade-024": {
+        "$type": "color",
+        "$value": "#CCCCCC"
+      },
+      "Shade-025": {
+        "$type": "color",
+        "$value": "#D1D1D1"
+      },
+      "Shade-026": {
+        "$type": "color",
+        "$value": "#D6D6D6"
+      },
+      "Shade-027": {
+        "$type": "color",
+        "$value": "#DADADA"
+      },
+      "Shade-028": {
+        "$type": "color",
+        "$value": "#E2E2E2"
+      },
+      "Shade-029": {
+        "$type": "color",
+        "$value": "#E8E8E8"
+      },
+      "Shade-030": {
+        "$type": "color",
+        "$value": "#EEEEEE"
+      },
+      "Shade-031": {
+        "$type": "color",
+        "$value": "#F2F2F2"
+      },
+      "Shade-032": {
+        "$type": "color",
+        "$value": "#F4F4F4"
+      },
+      "Shade-033": {
+        "$type": "color",
+        "$value": "#F5F5F5"
+      },
+      "Shade-034": {
+        "$type": "color",
+        "$value": "#FAFAFA"
+      },
+      "Shade-035": {
+        "$type": "color",
+        "$value": "#FFFFFF"
+      }
+    },
+    "Sage": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#252A14"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#293015"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#293700"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#30351F"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#354500"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#41482C"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#415400"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#4C5D23"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#555D3D"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#A6AF84"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#BDC59A"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#BEC79E"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#CBD3A8"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#D9DFBC"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#EEF5CD"
+      }
+    },
+    "Mint": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#003820"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#003821"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#00391F"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#064B30"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#075B3B"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#005F38"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#106543"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#246C49"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#087A4C"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#72C891"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#8BD7A8"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#8DDBAA"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#3CF19A"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#9BE7B6"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#AFF2C4"
+      },
+      "Shade-016": {
+        "$type": "color",
+        "$value": "#C9FFD9"
+      }
+    },
+    "Red": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#690005"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#641713"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#74110D"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#93000A"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#852221"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#8C1D18"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#A52620"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#A52A23"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#B3261E"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#FF9E96"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#FFB4AB"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#F5C7C3"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#FFC4BE"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#FFDAD6"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#F9DEDC"
+      }
+    },
+    "Neutral Variant": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#080907"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#0B0C0A"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#0D0E0C"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#10110F"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#121311"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#13140F"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#151613"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#181916"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#1A1B18"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#1B1C19"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#1D1E1B"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#1E1F1C"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#252623"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#272824"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#282A26"
+      },
+      "Shade-016": {
+        "$type": "color",
+        "$value": "#292A26"
+      },
+      "Shade-017": {
+        "$type": "color",
+        "$value": "#30312E"
+      },
+      "Shade-018": {
+        "$type": "color",
+        "$value": "#30322B"
+      },
+      "Shade-019": {
+        "$type": "color",
+        "$value": "#333430"
+      },
+      "Shade-020": {
+        "$type": "color",
+        "$value": "#343531"
+      },
+      "Shade-021": {
+        "$type": "color",
+        "$value": "#353632"
+      },
+      "Shade-022": {
+        "$type": "color",
+        "$value": "#383936"
+      },
+      "Shade-023": {
+        "$type": "color",
+        "$value": "#383A35"
+      },
+      "Shade-024": {
+        "$type": "color",
+        "$value": "#3D3E3A"
+      },
+      "Shade-025": {
+        "$type": "color",
+        "$value": "#41423E"
+      },
+      "Shade-026": {
+        "$type": "color",
+        "$value": "#46483F"
+      },
+      "Shade-027": {
+        "$type": "color",
+        "$value": "#464842"
+      },
+      "Shade-028": {
+        "$type": "color",
+        "$value": "#484A44"
+      },
+      "Shade-029": {
+        "$type": "color",
+        "$value": "#656760"
+      },
+      "Shade-030": {
+        "$type": "color",
+        "$value": "#696B64"
+      },
+      "Shade-031": {
+        "$type": "color",
+        "$value": "#777970"
+      },
+      "Shade-032": {
+        "$type": "color",
+        "$value": "#777A6F"
+      },
+      "Shade-033": {
+        "$type": "color",
+        "$value": "#91928B"
+      },
+      "Shade-034": {
+        "$type": "color",
+        "$value": "#9A9C94"
+      },
+      "Shade-035": {
+        "$type": "color",
+        "$value": "#A2A49B"
+      },
+      "Shade-036": {
+        "$type": "color",
+        "$value": "#ACAEA5"
+      },
+      "Shade-037": {
+        "$type": "color",
+        "$value": "#C7C8BF"
+      },
+      "Shade-038": {
+        "$type": "color",
+        "$value": "#C7CBBE"
+      },
+      "Shade-039": {
+        "$type": "color",
+        "$value": "#D0D1CB"
+      },
+      "Shade-040": {
+        "$type": "color",
+        "$value": "#D2D3CB"
+      },
+      "Shade-041": {
+        "$type": "color",
+        "$value": "#D7D8D2"
+      },
+      "Shade-042": {
+        "$type": "color",
+        "$value": "#D8D9D1"
+      },
+      "Shade-043": {
+        "$type": "color",
+        "$value": "#DCDDD4"
+      },
+      "Shade-044": {
+        "$type": "color",
+        "$value": "#DCDED7"
+      },
+      "Shade-045": {
+        "$type": "color",
+        "$value": "#E0E1DB"
+      },
+      "Shade-046": {
+        "$type": "color",
+        "$value": "#E4E3DE"
+      },
+      "Shade-047": {
+        "$type": "color",
+        "$value": "#E3E4DD"
+      },
+      "Shade-048": {
+        "$type": "color",
+        "$value": "#E4E5DC"
+      },
+      "Shade-049": {
+        "$type": "color",
+        "$value": "#E4E5DF"
+      },
+      "Shade-050": {
+        "$type": "color",
+        "$value": "#E5E7DC"
+      },
+      "Shade-051": {
+        "$type": "color",
+        "$value": "#E9EAE3"
+      },
+      "Shade-052": {
+        "$type": "color",
+        "$value": "#E9EAE4"
+      },
+      "Shade-053": {
+        "$type": "color",
+        "$value": "#EBECE6"
+      },
+      "Shade-054": {
+        "$type": "color",
+        "$value": "#EEEDE8"
+      },
+      "Shade-055": {
+        "$type": "color",
+        "$value": "#EFF0E9"
+      },
+      "Shade-056": {
+        "$type": "color",
+        "$value": "#F1F0EB"
+      },
+      "Shade-057": {
+        "$type": "color",
+        "$value": "#F1F1EC"
+      },
+      "Shade-058": {
+        "$type": "color",
+        "$value": "#F1F2EA"
+      },
+      "Shade-059": {
+        "$type": "color",
+        "$value": "#F3F3EE"
+      },
+      "Shade-060": {
+        "$type": "color",
+        "$value": "#F5F6EF"
+      },
+      "Shade-061": {
+        "$type": "color",
+        "$value": "#FAF9F5"
+      },
+      "Shade-062": {
+        "$type": "color",
+        "$value": "#FAFAF5"
+      }
+    },
+    "Green": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#1C3700"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#274D05"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#315D08"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#365E0A"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#315F05"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#38620C"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#477A14"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#467F0C"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#73C322"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#A5D66A"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#B7E77E"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#C8E8A5"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#DDF3C4"
+      }
+    },
+    "Blue": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#002E69"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#003A88"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#003E99"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#003F9E"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#004494"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#0050BF"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#1558B7"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#0054D1"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#0066FF"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#9EBBFF"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#ADC6FF"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#BDD0FF"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#C3D6FF"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#D9E2FF"
+      },
+      "Shade-015": {
+        "$type": "color",
+        "$value": "#DCE8FF"
+      }
+    },
+    "Amber": {
+      "Shade-001": {
+        "$type": "color",
+        "$value": "#482900"
+      },
+      "Shade-002": {
+        "$type": "color",
+        "$value": "#512F00"
+      },
+      "Shade-003": {
+        "$type": "color",
+        "$value": "#6A3D00"
+      },
+      "Shade-004": {
+        "$type": "color",
+        "$value": "#6B3F00"
+      },
+      "Shade-005": {
+        "$type": "color",
+        "$value": "#784200"
+      },
+      "Shade-006": {
+        "$type": "color",
+        "$value": "#7D4900"
+      },
+      "Shade-007": {
+        "$type": "color",
+        "$value": "#844B00"
+      },
+      "Shade-008": {
+        "$type": "color",
+        "$value": "#A85F00"
+      },
+      "Shade-009": {
+        "$type": "color",
+        "$value": "#FF9900"
+      },
+      "Shade-010": {
+        "$type": "color",
+        "$value": "#FFB95C"
+      },
+      "Shade-011": {
+        "$type": "color",
+        "$value": "#FFCB85"
+      },
+      "Shade-012": {
+        "$type": "color",
+        "$value": "#FFD39A"
+      },
+      "Shade-013": {
+        "$type": "color",
+        "$value": "#FFE0B2"
+      },
+      "Shade-014": {
+        "$type": "color",
+        "$value": "#FFE2B8"
+      }
+    }
+  }
+}
