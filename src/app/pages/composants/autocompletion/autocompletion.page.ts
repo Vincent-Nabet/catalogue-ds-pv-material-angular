@@ -42,6 +42,47 @@ const SNIPPETS = {
     <mat-option value="Nantes" disabled>Nantes (indisponible)</mat-option>
   </mat-autocomplete>
 </mat-form-field>`,
+  objets: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="afficher">
+    @for (ville of villes; track ville.nom) {
+      <mat-option [value]="ville">{{ ville.nom }}</mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
+
+afficher = (ville: { nom: string } | null) => ville?.nom ?? '';`,
+  premiere: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
+    <mat-option value="Rennes">Rennes</mat-option>
+    <mat-option value="Nantes">Nantes</mat-option>
+  </mat-autocomplete>
+</mat-form-field>`,
+  obligatoire: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" [requireSelection]="true">
+    <mat-option value="Rennes">Rennes</mat-option>
+    <mat-option value="Nantes">Nantes</mat-option>
+  </mat-autocomplete>
+</mat-form-field>`,
+  largeur: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" panelWidth="400px">
+    <mat-option value="Rennes">Rennes</mat-option>
+  </mat-autocomplete>
+</mat-form-field>`,
+  inactifAuto: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" [matAutocompleteDisabled]="true" />
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option value="Rennes">Rennes</mat-option>
+  </mat-autocomplete>
+</mat-form-field>`,
 };
 
 @Component({
@@ -108,8 +149,63 @@ const SNIPPETS = {
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section minWidth="340px" title="Comportements">
+      <app-specimen label="Valeurs objets (displayWith)" api="displayWith" [snippet]="snippets.objets">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="objets" />
+          <mat-autocomplete #objets="matAutocomplete" [displayWith]="afficher">
+            @for (ville of villes; track ville.nom) {
+              <mat-option [value]="ville">{{ ville.nom }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Première option active" api="autoActiveFirstOption" [snippet]="snippets.premiere">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="premiere" />
+          <mat-autocomplete #premiere="matAutocomplete" autoActiveFirstOption>
+            <mat-option value="Rennes">Rennes</mat-option>
+            <mat-option value="Nantes">Nantes</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Sélection obligatoire" api="requireSelection" [snippet]="snippets.obligatoire">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="obligatoire" />
+          <mat-autocomplete #obligatoire="matAutocomplete" [requireSelection]="true">
+            <mat-option value="Rennes">Rennes</mat-option>
+            <mat-option value="Nantes">Nantes</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Largeur du panneau" api='panelWidth="400px"' [snippet]="snippets.largeur">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="large" />
+          <mat-autocomplete #large="matAutocomplete" panelWidth="400px">
+            <mat-option value="Rennes">Rennes</mat-option>
+            <mat-option value="Nantes">Nantes</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Panneau désactivé" api="matAutocompleteDisabled" [snippet]="snippets.inactifAuto">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="sansPanneau" [matAutocompleteDisabled]="true" />
+          <mat-autocomplete #sansPanneau="matAutocomplete">
+            <mat-option value="Rennes">Rennes</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
   `,
 })
 export class AutocompletionPage {
   protected readonly snippets = SNIPPETS;
+  protected readonly villes = [{ nom: 'Rennes' }, { nom: 'Nantes' }, { nom: 'Brest' }];
+  protected readonly afficher = (ville: { nom: string } | null): string => ville?.nom ?? '';
 }

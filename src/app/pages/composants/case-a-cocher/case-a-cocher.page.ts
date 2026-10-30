@@ -11,6 +11,13 @@ const SNIPPETS = {
   cocheeDesactivee: `<mat-checkbox checked disabled>Cochée</mat-checkbox>`,
   apres: `<mat-checkbox labelPosition="before">Libellé avant</mat-checkbox>`,
   requise: `<mat-checkbox required>J’accepte les conditions</mat-checkbox>`,
+  inactifFocalisable: `<mat-checkbox [disabledInteractive]="true" disabled>Désactivée, focalisable</mat-checkbox>`,
+  sansRipple: `<mat-checkbox [disableRipple]="true">Sans effet d'ondulation</mat-checkbox>`,
+  imbriquees: `<mat-checkbox [indeterminate]="true">Tout sélectionner</mat-checkbox>
+<ul>
+  <li><mat-checkbox checked>Premier</mat-checkbox></li>
+  <li><mat-checkbox>Second</mat-checkbox></li>
+</ul>`,
 };
 
 @Component({
@@ -48,6 +55,38 @@ const SNIPPETS = {
         <mat-checkbox required>J’accepte les conditions</mat-checkbox>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section title="Options">
+      <app-specimen label="Désactivée mais focalisable" api="disabledInteractive" [snippet]="snippets.inactifFocalisable">
+        <mat-checkbox [disabledInteractive]="true" disabled>Désactivée, focalisable</mat-checkbox>
+      </app-specimen>
+      <app-specimen label="Sans ondulation" api="disableRipple" [snippet]="snippets.sansRipple">
+        <mat-checkbox [disableRipple]="true">Sans effet d’ondulation</mat-checkbox>
+      </app-specimen>
+      <app-specimen label="Cases imbriquées" api="indeterminate" [snippet]="snippets.imbriquees">
+        <ul class="imbriquees">
+          <li>
+            <mat-checkbox [indeterminate]="true">Tout sélectionner</mat-checkbox>
+            <ul>
+              <li><mat-checkbox checked>Premier</mat-checkbox></li>
+              <li><mat-checkbox>Second</mat-checkbox></li>
+            </ul>
+          </li>
+        </ul>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    .imbriquees,
+    .imbriquees ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .imbriquees ul {
+      padding-inline-start: 32px;
+    }
   `,
 })
 export class CaseACocherPage {

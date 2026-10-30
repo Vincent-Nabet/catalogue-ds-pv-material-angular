@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatRipple } from '@angular/material/core';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { MatButton } from '@angular/material/button';
 
 const SNIPPETS = {
   defaut: `<div matRipple class="zone">Cliquer ici</div>`,
@@ -9,11 +10,15 @@ const SNIPPETS = {
   nonBorne: `<div matRipple [matRippleUnbounded]="true" class="zone">Cliquer ici</div>`,
   couleur: `<div matRipple matRippleColor="rgba(255, 0, 0, 0.25)" class="zone">Cliquer ici</div>`,
   desactive: `<div matRipple [matRippleDisabled]="true" class="zone">Cliquer ici</div>`,
+  rayon: `<div matRipple [matRippleRadius]="40" class="zone">Cliquer ici</div>`,
+  animation: `<div matRipple [matRippleAnimation]="{ enterDuration: 1200, exitDuration: 600 }" class="zone">Cliquer ici</div>`,
+  declencheur: `<span #declencheur><button matButton="outlined">Déclencheur</button></span>
+<div matRipple [matRippleTrigger]="declencheur" class="zone">Zone animée par le bouton</div>`,
 };
 
 @Component({
   selector: 'app-ripple-page',
-  imports: [MatRipple, Specimen, SpecimenSection],
+  imports: [MatRipple, Specimen, SpecimenSection, MatButton],
   template: `
     <h1>Ripple</h1>
 
@@ -32,6 +37,27 @@ const SNIPPETS = {
       </app-specimen>
       <app-specimen label="Désactivé" api="matRippleDisabled" [snippet]="snippets.desactive">
         <div matRipple [matRippleDisabled]="true" class="zone" tabindex="0" role="button" aria-disabled="true">Cliquer ici</div>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Réglages avancés">
+      <app-specimen label="Rayon fixe" api="matRippleRadius" [snippet]="snippets.rayon">
+        <div matRipple [matRippleRadius]="40" class="zone" tabindex="0" role="button">Cliquer ici</div>
+      </app-specimen>
+      <app-specimen label="Animation lente" api="matRippleAnimation" [snippet]="snippets.animation">
+        <div
+          matRipple
+          [matRippleAnimation]="{ enterDuration: 1200, exitDuration: 600 }"
+          class="zone"
+          tabindex="0"
+          role="button"
+        >
+          Cliquer ici
+        </div>
+      </app-specimen>
+      <app-specimen label="Déclencheur externe" api="matRippleTrigger" [snippet]="snippets.declencheur">
+        <span #declencheur><button matButton="outlined">Déclencheur</button></span>
+        <div matRipple [matRippleTrigger]="declencheur" class="zone">Zone animée par le bouton</div>
       </app-specimen>
     </app-specimen-section>
   `,

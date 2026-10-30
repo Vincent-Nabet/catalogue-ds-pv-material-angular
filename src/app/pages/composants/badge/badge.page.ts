@@ -17,6 +17,8 @@ const SNIPPETS = {
   bouton: `<button matButton="tonal" matBadge="8" matBadgeOverlap="false">Messages</button>`,
   masque: `<mat-icon matBadge="3" matBadgeHidden="true">mail</mat-icon>`,
   desactive: `<mat-icon matBadge="3" matBadgeDisabled>mail</mat-icon>`,
+  description: `<mat-icon matBadge="3" matBadgeDescription="3 messages non lus" aria-hidden="false" aria-label="Messages">mail</mat-icon>`,
+  texte: `<mat-icon matBadge="99+" matBadgeSize="large" aria-hidden="false" aria-label="Notifications">notifications</mat-icon>`,
 };
 
 @Component({
@@ -54,6 +56,15 @@ const SNIPPETS = {
       </app-specimen>
       <app-specimen label="Désactivé" api="matBadgeDisabled" [snippet]="snippets.desactive">
         <mat-icon matBadge="3" matBadgeDisabled="true" aria-hidden="false" aria-label="3 messages">mail</mat-icon>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Contenu et accessibilité">
+      <app-specimen label="Description accessible" api="matBadgeDescription" [snippet]="snippets.description">
+        <mat-icon matBadge="3" matBadgeDescription="3 messages non lus" aria-hidden="false" aria-label="Messages">mail</mat-icon>
+      </app-specimen>
+      <app-specimen label="Texte long" api='matBadge="99+"' [snippet]="snippets.texte">
+        <mat-icon matBadge="99+" matBadgeSize="large" aria-hidden="false" aria-label="Notifications">notifications</mat-icon>
       </app-specimen>
     </app-specimen-section>
   `,

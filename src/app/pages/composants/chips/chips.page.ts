@@ -67,6 +67,17 @@ const SNIPPETS = {
   </mat-chip-grid>
   <input placeholder="Ajouter…" [matChipInputFor]="grille" />
 </mat-form-field>`,
+  miseEnEvidence: `<mat-chip-set aria-label="Mis en évidence">
+  <mat-chip [highlighted]="true">Mis en évidence</mat-chip>
+  <mat-chip>Normal</mat-chip>
+</mat-chip-set>`,
+  nonSelectionnable: `<mat-chip-listbox aria-label="Couleur" [selectable]="false">
+  <mat-chip-option>Rouge</mat-chip-option>
+  <mat-chip-option>Vert</mat-chip-option>
+</mat-chip-listbox>`,
+  modifiable: `<mat-chip-grid #grille aria-label="Chips modifiables">
+  <mat-chip-row [editable]="true">Double-clic pour modifier</mat-chip-row>
+</mat-chip-grid>`,
 };
 
 @Component({
@@ -161,6 +172,26 @@ const SNIPPETS = {
           </mat-chip-grid>
           <input placeholder="Ajouter…" [matChipInputFor]="grille" />
         </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Autres variantes">
+      <app-specimen label="Mis en évidence" api="highlighted" [snippet]="snippets.miseEnEvidence">
+        <mat-chip-set aria-label="Mis en évidence">
+          <mat-chip [highlighted]="true">Mis en évidence</mat-chip>
+          <mat-chip>Normal</mat-chip>
+        </mat-chip-set>
+      </app-specimen>
+      <app-specimen label="Non sélectionnable" api="selectable" [snippet]="snippets.nonSelectionnable">
+        <mat-chip-listbox aria-label="Couleur non sélectionnable" [selectable]="false">
+          <mat-chip-option>Rouge</mat-chip-option>
+          <mat-chip-option>Vert</mat-chip-option>
+        </mat-chip-listbox>
+      </app-specimen>
+      <app-specimen label="Modifiable" api="mat-chip-row editable" [snippet]="snippets.modifiable">
+        <mat-chip-grid aria-label="Chips modifiables">
+          <mat-chip-row [editable]="true">Double-clic pour modifier</mat-chip-row>
+        </mat-chip-grid>
       </app-specimen>
     </app-specimen-section>
   `,

@@ -20,6 +20,18 @@ const SNIPPETS = {
   desactive: `<mat-slider disabled>
   <input matSliderThumb value="40" aria-label="Volume" />
 </mat-slider>`,
+  formate: `<mat-slider discrete min="0" max="100" step="5" [displayWith]="pourcentage">
+  <input matSliderThumb value="35" aria-label="Opacité" />
+</mat-slider>
+
+pourcentage = (valeur: number) => valeur + ' %';`,
+  plageEtiquettes: `<mat-slider discrete showTickMarks min="0" max="100" step="10">
+  <input matSliderStartThumb value="20" aria-label="Minimum" />
+  <input matSliderEndThumb value="70" aria-label="Maximum" />
+</mat-slider>`,
+  pasFin: `<mat-slider discrete min="0" max="5" step="0.5">
+  <input matSliderThumb value="2.5" aria-label="Note" />
+</mat-slider>`,
 };
 
 @Component({
@@ -59,8 +71,28 @@ const SNIPPETS = {
         </mat-slider>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section title="Étiquettes et pas">
+      <app-specimen label="Étiquette formatée" api="displayWith" [snippet]="snippets.formate">
+        <mat-slider discrete min="0" max="100" step="5" [displayWith]="pourcentage">
+          <input matSliderThumb value="35" aria-label="Opacité" />
+        </mat-slider>
+      </app-specimen>
+      <app-specimen label="Plage avec graduations" api="discrete showTickMarks" [snippet]="snippets.plageEtiquettes">
+        <mat-slider discrete showTickMarks min="0" max="100" step="10">
+          <input matSliderStartThumb value="20" aria-label="Minimum" />
+          <input matSliderEndThumb value="70" aria-label="Maximum" />
+        </mat-slider>
+      </app-specimen>
+      <app-specimen label="Pas décimal" api='step="0.5"' [snippet]="snippets.pasFin">
+        <mat-slider discrete min="0" max="5" step="0.5">
+          <input matSliderThumb value="2.5" aria-label="Note" />
+        </mat-slider>
+      </app-specimen>
+    </app-specimen-section>
   `,
 })
 export class CurseurPage {
   protected readonly snippets = SNIPPETS;
+  protected readonly pourcentage = (valeur: number): string => `${valeur} %`;
 }

@@ -15,6 +15,12 @@ const SNIPPETS = {
   remplie: `<mat-icon style="font-variation-settings: 'FILL' 1">favorite</mat-icon>`,
   decorative: `<mat-icon aria-hidden="true">settings</mat-icon>`,
   semantique: `<mat-icon aria-hidden="false" aria-label="Paramètres">settings</mat-icon>`,
+  inline: `<p>Texte avec une icône <mat-icon [inline]="true">info</mat-icon> alignée sur la ligne.</p>`,
+  graisse: `<mat-icon style="font-variation-settings: 'wght' 100">settings</mat-icon>
+<mat-icon style="font-variation-settings: 'wght' 400">settings</mat-icon>
+<mat-icon style="font-variation-settings: 'wght' 700">settings</mat-icon>`,
+  taillesOptiques: `<mat-icon style="font-variation-settings: 'opsz' 20">settings</mat-icon>
+<mat-icon style="font-variation-settings: 'opsz' 48">settings</mat-icon>`,
 };
 
 @Component({
@@ -51,6 +57,21 @@ const SNIPPETS = {
         <mat-icon aria-hidden="false" aria-label="Paramètres">settings</mat-icon>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section title="Axes de la police Material Symbols">
+      <app-specimen label="Dans le texte" api="inline" [snippet]="snippets.inline">
+        <p class="texte">Texte avec une icône <mat-icon [inline]="true">info</mat-icon> alignée sur la ligne.</p>
+      </app-specimen>
+      <app-specimen label="Graisse" api="wght 100 / 400 / 700" [snippet]="snippets.graisse">
+        <mat-icon class="g100">settings</mat-icon>
+        <mat-icon class="g400">settings</mat-icon>
+        <mat-icon class="g700">settings</mat-icon>
+      </app-specimen>
+      <app-specimen label="Taille optique" api="opsz 20 / 48" [snippet]="snippets.taillesOptiques">
+        <mat-icon class="opsz20">settings</mat-icon>
+        <mat-icon class="opsz48">settings</mat-icon>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
     .t18 {
@@ -85,6 +106,29 @@ const SNIPPETS = {
 
     .remplie {
       font-variation-settings: 'FILL' 1;
+    }
+    .texte {
+      margin: 0;
+    }
+
+    .g100 {
+      font-variation-settings: 'wght' 100;
+    }
+
+    .g400 {
+      font-variation-settings: 'wght' 400;
+    }
+
+    .g700 {
+      font-variation-settings: 'wght' 700;
+    }
+
+    .opsz20 {
+      font-variation-settings: 'opsz' 20;
+    }
+
+    .opsz48 {
+      font-variation-settings: 'opsz' 48;
     }
   `,
 })

@@ -25,6 +25,14 @@ const SNIPPETS = {
   <mat-radio-button value="s">Petite</mat-radio-button>
   <mat-radio-button value="m">Moyenne</mat-radio-button>
 </mat-radio-group>`,
+  inactifFocalisable: `<mat-radio-group aria-label="Taille" value="s">
+  <mat-radio-button value="s">Petite</mat-radio-button>
+  <mat-radio-button value="m" [disabledInteractive]="true" disabled>Moyenne (focalisable)</mat-radio-button>
+</mat-radio-group>`,
+  sansRipple: `<mat-radio-group aria-label="Taille" value="s">
+  <mat-radio-button value="s" [disableRipple]="true">Petite</mat-radio-button>
+  <mat-radio-button value="m" [disableRipple]="true">Moyenne</mat-radio-button>
+</mat-radio-group>`,
 };
 
 @Component({
@@ -66,6 +74,21 @@ const SNIPPETS = {
         <mat-radio-group aria-label="Taille" value="m" disabled class="colonne">
           <mat-radio-button value="s">Petite</mat-radio-button>
           <mat-radio-button value="m">Moyenne</mat-radio-button>
+        </mat-radio-group>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Options">
+      <app-specimen label="Désactivé mais focalisable" api="disabledInteractive" [snippet]="snippets.inactifFocalisable">
+        <mat-radio-group aria-label="Taille focalisable" value="s" class="colonne">
+          <mat-radio-button value="s">Petite</mat-radio-button>
+          <mat-radio-button value="m" [disabledInteractive]="true" disabled>Moyenne (focalisable)</mat-radio-button>
+        </mat-radio-group>
+      </app-specimen>
+      <app-specimen label="Sans ondulation" api="disableRipple" [snippet]="snippets.sansRipple">
+        <mat-radio-group aria-label="Taille sans ondulation" value="s" class="colonne">
+          <mat-radio-button value="s" [disableRipple]="true">Petite</mat-radio-button>
+          <mat-radio-button value="m" [disableRipple]="true">Moyenne</mat-radio-button>
         </mat-radio-group>
       </app-specimen>
     </app-specimen-section>

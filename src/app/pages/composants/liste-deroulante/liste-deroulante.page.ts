@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatOptgroup, MatOption } from '@angular/material/core';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatSelect } from '@angular/material/select';
+import { MatError, MatFormField, MatLabel, MatPrefix } from '@angular/material/form-field';
+import { MatSelect, MatSelectTrigger } from '@angular/material/select';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { MatIcon } from '@angular/material/icon';
 
 const SNIPPETS = {
   simple: `<mat-form-field>
@@ -61,6 +62,56 @@ const SNIPPETS = {
   </mat-select>
   <mat-error>Le fruit est obligatoire.</mat-error>
 </mat-form-field>`,
+  placeholder: `<mat-form-field>
+  <mat-select placeholder="Choisir un fruit" aria-label="Fruit">
+    <mat-option value="pomme">Pomme</mat-option>
+    <mat-option value="poire">Poire</mat-option>
+  </mat-select>
+</mat-form-field>`,
+  sansCoche: `<mat-form-field>
+  <mat-label>Fruit</mat-label>
+  <mat-select value="pomme" hideSingleSelectionIndicator>
+    <mat-option value="pomme">Pomme</mat-option>
+    <mat-option value="poire">Poire</mat-option>
+  </mat-select>
+</mat-form-field>`,
+  sousChamp: `<mat-form-field>
+  <mat-label>Fruit</mat-label>
+  <mat-select disableOptionCentering>
+    <mat-option value="pomme">Pomme</mat-option>
+    <mat-option value="poire">Poire</mat-option>
+  </mat-select>
+</mat-form-field>`,
+  nullable: `<mat-form-field>
+  <mat-label>Fruit</mat-label>
+  <mat-select [canSelectNullableOptions]="true" value="pomme">
+    <mat-option [value]="null">Aucun</mat-option>
+    <mat-option value="pomme">Pomme</mat-option>
+  </mat-select>
+</mat-form-field>`,
+  largeurAuto: `<mat-form-field>
+  <mat-label>Fruit</mat-label>
+  <mat-select panelWidth="auto">
+    <mat-option value="pomme">Pomme golden bien mûre</mat-option>
+    <mat-option value="poire">Poire</mat-option>
+  </mat-select>
+</mat-form-field>`,
+  declencheur: `<mat-form-field>
+  <mat-label>Fruits</mat-label>
+  <mat-select multiple [value]="['pomme', 'cerise']">
+    <mat-select-trigger>Pomme (+1 autre)</mat-select-trigger>
+    <mat-option value="pomme">Pomme</mat-option>
+    <mat-option value="poire">Poire</mat-option>
+    <mat-option value="cerise">Cerise</mat-option>
+  </mat-select>
+</mat-form-field>`,
+  prefixe: `<mat-form-field>
+  <mat-label>Fruit</mat-label>
+  <mat-icon matPrefix>nutrition</mat-icon>
+  <mat-select>
+    <mat-option value="pomme">Pomme</mat-option>
+  </mat-select>
+</mat-form-field>`,
 };
 
 @Component({
@@ -75,6 +126,9 @@ const SNIPPETS = {
     MatError,
     Specimen,
     SpecimenSection,
+    MatSelectTrigger,
+    MatIcon,
+    MatPrefix,
   ],
   template: `
     <h1>Liste déroulante</h1>
@@ -149,6 +203,73 @@ const SNIPPETS = {
             <mat-option value="pomme">Pomme</mat-option>
           </mat-select>
           <mat-error>Le fruit est obligatoire.</mat-error>
+        </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section minWidth="340px" title="Présentation et comportements">
+      <app-specimen label="Placeholder seul" api="placeholder" [snippet]="snippets.placeholder">
+        <mat-form-field>
+          <mat-select placeholder="Choisir un fruit" aria-label="Fruit">
+            <mat-option value="pomme">Pomme</mat-option>
+            <mat-option value="poire">Poire</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Avec icône préfixe" api="matPrefix" [snippet]="snippets.prefixe">
+        <mat-form-field>
+          <mat-label>Fruit</mat-label>
+          <mat-icon matPrefix>nutrition</mat-icon>
+          <mat-select>
+            <mat-option value="pomme">Pomme</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Déclencheur personnalisé" api="mat-select-trigger" [snippet]="snippets.declencheur">
+        <mat-form-field>
+          <mat-label>Fruits</mat-label>
+          <mat-select multiple [value]="['pomme', 'cerise']">
+            <mat-select-trigger>Pomme (+1 autre)</mat-select-trigger>
+            <mat-option value="pomme">Pomme</mat-option>
+            <mat-option value="poire">Poire</mat-option>
+            <mat-option value="cerise">Cerise</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Sans coche de sélection" api="hideSingleSelectionIndicator" [snippet]="snippets.sansCoche">
+        <mat-form-field>
+          <mat-label>Fruit</mat-label>
+          <mat-select value="pomme" hideSingleSelectionIndicator>
+            <mat-option value="pomme">Pomme</mat-option>
+            <mat-option value="poire">Poire</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Panneau sous le champ" api="disableOptionCentering" [snippet]="snippets.sousChamp">
+        <mat-form-field>
+          <mat-label>Fruit</mat-label>
+          <mat-select disableOptionCentering>
+            <mat-option value="pomme">Pomme</mat-option>
+            <mat-option value="poire">Poire</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Option vide sélectionnable" api="canSelectNullableOptions" [snippet]="snippets.nullable">
+        <mat-form-field>
+          <mat-label>Fruit</mat-label>
+          <mat-select [canSelectNullableOptions]="true" value="pomme">
+            <mat-option [value]="null">Aucun</mat-option>
+            <mat-option value="pomme">Pomme</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Panneau à largeur du contenu" api='panelWidth="auto"' [snippet]="snippets.largeurAuto">
+        <mat-form-field>
+          <mat-label>Fruit</mat-label>
+          <mat-select panelWidth="auto">
+            <mat-option value="pomme">Pomme golden bien mûre</mat-option>
+            <mat-option value="poire">Poire</mat-option>
+          </mat-select>
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>

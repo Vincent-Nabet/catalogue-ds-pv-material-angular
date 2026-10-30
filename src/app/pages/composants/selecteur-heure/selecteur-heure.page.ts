@@ -25,6 +25,24 @@ const SNIPPETS = {
   <mat-timepicker-toggle matIconSuffix [for]="picker" />
   <mat-timepicker #picker />
 </mat-form-field>`,
+  bornes: `<mat-form-field>
+  <mat-label>Heure (8 h – 18 h)</mat-label>
+  <input matInput [matTimepicker]="picker" matTimepickerMin="08:00" matTimepickerMax="18:00" />
+  <mat-timepicker-toggle matIconSuffix [for]="picker" />
+  <mat-timepicker #picker />
+</mat-form-field>`,
+  heure: `<mat-form-field>
+  <mat-label>Heure</mat-label>
+  <input matInput [matTimepicker]="picker" />
+  <mat-timepicker-toggle matIconSuffix [for]="picker" />
+  <mat-timepicker #picker interval="1h" />
+</mat-form-field>`,
+  ouvertureBouton: `<mat-form-field>
+  <mat-label>Heure</mat-label>
+  <input matInput [matTimepicker]="picker" [matTimepickerOpenOnClick]="false" />
+  <mat-timepicker-toggle matIconSuffix [for]="picker" />
+  <mat-timepicker #picker />
+</mat-form-field>`,
 };
 
 @Component({
@@ -68,6 +86,33 @@ const SNIPPETS = {
           <input matInput [matTimepicker]="inactif" disabled />
           <mat-timepicker-toggle matIconSuffix [for]="inactif" />
           <mat-timepicker #inactif />
+        </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Restrictions et ouverture">
+      <app-specimen label="Heures min et max" api="matTimepickerMin / matTimepickerMax" [snippet]="snippets.bornes">
+        <mat-form-field>
+          <mat-label>Heure (8 h – 18 h)</mat-label>
+          <input matInput [matTimepicker]="borne" matTimepickerMin="08:00" matTimepickerMax="18:00" />
+          <mat-timepicker-toggle matIconSuffix [for]="borne" />
+          <mat-timepicker #borne />
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Pas d’une heure" api='interval="1h"' [snippet]="snippets.heure">
+        <mat-form-field>
+          <mat-label>Heure</mat-label>
+          <input matInput [matTimepicker]="heure" />
+          <mat-timepicker-toggle matIconSuffix [for]="heure" />
+          <mat-timepicker #heure interval="1h" />
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Ouverture par le bouton seul" api="matTimepickerOpenOnClick" [snippet]="snippets.ouvertureBouton">
+        <mat-form-field>
+          <mat-label>Heure</mat-label>
+          <input matInput [matTimepicker]="bouton" [matTimepickerOpenOnClick]="false" />
+          <mat-timepicker-toggle matIconSuffix [for]="bouton" />
+          <mat-timepicker #bouton />
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>

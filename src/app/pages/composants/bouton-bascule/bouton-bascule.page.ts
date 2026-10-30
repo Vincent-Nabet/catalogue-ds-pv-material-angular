@@ -33,6 +33,22 @@ const SNIPPETS = {
   <mat-button-toggle value="a">A</mat-button-toggle>
   <mat-button-toggle value="b">B</mat-button-toggle>
 </mat-button-toggle-group>`,
+  standard: `<mat-button-toggle-group aria-label="Alignement" value="gauche" appearance="standard">
+  <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+  <mat-button-toggle value="droite">Droite</mat-button-toggle>
+</mat-button-toggle-group>`,
+  legacy: `<mat-button-toggle-group aria-label="Alignement" value="gauche" appearance="legacy">
+  <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+  <mat-button-toggle value="droite">Droite</mat-button-toggle>
+</mat-button-toggle-group>`,
+  sansCocheMultiple: `<mat-button-toggle-group aria-label="Style" multiple hideMultipleSelectionIndicator>
+  <mat-button-toggle value="gras" checked>Gras</mat-button-toggle>
+  <mat-button-toggle value="italique">Italique</mat-button-toggle>
+</mat-button-toggle-group>`,
+  inactifFocalisable: `<mat-button-toggle-group aria-label="Groupe" value="a" disabledInteractive disabled>
+  <mat-button-toggle value="a">A</mat-button-toggle>
+  <mat-button-toggle value="b">B</mat-button-toggle>
+</mat-button-toggle-group>`,
 };
 
 @Component({
@@ -84,6 +100,33 @@ const SNIPPETS = {
     <app-specimen-section minWidth="300px" title="États">
       <app-specimen label="Désactivé" api="disabled" [snippet]="snippets.desactive">
         <mat-button-toggle-group aria-label="Groupe désactivé" value="a" disabled>
+          <mat-button-toggle value="a">A</mat-button-toggle>
+          <mat-button-toggle value="b">B</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section minWidth="300px" title="Apparences et options">
+      <app-specimen label="Apparence standard" api='appearance="standard"' [snippet]="snippets.standard">
+        <mat-button-toggle-group aria-label="Alignement standard" value="gauche" appearance="standard">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+      <app-specimen label="Apparence héritée" api='appearance="legacy"' [snippet]="snippets.legacy">
+        <mat-button-toggle-group aria-label="Alignement hérité" value="gauche" appearance="legacy">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+      <app-specimen label="Multiple sans coche" api="hideMultipleSelectionIndicator" [snippet]="snippets.sansCocheMultiple">
+        <mat-button-toggle-group aria-label="Style du texte" multiple hideMultipleSelectionIndicator>
+          <mat-button-toggle value="gras" checked>Gras</mat-button-toggle>
+          <mat-button-toggle value="italique">Italique</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+      <app-specimen label="Désactivé mais focalisable" api="disabledInteractive" [snippet]="snippets.inactifFocalisable">
+        <mat-button-toggle-group aria-label="Groupe désactivé focalisable" value="a" [disabledInteractive]="true" disabled>
           <mat-button-toggle value="a">A</mat-button-toggle>
           <mat-button-toggle value="b">B</mat-button-toggle>
         </mat-button-toggle-group>
