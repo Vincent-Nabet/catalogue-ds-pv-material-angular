@@ -10,7 +10,7 @@ Document généré à partir des fichiers de `tokens/` (format DTCG).
 Notes :
 - Les couleurs de `State Layers` n'ont pas de variable MD3 propre : MD3 combine la variable de couleur du rôle avec une variable d'opacité d'état (`hover` 0.08, `focus` 0.10 / `pressed` 0.10, `dragged` 0.16). Ici `Opacity-10` est rapproché de `focus` (`pressed` a la même valeur). Attention : dans les fichiers JSON, ces tokens sont de simples alias vers la couleur du rôle, **sans opacité**. Les valeurs 0.08 / 0.10 / 0.16 sont déduites du nom du token, pas du fichier.
 - Les noms marqués « MD3 Expressive » correspondent à l'évolution Expressive de MD3 et ne figurent pas dans MD3 de base. Les graisses « emphasized » suivent la forme `--md-sys-typescale-emphasized-<style>-weight` (préfixe `emphasized` avant le style, comme dans les implémentations communautaires de MD3 Expressive). Ce nom n'est confirmé par aucune source officielle Google. `Weight-emphasized` de Label Large et Label Medium correspond en revanche à la graisse `prominent` de MD3 de base.
-- Les graisses sont des noms, pas des nombres, et ne sont pas utilisables telles quelles en CSS. Correspondance : `Regular` = 400, `Medium` = 500, `SemiBold` = 600.
+- Les graisses sont des valeurs numériques (400, 500, 600), conformes au format DTCG et utilisables telles quelles en CSS. Le token `Font theme.Static.Weight.Bold` vaut 600 (semi-gras), pas 700.
 - Les noms MD3 sont déduits de la convention `--md-sys-*` / `--md-ref-*` (minuscules, tirets) et n'ont pas été vérifiés contre une implémentation (Material Web, etc.).
 
 ## primitives.tokens.json
@@ -21,9 +21,9 @@ Notes :
 | Number 2 | `0` | — |
 | Font theme.Static.Font.Brand | `Poppins` | `--md-ref-typeface-brand` |
 | Font theme.Static.Font.Plain | `Poppins` | `--md-ref-typeface-plain` |
-| Font theme.Static.Weight.Regular | `Regular` | `--md-ref-typeface-weight-regular` |
-| Font theme.Static.Weight.Medium | `Medium` | `--md-ref-typeface-weight-medium` |
-| Font theme.Static.Weight.Bold | `SemiBold` | `--md-ref-typeface-weight-bold` |
+| Font theme.Static.Weight.Regular | `400` | `--md-ref-typeface-weight-regular` |
+| Font theme.Static.Weight.Medium | `500` | `--md-ref-typeface-weight-medium` |
+| Font theme.Static.Weight.Bold | `600` | `--md-ref-typeface-weight-bold` |
 | Font theme.Tracking.Small | `0.1px` | — |
 | Font theme.Tracking.None | `0px` | — |
 | Radius.None | `0px` | `--md-sys-shape-corner-none` |
@@ -472,92 +472,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/dark-medium-contrast.tokens.json
 
@@ -778,92 +778,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/dark.tokens.json
 
@@ -1084,92 +1084,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/light-high-contrast.tokens.json
 
@@ -1390,92 +1390,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/light-medium-contrast.tokens.json
 
@@ -1696,92 +1696,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/light.tokens.json
 
@@ -2002,92 +2002,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/monochrome-dt.tokens.json
 
@@ -2308,92 +2308,92 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
 
 ## semantics/monochrome-lt.tokens.json
 
@@ -2614,89 +2614,89 @@ Notes :
 | Typescale.Static.Display Large.Tracking | `-0.25px` | `-0.25px` | `--md-sys-typescale-display-large-tracking` |
 | Typescale.Static.Display Large.Line Height | `64px` | `64px` | `--md-sys-typescale-display-large-line-height` |
 | Typescale.Static.Display Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-large-font` |
-| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-large-weight` |
-| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
+| Typescale.Static.Display Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-large-weight` |
+| Typescale.Static.Display Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-large-weight` (MD3 Expressive) |
 | Typescale.Static.Display Medium.Size | `45px` | `45px` | `--md-sys-typescale-display-medium-size` |
 | Typescale.Static.Display Medium.Line Height | `52px` | `52px` | `--md-sys-typescale-display-medium-line-height` |
 | Typescale.Static.Display Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-display-medium-tracking` |
 | Typescale.Static.Display Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-medium-font` |
-| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-medium-weight` |
-| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Display Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-medium-weight` |
+| Typescale.Static.Display Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Display Small.Size | `36px` | `36px` | `--md-sys-typescale-display-small-size` |
 | Typescale.Static.Display Small.Tracking | `0px` | `0px` | `--md-sys-typescale-display-small-tracking` |
 | Typescale.Static.Display Small.Line Height | `44px` | `44px` | `--md-sys-typescale-display-small-line-height` |
 | Typescale.Static.Display Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-display-small-font` |
-| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-display-small-weight` |
-| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
+| Typescale.Static.Display Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-display-small-weight` |
+| Typescale.Static.Display Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-display-small-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Large.Size | `32px` | `32px` | `--md-sys-typescale-headline-large-size` |
 | Typescale.Static.Headline Large.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-large-tracking` |
 | Typescale.Static.Headline Large.Line Height | `40px` | `40px` | `--md-sys-typescale-headline-large-line-height` |
 | Typescale.Static.Headline Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-large-font` |
-| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-large-weight` |
-| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-large-weight` |
+| Typescale.Static.Headline Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-large-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Medium.Size | `28px` | `28px` | `--md-sys-typescale-headline-medium-size` |
 | Typescale.Static.Headline Medium.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-medium-tracking` |
 | Typescale.Static.Headline Medium.Line Height | `36px` | `36px` | `--md-sys-typescale-headline-medium-line-height` |
 | Typescale.Static.Headline Medium.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-medium-font` |
-| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-medium-weight` |
-| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-medium-weight` |
+| Typescale.Static.Headline Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Headline Small.Size | `24px` | `24px` | `--md-sys-typescale-headline-small-size` |
 | Typescale.Static.Headline Small.Tracking | `0px` | `0px` | `--md-sys-typescale-headline-small-tracking` |
 | Typescale.Static.Headline Small.Line Height | `32px` | `32px` | `--md-sys-typescale-headline-small-line-height` |
 | Typescale.Static.Headline Small.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-headline-small-font` |
-| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-headline-small-weight` |
-| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
+| Typescale.Static.Headline Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-headline-small-weight` |
+| Typescale.Static.Headline Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-headline-small-weight` (MD3 Expressive) |
 | Typescale.Static.Title Large.Size | `22px` | `22px` | `--md-sys-typescale-title-large-size` |
 | Typescale.Static.Title Large.Tracking | `0px` | `0px` | `--md-sys-typescale-title-large-tracking` |
 | Typescale.Static.Title Large.Line Height | `28px` | `28px` | `--md-sys-typescale-title-large-line-height` |
 | Typescale.Static.Title Large.Font | `{Font theme.Static.Font.Brand}` | `Poppins` | `--md-sys-typescale-title-large-font` |
-| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-title-large-weight` |
-| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
+| Typescale.Static.Title Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-title-large-weight` |
+| Typescale.Static.Title Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-title-large-weight` (MD3 Expressive) |
 | Typescale.Static.Title Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-medium-font` |
-| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-medium-weight` |
+| Typescale.Static.Title Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-medium-weight` |
 | Typescale.Static.Title Medium.Size | `16px` | `16px` | `--md-sys-typescale-title-medium-size` |
 | Typescale.Static.Title Medium.Tracking | `0.15000000596046448px` | `0.15000000596046448px` | `--md-sys-typescale-title-medium-tracking` |
 | Typescale.Static.Title Medium.Line Height | `24px` | `24px` | `--md-sys-typescale-title-medium-line-height` |
-| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Title Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Title Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-title-small-font` |
-| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-title-small-weight` |
+| Typescale.Static.Title Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-title-small-weight` |
 | Typescale.Static.Title Small.Size | `14px` | `14px` | `--md-sys-typescale-title-small-size` |
 | Typescale.Static.Title Small.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-title-small-tracking` |
 | Typescale.Static.Title Small.Line Height | `20px` | `20px` | `--md-sys-typescale-title-small-line-height` |
-| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
+| Typescale.Static.Title Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-title-small-weight` (MD3 Expressive) |
 | Typescale.Static.Label Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-large-font` |
-| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-large-weight` |
+| Typescale.Static.Label Large.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-large-weight` |
 | Typescale.Static.Label Large.Size | `14px` | `14px` | `--md-sys-typescale-label-large-size` |
 | Typescale.Static.Label Large.Tracking | `0.10000000149011612px` | `0.10000000149011612px` | `--md-sys-typescale-label-large-tracking` |
 | Typescale.Static.Label Large.Line Height | `20px` | `20px` | `--md-sys-typescale-label-large-line-height` |
-| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-large-weight-prominent` |
+| Typescale.Static.Label Large.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-large-weight-prominent` |
 | Typescale.Static.Label Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-medium-font` |
-| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-medium-weight` |
+| Typescale.Static.Label Medium.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-medium-weight` |
 | Typescale.Static.Label Medium.Size | `12px` | `12px` | `--md-sys-typescale-label-medium-size` |
 | Typescale.Static.Label Medium.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-medium-tracking` |
 | Typescale.Static.Label Medium.Line Height | `16px` | `16px` | `--md-sys-typescale-label-medium-line-height` |
-| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-label-medium-weight-prominent` |
+| Typescale.Static.Label Medium.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-label-medium-weight-prominent` |
 | Typescale.Static.Label Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-label-small-font` |
-| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-label-small-weight` |
+| Typescale.Static.Label Small.Weight | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-label-small-weight` |
 | Typescale.Static.Label Small.Size | `11px` | `11px` | `--md-sys-typescale-label-small-size` |
 | Typescale.Static.Label Small.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-label-small-tracking` |
 | Typescale.Static.Label Small.Line Height | `16px` | `16px` | `--md-sys-typescale-label-small-line-height` |
-| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `SemiBold` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
+| Typescale.Static.Label Small.Weight-emphasized | `{Font theme.Static.Weight.Bold}` | `600` | `--md-sys-typescale-emphasized-label-small-weight` (MD3 Expressive) |
 | Typescale.Static.Body Large.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-large-font` |
-| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-large-weight` |
+| Typescale.Static.Body Large.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-large-weight` |
 | Typescale.Static.Body Large.Size | `16px` | `16px` | `--md-sys-typescale-body-large-size` |
 | Typescale.Static.Body Large.Tracking | `0.5px` | `0.5px` | `--md-sys-typescale-body-large-tracking` |
 | Typescale.Static.Body Large.Line Height | `24px` | `24px` | `--md-sys-typescale-body-large-line-height` |
-| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
+| Typescale.Static.Body Large.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-large-weight` (MD3 Expressive) |
 | Typescale.Static.Body Medium.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-medium-font` |
-| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-medium-weight` |
+| Typescale.Static.Body Medium.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-medium-weight` |
 | Typescale.Static.Body Medium.Size | `14px` | `14px` | `--md-sys-typescale-body-medium-size` |
 | Typescale.Static.Body Medium.Tracking | `0.25px` | `0.25px` | `--md-sys-typescale-body-medium-tracking` |
 | Typescale.Static.Body Medium.Line Height | `20px` | `20px` | `--md-sys-typescale-body-medium-line-height` |
-| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
+| Typescale.Static.Body Medium.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-medium-weight` (MD3 Expressive) |
 | Typescale.Static.Body Small.Font | `{Font theme.Static.Font.Plain}` | `Poppins` | `--md-sys-typescale-body-small-font` |
-| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `Regular` | `--md-sys-typescale-body-small-weight` |
+| Typescale.Static.Body Small.Weight | `{Font theme.Static.Weight.Regular}` | `400` | `--md-sys-typescale-body-small-weight` |
 | Typescale.Static.Body Small.Size | `12px` | `12px` | `--md-sys-typescale-body-small-size` |
 | Typescale.Static.Body Small.Tracking | `0.4000000059604645px` | `0.4000000059604645px` | `--md-sys-typescale-body-small-tracking` |
 | Typescale.Static.Body Small.Line Height | `16px` | `16px` | `--md-sys-typescale-body-small-line-height` |
-| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `Medium` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |
+| Typescale.Static.Body Small.Weight-emphasized | `{Font theme.Static.Weight.Medium}` | `500` | `--md-sys-typescale-emphasized-body-small-weight` (MD3 Expressive) |

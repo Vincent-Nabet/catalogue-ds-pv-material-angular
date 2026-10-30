@@ -22,15 +22,15 @@
       "Weight": {
         "Regular": {
           "$type": "fontWeight",
-          "$value": "Regular"
+          "$value": 400
         },
         "Medium": {
           "$type": "fontWeight",
-          "$value": "Medium"
+          "$value": 500
         },
         "Bold": {
           "$type": "fontWeight",
-          "$value": "SemiBold"
+          "$value": 600
         }
       }
     },
