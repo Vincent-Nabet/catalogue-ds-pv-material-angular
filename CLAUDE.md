@@ -1,5 +1,39 @@
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
+## Projet : Catalogue Material
+
+Catalogue visuel des composants **Angular Material 22** (designers, intégrateurs). Angular 22.2, Material/CDK 22.2.5, zoneless, SCSS, Vitest. **Interface uniquement en français.** Documentation détaillée dans `docs/` (index : `docs/README.md`) : lire le fichier utile avant de fouiller le code.
+
+| Pour… | Lire |
+|---|---|
+| comprendre le produit, la liste des pages et variantes | `docs/fonctionnel.md` |
+| structure, registre, routage, shell, services, budgets | `docs/architecture.md` |
+| ajouter une page ou une variante (gabarit, pièges) | `docs/ajouter-un-composant.md` |
+| thèmes, densité, polices, icônes, jetons CSS | `docs/themes-et-styles.md` |
+| lint, tests, axe, méthode de vérification, commits | `docs/qualite-et-accessibilite.md` |
+| comprendre un choix ou un comportement inattendu | `docs/decisions-et-limites.md` |
+
+### Essentiel
+
+- **35 pages** (6 catégories) générées depuis un registre unique : `src/app/core/catalog/catalog.registry.ts`. Ajouter un composant = 1 entrée de registre + 1 fichier `src/app/pages/composants/<id>/<id>.page.ts` (lazy, template inline, snippets écrits à la main dans `const SNIPPETS`).
+- Une page = `<h1>` + `app-specimen-section` (`title`, `description`, `minWidth`) contenant des `app-specimen` (`label` FR, `api`, `snippet`). Le bouton `</>` ouvre `SnippetDialog` (copie + snackbar).
+- Thème : `ThemeService` (`@Service`, signaux `theme` / `scheme` / `density`, `localStorage` clé `catalogue-material-theme`) pose des classes `theme-*`, `scheme-*`, `density-*` sur `<html>` ; couleurs dans `src/styles.scss` (palettes Material prédéfinies, `mat.theme()` + `light-dark()`). Défaut : azur, **clair**, densité 0.
+- Shell : `layout/shell` (toolbar primaire + sidenav `side`/`over` selon `(max-width: 959.98px)`), focus donné à `<main>` après chaque navigation ; `layout/theme-picker`.
+- Police **Poppins**, icônes **Material Symbols Outlined** (défini comme jeu par défaut de `mat-icon` dans `app.config.ts`), toutes deux via Google Fonts.
+- Libellés Material en français : `core/i18n/intl-fr.ts`, fournis **au niveau des pages** (pagination, sélecteur de date, étapes).
+
+### Pièges fréquents
+
+- Angular Material 22 n'a **pas d'API de taille** pour les boutons (sizes/formes = surcharge de jetons `--mat-button-*`) ; `color` est **M2 uniquement** (sans effet) : ne pas l'utiliser.
+- Booléens en binding (`[disabledInteractive]="true"`), `&#64;` pour une arobase dans un template, `hasBackdrop` sur `mat-sidenav-container`, drawers `over`/`push` laissés fermés (piège de focus).
+- Couleurs uniquement via `--mat-sys-*` ; typographie via `--mat-sys-*` (pas de tailles/couleurs en dur).
+- Bundle initial ≈ 823 kB (avertissement à 850 kB, erreur à 1 MB) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
+- Hors périmètre : `tokens/` et `TOKENS-*.md` (design system distinct, **ne pas modifier**) ; ne pas committer `.mcp.json`, `.mcp.json.tmp`, `.claude/`, `.agents/`, `skills-lock.json` dans ce chantier.
+
+### Vérifier un changement
+
+`ng build`, `ng lint`, `ng test --watch=false` au vert ; accessibilité : 0 violation axe-core (seule exception connue : bouton de période du calendrier natif de `selecteur-date`) ; contrôle visuel dans ≥ 2 thèmes, clair et sombre. Commits : Conventional Commits en français, branche `feat/catalogue-material`.
+
 ## TypeScript Best Practices
 
 - Use strict type checking

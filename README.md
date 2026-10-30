@@ -1,59 +1,34 @@
-# PocDsIsagri
+# Catalogue Material
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.5.
+Catalogue visuel des composants **Angular Material 22** pour designers et intégrateurs : une page par composant avec toutes ses variantes et ses états, un sélecteur de thème en direct (6 thèmes, clair/sombre, 5 densités) et le code de chaque variante à copier. Interface en français.
 
-## Development server
+Projet généré avec [Angular CLI](https://github.com/angular/angular-cli) 22.2.5 (Angular 22.2, Angular Material et CDK 22.2.5, zoneless, SCSS, Vitest).
 
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Démarrer
 
 ```bash
-ng generate component component-name
+npm install
+npm start          # http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+| Commande | Rôle |
+|---|---|
+| `npm start` | serveur de développement (`ng serve`) |
+| `npm run build` | build de production, budgets appliqués (sortie dans `dist/`) |
+| `npm run lint` | ESLint (angular-eslint) |
+| `npm test` | tests unitaires Vitest (`-- --watch=false` pour un seul passage) |
 
-```bash
-ng generate --help
-```
+Avant tout commit : build, lint et tests doivent passer.
 
-## Building
+## Documentation
 
-To build the project run:
+Tout est décrit dans [`docs/`](docs/README.md) :
 
-```bash
-ng build
-```
+- [Fonctionnel](docs/fonctionnel.md) : pages, sélecteur de thème, snippets, composants et variantes couvertes
+- [Architecture](docs/architecture.md) : arborescence, registre, routage, shell, services, build et budgets
+- [Ajouter un composant](docs/ajouter-un-composant.md) : gabarit de page et pièges de template
+- [Thèmes et styles](docs/themes-et-styles.md) : thèmes Material, modes, densité, polices, icônes, jetons
+- [Qualité et accessibilité](docs/qualite-et-accessibilite.md) : lint, tests, axe-core, méthode de vérification
+- [Décisions et limites](docs/decisions-et-limites.md) : choix de conception et particularités d'Angular Material 22
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Le dossier `tokens/` et les fichiers `TOKENS-*.md` concernent un design system distinct et ne sont pas utilisés par l'application.
