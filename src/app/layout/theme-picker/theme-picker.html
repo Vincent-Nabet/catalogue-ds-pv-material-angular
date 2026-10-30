@@ -1,5 +1,7 @@
-<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Changer de thème">
+<button matButton="tonal" [matMenuTriggerFor]="menu">
   <mat-icon>palette</mat-icon>
+  <span class="apercu" [style.background-color]="courant().color"></span>
+  <span class="libelle">Thème : {{ courant().label }}</span>
 </button>
 
 <mat-menu #menu="matMenu">
