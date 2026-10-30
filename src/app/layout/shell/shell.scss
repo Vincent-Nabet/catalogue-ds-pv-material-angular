@@ -4,10 +4,53 @@
   height: 100dvh;
 }
 
-.titre {
+// Barre d'outils : couleur primaire du thème, qui suit le sélecteur
+.barre {
+  --mat-toolbar-container-background-color: var(--mat-sys-primary);
+  --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
+  --mat-icon-button-icon-color: var(--mat-sys-on-primary);
+  --mat-icon-button-state-layer-color: var(--mat-sys-on-primary);
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--mat-sys-level2);
+}
+
+.marque {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: var(--mat-sys-corner-small);
   color: inherit;
   text-decoration: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-on-primary);
+    outline-offset: 4px;
+  }
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: color-mix(in srgb, var(--mat-sys-on-primary) 18%, transparent);
+}
+
+.textes {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.titre {
   font: var(--mat-sys-title-large);
+}
+
+.sous-titre {
+  font: var(--mat-sys-label-medium);
+  opacity: 0.85;
 }
 
 .espace {
@@ -19,11 +62,46 @@
   min-height: 0;
 }
 
+// Navigation latérale : surface teintée, angles arrondis, catégories colorées
 mat-sidenav {
-  width: 280px;
+  --mat-sidenav-container-background-color: var(--mat-sys-surface-container-low);
+  width: 288px;
+  padding-block: 8px 24px;
+  border-start-end-radius: var(--mat-sys-corner-large);
+  border-end-end-radius: var(--mat-sys-corner-large);
+}
+
+.categorie {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 8px;
+  color: var(--mat-sys-primary);
+  font: var(--mat-sys-label-large);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
 }
 
 main {
-  padding: 24px;
+  box-sizing: border-box;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: 32px 32px 56px;
   outline: none;
+}
+
+@media (max-width: 599.98px) {
+  main {
+    padding: 16px 16px 40px;
+  }
+
+  .sous-titre {
+    display: none;
+  }
 }

@@ -40,7 +40,7 @@ html {
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Roboto,
+      typography: Poppins,
       density: 0,
     )
   );
@@ -97,4 +97,18 @@ body {
 main h1 {
   margin: 0 0 24px;
   font: var(--mat-sys-headline-medium);
+}
+
+// Apparition douce de la page à chaque changement de route
+@keyframes apparition-page {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  main > router-outlet + * {
+    animation: apparition-page 220ms ease-out;
+  }
 }
