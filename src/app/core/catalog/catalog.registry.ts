@@ -44,6 +44,58 @@ export const CATALOG: readonly CatalogEntry[] = [
     loadComponent: () =>
       import('../../pages/composants/bouton/bouton.page').then((m) => m.BoutonPage),
   },
+  {
+    id: 'bouton-bascule',
+    label: 'Bouton bascule',
+    category: 'boutons-indicateurs',
+    icon: 'toggle_on',
+    loadComponent: () =>
+      import('../../pages/composants/bouton-bascule/bouton-bascule.page').then(
+        (m) => m.BoutonBasculePage,
+      ),
+  },
+  {
+    id: 'badge',
+    label: 'Badge',
+    category: 'boutons-indicateurs',
+    icon: 'notification_important',
+    loadComponent: () => import('../../pages/composants/badge/badge.page').then((m) => m.BadgePage),
+  },
+  {
+    id: 'icone',
+    label: 'Icône',
+    category: 'boutons-indicateurs',
+    icon: 'emoji_symbols',
+    loadComponent: () => import('../../pages/composants/icone/icone.page').then((m) => m.IconePage),
+  },
+  {
+    id: 'barre-progression',
+    label: 'Barre de progression',
+    category: 'boutons-indicateurs',
+    icon: 'linear_scale',
+    loadComponent: () =>
+      import('../../pages/composants/barre-progression/barre-progression.page').then(
+        (m) => m.BarreProgressionPage,
+      ),
+  },
+  {
+    id: 'indicateur-circulaire',
+    label: 'Indicateur circulaire',
+    category: 'boutons-indicateurs',
+    icon: 'progress_activity',
+    loadComponent: () =>
+      import('../../pages/composants/indicateur-circulaire/indicateur-circulaire.page').then(
+        (m) => m.IndicateurCirculairePage,
+      ),
+  },
+  {
+    id: 'ripple',
+    label: 'Ripple',
+    category: 'boutons-indicateurs',
+    icon: 'touch_app',
+    loadComponent: () =>
+      import('../../pages/composants/ripple/ripple.page').then((m) => m.RipplePage),
+  },
 ];
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({
