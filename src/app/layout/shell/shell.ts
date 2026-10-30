@@ -9,6 +9,7 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter, map, skip } from 'rxjs';
 import { CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
+import { ThemePicker } from '../theme-picker/theme-picker';
 
 @Component({
   selector: 'app-shell',
@@ -25,6 +26,7 @@ import { CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    ThemePicker,
   ],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',

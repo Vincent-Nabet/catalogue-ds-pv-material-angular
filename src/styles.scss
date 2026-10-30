@@ -1,9 +1,36 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
+// Thèmes du catalogue : palettes Material prédéfinies, scopées par classe sur <html>.
+// mat.theme() émet des light-dark() : un seul bloc couleur par thème suffit pour clair/sombre.
 // Learn more about theming and how to use it for your application's
 // custom components at https://material.angular.dev/guide/theming
+@use 'sass:list';
 @use '@angular/material' as mat;
+
+$themes: (
+  "azur": (
+    mat.$azure-palette,
+    mat.$blue-palette,
+  ),
+  "violet": (
+    mat.$violet-palette,
+    mat.$magenta-palette,
+  ),
+  "rose": (
+    mat.$rose-palette,
+    mat.$red-palette,
+  ),
+  "vert": (
+    mat.$green-palette,
+    mat.$spring-green-palette,
+  ),
+  "orange": (
+    mat.$orange-palette,
+    mat.$yellow-palette,
+  ),
+  "cyan": (
+    mat.$cyan-palette,
+    mat.$chartreuse-palette,
+  ),
+);
 
 html {
   height: 100%;
@@ -19,12 +46,42 @@ html {
   );
 }
 
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
+@each $name, $palettes in $themes {
+  html.theme-#{$name} {
+    @include mat.theme(
+      (
+        color: (
+          primary: list.nth($palettes, 1),
+          tertiary: list.nth($palettes, 2),
+        ),
+      )
+    );
+  }
+}
 
+@for $i from 0 through 4 {
+  html.density-#{$i} {
+    @include mat.theme(
+      (
+        density: -$i,
+      )
+    );
+  }
+}
+
+html.scheme-light {
+  color-scheme: light;
+}
+
+html.scheme-dark {
+  color-scheme: dark;
+}
+
+html.scheme-system {
+  color-scheme: light dark;
+}
+
+body {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
@@ -36,4 +93,3 @@ body {
   margin: 0;
   height: 100%;
 }
-/* You can add global styles to this file, and also import other style files */

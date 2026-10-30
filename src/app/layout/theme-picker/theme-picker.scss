@@ -1,0 +1,20 @@
+.titre {
+  display: block;
+  padding: 8px 16px 4px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+.pastille {
+  display: inline-block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 12px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 50%;
+}
+
+.coche {
+  margin-inline: auto 0;
+}

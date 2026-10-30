@@ -1,0 +1,58 @@
+<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Changer de thème">
+  <mat-icon>palette</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu">
+  <div role="group" aria-labelledby="picker-theme">
+    <span class="titre" id="picker-theme">Thème</span>
+    @for (theme of themes; track theme.id) {
+      <button
+        mat-menu-item
+        role="menuitemradio"
+        [attr.aria-checked]="service.theme() === theme.id"
+        (click)="service.theme.set(theme.id)"
+      >
+        <span class="pastille" [style.background-color]="theme.color"></span>
+        <span>{{ theme.label }}</span>
+        @if (service.theme() === theme.id) {
+          <mat-icon class="coche">check</mat-icon>
+        }
+      </button>
+    }
+  </div>
+  <mat-divider />
+  <div role="group" aria-labelledby="picker-mode">
+    <span class="titre" id="picker-mode">Mode</span>
+    @for (scheme of schemes; track scheme.id) {
+      <button
+        mat-menu-item
+        role="menuitemradio"
+        [attr.aria-checked]="service.scheme() === scheme.id"
+        (click)="service.scheme.set(scheme.id)"
+      >
+        <mat-icon>{{ scheme.icon }}</mat-icon>
+        <span>{{ scheme.label }}</span>
+        @if (service.scheme() === scheme.id) {
+          <mat-icon class="coche">check</mat-icon>
+        }
+      </button>
+    }
+  </div>
+  <mat-divider />
+  <div role="group" aria-labelledby="picker-densite">
+    <span class="titre" id="picker-densite">Densité</span>
+    @for (density of densities; track density) {
+      <button
+        mat-menu-item
+        role="menuitemradio"
+        [attr.aria-checked]="service.density() === density"
+        (click)="service.density.set(density)"
+      >
+        <span>{{ density === 0 ? '0 (par défaut)' : -density }}</span>
+        @if (service.density() === density) {
+          <mat-icon class="coche">check</mat-icon>
+        }
+      </button>
+    }
+  </div>
+</mat-menu>
