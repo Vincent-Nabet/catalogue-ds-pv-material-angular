@@ -28,8 +28,8 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 - Angular Material 22 n'a **pas d'API de taille** pour les boutons (sizes/formes = surcharge de jetons `--mat-button-*`) ; `color` est **M2 uniquement** (sans effet) : ne pas l'utiliser.
 - Booléens en binding (`[disabledInteractive]="true"`), `&#64;` pour une arobase dans un template, `hasBackdrop` sur `mat-sidenav-container`, drawers `over`/`push` laissés fermés (piège de focus).
 - Couleurs uniquement via `--mat-sys-*` ; typographie via `--mat-sys-*` (pas de tailles/couleurs en dur).
-- Bundle initial ≈ 823 kB (avertissement à 850 kB, erreur à 1 MB) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
-- Thèmes du design system : générés par `npm run themes` dans `src/styles/themes-<nom>/` (défaut `themes-app`) : **ne pas éditer ces fichiers à la main**, relancer le script ; pas encore branchés au catalogue ; tests : `node --test scripts/themes/`.
+- Bundle initial ≈ 858 kB (avertissement à 880 kB, erreur à 1 MB) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
+- Thèmes du design system : générés par `npm run themes` dans `src/styles/themes-<nom>/` (défaut `themes-app`) : **ne pas éditer ces fichiers à la main**, relancer le script ; branchés au catalogue (4 entrées `app*` dans `themes.ts`, `angular.json`, `styles.scss`) ; tests : `node --test scripts/themes/`.
 - Hors périmètre : `tokens/` et `TOKENS-*.md` (design system distinct, **ne pas modifier**) ; ne pas committer `.mcp.json`, `.mcp.json.tmp`, `.claude/`, `.agents/`, `skills-lock.json` dans ce chantier.
 
 ### Vérifier un changement

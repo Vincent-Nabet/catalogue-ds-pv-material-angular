@@ -42,7 +42,7 @@ src/
       accueil/accueil.ts
       composants/<id>/<id>.page.ts   une page par composant (35)
   styles/themes-<nom>/       GÉNÉRÉ par `npm run themes` (défaut : themes-app), ne pas éditer à la main :
-                             index.css, md3/*.css, <nom>.css, _themes-<nom>.scss ; pas encore importé
+                             index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
 scripts/
   a11y.mjs, captures.mjs, lib.mjs   vérification du site (axe-core, captures)
   themes/                    génération des thèmes depuis les tokens (voir docs/generation-themes.md)
@@ -122,7 +122,7 @@ Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, fo
 
 | Budget | Avertissement | Erreur |
 |---|---|---|
-| Bundle initial | **850 kB** | 1 MB |
+| Bundle initial | **880 kB** | 1 MB |
 | Style d'un composant | 4 kB | 8 kB |
 
-Le bundle initial pèse environ 823 kB (≈ 161 kB transférés). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse environ 858 kB (≈ 164 kB transférés). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). Les pages sont toutes en lazy loading ; garder les styles de page légers.

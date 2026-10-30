@@ -5,7 +5,7 @@ Un script Node lit les tokens DTCG du design system (`tokens/` ou un `.zip` de m
 1. **Étape 1 : variables CSS** MD3 (`--md-sys-*`, `--md-ref-*`) et custom (`--<nom>-*`), dans des fichiers `.css` autonomes, utilisables hors Angular.
 2. **Étape 2 : thème Angular Material** : un mixin Sass qui branche les `--mat-sys-*` sur ces variables.
 
-> **État** : les fichiers sont générés et versionnés dans `src/styles/themes-app/`, mais **pas encore branchés** au catalogue (`styles.scss`, `ThemeService`, sélecteur de thème inchangés). Les choix ci-dessous (classes `theme-*`, `color-scheme`) préparent cette intégration.
+> **État** : les fichiers sont générés et versionnés dans `src/styles/themes-app/`, et **branchés au catalogue** (voir « Intégration au catalogue » plus bas).
 
 Analyses de référence (lecture seule, non modifiées) : `TOKENS-MD3.md` (correspondance token par token) et `TOKENS-NON-APPLICABLES-MD3.md`. Les tokens eux-mêmes (`tokens/`) ne sont jamais modifiés par le script.
 
@@ -96,6 +96,14 @@ avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <su
 - **`neutral10` ← `Neutral.900`** (`#1A1A1A`, identique dans les 8 modes) : ne colore que le texte des options du `<select>` natif dans `mat-form-field`.
 - La table des surcharges est construite à partir des `--mat-sys-*` que la version installée de Material émet (compilation d'un thème témoin) ; le script recompile ensuite le mixin et **vérifie que chaque surcharge est la valeur finale**. Une variable Material sans source (nouvelle version de Material) est listée dans le rapport.
 
+## Intégration au catalogue
+
+- `angular.json` : `src/styles/themes-app/index.css` ajouté à `styles` (variables `--md-sys-*`, `--app-*`).
+- `src/styles.scss` : `@use './styles/themes-app/themes-app'` et un bloc `html.theme-app, html.theme-app-contraste-moyen, html.theme-app-contraste-eleve, html.theme-app-monochrome { @include themes-app.theme(); }` (un seul bloc : le mixin ne référence que des variables, qui changent déjà selon la classe).
+- `core/theme/themes.ts` : 4 entrées `app*` dans `ThemeId` et `THEMES` ; `ThemeService` pose `theme-<id>` sans autre changement, le sélecteur et le compteur de l'accueil suivent.
+- Si `--nom` change, adapter ces trois endroits.
+- Coût : +34 kB au bundle initial (budget d'avertissement relevé à 880 kB).
+
 ## Utilisation hors Angular
 
 ```html
@@ -113,7 +121,6 @@ Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponib
 - Les 8 modes sont requis ; un mode supplémentaire dans la source est ignoré avec un avertissement.
 - En-tête : nom du dossier ou du zip source (pas de chemin machine) ; le rapport affiche en revanche le chemin complet.
 - Les tests (`node:test`) lisent `tokens/` et construisent leurs zips en mémoire ; ils ne font pas partie de `ng test`.
-- Intégration au catalogue non réalisée (hors périmètre) : à faire plus tard en ajoutant `index.css` aux styles, le mixin dans `styles.scss` et les entrées `theme-app*` dans `themes.ts`.
 
 ## Fichiers du script
 

@@ -52,7 +52,7 @@ Ouvre chaque page (accueil + 35 composants) avec un thème et un mode imposés, 
 ```bash
 npm run a11y                                              # azur, clair + sombre, toutes les pages
 npm run a11y -- --themes=azur,violet --schemes=dark       # thèmes et modes précis
-npm run a11y -- --themes=tous                             # les 6 thèmes
+npm run a11y -- --themes=tous                             # les 10 thèmes
 npm run a11y -- --routes=accueil,bouton,carte             # quelques pages
 npm run a11y -- --strict                                  # sans tolérer l'exception connue
 ```

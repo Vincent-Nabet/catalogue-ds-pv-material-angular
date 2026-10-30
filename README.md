@@ -1,6 +1,6 @@
 # Catalogue Material
 
-Catalogue visuel des composants **Angular Material 22** pour designers et intégrateurs : une page par composant avec toutes ses variantes et ses états, un sélecteur de thème en direct (6 thèmes, clair/sombre, 5 densités) et le code de chaque variante à copier. Interface en français.
+Catalogue visuel des composants **Angular Material 22** pour designers et intégrateurs : une page par composant avec toutes ses variantes et ses états, un sélecteur de thème en direct (10 thèmes dont 4 du design system, clair/sombre, 5 densités) et le code de chaque variante à copier. Interface en français.
 
 Projet généré avec [Angular CLI](https://github.com/angular/angular-cli) 22.2.5 (Angular 22.2, Angular Material et CDK 22.2.5, zoneless, SCSS, Vitest).
 

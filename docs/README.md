@@ -29,9 +29,9 @@ Analyses de référence à la racine du dépôt (lecture seule) : `TOKENS-MD3.md
 - **Interface uniquement en français.**
 - 35 pages de composants, 6 catégories, lazy loading, générées depuis un registre unique (`src/app/core/catalog/catalog.registry.ts`).
 - Chaque page présente des **specimens** (variantes et états) avec un bouton `</>` qui ouvre le code dans une boîte de dialogue avec bouton « Copier ».
-- 6 thèmes Material prédéfinis × 3 modes (clair, sombre, système) × 5 densités, modifiables en direct et mémorisés dans `localStorage`.
+- 6 thèmes Material prédéfinis + 4 thèmes du design system (générés depuis `tokens/`) × 3 modes (clair, sombre, système) × 5 densités, modifiables en direct et mémorisés dans `localStorage`.
 - Police **Poppins**, icônes **Material Symbols Outlined** (les deux via Google Fonts).
-- Les thèmes du design system sont **générés** par `npm run themes` dans `src/styles/themes-app/` ; ils ne sont pas encore branchés au catalogue.
+- Les thèmes du design system sont **générés** par `npm run themes` dans `src/styles/themes-app/`  et branchés au sélecteur de thème du catalogue.
 
 ## Commandes
 

@@ -18,7 +18,7 @@ Public : designers, intégrateurs, développeurs front. Langue de l'interface : 
 
 | Réglage | Valeurs | Défaut |
 |---|---|---|
-| Thème | Azur, Violet, Rose, Vert, Orange, Cyan (pastille de couleur + coche sur l'actif) | Azur |
+| Thème | Azur, Violet, Rose, Vert, Orange, Cyan, puis 4 thèmes du design system : Design system, contraste moyen, contraste élevé, monochrome (pastille de couleur + coche sur l'actif) | Azur |
 | Mode | Clair, Sombre, Système | **Clair** |
 | Densité | 0 (par défaut), −1, −2, −3, −4 | 0 |
 
@@ -105,4 +105,3 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 
 - Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici.
 - Les cartes avec image (nécessiteraient un asset et `NgOptimizedImage`).
-- Un thème « Isagri » ou des niveaux de contraste : hors périmètre (voir [decisions-et-limites.md](decisions-et-limites.md)).

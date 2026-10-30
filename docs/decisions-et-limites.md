@@ -7,7 +7,7 @@
 | Source des pages | Registre unique (`catalog.registry.ts`) | Ajouter un composant = 1 entrée + 1 page ; routes, navigation et accueil dérivés |
 | Snippets | Écrits à la main, dans une constante par page | Pas de génération automatique ni de coloration syntaxique (aucune dépendance ajoutée) |
 | Snippet discret | Petit bouton `</>` sur le specimen, dialog avec « Copier » | Le visuel prime ; le code reste accessible sans encombrer |
-| Thème | Palettes Material prédéfinies uniquement, classes sur `<html>` | Pas de thème Isagri ni de niveaux de contraste (hors périmètre) ; `light-dark()` évite de dupliquer clair/sombre |
+| Thème | 6 palettes Material prédéfinies + 4 thèmes du design system (générés), classes sur `<html>` | `light-dark()` évite de dupliquer clair/sombre ; les thèmes du design system apportent les niveaux de contraste |
 | Mode par défaut | Clair (et classe `scheme-light` en dur dans `index.html`) | Demande explicite ; évite le flash selon le thème du système |
 | Libellés Material | `*Intl` français fournis au niveau des pages | Interface 100 % française sans alourdir le bundle initial |
 | Bouton du sélecteur | Bouton tonal « Thème : X » avec pastille | Un bouton icône seul passait inaperçu |
@@ -27,11 +27,11 @@ Détail : [generation-themes.md](generation-themes.md).
 | Variables typo composites | Surchargées aussi (`--mat-sys-body-large`…) | Valeurs figées : surcharger `-size` ou `-weight` ne les met pas à jour |
 | State Layers | Ignorés ; opacités d'état MD3 posées en constantes | Ce sont des alias de couleur sans opacité |
 | Clair/sombre et contraste | `light-dark()` + une classe `theme-<nom>[-<contraste>]` par famille | Même mécanisme que Material et que le catalogue ; 4 blocs au lieu de 8 |
-| Intégration au catalogue | Non faite | Hors périmètre de ce chantier ; les fichiers sont prêts à importer |
+| Intégration au catalogue | 4 entrées dans le sélecteur (`app`, `app-contraste-moyen`, `app-contraste-eleve`, `app-monochrome`) | Une classe `theme-*` par famille de contraste ; un seul bloc `mat.theme()` pour les quatre (le mixin ne référence que des variables) |
 
 ## Budget initial
 
-L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 850 kB) au fil de l'ajout de pages. Cause mesurée : le shell importe des modules Material entiers (`list.mjs` ≈ 132 kB, `button.mjs` ≈ 67 kB, `forms`, overlay CDK) qui ne se découpent pas à la classe près, et que le bundler place dans le chunk initial. Déplacer le date adapter vers les pages n'économisait que ≈ 17 kB : abandonné pour garder `app.config.ts` fidèle au plan. Erreur à 1 MB inchangée. Une piste si le poids devient gênant : remplacer `mat-nav-list` du shell par une navigation maison (≈ −130 kB), au prix d'un rendu moins fidèle.
+L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 850 → 880 kB) au fil de l'ajout de pages. Le dernier cran (850 → 880 kB) vient du branchement des thèmes du design system : le CSS passe de ≈ 44 à ≈ 79 kB (variables `--md-sys-*` des 4 familles de contraste + bloc de surcharges `--mat-sys-*`), le total initial de 823,55 à 857,68 kB. Cause mesurée : le shell importe des modules Material entiers (`list.mjs` ≈ 132 kB, `button.mjs` ≈ 67 kB, `forms`, overlay CDK) qui ne se découpent pas à la classe près, et que le bundler place dans le chunk initial. Déplacer le date adapter vers les pages n'économisait que ≈ 17 kB : abandonné pour garder `app.config.ts` fidèle au plan. Erreur à 1 MB inchangée. Une piste si le poids devient gênant : remplacer `mat-nav-list` du shell par une navigation maison (≈ −130 kB), au prix d'un rendu moins fidèle.
 
 ## Particularités d'Angular Material 22 (vérifiées dans les sources installées)
 
@@ -57,12 +57,12 @@ L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 
 - Pas de cartes avec image, pas de formulaires complets, pas de validation asynchrone.
 - Les scripts `a11y` et `captures` nécessitent Chrome ou Chromium installé (`CHROME_PATH` sinon) ; ils ne tournent pas en CI par défaut.
 - Seuls les tests du shell, du registre, du service de thème et du specimen existent (plus ceux du script de génération, via `node --test scripts/themes/`).
-- Les thèmes générés (`src/styles/themes-app/`) ne sont validés que par compilation Sass et par tests : pas encore de contrôle visuel ni axe, faute d'intégration au catalogue.
+- **Thèmes du design system : violations axe `color-contrast` dues aux tokens**, volontairement **non corrigées** (le thème est reproduit tel que défini, à remonter aux designers). Audit `npm run a11y -- --themes=app,app-contraste-moyen,app-contraste-eleve,app-monochrome` : `app` et `app-contraste-moyen` en clair (primaire olive utilisé en texte pour les catégories du menu latéral, sous-titre de la barre à 85 % d'opacité) ; `app-contraste-eleve` en clair et en sombre (ligne sélectionnée du tableau : `on-surface` sur `secondary-container`) ; aucune en sombre pour `app` / `app-contraste-moyen`, aucune pour `app-monochrome`.
 
 ## Hors périmètre
 
 - `tokens/` et `TOKENS-MD3.md`, `TOKENS-NON-APPLICABLES-MD3.md` : design system externe (tokens DTCG) et analyses de correspondance avec les variables Material Design 3. Lus par `npm run themes` en lecture seule, **jamais modifiés** ni committés ; **non utilisés directement par l'application**.
-- Thème Isagri, niveaux de contraste du thème, internationalisation autre que le français.
+- Internationalisation autre que le français.
 
 ## Fichiers d'outillage à ne pas toucher dans ce chantier
 

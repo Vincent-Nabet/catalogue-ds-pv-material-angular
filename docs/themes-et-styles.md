@@ -4,11 +4,11 @@
 
 Tout le thème est porté par des **classes sur `<html>`**, posées par `ThemeService`, et par le mixin Sass `mat.theme()` d'Angular Material, qui émet des variables CSS `--mat-sys-*`. Comme `mat.theme()` utilise `light-dark()`, **un seul bloc de couleur par thème** suffit pour le clair et le sombre : le mode ne fait que changer `color-scheme`.
 
-Seules les palettes Material prédéfinies sont utilisées par le catalogue. Le thème du design system (`tokens/`) est généré à part : voir la section suivante.
+Le catalogue propose 6 palettes Material prédéfinies et 4 thèmes du design system (`tokens/`), ces derniers générés à part : voir la section suivante.
 
-### Thème du design system : généré, pas encore branché
+### Thèmes du design system : générés et branchés
 
-`npm run themes` produit dans `src/styles/themes-app/` des variables CSS MD3 + custom et un mixin Angular Material (`_themes-app.scss`) à partir des tokens. Ces fichiers **ne sont pas importés** par `styles.scss` et ne changent rien au catalogue ; ils préparent un futur thème « design system » (classes `theme-app*`, `color-scheme`). Détails, options et fichiers produits : [generation-themes.md](generation-themes.md).
+`npm run themes` produit dans `src/styles/themes-app/` des variables CSS MD3 + custom et un mixin Angular Material (`_themes-app.scss`) à partir des tokens. Le CSS est chargé par `angular.json`, le mixin est inclus par `styles.scss` pour les classes `theme-app`, `theme-app-contraste-moyen`, `theme-app-contraste-eleve` et `theme-app-monochrome` (entrées « Design system… » du sélecteur). Détails, options et intégration : [generation-themes.md](generation-themes.md).
 
 ## `src/styles.scss`
 
