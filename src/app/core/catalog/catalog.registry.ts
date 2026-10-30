@@ -176,6 +176,38 @@ export const CATALOG: readonly CatalogEntry[] = [
     loadComponent: () =>
       import('../../pages/composants/chips/chips.page').then((m) => m.ChipsPage),
   },
+  {
+    id: 'barre-outils',
+    label: 'Barre d’outils',
+    category: 'navigation',
+    icon: 'web_asset',
+    loadComponent: () =>
+      import('../../pages/composants/barre-outils/barre-outils.page').then((m) => m.BarreOutilsPage),
+  },
+  {
+    id: 'menu-lateral',
+    label: 'Menu latéral',
+    category: 'navigation',
+    icon: 'left_panel_open',
+    loadComponent: () =>
+      import('../../pages/composants/menu-lateral/menu-lateral.page').then((m) => m.MenuLateralPage),
+  },
+  {
+    id: 'menu',
+    label: 'Menu',
+    category: 'navigation',
+    icon: 'menu_open',
+    loadComponent: () =>
+      import('../../pages/composants/menu/menu.page').then((m) => m.MenuPage),
+  },
+  {
+    id: 'onglets',
+    label: 'Onglets',
+    category: 'navigation',
+    icon: 'tab',
+    loadComponent: () =>
+      import('../../pages/composants/onglets/onglets.page').then((m) => m.OngletsPage),
+  },
 ];
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({
