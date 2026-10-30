@@ -41,7 +41,7 @@ const SNIPPETS = {
   template: `
     <h1>Bouton bascule</h1>
 
-    <app-specimen-section title="Sélection">
+    <app-specimen-section minWidth="300px" title="Sélection">
       <app-specimen label="Choix unique" api="mat-button-toggle-group" [snippet]="snippets.simple">
         <mat-button-toggle-group aria-label="Alignement" value="gauche">
           <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
@@ -58,7 +58,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Présentation">
+    <app-specimen-section minWidth="300px" title="Présentation">
       <app-specimen label="Avec icônes" api="mat-icon" [snippet]="snippets.icones">
         <mat-button-toggle-group aria-label="Affichage" value="liste">
           <mat-button-toggle value="liste" aria-label="Liste"><mat-icon>view_list</mat-icon></mat-button-toggle>
@@ -81,7 +81,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="États">
+    <app-specimen-section minWidth="300px" title="États">
       <app-specimen label="Désactivé" api="disabled" [snippet]="snippets.desactive">
         <mat-button-toggle-group aria-label="Groupe désactivé" value="a" disabled>
           <mat-button-toggle value="a">A</mat-button-toggle>

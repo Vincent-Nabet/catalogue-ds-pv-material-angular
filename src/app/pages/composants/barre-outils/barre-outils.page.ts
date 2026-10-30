@@ -27,7 +27,7 @@ const SNIPPETS = {
   template: `
     <h1>Barre d’outils</h1>
 
-    <app-specimen-section title="Variantes">
+    <app-specimen-section minWidth="320px" title="Variantes">
       <app-specimen label="Simple" api="mat-toolbar" [snippet]="snippets.simple">
         <mat-toolbar>Titre de la page</mat-toolbar>
       </app-specimen>

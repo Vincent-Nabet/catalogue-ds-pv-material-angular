@@ -64,7 +64,7 @@ const SNIPPETS = {
   template: `
     <h1>Onglets</h1>
 
-    <app-specimen-section title="Groupes d’onglets">
+    <app-specimen-section minWidth="340px" title="Groupes d’onglets">
       <app-specimen label="Simple" api="mat-tab-group" [snippet]="snippets.simple">
         <mat-tab-group class="onglets">
           <mat-tab label="Général"><p>Contenu général</p></mat-tab>
@@ -104,7 +104,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Barre de navigation">
+    <app-specimen-section minWidth="340px" title="Barre de navigation">
       <app-specimen label="Liens" api="mat-tab-nav-bar" [snippet]="snippets.navigation">
         <div class="onglets">
           <nav mat-tab-nav-bar [tabPanel]="panneau" aria-label="Sections">

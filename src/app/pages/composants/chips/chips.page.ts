@@ -64,8 +64,8 @@ const SNIPPETS = {
         <mat-icon>cancel</mat-icon>
       </button>
     </mat-chip-row>
-    <input placeholder="Ajouter…" [matChipInputFor]="grille" />
   </mat-chip-grid>
+  <input placeholder="Ajouter…" [matChipInputFor]="grille" />
 </mat-form-field>`,
 };
 
@@ -158,8 +158,8 @@ const SNIPPETS = {
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip-row>
-            <input placeholder="Ajouter…" [matChipInputFor]="grille" />
           </mat-chip-grid>
+          <input placeholder="Ajouter…" [matChipInputFor]="grille" />
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>

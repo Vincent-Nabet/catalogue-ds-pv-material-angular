@@ -88,7 +88,7 @@ const SNIPPETS = {
   template: `
     <h1>Tri</h1>
 
-    <app-specimen-section title="En-têtes triables" description="Cliquer sur un en-tête pour trier la colonne.">
+    <app-specimen-section minWidth="320px" title="En-têtes triables" description="Cliquer sur un en-tête pour trier la colonne.">
       <app-specimen label="Tri par colonne" api="matSort / mat-sort-header" [snippet]="snippets.simple">
         <table mat-table [dataSource]="lignesSimple()" matSort (matSortChange)="triSimple.set($event)" aria-label="Produits triables">
           <ng-container matColumnDef="nom">

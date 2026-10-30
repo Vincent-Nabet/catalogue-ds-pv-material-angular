@@ -3,7 +3,13 @@ import { Component, ElementRef, effect, inject, viewChild } from '@angular/core'
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatListItem, MatListSubheaderCssMatStyler, MatNavList } from '@angular/material/list';
+import {
+  MatListItem,
+  MatListItemIcon,
+  MatListItemTitle,
+  MatListSubheaderCssMatStyler,
+  MatNavList,
+} from '@angular/material/list';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
@@ -22,6 +28,8 @@ import { ThemePicker } from '../theme-picker/theme-picker';
     MatSidenavContent,
     MatNavList,
     MatListItem,
+    MatListItemIcon,
+    MatListItemTitle,
     MatListSubheaderCssMatStyler,
     RouterLink,
     RouterLinkActive,

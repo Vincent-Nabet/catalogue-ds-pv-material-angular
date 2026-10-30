@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
-import { MatListItem, MatNavList } from '@angular/material/list';
+import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
 
@@ -14,6 +14,8 @@ import { CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
     MatCardContent,
     MatIcon,
     MatListItem,
+    MatListItemIcon,
+    MatListItemTitle,
     MatNavList,
     RouterLink,
   ],

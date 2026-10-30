@@ -90,6 +90,11 @@ const SNIPPETS = {
       background: var(--mat-sys-primary-container);
       color: var(--mat-sys-on-primary-container);
     }
+
+    mat-grid-tile .mat-grid-tile-header {
+      background: var(--mat-sys-primary);
+      color: var(--mat-sys-on-primary);
+    }
   `,
 })
 export class GrillePage {

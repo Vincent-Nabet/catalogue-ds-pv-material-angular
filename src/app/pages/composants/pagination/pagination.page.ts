@@ -28,7 +28,7 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
   template: `
     <h1>Pagination</h1>
 
-    <app-specimen-section title="Paginateurs">
+    <app-specimen-section minWidth="440px" title="Paginateurs">
       <app-specimen label="Simple" api="mat-paginator" [snippet]="snippets.simple">
         <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" aria-label="Pagination simple" />
       </app-specimen>
@@ -43,7 +43,7 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="État et libellés">
+    <app-specimen-section minWidth="440px" title="État et libellés">
       <app-specimen label="Désactivé" api="disabled" [snippet]="snippets.desactive">
         <mat-paginator [length]="100" [pageSize]="10" disabled aria-label="Pagination désactivée" />
       </app-specimen>

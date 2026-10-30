@@ -104,7 +104,7 @@ const SNIPPETS = {
   template: `
     <h1>Tableau</h1>
 
-    <app-specimen-section title="Tableaux">
+    <app-specimen-section minWidth="360px" title="Tableaux">
       <app-specimen label="Simple" api="mat-table" [snippet]="snippets.simple">
         <table mat-table [dataSource]="produits" aria-label="Produits">
           <ng-container matColumnDef="reference">

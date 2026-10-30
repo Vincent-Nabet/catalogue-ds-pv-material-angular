@@ -57,7 +57,7 @@ const SNIPPETS = {
   template: `
     <h1>Étapes</h1>
 
-    <app-specimen-section title="Orientations">
+    <app-specimen-section minWidth="420px" title="Orientations">
       <app-specimen label="Horizontal" api="mat-stepper" [snippet]="snippets.horizontal">
         <mat-stepper>
           <mat-step label="Identité">
@@ -89,7 +89,7 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Comportements">
+    <app-specimen-section minWidth="420px" title="Comportements">
       <app-specimen label="Étape optionnelle" api="optional" [snippet]="snippets.optionnelle">
         <mat-stepper>
           <mat-step label="Identité"><p>Première étape.</p></mat-step>
