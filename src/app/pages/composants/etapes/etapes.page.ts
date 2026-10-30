@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { MatStep, MatStepper, MatStepperNext, MatStepperPrevious } from '@angular/material/stepper';
+import {
+  MatStep,
+  MatStepper,
+  MatStepperIntl,
+  MatStepperNext,
+  MatStepperPrevious,
+} from '@angular/material/stepper';
+import { StepperIntlFr } from '../../../core/i18n/intl-fr';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -46,6 +53,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-etapes-page',
   imports: [MatButton, MatStep, MatStepper, MatStepperNext, MatStepperPrevious, Specimen, SpecimenSection],
+  providers: [{ provide: MatStepperIntl, useClass: StepperIntlFr }],
   template: `
     <h1>Étapes</h1>
 

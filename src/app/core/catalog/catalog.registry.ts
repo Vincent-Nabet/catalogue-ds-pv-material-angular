@@ -296,6 +296,30 @@ export const CATALOG: readonly CatalogEntry[] = [
     loadComponent: () =>
       import('../../pages/composants/infobulle/infobulle.page').then((m) => m.InfobullePage),
   },
+  {
+    id: 'tableau',
+    label: 'Tableau',
+    category: 'donnees',
+    icon: 'table_chart',
+    loadComponent: () =>
+      import('../../pages/composants/tableau/tableau.page').then((m) => m.TableauPage),
+  },
+  {
+    id: 'tri',
+    label: 'Tri',
+    category: 'donnees',
+    icon: 'sort',
+    loadComponent: () =>
+      import('../../pages/composants/tri/tri.page').then((m) => m.TriPage),
+  },
+  {
+    id: 'pagination',
+    label: 'Pagination',
+    category: 'donnees',
+    icon: 'last_page',
+    loadComponent: () =>
+      import('../../pages/composants/pagination/pagination.page').then((m) => m.PaginationPage),
+  },
 ];
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({

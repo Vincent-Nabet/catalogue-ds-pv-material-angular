@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDatepickerIntl } from '@angular/material/datepicker';
 import {
   MatCalendar,
   MatDatepicker,
@@ -11,6 +12,7 @@ import {
 } from '@angular/material/datepicker';
 import { MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { DatepickerIntlFr } from '../../../core/i18n/intl-fr';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -59,6 +61,7 @@ const SNIPPETS = {
     Specimen,
     SpecimenSection,
   ],
+  providers: [{ provide: MatDatepickerIntl, useClass: DatepickerIntlFr }],
   template: `
     <h1>Sélecteur de date</h1>
 
