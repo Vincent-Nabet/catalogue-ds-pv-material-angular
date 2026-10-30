@@ -1,0 +1,108 @@
+/* Fichier généré par `npm run themes` — ne pas modifier.
+ * Source : tokens — 2026-10-30 */
+
+/* Variables hors MD3 identiques dans tous les modes */
+:root {
+  --app-shape-corner-large-increased: 20px;
+  --app-shape-corner-extra-large-increased: 32px;
+  --app-shape-corner-extra-extra-large: 48px;
+  --app-spacing-none: 0px;
+  --app-spacing-extra-small: 4px;
+  --app-spacing-small: 8px;
+  --app-spacing-medium: 16px;
+  --app-spacing-large: 24px;
+  --app-spacing-large-increased: 32px;
+  --app-spacing-extra-large: 40px;
+  --app-spacing-extra-large-increased: 48px;
+  --app-spacing-extra-extra-large: 56px;
+  --app-spacing-full: 64px;
+  --app-typescale-emphasized-display-large-weight: 500;
+  --app-typescale-emphasized-display-medium-weight: 500;
+  --app-typescale-emphasized-display-small-weight: 500;
+  --app-typescale-emphasized-headline-large-weight: 500;
+  --app-typescale-emphasized-headline-medium-weight: 500;
+  --app-typescale-emphasized-headline-small-weight: 500;
+  --app-typescale-emphasized-title-large-weight: 500;
+  --app-typescale-emphasized-title-medium-weight: 600;
+  --app-typescale-emphasized-title-small-weight: 600;
+  --app-typescale-emphasized-label-small-weight: 600;
+  --app-typescale-emphasized-body-large-weight: 500;
+  --app-typescale-emphasized-body-medium-weight: 500;
+  --app-typescale-emphasized-body-small-weight: 500;
+}
+
+/* Standard (light / dark) */
+:root, .theme-app {
+  --app-color-success: light-dark(#73C322, #A5D66A);
+  --app-color-info: light-dark(#0066FF, #ADC6FF);
+  --app-color-warning: light-dark(#FF9900, #FFB95C);
+  --app-color-on-warning: light-dark(#1A1A1A, #482900);
+  --app-color-on-success: light-dark(#1A1A1A, #1C3700);
+  --app-color-on-info: light-dark(#FFFFFF, #002E69);
+  --app-color-warning-container: light-dark(#FFE2B8, #6A3D00);
+  --app-color-on-warning-container: light-dark(#6B3F00, #FFE0B2);
+  --app-color-success-container: light-dark(#DDF3C4, #365E0A);
+  --app-color-on-success-container: light-dark(#315D08, #DDF3C4);
+  --app-color-info-container: light-dark(#DCE8FF, #004494);
+  --app-color-on-info-container: light-dark(#003E99, #D9E2FF);
+  --app-color-neutral-0: #FFFFFF;
+  --app-color-neutral-900: #1A1A1A;
+  --app-color-section-background: light-dark(#F5F5F5, #000000);
+}
+
+/* Contraste moyen (light-medium-contrast / dark-medium-contrast) */
+.theme-app-contraste-moyen {
+  --app-color-success: light-dark(#467F0C, #B7E77E);
+  --app-color-info: light-dark(#0054D1, #BDD0FF);
+  --app-color-warning: light-dark(#A85F00, #FFCB85);
+  --app-color-on-warning: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-on-success: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-on-info: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-warning-container: light-dark(#FFD39A, #7D4900);
+  --app-color-on-warning-container: light-dark(#512F00, #FFFFFF);
+  --app-color-success-container: light-dark(#C8E8A5, #477A14);
+  --app-color-on-success-container: light-dark(#274D05, #FFFFFF);
+  --app-color-info-container: light-dark(#C3D6FF, #1558B7);
+  --app-color-on-info-container: light-dark(#003A88, #FFFFFF);
+  --app-color-neutral-0: #FFFFFF;
+  --app-color-neutral-900: #1A1A1A;
+  --app-color-section-background: light-dark(#F5F5F5, #000000);
+}
+
+/* Contraste élevé (light-high-contrast / dark-high-contrast) */
+.theme-app-contraste-eleve {
+  --app-color-success: light-dark(#315F05, #DDF3C4);
+  --app-color-info: light-dark(#003F9E, #D9E2FF);
+  --app-color-warning: light-dark(#784200, #FFE0B2);
+  --app-color-on-warning: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-on-success: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-on-info: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-warning-container: light-dark(#844B00, #FFB95C);
+  --app-color-on-warning-container: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-success-container: light-dark(#38620C, #A5D66A);
+  --app-color-on-success-container: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-info-container: light-dark(#0050BF, #9EBBFF);
+  --app-color-on-info-container: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-neutral-0: #FFFFFF;
+  --app-color-neutral-900: #1A1A1A;
+  --app-color-section-background: light-dark(#F5F5F5, #000000);
+}
+
+/* Monochrome (monochrome-lt / monochrome-dt) */
+.theme-app-monochrome {
+  --app-color-success: light-dark(#4D4D4D, #D1D1D1);
+  --app-color-info: light-dark(#5C5C5C, #C6C6C6);
+  --app-color-warning: light-dark(#545454, #CCCCCC);
+  --app-color-on-warning: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-on-success: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-on-info: light-dark(#FFFFFF, #1A1A1A);
+  --app-color-warning-container: light-dark(#E2E2E2, #545454);
+  --app-color-on-warning-container: light-dark(#1A1A1A, #FFFFFF);
+  --app-color-success-container: light-dark(#E2E2E2, #4D4D4D);
+  --app-color-on-success-container: light-dark(#1A1A1A, #FFFFFF);
+  --app-color-info-container: light-dark(#E2E2E2, #5C5C5C);
+  --app-color-on-info-container: light-dark(#1A1A1A, #FFFFFF);
+  --app-color-neutral-0: #FFFFFF;
+  --app-color-neutral-900: #1A1A1A;
+  --app-color-section-background: light-dark(#F5F5F5, #000000);
+}
