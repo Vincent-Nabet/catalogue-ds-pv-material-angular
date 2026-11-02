@@ -2,6 +2,7 @@ import {
   COLOR_PAIRS,
   COLOR_ROLES,
   colorVar,
+  detectedColorFamilies,
   detectedRoles,
   listedDesignSystemColorVars,
   pairGroup,
@@ -96,5 +97,26 @@ describe('color roles', () => {
 
   it('should label a pair from its roles', () => {
     expect(pairLabel(COLOR_PAIRS[0])).toBe('on-primary sur primary');
+  });
+
+  describe('detectedColorFamilies', () => {
+    const family = (id: string) =>
+      [id, `on-${id}`, `${id}-container`, `on-${id}-container`].map((role) => `--app-color-${role}`);
+
+    it('should detect complete families and label the listed ones', () => {
+      expect(detectedColorFamilies([...family('success'), ...family('warning')])).toEqual([
+        { id: 'success', label: 'Succès' },
+        { id: 'warning', label: 'Alerte' },
+      ]);
+    });
+
+    it('should detect an unlisted family and fall back to its id as label', () => {
+      expect(detectedColorFamilies(family('brand'))).toEqual([{ id: 'brand', label: 'brand' }]);
+    });
+
+    it('should ignore incomplete families and standalone colors', () => {
+      const found = ['--app-color-neutral-0', '--app-color-danger', '--app-color-on-danger', '--app-spacing-small'];
+      expect(detectedColorFamilies(found)).toEqual([]);
+    });
   });
 });

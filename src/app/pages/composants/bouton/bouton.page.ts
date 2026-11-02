@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { detectedColorFamilies } from '../../../core/tokens/color-roles';
+import { injectIsDesignSystem } from '../../../core/tokens/theme-key';
+import { TokenCatalog } from '../../../core/tokens/token-catalog';
 import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -273,6 +276,38 @@ const SNIPPETS = {
 </button>`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  const role = `--app-color-${id}`;
+  return `<button matButton="filled" class="${id}">Rempli</button>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.button-overrides((
+    filled-container-color: var(${role}),
+    filled-label-text-color: var(--app-color-on-${id}),
+    filled-state-layer-color: var(--app-color-on-${id}),
+
+    tonal-container-color: var(${role}-container),
+    tonal-label-text-color: var(--app-color-on-${id}-container),
+    tonal-state-layer-color: var(--app-color-on-${id}-container),
+
+    outlined-label-text-color: var(${role}),
+    outlined-outline-color: var(${role}),
+    outlined-state-layer-color: var(${role}),
+
+    text-label-text-color: var(${role}),
+    text-state-layer-color: var(${role}),
+
+    protected-label-text-color: var(${role}),
+    protected-state-layer-color: var(${role}),
+  ));
+}
+
+/* Boutons icône et FAB : mêmes jetons que pour secondary (voir « Couleurs »), avec ces variables */`;
+}
+
 @Component({
   selector: 'app-bouton-page',
   imports: [MatButton, MatIconButton, MatFabButton, MatMiniFabButton, MatIcon, Specimen, SpecimenSection, MatProgressSpinner],
@@ -416,6 +451,29 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond et texte ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span class="famille" [style]="family.style">
+              <button matButton="text" class="perso">Texte</button>
+              <button matButton="filled" class="perso">Rempli</button>
+              <button matButton="tonal" class="perso">Tonal</button>
+              <button matButton="elevated" class="perso">Relevé</button>
+              <button matButton="outlined" class="perso">Contour</button>
+              <button matIconButton class="perso" [attr.aria-label]="'Favori ' + family.label"><mat-icon>favorite</mat-icon></button>
+              <button matFab class="perso" [attr.aria-label]="'Modifier ' + family.label"><mat-icon>edit</mat-icon></button>
+              <button matMiniFab class="perso" [attr.aria-label]="'Modifier ' + family.label"><mat-icon>edit</mat-icon></button>
+              <button matFab extended class="perso"><mat-icon>edit</mat-icon>Modifier</button>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
+
     <app-specimen-section title="Formes" description="Rayon des angles : le mixin mat.button-overrides reçoit un jeton de l’échelle de formes --mat-sys-corner-* (container-shape).">
       <app-specimen label="Pilule (défaut)" api="corner-full" [snippet]="snippets.pilule">
         <button matButton="filled">Rempli</button>
@@ -514,8 +572,13 @@ const SNIPPETS = {
 
     .secondaire,
     .tertiaire,
-    .erreur {
+    .erreur,
+    .perso {
       @include roles.button-tokens;
+    }
+
+    .famille {
+      display: contents;
     }
 
     .secondaire {
@@ -556,4 +619,27 @@ const SNIPPETS = {
 })
 export class BoutonPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly catalog = inject(TokenCatalog);
+  private readonly designSystem = injectIsDesignSystem();
+
+  /** Une famille par jeu `--app-color-*` complet : seul le design system les porte, ils sont masqués avec un thème Angular Material. */
+  protected readonly families = computed(() => {
+    const names = this.catalog.names();
+    return this.designSystem() && names
+      ? detectedColorFamilies(names).map(({ id, label }) => ({
+          id,
+          label,
+          api: `--app-color-${id}`,
+          snippet: customSnippet(id),
+          // Mêmes variables intermédiaires que les rôles M3 (`roles.button`), lues par `.perso`.
+          style: {
+            '--r-f': `var(--app-color-${id})`,
+            '--r-sf': `var(--app-color-on-${id})`,
+            '--r-c': `var(--app-color-${id}-container)`,
+            '--r-sc': `var(--app-color-on-${id}-container)`,
+          },
+        }))
+      : [];
+  });
 }
