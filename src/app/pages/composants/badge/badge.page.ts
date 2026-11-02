@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatBadge } from '@angular/material/badge';
 import { MatIcon } from '@angular/material/icon';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -65,9 +67,23 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-icon matBadge="4" class="${id}" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.badge-overrides((
+    background-color: var(--app-color-${id}),
+    text-color: var(--app-color-on-${id}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-badge-page',
-  imports: [MatBadge, MatButton, MatIcon, Specimen, SpecimenSection],
+  imports: [MatBadge, MatButton, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Badge</h1>
 
@@ -128,6 +144,23 @@ const SNIPPETS = {
         <mat-icon matBadge="8" matBadgeSize="large" class="grand" aria-hidden="false" aria-label="8 notifications">mail</mat-icon>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond et texte ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-icon matBadge="4" class="perso" aria-hidden="false" [attr.aria-label]="'4 notifications ' + family.label">mail</mat-icon>
+              <mat-icon matBadge="4" matBadgeSize="large" class="perso" aria-hidden="false" [attr.aria-label]="'4 notifications, grande taille ' + family.label">mail</mat-icon>
+              <mat-icon matBadge matBadgeSize="small" class="perso" aria-hidden="false" [attr.aria-label]="'Nouveau ' + family.label">notifications</mat-icon>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -143,6 +176,10 @@ const SNIPPETS = {
 
     .tertiaire {
       @include roles.badge(var(--mat-sys-tertiary), var(--mat-sys-on-tertiary));
+    }
+
+    .perso {
+      @include roles.badge(var(--r-f), var(--r-sf));
     }
 
     .angles-droits {
@@ -166,4 +203,11 @@ const SNIPPETS = {
 })
 export class BadgePage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.badge-overrides : background-color', snippet: customSnippet(id) })),
+  );
 }

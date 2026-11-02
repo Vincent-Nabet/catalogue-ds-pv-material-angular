@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatIcon } from '@angular/material/icon';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -110,9 +112,26 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-button-toggle-group aria-label="Alignement" value="gauche" class="${id}">
+  <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+  <mat-button-toggle value="droite">Droite</mat-button-toggle>
+</mat-button-toggle-group>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.button-toggle-overrides((
+    selected-state-background-color: var(--app-color-${id}-container),
+    selected-state-text-color: var(--app-color-on-${id}-container),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-bouton-bascule-page',
-  imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, Specimen, SpecimenSection],
+  imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Bouton bascule</h1>
 
@@ -232,6 +251,25 @@ const SNIPPETS = {
         </mat-button-toggle-group>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="300px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond et texte de la sélection ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-button-toggle-group [attr.aria-label]="'Alignement, sélection ' + family.label" value="gauche" class="perso">
+                <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+                <mat-button-toggle value="droite">Droite</mat-button-toggle>
+              </mat-button-toggle-group>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -265,6 +303,10 @@ const SNIPPETS = {
       @include roles.button-toggle(var(--mat-sys-error-container), var(--mat-sys-on-error-container));
     }
 
+    .perso {
+      @include roles.button-toggle(var(--r-c), var(--r-sc));
+    }
+
     .grand {
       @include mat.button-toggle-overrides(
         (
@@ -277,4 +319,11 @@ const SNIPPETS = {
 })
 export class BoutonBasculePage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.button-toggle-overrides : selected-state-background-color', snippet: customSnippet(id) })),
+  );
 }
