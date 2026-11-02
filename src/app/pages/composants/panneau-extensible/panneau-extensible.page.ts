@@ -87,6 +87,57 @@ const SNIPPETS = {
     <p>Rendu à la première ouverture.</p>
   </ng-template>
 </mat-expansion-panel>`,
+  couleurs: `<mat-expansion-panel class="panneau-secondaire" expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Mon compte</mat-panel-title>
+    <mat-panel-description>Détails du compte</mat-panel-description>
+  </mat-expansion-panel-header>
+  <p>Contenu du panneau.</p>
+</mat-expansion-panel>
+
+@use '@angular/material' as mat;
+
+.panneau-secondaire {
+  @include mat.expansion-overrides((
+    container-background-color: var(--mat-sys-secondary-container),
+    container-text-color: var(--mat-sys-on-secondary-container),
+    header-text-color: var(--mat-sys-on-secondary-container),
+    header-description-color: var(--mat-sys-on-secondary-container),
+    header-indicator-color: var(--mat-sys-on-secondary-container),
+  ));
+}`,
+  formeRelief: `<mat-expansion-panel class="panneau-arrondi" expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Sécurité</mat-panel-title>
+  </mat-expansion-panel-header>
+  <p>Contenu du panneau.</p>
+</mat-expansion-panel>
+
+@use '@angular/material' as mat;
+
+.panneau-arrondi {
+  @include mat.expansion-overrides((
+    container-shape: var(--mat-sys-corner-extra-large),
+    container-elevation-shadow: var(--mat-sys-level3),
+  ));
+}`,
+  typographie: `<mat-expansion-panel class="panneau-typo" expanded>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Notifications</mat-panel-title>
+  </mat-expansion-panel-header>
+  <p>Contenu du panneau.</p>
+</mat-expansion-panel>
+
+@use '@angular/material' as mat;
+
+.panneau-typo {
+  @include mat.expansion-overrides((
+    header-text-size: var(--mat-sys-title-large-size),
+    header-text-line-height: var(--mat-sys-title-large-line-height),
+    container-text-size: var(--mat-sys-body-medium-size),
+    container-text-line-height: var(--mat-sys-body-medium-line-height),
+  ));
+}`,
 };
 
 @Component({
@@ -228,11 +279,77 @@ const SNIPPETS = {
         </mat-expansion-panel>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="420px"
+      title="Personnalisation (jetons)"
+      description="Couleurs, forme, relief et typographie se règlent avec le mixin Sass mat.expansion-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Couleurs de rôle (secondaire)" api="mat.expansion-overrides : container-background-color" [snippet]="snippets.couleurs">
+        <mat-expansion-panel class="panneau-secondaire" expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Mon compte</mat-panel-title>
+            <mat-panel-description>Détails du compte</mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Contenu du panneau.</p>
+        </mat-expansion-panel>
+      </app-specimen>
+      <app-specimen label="Forme et relief" api="mat.expansion-overrides : container-shape" [snippet]="snippets.formeRelief">
+        <mat-expansion-panel class="panneau-arrondi" expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Sécurité</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Contenu du panneau.</p>
+        </mat-expansion-panel>
+      </app-specimen>
+      <app-specimen label="Typographie" api="mat.expansion-overrides : header-text-size" [snippet]="snippets.typographie">
+        <mat-expansion-panel class="panneau-typo" expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>Notifications</mat-panel-title>
+          </mat-expansion-panel-header>
+          <p>Contenu du panneau.</p>
+        </mat-expansion-panel>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-expansion-panel,
     mat-accordion {
       width: 100%;
+    }
+
+    .panneau-secondaire {
+      @include mat.expansion-overrides(
+        (
+          container-background-color: var(--mat-sys-secondary-container),
+          container-text-color: var(--mat-sys-on-secondary-container),
+          header-text-color: var(--mat-sys-on-secondary-container),
+          header-description-color: var(--mat-sys-on-secondary-container),
+          header-indicator-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .panneau-arrondi {
+      @include mat.expansion-overrides(
+        (
+          container-shape: var(--mat-sys-corner-extra-large),
+          container-elevation-shadow: var(--mat-sys-level3),
+        )
+      );
+    }
+
+    .panneau-typo {
+      @include mat.expansion-overrides(
+        (
+          header-text-size: var(--mat-sys-title-large-size),
+          header-text-line-height: var(--mat-sys-title-large-line-height),
+          container-text-size: var(--mat-sys-body-medium-size),
+          container-text-line-height: var(--mat-sys-body-medium-line-height),
+        )
+      );
     }
   `,
 })

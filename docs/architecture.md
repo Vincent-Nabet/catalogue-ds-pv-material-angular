@@ -87,14 +87,14 @@ Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories), `CATALOG` (
 - `mat-sidenav-container` : `mat-sidenav` en `side` ouvert sur ordinateur, `over` fermé sur mobile. Seuil : `BreakpointObserver` sur `(max-width: 959.98px)`, converti en signal (`toSignal`).
 - Navigation : `<nav aria-label="Composants">` contenant un `mat-nav-list`. Pour chaque catégorie, un sous-titre (`mat-subheader`) avec icône, puis les liens. Lien actif : `routerLinkActive` + `ariaCurrentWhenActive="page"` + `[activated]`. Sur mobile, un clic ferme le tiroir.
 - `<main #main tabindex="-1">` contient le `<router-outlet>`. **Après chaque navigation (hors première), le focus est donné à `<main>`** (effet sur un signal alimenté par `NavigationEnd` avec `skip(1)`).
-- Styles : barre d'outils colorée en primaire (`--mat-toolbar-container-*`), sidenav teintée (`surface-container-low`), `main` centré (max 1440 px).
+- Styles : barre d'outils colorée en primaire (`mat.toolbar-overrides`), sidenav teintée (`surface-container-low`), `main` centré (max 1440 px).
 
 ## ThemeService (`core/theme/theme.service.ts`)
 
 `@Service()` (équivalent d'un singleton racine, Angular 22).
 
 - Signaux publics et modifiables : `theme` (`ThemeId`), `scheme` (`'light' | 'dark' | 'system'`), `density` (`0..4`).
-- Lecture initiale depuis `localStorage` (clé `catalogue-material-theme`, JSON, valeurs validées, `try/catch`), valeurs par défaut : `azur`, `light`, `0`.
+- Lecture initiale depuis `localStorage` (clé `catalogue-material-theme`, JSON, valeurs validées, `try/catch`), valeurs par défaut : `app-contraste-moyen`, `light`, `0`.
 - Un `effect()` retire puis repose les classes `theme-<id>`, `scheme-<mode>`, `density-<n>` sur `<html>` et sauvegarde.
 - Les couleurs viennent entièrement du SCSS (voir [themes-et-styles.md](themes-et-styles.md)) : le service ne manipule que des classes.
 - `index.html` pose `class="scheme-light"` en dur pour éviter un flash selon le thème du système avant l'initialisation.
@@ -126,6 +126,6 @@ Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, fo
 | Budget | Avertissement | Erreur |
 |---|---|---|
 | Bundle initial | **880 kB** | 1 MB |
-| Style d'un composant | 4 kB | 8 kB |
+| Style d'un composant | **5 kB** | 8 kB |
 
-Le bundle initial pèse environ 867 kB (≈ 167 kB transférés). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse environ 867 kB (≈ 167 kB transférés). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.

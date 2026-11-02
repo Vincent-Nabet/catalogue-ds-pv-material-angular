@@ -9,9 +9,41 @@ const SNIPPETS = {
 <mat-icon>star</mat-icon>
 <mat-icon style="font-size: 36px; width: 36px; height: 36px">star</mat-icon>
 <mat-icon style="font-size: 48px; width: 48px; height: 48px">star</mat-icon>`,
-  couleurs: `<mat-icon style="color: var(--mat-sys-primary)">favorite</mat-icon>
-<mat-icon style="color: var(--mat-sys-tertiary)">favorite</mat-icon>
-<mat-icon style="color: var(--mat-sys-error)">favorite</mat-icon>`,
+  couleurs: `<mat-icon class="primaire">favorite</mat-icon>
+<mat-icon class="tertiaire">favorite</mat-icon>
+<mat-icon class="erreur">favorite</mat-icon>
+
+@use '@angular/material' as mat;
+
+.primaire {
+  @include mat.icon-overrides((
+    color: var(--mat-sys-primary),
+  ));
+}
+.tertiaire {
+  @include mat.icon-overrides((
+    color: var(--mat-sys-tertiary),
+  ));
+}
+.erreur {
+  @include mat.icon-overrides((
+    color: var(--mat-sys-error),
+  ));
+}`,
+  couleurHeritee: `<div class="groupe">
+  <mat-icon>favorite</mat-icon>
+  <mat-icon>star</mat-icon>
+  <mat-icon>bolt</mat-icon>
+</div>
+
+@use '@angular/material' as mat;
+
+/* Le jeton est posé sur le conteneur : toutes les icônes qu'il contient l'héritent */
+.groupe {
+  @include mat.icon-overrides((
+    color: var(--mat-sys-tertiary),
+  ));
+}`,
   remplie: `<mat-icon style="font-variation-settings: 'FILL' 1">favorite</mat-icon>`,
   decorative: `<mat-icon aria-hidden="true">settings</mat-icon>`,
   semantique: `<mat-icon aria-hidden="false" aria-label="Paramètres">settings</mat-icon>`,
@@ -29,7 +61,10 @@ const SNIPPETS = {
   template: `
     <h1>Icône</h1>
 
-    <app-specimen-section title="Icônes" description="Police Material Symbols (contour) déclarée comme jeu d’icônes par défaut.">
+    <app-specimen-section
+      title="Icônes"
+      description="Police Material Symbols (contour) déclarée comme jeu d’icônes par défaut. La couleur se règle avec le mixin Sass mat.icon-overrides (jeton color) ; mat-icon n’a pas de jeton de taille : celle-ci passe par font-size, width et height."
+    >
       <app-specimen label="Par défaut" api="mat-icon" [snippet]="snippets.defaut">
         <mat-icon>home</mat-icon>
       </app-specimen>
@@ -39,10 +74,17 @@ const SNIPPETS = {
         <mat-icon class="t36">star</mat-icon>
         <mat-icon class="t48">star</mat-icon>
       </app-specimen>
-      <app-specimen label="Couleurs" api="color" [snippet]="snippets.couleurs">
+      <app-specimen label="Couleurs" api="mat.icon-overrides : color" [snippet]="snippets.couleurs">
         <mat-icon class="primaire">favorite</mat-icon>
         <mat-icon class="tertiaire">favorite</mat-icon>
         <mat-icon class="erreur">favorite</mat-icon>
+      </app-specimen>
+      <app-specimen label="Couleur héritée d’un conteneur" api="mat.icon-overrides : color" [snippet]="snippets.couleurHeritee">
+        <div class="groupe">
+          <mat-icon>favorite</mat-icon>
+          <mat-icon>star</mat-icon>
+          <mat-icon>bolt</mat-icon>
+        </div>
       </app-specimen>
       <app-specimen label="Remplie" api="FILL 1" [snippet]="snippets.remplie">
         <mat-icon class="remplie">favorite</mat-icon>
@@ -74,6 +116,8 @@ const SNIPPETS = {
     </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     .t18 {
       font-size: 18px;
       width: 18px;
@@ -93,15 +137,33 @@ const SNIPPETS = {
     }
 
     .primaire {
-      color: var(--mat-sys-primary);
+      @include mat.icon-overrides(
+        (
+          color: var(--mat-sys-primary),
+        )
+      );
     }
 
-    .tertiaire {
-      color: var(--mat-sys-tertiary);
+    .tertiaire,
+    .groupe {
+      @include mat.icon-overrides(
+        (
+          color: var(--mat-sys-tertiary),
+        )
+      );
     }
 
     .erreur {
-      color: var(--mat-sys-error);
+      @include mat.icon-overrides(
+        (
+          color: var(--mat-sys-error),
+        )
+      );
+    }
+
+    .groupe {
+      display: flex;
+      gap: 12px;
     }
 
     .remplie {

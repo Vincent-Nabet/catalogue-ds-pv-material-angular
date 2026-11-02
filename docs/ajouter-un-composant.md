@@ -91,22 +91,30 @@ Valeurs en usage : 300 (défaut), 320–360 (champs, cartes, tableaux, listes, g
 - **Popups avec contenu** (dialog, bottom-sheet, snackbar personnalisé) : déclarer un petit composant dans le même fichier de page, avant `SNIPPETS`.
 - **Libellés Material en anglais** : si le composant a une classe `*Intl`, fournir la version française au niveau de la page (voir `core/i18n/intl-fr.ts`).
 
-## 5. Surcharger la taille ou la forme (jetons CSS)
+## 5. Surcharger un composant : mixins `mat.<composant>-overrides`
 
-Angular Material 22 n'a pas d'API de taille. Pour montrer une taille ou une forme, surcharger les jetons sur une classe de la page (exemple de la page Bouton, en SCSS avec mixin) :
+Angular Material 22 n'a pas d'API de taille, de forme ni de couleur de rôle. Pour les montrer, **ne pas écrire de variables `--mat-<composant>-*` à la main** : utiliser le mixin Sass `mat.<composant>-overrides` sur une classe de la page (`@use '@angular/material' as mat;`). Les noms de jetons s'écrivent **sans** le préfixe du composant (`--mat-button-filled-container-shape` → `mat.button-overrides((filled-container-shape: …))`) et sont validés à la compilation : un nom inconnu fait échouer Sass en listant les jetons valides, ce qui sert aussi à les découvrir (`@include mat.badge-overrides((nope: 1px))`). La page « Styling » de chaque composant sur material.angular.dev décrit les mêmes jetons.
 
 ```scss
-@mixin taille($hauteur, $marge, $texte) {
-  @each $variante in (filled, tonal, outlined, text, protected) {
-    --mat-button-#{$variante}-container-height: #{$hauteur};
-    --mat-button-#{$variante}-horizontal-padding: #{$marge};
-    --mat-button-#{$variante}-label-text-size: #{$texte};
-  }
+@use '@angular/material' as mat;
+
+.petit {
+  @include mat.button-overrides((
+    filled-container-height: 32px,
+    filled-horizontal-padding: 12px,
+    filled-label-text-size: var(--mat-sys-label-medium-size),
+  ));
 }
-.petit { @include taille(32px, 12px, 12px); }
 ```
 
-Pour un bouton icône, surcharger aussi la taille du `.mat-icon` interne (le jeton `--mat-icon-button-icon-size` ne redimensionne pas `mat-icon`). Indiquer dans la description de section que la variante est obtenue par jetons et non par une API native, et mettre le CSS dans le snippet.
+Règles :
+
+- **Valeur en dur seulement s'il n'existe pas de jeton système.** Couleurs : `var(--mat-sys-*)` par paires fond/texte (`primary`/`on-primary`…). Formes : `var(--mat-sys-corner-*)` (`none`, `extra-small`, `small`, `medium`, `large`, `extra-large`, `full`). Texte : `var(--mat-sys-<rôle>-size)` (`label-medium` 12 px, `label-large` 14 px, `title-medium` 16 px, `title-large` 22 px…). Ombres : `var(--mat-sys-level1)` à `level5`. Opacités d'état : `var(--mat-sys-hover-state-layer-opacity)`, `focus-…`, `pressed-…`. Hauteurs, largeurs, marges, tailles d'icône, épaisseurs et durées n'ont pas de jeton système (les `--mat-sys-motion-*` ne sont pas émis par `mat.theme()`) : px acceptés.
+- Les jetons se posent sur l'élément qui porte la classe et **s'héritent** : un conteneur peut les poser pour tous ses composants (ex. `mat.icon-overrides((color: …))` sur un `div`).
+- **Contenus en overlay** (panneaux de menu/select/autocomplete, dialog, bottom-sheet, snackbar, infobulle, calendrier) : ils sont hors du composant, donc hors de l'encapsulation. Donner une classe via `panelClass` (ou `class`, `tooltipClass`) et écrire la règle en global dans `styles` : `::ng-deep .perso-xxx { @include mat.menu-overrides((...)); }`.
+- Bouton icône : surcharger aussi la taille du `.mat-icon` interne (le jeton `icon-size` ne redimensionne pas `mat-icon`, qui n'a d'ailleurs aucun jeton de taille : `font-size`, `width`, `height`).
+- Dans la page, indiquer en description de section que la variante vient des mixins et non d'une API native ; le snippet contient le template **et** le SCSS.
+- Garder le SCSS compact (budget `anyComponentStyle` 5 kB / 8 kB) : mixins locaux et sélecteurs groupés. Utile pour des rôles de couleur : définir des variables intermédiaires (`--r-f`, `--r-c`…) par rôle puis passer `var(--r-f)` aux mixins, plutôt que répéter `var(--mat-sys-*)` pour chaque variante.
 
 ## 6. Ajouter un thème, un mode ou une densité
 

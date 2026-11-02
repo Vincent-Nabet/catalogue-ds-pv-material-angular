@@ -7,21 +7,35 @@
 <mat-menu #menu="matMenu" class="menu-theme">
   <div role="group" aria-labelledby="picker-theme">
     <span class="titre" id="picker-theme">Thème</span>
-    @for (theme of themes; track theme.id) {
-      <button
-        mat-menu-item
-        role="menuitemradio"
-        [attr.aria-checked]="service.theme() === theme.id"
-        (click)="service.theme.set(theme.id)"
-      >
+    @for (groupe of groupes; track groupe.id) {
+      <button mat-menu-item [matMenuTriggerFor]="sousMenu">
         <span class="ligne">
-          <span class="pastille" [style.background-color]="theme.color"></span>
-          <span>{{ theme.label }}</span>
-          @if (service.theme() === theme.id) {
-            <mat-icon class="coche">check</mat-icon>
+          <span>{{ groupe.label }}</span>
+          @if (courant().group === groupe.id) {
+            <span class="pastille" [style.background-color]="courant().color"></span>
           }
         </span>
       </button>
+      <mat-menu #sousMenu="matMenu" class="menu-theme">
+        <div role="group" [attr.aria-label]="groupe.label">
+          @for (theme of groupe.themes; track theme.id) {
+            <button
+              mat-menu-item
+              role="menuitemradio"
+              [attr.aria-checked]="service.theme() === theme.id"
+              (click)="service.theme.set(theme.id)"
+            >
+              <span class="ligne">
+                <span class="pastille" [style.background-color]="theme.color"></span>
+                <span>{{ theme.shortLabel }}</span>
+                @if (service.theme() === theme.id) {
+                  <mat-icon class="coche">check</mat-icon>
+                }
+              </span>
+            </button>
+          }
+        </div>
+      </mat-menu>
     }
   </div>
   <mat-divider />

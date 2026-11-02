@@ -49,6 +49,65 @@ const SNIPPETS = {
   <mat-button-toggle value="a">A</mat-button-toggle>
   <mat-button-toggle value="b">B</mat-button-toggle>
 </mat-button-toggle-group>`,
+  formes: `<mat-button-toggle-group aria-label="Alignement" value="gauche" class="angles-arrondis">
+  <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+  <mat-button-toggle value="droite">Droite</mat-button-toggle>
+</mat-button-toggle-group>
+<mat-button-toggle-group aria-label="Alignement" value="gauche" class="angles-droits">
+  <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+  <mat-button-toggle value="droite">Droite</mat-button-toggle>
+</mat-button-toggle-group>
+
+@use '@angular/material' as mat;
+
+.angles-arrondis {
+  @include mat.button-toggle-overrides((
+    shape: var(--mat-sys-corner-small),
+  ));
+}
+
+.angles-droits {
+  @include mat.button-toggle-overrides((
+    shape: var(--mat-sys-corner-none),
+  ));
+}`,
+  selection: `<mat-button-toggle-group aria-label="Alignement" value="gauche" class="selection-primaire">…</mat-button-toggle-group>
+<mat-button-toggle-group aria-label="Alignement" value="gauche" class="selection-tertiaire">…</mat-button-toggle-group>
+<mat-button-toggle-group aria-label="Alignement" value="gauche" class="selection-erreur">…</mat-button-toggle-group>
+
+@use '@angular/material' as mat;
+
+@mixin selection($fond, $texte) {
+  @include mat.button-toggle-overrides((
+    selected-state-background-color: $fond,
+    selected-state-text-color: $texte,
+  ));
+}
+
+.selection-primaire {
+  @include selection(var(--mat-sys-primary), var(--mat-sys-on-primary));
+}
+
+.selection-tertiaire {
+  @include selection(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
+}
+
+.selection-erreur {
+  @include selection(var(--mat-sys-error-container), var(--mat-sys-on-error-container));
+}`,
+  grand: `<mat-button-toggle-group aria-label="Alignement" value="gauche" class="grand">
+  <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+  <mat-button-toggle value="droite">Droite</mat-button-toggle>
+</mat-button-toggle-group>
+
+@use '@angular/material' as mat;
+
+.grand {
+  @include mat.button-toggle-overrides((
+    height: 56px,
+    label-text-size: var(--mat-sys-title-medium-size),
+  ));
+}`,
 };
 
 @Component({
@@ -132,6 +191,96 @@ const SNIPPETS = {
         </mat-button-toggle-group>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="300px"
+      title="Personnalisation (jetons)"
+      description="Le mixin Sass mat.button-toggle-overrides modifie forme, couleurs et taille ; les noms de jetons sont validés à la compilation. Les couleurs viennent des jetons système --mat-sys-*, fond et texte ensemble pour garder le contraste."
+    >
+      <app-specimen label="Forme" api="mat.button-toggle-overrides : shape" [snippet]="snippets.formes">
+        <mat-button-toggle-group aria-label="Alignement, angles arrondis" value="gauche" class="angles-arrondis">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-button-toggle-group aria-label="Alignement, angles droits" value="gauche" class="angles-droits">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+      <app-specimen
+        label="Couleur de la sélection"
+        api="mat.button-toggle-overrides : selected-state-background-color"
+        [snippet]="snippets.selection"
+      >
+        <mat-button-toggle-group aria-label="Alignement, sélection primaire" value="gauche" class="selection-primaire">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-button-toggle-group aria-label="Alignement, sélection tertiaire" value="gauche" class="selection-tertiaire">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+        <mat-button-toggle-group aria-label="Alignement, sélection erreur" value="gauche" class="selection-erreur">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+      <app-specimen label="Grande taille" api="mat.button-toggle-overrides : height" [snippet]="snippets.grand">
+        <mat-button-toggle-group aria-label="Alignement, grande taille" value="gauche" class="grand">
+          <mat-button-toggle value="gauche">Gauche</mat-button-toggle>
+          <mat-button-toggle value="droite">Droite</mat-button-toggle>
+        </mat-button-toggle-group>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    .angles-arrondis {
+      @include mat.button-toggle-overrides(
+        (
+          shape: var(--mat-sys-corner-small),
+        )
+      );
+    }
+
+    .angles-droits {
+      @include mat.button-toggle-overrides(
+        (
+          shape: var(--mat-sys-corner-none),
+        )
+      );
+    }
+
+    @mixin selection($fond, $texte) {
+      @include mat.button-toggle-overrides(
+        (
+          selected-state-background-color: $fond,
+          selected-state-text-color: $texte,
+        )
+      );
+    }
+
+    .selection-primaire {
+      @include selection(var(--mat-sys-primary), var(--mat-sys-on-primary));
+    }
+
+    .selection-tertiaire {
+      @include selection(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
+    }
+
+    .selection-erreur {
+      @include selection(var(--mat-sys-error-container), var(--mat-sys-on-error-container));
+    }
+
+    .grand {
+      @include mat.button-toggle-overrides(
+        (
+          height: 56px,
+          label-text-size: var(--mat-sys-title-medium-size),
+        )
+      );
+    }
   `,
 })
 export class BoutonBasculePage {

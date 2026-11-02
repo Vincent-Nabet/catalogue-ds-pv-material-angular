@@ -60,7 +60,7 @@ import { SnippetDialog, SnippetDialogData } from '../snippet-dialog/snippet-dial
 
     code {
       color: var(--mat-sys-on-surface-variant);
-      font-size: 12px;
+      font-size: var(--mat-sys-label-medium-size);
       overflow-wrap: anywhere;
     }
 

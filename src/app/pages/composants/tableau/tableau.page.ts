@@ -87,6 +87,49 @@ const SNIPPETS = {
     <tr mat-row *matRowDef="let row; columns: colonnesLarges"></tr>
   </table>
 </div>`,
+  couleurs: `<table mat-table class="tableau-secondaire" [dataSource]="produits">
+  <!-- colonnes : référence, nom, prix -->
+  <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+  <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+</table>
+
+@use '@angular/material' as mat;
+
+.tableau-secondaire {
+  @include mat.table-overrides((
+    background-color: var(--mat-sys-secondary-container),
+    header-headline-color: var(--mat-sys-on-secondary-container),
+    row-item-label-text-color: var(--mat-sys-on-secondary-container),
+  ));
+}`,
+  compact: `<table mat-table class="tableau-compact" [dataSource]="produits">
+  <!-- colonnes : référence, nom, prix -->
+  <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+  <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+</table>
+
+@use '@angular/material' as mat;
+
+.tableau-compact {
+  @include mat.table-overrides((
+    header-container-height: 40px,
+    row-item-container-height: 40px,
+  ));
+}`,
+  lignesMarquees: `<table mat-table class="tableau-lignes" [dataSource]="produits">
+  <!-- colonnes : référence, nom, prix -->
+  <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+  <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+</table>
+
+@use '@angular/material' as mat;
+
+.tableau-lignes {
+  @include mat.table-overrides((
+    row-item-outline-width: 2px,
+    row-item-outline-color: var(--mat-sys-primary),
+  ));
+}`,
 };
 
 @Component({
@@ -260,10 +303,101 @@ const SNIPPETS = {
         </div>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="360px"
+      title="Personnalisation (jetons)"
+      description="Couleurs, hauteur des lignes et bordures se règlent avec le mixin Sass mat.table-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Couleurs de rôle (secondaire)" api="mat.table-overrides : background-color" [snippet]="snippets.couleurs">
+        <table mat-table class="tableau-secondaire" [dataSource]="produits" aria-label="Produits, couleurs secondaires">
+          <ng-container matColumnDef="reference">
+            <th mat-header-cell *matHeaderCellDef>Référence</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prix">
+            <th mat-header-cell *matHeaderCellDef>Prix</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.prix | currency: 'EUR' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+        </table>
+      </app-specimen>
+      <app-specimen label="Lignes compactes" api="mat.table-overrides : row-item-container-height" [snippet]="snippets.compact">
+        <table mat-table class="tableau-compact" [dataSource]="produits" aria-label="Produits, lignes compactes">
+          <ng-container matColumnDef="reference">
+            <th mat-header-cell *matHeaderCellDef>Référence</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prix">
+            <th mat-header-cell *matHeaderCellDef>Prix</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.prix | currency: 'EUR' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+        </table>
+      </app-specimen>
+      <app-specimen label="Séparateurs de lignes marqués" api="mat.table-overrides : row-item-outline-width" [snippet]="snippets.lignesMarquees">
+        <table mat-table class="tableau-lignes" [dataSource]="produits" aria-label="Produits, séparateurs marqués">
+          <ng-container matColumnDef="reference">
+            <th mat-header-cell *matHeaderCellDef>Référence</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prix">
+            <th mat-header-cell *matHeaderCellDef>Prix</th>
+            <td mat-cell *matCellDef="let produit">{{ produit.prix | currency: 'EUR' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+          <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+        </table>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     table {
       width: 100%;
+    }
+
+    .tableau-secondaire {
+      @include mat.table-overrides(
+        (
+          background-color: var(--mat-sys-secondary-container),
+          header-headline-color: var(--mat-sys-on-secondary-container),
+          row-item-label-text-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .tableau-compact {
+      @include mat.table-overrides(
+        (
+          header-container-height: 40px,
+          row-item-container-height: 40px,
+        )
+      );
+    }
+
+    .tableau-lignes {
+      @include mat.table-overrides(
+        (
+          row-item-outline-width: 2px,
+          row-item-outline-color: var(--mat-sys-primary),
+        )
+      );
     }
 
     .defilement {

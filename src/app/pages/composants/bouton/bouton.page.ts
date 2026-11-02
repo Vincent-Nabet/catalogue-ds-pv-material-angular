@@ -34,32 +34,48 @@ const SNIPPETS = {
 </button>`,
   petit: `<button matButton="filled" class="petit">Petit</button>
 
-/* Surcharge des jetons : Angular Material n'a pas d'API de taille */
+/* Angular Material n'a pas d'API de taille : on surcharge les jetons du bouton */
+@use '@angular/material' as mat;
+
 .petit {
-  --mat-button-filled-container-height: 32px;
-  --mat-button-filled-horizontal-padding: 12px;
-  --mat-button-filled-label-text-size: 12px;
+  @include mat.button-overrides((
+    filled-container-height: 32px,
+    filled-horizontal-padding: 12px,
+    filled-label-text-size: var(--mat-sys-label-medium-size),
+  ));
 }`,
   standard: `<button matButton="filled">Standard</button>`,
   grand: `<button matButton="filled" class="grand">Grand</button>
 
+@use '@angular/material' as mat;
+
 .grand {
-  --mat-button-filled-container-height: 56px;
-  --mat-button-filled-horizontal-padding: 32px;
-  --mat-button-filled-label-text-size: 18px;
+  @include mat.button-overrides((
+    filled-container-height: 56px,
+    filled-horizontal-padding: 32px,
+    filled-label-text-size: var(--mat-sys-title-medium-size),
+  ));
 }`,
   tresGrand: `<button matButton="filled" class="tres-grand">Très grand</button>
 
+@use '@angular/material' as mat;
+
 .tres-grand {
-  --mat-button-filled-container-height: 72px;
-  --mat-button-filled-horizontal-padding: 40px;
-  --mat-button-filled-label-text-size: 22px;
+  @include mat.button-overrides((
+    filled-container-height: 72px,
+    filled-horizontal-padding: 40px,
+    filled-label-text-size: var(--mat-sys-title-large-size),
+  ));
 }`,
   iconePetit: `<button matIconButton class="icone-petit" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 
+@use '@angular/material' as mat;
+
 .icone-petit {
-  --mat-icon-button-state-layer-size: 32px;
-  --mat-icon-button-icon-size: 18px;
+  @include mat.icon-button-overrides((
+    state-layer-size: 32px,
+    icon-size: 18px,
+  ));
 }
 .icone-petit .mat-icon {
   width: 18px;
@@ -68,9 +84,13 @@ const SNIPPETS = {
 }`,
   iconeGrand: `<button matIconButton class="icone-grand" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 
+@use '@angular/material' as mat;
+
 .icone-grand {
-  --mat-icon-button-state-layer-size: 56px;
-  --mat-icon-button-icon-size: 32px;
+  @include mat.icon-button-overrides((
+    state-layer-size: 56px,
+    icon-size: 32px,
+  ));
 }
 .icone-grand .mat-icon {
   width: 32px;
@@ -79,13 +99,166 @@ const SNIPPETS = {
 }`,
   angulaire: `<button matButton="filled" class="angulaire">Angulaire</button>
 
+@use '@angular/material' as mat;
+
 .angulaire {
-  --mat-button-filled-container-shape: 0;
+  @include mat.button-overrides((
+    filled-container-shape: var(--mat-sys-corner-none),
+  ));
 }`,
   arrondi: `<button matButton="filled" class="arrondi">Arrondi</button>
 
+@use '@angular/material' as mat;
+
 .arrondi {
-  --mat-button-filled-container-shape: 8px;
+  @include mat.button-overrides((
+    filled-container-shape: var(--mat-sys-corner-small),
+  ));
+}`,
+  couleurPrimaire: `<button matButton="filled">Rempli</button>
+
+/* Couleur primaire : défaut du thème, aucune surcharge */`,
+  couleurSecondaire: `<button matButton="filled" class="secondaire">Rempli</button>
+
+@use '@angular/material' as mat;
+
+.secondaire {
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-secondary),
+    filled-label-text-color: var(--mat-sys-on-secondary),
+    filled-state-layer-color: var(--mat-sys-on-secondary),
+
+    tonal-container-color: var(--mat-sys-secondary-container),
+    tonal-label-text-color: var(--mat-sys-on-secondary-container),
+    tonal-state-layer-color: var(--mat-sys-on-secondary-container),
+
+    outlined-label-text-color: var(--mat-sys-secondary),
+    outlined-outline-color: var(--mat-sys-secondary),
+    outlined-state-layer-color: var(--mat-sys-secondary),
+
+    text-label-text-color: var(--mat-sys-secondary),
+    text-state-layer-color: var(--mat-sys-secondary),
+
+    protected-label-text-color: var(--mat-sys-secondary),
+    protected-state-layer-color: var(--mat-sys-secondary),
+  ));
+}`,
+  couleurTertiaire: `<button matButton="filled" class="tertiaire">Rempli</button>
+
+@use '@angular/material' as mat;
+
+.tertiaire {
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-tertiary),
+    filled-label-text-color: var(--mat-sys-on-tertiary),
+    filled-state-layer-color: var(--mat-sys-on-tertiary),
+
+    tonal-container-color: var(--mat-sys-tertiary-container),
+    tonal-label-text-color: var(--mat-sys-on-tertiary-container),
+    tonal-state-layer-color: var(--mat-sys-on-tertiary-container),
+
+    outlined-label-text-color: var(--mat-sys-tertiary),
+    outlined-outline-color: var(--mat-sys-tertiary),
+    outlined-state-layer-color: var(--mat-sys-tertiary),
+
+    text-label-text-color: var(--mat-sys-tertiary),
+    text-state-layer-color: var(--mat-sys-tertiary),
+
+    protected-label-text-color: var(--mat-sys-tertiary),
+    protected-state-layer-color: var(--mat-sys-tertiary),
+  ));
+}`,
+  couleurErreur: `<button matButton="filled" class="erreur">Rempli</button>
+
+@use '@angular/material' as mat;
+
+.erreur {
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-error),
+    filled-label-text-color: var(--mat-sys-on-error),
+    filled-state-layer-color: var(--mat-sys-on-error),
+
+    tonal-container-color: var(--mat-sys-error-container),
+    tonal-label-text-color: var(--mat-sys-on-error-container),
+    tonal-state-layer-color: var(--mat-sys-on-error-container),
+
+    outlined-label-text-color: var(--mat-sys-error),
+    outlined-outline-color: var(--mat-sys-error),
+    outlined-state-layer-color: var(--mat-sys-error),
+
+    text-label-text-color: var(--mat-sys-error),
+    text-state-layer-color: var(--mat-sys-error),
+
+    protected-label-text-color: var(--mat-sys-error),
+    protected-state-layer-color: var(--mat-sys-error),
+  ));
+}`,
+  couleurIcone: `<button matIconButton aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+<button matIconButton class="secondaire" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+<button matIconButton class="tertiaire" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+<button matIconButton class="erreur" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
+
+@use '@angular/material' as mat;
+
+.secondaire {
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-secondary),
+    state-layer-color: var(--mat-sys-secondary),
+  ));
+}
+
+.tertiaire {
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-tertiary),
+    state-layer-color: var(--mat-sys-tertiary),
+  ));
+}
+
+.erreur {
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-error),
+    state-layer-color: var(--mat-sys-error),
+  ));
+}`,
+  couleurFab: `<button matFab aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+<button matFab class="secondaire" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+<button matFab class="tertiaire" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+<button matFab class="erreur" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
+
+@use '@angular/material' as mat;
+
+/* Mêmes classes et jetons pour matMiniFab et matFab extended */
+.secondaire {
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-secondary-container),
+    foreground-color: var(--mat-sys-on-secondary-container),
+    state-layer-color: var(--mat-sys-on-secondary-container),
+    small-container-color: var(--mat-sys-secondary-container),
+    small-foreground-color: var(--mat-sys-on-secondary-container),
+    small-state-layer-color: var(--mat-sys-on-secondary-container),
+  ));
+}
+
+.tertiaire {
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-tertiary-container),
+    foreground-color: var(--mat-sys-on-tertiary-container),
+    state-layer-color: var(--mat-sys-on-tertiary-container),
+    small-container-color: var(--mat-sys-tertiary-container),
+    small-foreground-color: var(--mat-sys-on-tertiary-container),
+    small-state-layer-color: var(--mat-sys-on-tertiary-container),
+  ));
+}
+
+.erreur {
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-error-container),
+    foreground-color: var(--mat-sys-on-error-container),
+    state-layer-color: var(--mat-sys-on-error-container),
+    small-container-color: var(--mat-sys-error-container),
+    small-foreground-color: var(--mat-sys-on-error-container),
+    small-state-layer-color: var(--mat-sys-on-error-container),
+  ));
 }`,
   pilule: `<button matButton="filled">Pilule (défaut)</button>`,
   chargement: `<button matButton="filled" [showProgress]="true" aria-label="Enregistrement en cours">
@@ -161,9 +334,9 @@ const SNIPPETS = {
 
     <app-specimen-section
       title="Tailles"
-      description="Angular Material n’expose pas d’API de taille : ces variantes surchargent les jetons CSS --mat-button-* (hauteur, marges, texte). La densité du thème agit aussi sur la hauteur."
+      description="Angular Material n’expose pas d’API de taille : ces variantes passent par les mixins mat.button-overrides et mat.icon-button-overrides (hauteur, marges, texte). Le texte reprend l’échelle typographique --mat-sys-*-size ; hauteurs et marges n’ont pas de jeton système. La densité du thème agit aussi sur la hauteur."
     >
-      <app-specimen label="Petit" api="--mat-button-*-container-height: 32px" [snippet]="snippets.petit">
+      <app-specimen label="Petit" api="container-height: 32px" [snippet]="snippets.petit">
         <button matButton="text" class="petit">Texte</button>
         <button matButton="filled" class="petit">Rempli</button>
         <button matButton="tonal" class="petit">Tonal</button>
@@ -175,34 +348,84 @@ const SNIPPETS = {
         <button matButton="tonal">Tonal</button>
         <button matButton="outlined">Contour</button>
       </app-specimen>
-      <app-specimen label="Grand" api="--mat-button-*-container-height: 56px" [snippet]="snippets.grand">
+      <app-specimen label="Grand" api="container-height: 56px" [snippet]="snippets.grand">
         <button matButton="text" class="grand">Texte</button>
         <button matButton="filled" class="grand">Rempli</button>
         <button matButton="tonal" class="grand">Tonal</button>
         <button matButton="outlined" class="grand">Contour</button>
       </app-specimen>
-      <app-specimen label="Très grand" api="--mat-button-*-container-height: 72px" [snippet]="snippets.tresGrand">
+      <app-specimen label="Très grand" api="container-height: 72px" [snippet]="snippets.tresGrand">
         <button matButton="filled" class="tres-grand">Rempli</button>
         <button matButton="outlined" class="tres-grand">Contour</button>
       </app-specimen>
-      <app-specimen label="Bouton icône petit" api="--mat-icon-button-state-layer-size: 32px" [snippet]="snippets.iconePetit">
+      <app-specimen label="Bouton icône petit" api="state-layer-size: 32px" [snippet]="snippets.iconePetit">
         <button matIconButton class="icone-petit" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
       </app-specimen>
-      <app-specimen label="Bouton icône grand" api="--mat-icon-button-state-layer-size: 56px" [snippet]="snippets.iconeGrand">
+      <app-specimen label="Bouton icône grand" api="state-layer-size: 56px" [snippet]="snippets.iconeGrand">
         <button matIconButton class="icone-grand" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Formes" description="Rayon des angles via le jeton --mat-button-*-container-shape.">
+    <app-specimen-section
+      title="Couleurs"
+      description="L’entrée color est réservée aux thèmes M2 et reste sans effet ici. Les rôles de couleur M3 s’obtiennent avec les mixins Sass mat.button-overrides, mat.icon-button-overrides et mat.fab-overrides, en leur passant les jetons système --mat-sys-* (fond et texte ensemble, pour garder le contraste)."
+    >
+      <app-specimen label="Primaire (défaut)" api="--mat-sys-primary" [snippet]="snippets.couleurPrimaire">
+        <button matButton="text">Texte</button>
+        <button matButton="filled">Rempli</button>
+        <button matButton="tonal">Tonal</button>
+        <button matButton="elevated">Relevé</button>
+        <button matButton="outlined">Contour</button>
+      </app-specimen>
+      <app-specimen label="Secondaire" api="--mat-sys-secondary" [snippet]="snippets.couleurSecondaire">
+        <button matButton="text" class="secondaire">Texte</button>
+        <button matButton="filled" class="secondaire">Rempli</button>
+        <button matButton="tonal" class="secondaire">Tonal</button>
+        <button matButton="elevated" class="secondaire">Relevé</button>
+        <button matButton="outlined" class="secondaire">Contour</button>
+      </app-specimen>
+      <app-specimen label="Tertiaire" api="--mat-sys-tertiary" [snippet]="snippets.couleurTertiaire">
+        <button matButton="text" class="tertiaire">Texte</button>
+        <button matButton="filled" class="tertiaire">Rempli</button>
+        <button matButton="tonal" class="tertiaire">Tonal</button>
+        <button matButton="elevated" class="tertiaire">Relevé</button>
+        <button matButton="outlined" class="tertiaire">Contour</button>
+      </app-specimen>
+      <app-specimen label="Erreur" api="--mat-sys-error" [snippet]="snippets.couleurErreur">
+        <button matButton="text" class="erreur">Texte</button>
+        <button matButton="filled" class="erreur">Rempli</button>
+        <button matButton="tonal" class="erreur">Tonal</button>
+        <button matButton="elevated" class="erreur">Relevé</button>
+        <button matButton="outlined" class="erreur">Contour</button>
+      </app-specimen>
+      <app-specimen label="Boutons icône" api="icon-button-overrides : icon-color" [snippet]="snippets.couleurIcone">
+        <button matIconButton aria-label="Favori primaire"><mat-icon>favorite</mat-icon></button>
+        <button matIconButton class="secondaire" aria-label="Favori secondaire"><mat-icon>favorite</mat-icon></button>
+        <button matIconButton class="tertiaire" aria-label="Favori tertiaire"><mat-icon>favorite</mat-icon></button>
+        <button matIconButton class="erreur" aria-label="Favori erreur"><mat-icon>favorite</mat-icon></button>
+      </app-specimen>
+      <app-specimen label="FAB" api="fab-overrides : container-color" [snippet]="snippets.couleurFab">
+        <button matFab aria-label="Modifier primaire"><mat-icon>edit</mat-icon></button>
+        <button matFab class="secondaire" aria-label="Modifier secondaire"><mat-icon>edit</mat-icon></button>
+        <button matFab class="tertiaire" aria-label="Modifier tertiaire"><mat-icon>edit</mat-icon></button>
+        <button matFab class="erreur" aria-label="Modifier erreur"><mat-icon>edit</mat-icon></button>
+        <button matMiniFab class="secondaire" aria-label="Modifier secondaire"><mat-icon>edit</mat-icon></button>
+        <button matMiniFab class="tertiaire" aria-label="Modifier tertiaire"><mat-icon>edit</mat-icon></button>
+        <button matMiniFab class="erreur" aria-label="Modifier erreur"><mat-icon>edit</mat-icon></button>
+        <button matFab extended class="erreur"><mat-icon>edit</mat-icon>Modifier</button>
+      </app-specimen>
+    </app-specimen-section>
+
+    <app-specimen-section title="Formes" description="Rayon des angles : le mixin mat.button-overrides reçoit un jeton de l’échelle de formes --mat-sys-corner-* (container-shape).">
       <app-specimen label="Pilule (défaut)" api="corner-full" [snippet]="snippets.pilule">
         <button matButton="filled">Rempli</button>
         <button matButton="outlined">Contour</button>
       </app-specimen>
-      <app-specimen label="Arrondi" api="--mat-button-*-container-shape: 8px" [snippet]="snippets.arrondi">
+      <app-specimen label="Arrondi" api="--mat-sys-corner-small" [snippet]="snippets.arrondi">
         <button matButton="filled" class="arrondi">Rempli</button>
         <button matButton="outlined" class="arrondi">Contour</button>
       </app-specimen>
-      <app-specimen label="Angulaire" api="--mat-button-*-container-shape: 0" [snippet]="snippets.angulaire">
+      <app-specimen label="Angulaire" api="--mat-sys-corner-none" [snippet]="snippets.angulaire">
         <button matButton="filled" class="angulaire">Rempli</button>
         <button matButton="outlined" class="angulaire">Contour</button>
       </app-specimen>
@@ -232,43 +455,131 @@ const SNIPPETS = {
     </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     @mixin taille($hauteur, $marge, $texte) {
-      @each $variante in (filled, tonal, outlined, text, protected) {
-        --mat-button-#{$variante}-container-height: #{$hauteur};
-        --mat-button-#{$variante}-horizontal-padding: #{$marge};
-        --mat-button-#{$variante}-label-text-size: #{$texte};
-      }
+      @include mat.button-overrides(
+        (
+          filled-container-height: $hauteur,
+          filled-horizontal-padding: $marge,
+          filled-label-text-size: $texte,
+          tonal-container-height: $hauteur,
+          tonal-horizontal-padding: $marge,
+          tonal-label-text-size: $texte,
+          outlined-container-height: $hauteur,
+          outlined-horizontal-padding: $marge,
+          outlined-label-text-size: $texte,
+          text-container-height: $hauteur,
+          text-horizontal-padding: $marge,
+          text-label-text-size: $texte,
+          protected-container-height: $hauteur,
+          protected-horizontal-padding: $marge,
+          protected-label-text-size: $texte,
+        )
+      );
     }
 
     @mixin forme($rayon) {
-      @each $variante in (filled, tonal, outlined, text, protected) {
-        --mat-button-#{$variante}-container-shape: #{$rayon};
-      }
+      @include mat.button-overrides(
+        (
+          filled-container-shape: $rayon,
+          tonal-container-shape: $rayon,
+          outlined-container-shape: $rayon,
+          text-container-shape: $rayon,
+          protected-container-shape: $rayon,
+        )
+      );
     }
 
     .petit {
-      @include taille(32px, 12px, 12px);
+      @include taille(32px, 12px, var(--mat-sys-label-medium-size));
     }
 
     .grand {
-      @include taille(56px, 32px, 18px);
+      @include taille(56px, 32px, var(--mat-sys-title-medium-size));
     }
 
     .tres-grand {
-      @include taille(72px, 40px, 22px);
+      @include taille(72px, 40px, var(--mat-sys-title-large-size));
     }
 
     .arrondi {
-      @include forme(8px);
+      @include forme(var(--mat-sys-corner-small));
     }
 
     .angulaire {
-      @include forme(0);
+      @include forme(var(--mat-sys-corner-none));
+    }
+
+    .secondaire,
+    .tertiaire,
+    .erreur {
+      $f: var(--r-f);
+      $sf: var(--r-sf);
+      $c: var(--r-c);
+      $sc: var(--r-sc);
+
+      @include mat.button-overrides(
+        (
+          filled-container-color: $f,
+          filled-label-text-color: $sf,
+          filled-state-layer-color: $sf,
+          tonal-container-color: $c,
+          tonal-label-text-color: $sc,
+          tonal-state-layer-color: $sc,
+          outlined-label-text-color: $f,
+          outlined-outline-color: $f,
+          outlined-state-layer-color: $f,
+          text-label-text-color: $f,
+          text-state-layer-color: $f,
+          protected-label-text-color: $f,
+          protected-state-layer-color: $f,
+        )
+      );
+      @include mat.icon-button-overrides(
+        (
+          icon-color: $f,
+          state-layer-color: $f,
+        )
+      );
+      @include mat.fab-overrides(
+        (
+          container-color: $c,
+          foreground-color: $sc,
+          state-layer-color: $sc,
+          small-container-color: $c,
+          small-foreground-color: $sc,
+          small-state-layer-color: $sc,
+        )
+      );
+    }
+
+    @mixin role($role) {
+      --r-f: var(--mat-sys-#{$role});
+      --r-sf: var(--mat-sys-on-#{$role});
+      --r-c: var(--mat-sys-#{$role}-container);
+      --r-sc: var(--mat-sys-on-#{$role}-container);
+    }
+
+    .secondaire {
+      @include role(secondary);
+    }
+
+    .tertiaire {
+      @include role(tertiary);
+    }
+
+    .erreur {
+      @include role(error);
     }
 
     @mixin taille-icone($zone, $icone) {
-      --mat-icon-button-state-layer-size: #{$zone};
-      --mat-icon-button-icon-size: #{$icone};
+      @include mat.icon-button-overrides(
+        (
+          state-layer-size: $zone,
+          icon-size: $icone,
+        )
+      );
 
       .mat-icon {
         width: $icone;

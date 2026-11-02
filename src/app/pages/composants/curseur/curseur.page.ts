@@ -32,6 +32,67 @@ pourcentage = (valeur: number) => valeur + ' %';`,
   pasFin: `<mat-slider discrete min="0" max="5" step="0.5">
   <input matSliderThumb value="2.5" aria-label="Note" />
 </mat-slider>`,
+  roles: `<mat-slider discrete showTickMarks min="0" max="100" step="10" class="secondaire">
+  <input matSliderThumb value="40" aria-label="Volume secondaire" />
+</mat-slider>
+<mat-slider discrete showTickMarks min="0" max="100" step="10" class="tertiaire">
+  <input matSliderThumb value="60" aria-label="Volume tertiaire" />
+</mat-slider>
+<mat-slider discrete showTickMarks min="0" max="100" step="10" class="erreur">
+  <input matSliderThumb value="80" aria-label="Volume erreur" />
+</mat-slider>
+
+@use '@angular/material' as mat;
+
+.secondaire {
+  $couleur: var(--mat-sys-secondary);
+
+  @include mat.slider-overrides((
+    active-track-color: $couleur,
+    handle-color: $couleur,
+    hover-handle-color: $couleur,
+    focus-handle-color: $couleur,
+    ripple-color: $couleur,
+    hover-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+    focus-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+    label-container-color: $couleur,
+    label-label-text-color: var(--mat-sys-on-secondary),
+    with-overlap-handle-outline-color: var(--mat-sys-on-secondary),
+    with-tick-marks-active-container-color: var(--mat-sys-on-secondary),
+  ));
+}
+
+/* Mêmes jetons avec secondary → tertiary (.tertiaire) et error (.erreur) */`,
+  rail: `<mat-slider class="rail-epais">
+  <input matSliderThumb value="60" aria-label="Volume" />
+</mat-slider>
+
+@use '@angular/material' as mat;
+
+.rail-epais {
+  @include mat.slider-overrides((
+    active-track-height: 16px,
+    inactive-track-height: 16px,
+    handle-width: 4px,
+    handle-height: 44px,
+  ));
+}`,
+  angulaire: `<mat-slider discrete showTickMarks min="0" max="100" step="10" class="angulaire">
+  <input matSliderThumb value="50" aria-label="Volume" />
+</mat-slider>
+
+@use '@angular/material' as mat;
+
+.angulaire {
+  @include mat.slider-overrides((
+    active-track-height: 8px,
+    inactive-track-height: 8px,
+    active-track-shape: var(--mat-sys-corner-none),
+    inactive-track-shape: var(--mat-sys-corner-none),
+    handle-shape: var(--mat-sys-corner-extra-small),
+    with-tick-marks-container-shape: var(--mat-sys-corner-none),
+  ));
+}`,
 };
 
 @Component({
@@ -90,6 +151,93 @@ pourcentage = (valeur: number) => valeur + ' %';`,
         </mat-slider>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Couleurs de rôle, épaisseur du rail et formes via le mixin mat.slider-overrides, avec les jetons système --mat-sys-* pour les couleurs et les formes (noms de jetons validés à la compilation). Hauteurs et largeurs n’ont pas de jeton système."
+    >
+      <app-specimen label="Rôles de couleur" api="slider-overrides : active-track-color" [snippet]="snippets.roles">
+        <mat-slider discrete showTickMarks min="0" max="100" step="10" class="secondaire">
+          <input matSliderThumb value="40" aria-label="Volume secondaire" />
+        </mat-slider>
+        <mat-slider discrete showTickMarks min="0" max="100" step="10" class="tertiaire">
+          <input matSliderThumb value="60" aria-label="Volume tertiaire" />
+        </mat-slider>
+        <mat-slider discrete showTickMarks min="0" max="100" step="10" class="erreur">
+          <input matSliderThumb value="80" aria-label="Volume erreur" />
+        </mat-slider>
+      </app-specimen>
+      <app-specimen label="Rail épais, poignée en barre" api="slider-overrides : active-track-height" [snippet]="snippets.rail">
+        <mat-slider class="rail-epais">
+          <input matSliderThumb value="60" aria-label="Volume" />
+        </mat-slider>
+      </app-specimen>
+      <app-specimen label="Formes angulaires" api="slider-overrides : active-track-shape" [snippet]="snippets.angulaire">
+        <mat-slider discrete showTickMarks min="0" max="100" step="10" class="angulaire">
+          <input matSliderThumb value="50" aria-label="Volume" />
+        </mat-slider>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    @mixin role($role) {
+      $couleur: var(--mat-sys-#{$role});
+      $sur-couleur: var(--mat-sys-on-#{$role});
+
+      @include mat.slider-overrides(
+        (
+          active-track-color: $couleur,
+          handle-color: $couleur,
+          hover-handle-color: $couleur,
+          focus-handle-color: $couleur,
+          ripple-color: $couleur,
+          hover-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+          focus-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+          label-container-color: $couleur,
+          label-label-text-color: $sur-couleur,
+          with-overlap-handle-outline-color: $sur-couleur,
+          with-tick-marks-active-container-color: $sur-couleur,
+        )
+      );
+    }
+
+    .secondaire {
+      @include role(secondary);
+    }
+
+    .tertiaire {
+      @include role(tertiary);
+    }
+
+    .erreur {
+      @include role(error);
+    }
+
+    .rail-epais {
+      @include mat.slider-overrides(
+        (
+          active-track-height: 16px,
+          inactive-track-height: 16px,
+          handle-width: 4px,
+          handle-height: 44px,
+        )
+      );
+    }
+
+    .angulaire {
+      @include mat.slider-overrides(
+        (
+          active-track-height: 8px,
+          inactive-track-height: 8px,
+          active-track-shape: var(--mat-sys-corner-none),
+          inactive-track-shape: var(--mat-sys-corner-none),
+          handle-shape: var(--mat-sys-corner-extra-small),
+          with-tick-marks-container-shape: var(--mat-sys-corner-none),
+        )
+      );
+    }
   `,
 })
 export class CurseurPage {

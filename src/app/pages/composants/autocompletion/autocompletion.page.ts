@@ -83,6 +83,48 @@ afficher = (ville: { nom: string } | null) => ville?.nom ?? '';`,
     <mat-option value="Rennes">Rennes</mat-option>
   </mat-autocomplete>
 </mat-form-field>`,
+  panneauArrondi: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" class="perso-panneau-arrondi">
+    <mat-option value="Rennes">Rennes</mat-option>
+    <mat-option value="Nantes">Nantes</mat-option>
+    <mat-option value="Brest">Brest</mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-panneau-arrondi {
+  @include mat.autocomplete-overrides((
+    container-shape: var(--mat-sys-corner-extra-large),
+    container-elevation-shadow: var(--mat-sys-level4),
+  ));
+}`,
+  panneauTertiaire: `<mat-form-field>
+  <mat-label>Ville</mat-label>
+  <input matInput [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" class="perso-panneau-tertiaire">
+    <mat-option value="Rennes">Rennes</mat-option>
+    <mat-option value="Nantes">Nantes</mat-option>
+    <mat-option value="Brest">Brest</mat-option>
+  </mat-autocomplete>
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-panneau-tertiaire {
+  @include mat.autocomplete-overrides((
+    background-color: var(--mat-sys-tertiary-container),
+  ));
+  @include mat.option-overrides((
+    label-text-color: var(--mat-sys-on-tertiary-container),
+    selected-state-layer-color: var(--mat-sys-tertiary),
+    selected-state-label-text-color: var(--mat-sys-on-tertiary),
+  ));
+}`,
 };
 
 @Component({
@@ -202,6 +244,63 @@ afficher = (ville: { nom: string } | null) => ville?.nom ?? '';`,
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="340px"
+      title="Personnalisation (jetons)"
+      description="Le panneau est rendu dans une surcouche : sa classe passe par l’entrée class de mat-autocomplete, et le style par les mixins mat.autocomplete-overrides et mat.option-overrides (noms de jetons validés à la compilation). Cliquer dans le champ pour voir le panneau."
+    >
+      <app-specimen label="Forme et élévation du panneau" api="autocomplete-overrides : container-shape" [snippet]="snippets.panneauArrondi">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="arrondi" />
+          <mat-autocomplete #arrondi="matAutocomplete" class="perso-panneau-arrondi">
+            <mat-option value="Rennes">Rennes</mat-option>
+            <mat-option value="Nantes">Nantes</mat-option>
+            <mat-option value="Brest">Brest</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Couleurs du panneau et des options" api="autocomplete-overrides : background-color" [snippet]="snippets.panneauTertiaire">
+        <mat-form-field>
+          <mat-label>Ville</mat-label>
+          <input matInput [matAutocomplete]="tertiaire" />
+          <mat-autocomplete #tertiaire="matAutocomplete" class="perso-panneau-tertiaire">
+            <mat-option value="Rennes">Rennes</mat-option>
+            <mat-option value="Nantes">Nantes</mat-option>
+            <mat-option value="Brest">Brest</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    /* Le panneau est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-panneau-arrondi {
+      @include mat.autocomplete-overrides(
+        (
+          container-shape: var(--mat-sys-corner-extra-large),
+          container-elevation-shadow: var(--mat-sys-level4),
+        )
+      );
+    }
+
+    ::ng-deep .perso-panneau-tertiaire {
+      @include mat.autocomplete-overrides(
+        (
+          background-color: var(--mat-sys-tertiary-container),
+        )
+      );
+      @include mat.option-overrides(
+        (
+          label-text-color: var(--mat-sys-on-tertiary-container),
+          selected-state-layer-color: var(--mat-sys-tertiary),
+          selected-state-label-text-color: var(--mat-sys-on-tertiary),
+        )
+      );
+    }
   `,
 })
 export class AutocompletionPage {

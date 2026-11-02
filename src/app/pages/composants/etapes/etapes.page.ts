@@ -68,6 +68,54 @@ const SNIPPETS = {
   <mat-step label="Adresse" [completed]="true" [editable]="false">…</mat-step>
   <mat-step label="Validation">…</mat-step>
 </mat-stepper>`,
+  couleurs: `<mat-stepper class="etapes-secondaire" [selectedIndex]="1">
+  <mat-step label="Identité" [completed]="true">…</mat-step>
+  <mat-step label="Adresse">…</mat-step>
+  <mat-step label="Validation">…</mat-step>
+</mat-stepper>
+<mat-stepper class="etapes-tertiaire" [selectedIndex]="1">…</mat-stepper>
+
+@use '@angular/material' as mat;
+
+.etapes-secondaire {
+  @include mat.stepper-overrides((
+    header-selected-state-icon-background-color: var(--mat-sys-secondary),
+    header-selected-state-icon-foreground-color: var(--mat-sys-on-secondary),
+    header-done-state-icon-background-color: var(--mat-sys-secondary),
+    header-done-state-icon-foreground-color: var(--mat-sys-on-secondary),
+    header-edit-state-icon-background-color: var(--mat-sys-secondary),
+    header-edit-state-icon-foreground-color: var(--mat-sys-on-secondary),
+    line-color: var(--mat-sys-secondary),
+  ));
+}
+
+/* Même liste de jetons avec --mat-sys-tertiary et --mat-sys-on-tertiary */
+.etapes-tertiaire {
+  @include mat.stepper-overrides((
+    header-selected-state-icon-background-color: var(--mat-sys-tertiary),
+    header-selected-state-icon-foreground-color: var(--mat-sys-on-tertiary),
+    header-done-state-icon-background-color: var(--mat-sys-tertiary),
+    header-done-state-icon-foreground-color: var(--mat-sys-on-tertiary),
+    header-edit-state-icon-background-color: var(--mat-sys-tertiary),
+    header-edit-state-icon-foreground-color: var(--mat-sys-on-tertiary),
+    line-color: var(--mat-sys-tertiary),
+  ));
+}`,
+  compact: `<mat-stepper class="etapes-compactes">
+  <mat-step label="Identité">…</mat-step>
+  <mat-step label="Adresse">…</mat-step>
+  <mat-step label="Validation">…</mat-step>
+</mat-stepper>
+
+@use '@angular/material' as mat;
+
+.etapes-compactes {
+  @include mat.stepper-overrides((
+    header-height: 56px,
+    header-label-text-size: var(--mat-sys-label-medium-size),
+    header-selected-state-label-text-size: var(--mat-sys-label-medium-size),
+  ));
+}`,
 };
 
 @Component({
@@ -164,10 +212,70 @@ const SNIPPETS = {
         </mat-stepper>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="420px"
+      title="Personnalisation (jetons)"
+      description="Couleurs des pastilles, hauteur de l’en-tête et typographie des libellés se règlent avec le mixin Sass mat.stepper-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Couleurs de rôle (secondaire, tertiaire)" api="mat.stepper-overrides : header-selected-state-icon-background-color" [snippet]="snippets.couleurs">
+        <mat-stepper class="etapes-secondaire" [selectedIndex]="1">
+          <mat-step label="Identité" [completed]="true"><p>Terminée.</p></mat-step>
+          <mat-step label="Adresse"><p>En cours.</p></mat-step>
+          <mat-step label="Validation"><p>À venir.</p></mat-step>
+        </mat-stepper>
+        <mat-stepper class="etapes-tertiaire" [selectedIndex]="1">
+          <mat-step label="Identité" [completed]="true"><p>Terminée.</p></mat-step>
+          <mat-step label="Adresse"><p>En cours.</p></mat-step>
+          <mat-step label="Validation"><p>À venir.</p></mat-step>
+        </mat-stepper>
+      </app-specimen>
+      <app-specimen label="En-tête compact" api="mat.stepper-overrides : header-height" [snippet]="snippets.compact">
+        <mat-stepper class="etapes-compactes">
+          <mat-step label="Identité"><p>Première étape.</p></mat-step>
+          <mat-step label="Adresse"><p>Deuxième étape.</p></mat-step>
+          <mat-step label="Validation"><p>Dernière étape.</p></mat-step>
+        </mat-stepper>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-stepper {
       width: 100%;
+    }
+
+    @mixin role($role) {
+      @include mat.stepper-overrides(
+        (
+          header-selected-state-icon-background-color: var(--mat-sys-#{$role}),
+          header-selected-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
+          header-done-state-icon-background-color: var(--mat-sys-#{$role}),
+          header-done-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
+          header-edit-state-icon-background-color: var(--mat-sys-#{$role}),
+          header-edit-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
+          line-color: var(--mat-sys-#{$role}),
+        )
+      );
+    }
+
+    .etapes-secondaire {
+      @include role(secondary);
+    }
+
+    .etapes-tertiaire {
+      @include role(tertiary);
+    }
+
+    .etapes-compactes {
+      @include mat.stepper-overrides(
+        (
+          header-height: 56px,
+          header-label-text-size: var(--mat-sys-label-medium-size),
+          header-selected-state-label-text-size: var(--mat-sys-label-medium-size),
+        )
+      );
     }
   `,
 })

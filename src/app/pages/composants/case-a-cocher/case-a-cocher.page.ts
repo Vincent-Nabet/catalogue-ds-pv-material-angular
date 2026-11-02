@@ -18,6 +18,42 @@ const SNIPPETS = {
   <li><mat-checkbox checked>Premier</mat-checkbox></li>
   <li><mat-checkbox>Second</mat-checkbox></li>
 </ul>`,
+  roles: `<mat-checkbox checked>Primaire (défaut)</mat-checkbox>
+<mat-checkbox class="secondaire" checked>Secondaire</mat-checkbox>
+<mat-checkbox class="tertiaire" checked>Tertiaire</mat-checkbox>
+<mat-checkbox class="erreur" checked>Erreur</mat-checkbox>
+
+@use '@angular/material' as mat;
+
+.secondaire {
+  @include mat.checkbox-overrides((
+    selected-icon-color: var(--mat-sys-secondary),
+    selected-hover-icon-color: var(--mat-sys-secondary),
+    selected-focus-icon-color: var(--mat-sys-secondary),
+    selected-pressed-icon-color: var(--mat-sys-secondary),
+    selected-checkmark-color: var(--mat-sys-on-secondary),
+    selected-hover-state-layer-color: var(--mat-sys-secondary),
+    selected-focus-state-layer-color: var(--mat-sys-secondary),
+    selected-pressed-state-layer-color: var(--mat-sys-secondary),
+  ));
+}
+
+/* Mêmes jetons avec --mat-sys-tertiary (.tertiaire) et --mat-sys-error (.erreur) */`,
+  nonCocheeErreur: `<mat-checkbox class="invalide" required>J’accepte les conditions</mat-checkbox>
+
+@use '@angular/material' as mat;
+
+.invalide {
+  @include mat.checkbox-overrides((
+    unselected-icon-color: var(--mat-sys-error),
+    unselected-hover-icon-color: var(--mat-sys-error),
+    unselected-focus-icon-color: var(--mat-sys-error),
+    unselected-hover-state-layer-color: var(--mat-sys-error),
+    unselected-focus-state-layer-color: var(--mat-sys-error),
+    unselected-pressed-state-layer-color: var(--mat-sys-error),
+    label-text-color: var(--mat-sys-error),
+  ));
+}`,
 };
 
 @Component({
@@ -75,8 +111,25 @@ const SNIPPETS = {
         </ul>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Rôles de couleur via le mixin mat.checkbox-overrides, avec les jetons système --mat-sys-* (fond et coche ensemble, pour garder le contraste). Noms de jetons validés à la compilation."
+    >
+      <app-specimen label="Rôles de couleur" api="checkbox-overrides : selected-icon-color" [snippet]="snippets.roles">
+        <mat-checkbox checked>Primaire (défaut)</mat-checkbox>
+        <mat-checkbox class="secondaire" checked>Secondaire</mat-checkbox>
+        <mat-checkbox class="tertiaire" checked>Tertiaire</mat-checkbox>
+        <mat-checkbox class="erreur" checked>Erreur</mat-checkbox>
+      </app-specimen>
+      <app-specimen label="Case non cochée en erreur" api="checkbox-overrides : unselected-icon-color" [snippet]="snippets.nonCocheeErreur">
+        <mat-checkbox class="invalide" required>J’accepte les conditions</mat-checkbox>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     .imbriquees,
     .imbriquees ul {
       margin: 0;
@@ -86,6 +139,47 @@ const SNIPPETS = {
 
     .imbriquees ul {
       padding-inline-start: 32px;
+    }
+
+    @mixin role($role) {
+      @include mat.checkbox-overrides(
+        (
+          selected-icon-color: var(--mat-sys-#{$role}),
+          selected-hover-icon-color: var(--mat-sys-#{$role}),
+          selected-focus-icon-color: var(--mat-sys-#{$role}),
+          selected-pressed-icon-color: var(--mat-sys-#{$role}),
+          selected-checkmark-color: var(--mat-sys-on-#{$role}),
+          selected-hover-state-layer-color: var(--mat-sys-#{$role}),
+          selected-focus-state-layer-color: var(--mat-sys-#{$role}),
+          selected-pressed-state-layer-color: var(--mat-sys-#{$role}),
+        )
+      );
+    }
+
+    .secondaire {
+      @include role(secondary);
+    }
+
+    .tertiaire {
+      @include role(tertiary);
+    }
+
+    .erreur {
+      @include role(error);
+    }
+
+    .invalide {
+      @include mat.checkbox-overrides(
+        (
+          unselected-icon-color: var(--mat-sys-error),
+          unselected-hover-icon-color: var(--mat-sys-error),
+          unselected-focus-icon-color: var(--mat-sys-error),
+          unselected-hover-state-layer-color: var(--mat-sys-error),
+          unselected-focus-state-layer-color: var(--mat-sys-error),
+          unselected-pressed-state-layer-color: var(--mat-sys-error),
+          label-text-color: var(--mat-sys-error),
+        )
+      );
     }
   `,
 })

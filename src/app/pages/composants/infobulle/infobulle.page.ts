@@ -23,6 +23,29 @@ const SNIPPETS = {
   origine: `<button matButton="outlined" matTooltip="Suit le point d'entrée du curseur" [matTooltipPositionAtOrigin]="true">Au curseur</button>`,
   avantApres: `<button matButton="outlined" matTooltip="Avant (selon le sens d'écriture)" matTooltipPosition="before">Avant</button>
 <button matButton="outlined" matTooltip="Après (selon le sens d'écriture)" matTooltipPosition="after">Après</button>`,
+  erreur: `<button matButton="outlined" matTooltip="Ce champ est obligatoire" matTooltipClass="perso-infobulle-erreur">Erreur</button>
+
+@use '@angular/material' as mat;
+
+/* L’infobulle est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-infobulle-erreur {
+  @include mat.tooltip-overrides((
+    container-color: var(--mat-sys-error-container),
+    supporting-text-color: var(--mat-sys-on-error-container),
+  ));
+}`,
+  pilule: `<button matButton="outlined" matTooltip="Pilule" matTooltipClass="perso-infobulle-pilule">Pilule</button>
+
+@use '@angular/material' as mat;
+
+/* L’infobulle est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-infobulle-pilule {
+  @include mat.tooltip-overrides((
+    container-shape: var(--mat-sys-corner-full),
+    supporting-text-size: var(--mat-sys-label-large-size),
+    supporting-text-weight: var(--mat-sys-label-large-weight),
+  ));
+}`,
 };
 
 @Component({
@@ -83,6 +106,41 @@ const SNIPPETS = {
         <button matButton="outlined" matTooltip="Après (selon le sens d’écriture)" matTooltipPosition="after">Après</button>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Le mixin mat.tooltip-overrides reçoit les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. L’infobulle étant rendue dans une surcouche, sa classe passe par matTooltipClass."
+    >
+      <app-specimen label="Rôle erreur" api="mat.tooltip-overrides : container-color" [snippet]="snippets.erreur">
+        <button matButton="outlined" matTooltip="Ce champ est obligatoire" matTooltipClass="perso-infobulle-erreur">Erreur</button>
+      </app-specimen>
+      <app-specimen label="Pilule, texte renforcé" api="mat.tooltip-overrides : container-shape" [snippet]="snippets.pilule">
+        <button matButton="outlined" matTooltip="Pilule" matTooltipClass="perso-infobulle-pilule">Pilule</button>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    /* L’infobulle est rendue dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-infobulle-erreur {
+      @include mat.tooltip-overrides(
+        (
+          container-color: var(--mat-sys-error-container),
+          supporting-text-color: var(--mat-sys-on-error-container),
+        )
+      );
+    }
+
+    ::ng-deep .perso-infobulle-pilule {
+      @include mat.tooltip-overrides(
+        (
+          container-shape: var(--mat-sys-corner-full),
+          supporting-text-size: var(--mat-sys-label-large-size),
+          supporting-text-weight: var(--mat-sys-label-large-weight),
+        )
+      );
+    }
   `,
 })
 export class InfobullePage {

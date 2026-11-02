@@ -14,6 +14,42 @@ const SNIPPETS = {
   sansLibelle: `<mat-slide-toggle aria-label="Mode avion" />`,
   inactifFocalisable: `<mat-slide-toggle [disabledInteractive]="true" disabled>Désactivé, focalisable</mat-slide-toggle>`,
   sansRipple: `<mat-slide-toggle [disableRipple]="true">Sans ondulation</mat-slide-toggle>`,
+  roles: `<mat-slide-toggle checked>Primaire (défaut)</mat-slide-toggle>
+<mat-slide-toggle class="secondaire" checked>Secondaire</mat-slide-toggle>
+<mat-slide-toggle class="tertiaire" checked>Tertiaire</mat-slide-toggle>
+<mat-slide-toggle class="erreur" checked>Erreur</mat-slide-toggle>
+
+@use '@angular/material' as mat;
+
+.secondaire {
+  @include mat.slide-toggle-overrides((
+    selected-track-color: var(--mat-sys-secondary),
+    selected-hover-track-color: var(--mat-sys-secondary),
+    selected-focus-track-color: var(--mat-sys-secondary),
+    selected-pressed-track-color: var(--mat-sys-secondary),
+    selected-handle-color: var(--mat-sys-on-secondary),
+    selected-hover-handle-color: var(--mat-sys-secondary-container),
+    selected-focus-handle-color: var(--mat-sys-secondary-container),
+    selected-pressed-handle-color: var(--mat-sys-secondary-container),
+    selected-icon-color: var(--mat-sys-on-secondary-container),
+    selected-hover-state-layer-color: var(--mat-sys-secondary),
+    selected-focus-state-layer-color: var(--mat-sys-secondary),
+    selected-pressed-state-layer-color: var(--mat-sys-secondary),
+  ));
+}
+
+/* Mêmes jetons avec secondary → tertiary (.tertiaire) et error (.erreur) */`,
+  carre: `<mat-slide-toggle class="carre">Éteint</mat-slide-toggle>
+<mat-slide-toggle class="carre" checked>Allumé</mat-slide-toggle>
+
+@use '@angular/material' as mat;
+
+.carre {
+  @include mat.slide-toggle-overrides((
+    track-shape: var(--mat-sys-corner-small),
+    handle-shape: var(--mat-sys-corner-extra-small),
+  ));
+}`,
 };
 
 @Component({
@@ -63,6 +99,66 @@ const SNIPPETS = {
         <mat-slide-toggle [disableRipple]="true">Sans ondulation</mat-slide-toggle>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="320px"
+      title="Personnalisation (jetons)"
+      description="Rôles de couleur et formes via le mixin mat.slide-toggle-overrides, avec les jetons système --mat-sys-* (noms de jetons validés à la compilation)."
+    >
+      <app-specimen label="Rôles de couleur" api="slide-toggle-overrides : selected-track-color" [snippet]="snippets.roles">
+        <mat-slide-toggle checked>Primaire (défaut)</mat-slide-toggle>
+        <mat-slide-toggle class="secondaire" checked>Secondaire</mat-slide-toggle>
+        <mat-slide-toggle class="tertiaire" checked>Tertiaire</mat-slide-toggle>
+        <mat-slide-toggle class="erreur" checked>Erreur</mat-slide-toggle>
+      </app-specimen>
+      <app-specimen label="Forme carrée" api="slide-toggle-overrides : track-shape" [snippet]="snippets.carre">
+        <mat-slide-toggle class="carre">Éteint</mat-slide-toggle>
+        <mat-slide-toggle class="carre" checked>Allumé</mat-slide-toggle>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    @mixin role($role) {
+      @include mat.slide-toggle-overrides(
+        (
+          selected-track-color: var(--mat-sys-#{$role}),
+          selected-hover-track-color: var(--mat-sys-#{$role}),
+          selected-focus-track-color: var(--mat-sys-#{$role}),
+          selected-pressed-track-color: var(--mat-sys-#{$role}),
+          selected-handle-color: var(--mat-sys-on-#{$role}),
+          selected-hover-handle-color: var(--mat-sys-#{$role}-container),
+          selected-focus-handle-color: var(--mat-sys-#{$role}-container),
+          selected-pressed-handle-color: var(--mat-sys-#{$role}-container),
+          selected-icon-color: var(--mat-sys-on-#{$role}-container),
+          selected-hover-state-layer-color: var(--mat-sys-#{$role}),
+          selected-focus-state-layer-color: var(--mat-sys-#{$role}),
+          selected-pressed-state-layer-color: var(--mat-sys-#{$role}),
+        )
+      );
+    }
+
+    .secondaire {
+      @include role(secondary);
+    }
+
+    .tertiaire {
+      @include role(tertiary);
+    }
+
+    .erreur {
+      @include role(error);
+    }
+
+    .carre {
+      @include mat.slide-toggle-overrides(
+        (
+          track-shape: var(--mat-sys-corner-small),
+          handle-shape: var(--mat-sys-corner-extra-small),
+        )
+      );
+    }
   `,
 })
 export class InterrupteurPage {
