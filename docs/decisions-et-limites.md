@@ -55,6 +55,25 @@ Détail : [fonctionnel.md](fonctionnel.md) et [architecture.md](architecture.md)
 | Statut | Icône et texte, jamais la couleur seule | WCAG 1.4.1 |
 | Fichiers | `pages/fondations/<id>/`, URL `/composants/<id>` | Routes, menu, accueil, inspecteur et scripts suivent sans modification |
 
+### Page Matrice de contraste : débranchée
+
+La page est conservée (`src/app/pages/fondations/matrice-contraste/matrice-contraste.page.ts`, avec `core/tokens/contrast-matrix.ts` et ses tests) mais son entrée a été retirée de `CATALOG` : plus de route, de lien de menu ni de carte d'accueil, et elle n'entre pas dans le bundle. Le fichier reste compilé et typé (`tsconfig.app.json` inclut `src/**/*.ts`). Pour la rebrancher, ajouter dans `CATALOG`, en deuxième position :
+
+```ts
+{
+  id: 'matrice-contraste',
+  label: 'Matrice de contraste',
+  category: 'fondations',
+  icon: 'grid_on',
+  loadComponent: () =>
+    import('../../pages/fondations/matrice-contraste/matrice-contraste.page').then(
+      (m) => m.MatriceContrastePage,
+    ),
+},
+```
+
+puis passer le test du registre à 4 pages Fondations et mettre à jour les compteurs de la documentation. Les mentions de la matrice ci-dessous décrivent la page telle qu'elle a été vérifiée avant son retrait.
+
 ### Limites des pages Fondations
 
 - **WCAG 2.x seulement** (pas d'APCA) ; texte (4,5), éléments d'interface (3) et décoratif (sans seuil). Pas de contraste des états (survol, focus).

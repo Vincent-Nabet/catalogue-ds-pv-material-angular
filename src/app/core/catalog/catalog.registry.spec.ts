@@ -24,9 +24,9 @@ describe('catalog registry', () => {
     expect(grouped.length).toBe(CATALOG.length);
   });
 
-  it('should list Fondations first, with 4 pages', () => {
+  it('should list Fondations first, with 3 pages', () => {
     expect(CATALOG_CATEGORIES[0].id).toBe('fondations');
-    expect(CATALOG_GROUPS[0].entries.length).toBe(4);
+    expect(CATALOG_GROUPS[0].entries.length).toBe(3);
   });
 
   it('should count the 35 component pages apart from Fondations', () => {

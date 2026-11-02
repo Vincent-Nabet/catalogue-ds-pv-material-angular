@@ -47,16 +47,6 @@ export const CATALOG: readonly CatalogEntry[] = [
       import('../../pages/fondations/couleurs/couleurs.page').then((m) => m.CouleursPage),
   },
   {
-    id: 'matrice-contraste',
-    label: 'Matrice de contraste',
-    category: 'fondations',
-    icon: 'grid_on',
-    loadComponent: () =>
-      import('../../pages/fondations/matrice-contraste/matrice-contraste.page').then(
-        (m) => m.MatriceContrastePage,
-      ),
-  },
-  {
     id: 'typographie',
     label: 'Typographie',
     category: 'fondations',

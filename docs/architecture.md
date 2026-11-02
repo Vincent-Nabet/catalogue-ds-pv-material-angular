@@ -47,7 +47,7 @@ src/
       snippet-dialog/        dialog « Code — … » avec bouton Copier
     pages/
       accueil/accueil.ts
-      fondations/<id>/<id>.page.ts   4 pages Fondations : couleurs, matrice-contraste, typographie, formes-espacements
+      fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre
       composants/<id>/<id>.page.ts   une page par composant (35)
   styles/themes-<nom>/       GÉNÉRÉ par `npm run themes` (défaut : themes-app), ne pas éditer à la main :
                              index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
@@ -75,7 +75,7 @@ interface CatalogEntry {
 }
 ```
 
-Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories, `fondations` en tête), `CATALOG` (les 39 entrées, les 4 pages Fondations en premier), `COMPONENT_ENTRIES` (les 35 pages de composants, sans Fondations : compteur « composants » de l'accueil), `CATALOG_GROUPS` (catégories non vides avec leurs entrées, utilisé par la navigation et l'accueil).
+Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories, `fondations` en tête), `CATALOG` (les 38 entrées, les 3 pages Fondations en premier), `COMPONENT_ENTRIES` (les 35 pages de composants, sans Fondations : compteur « composants » de l'accueil), `CATALOG_GROUPS` (catégories non vides avec leurs entrées, utilisé par la navigation et l'accueil).
 
 Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'URL `/composants/<id>` : routes, navigation, inspecteur de contraste et scripts (qui lisent le registre par expression régulière : garder le format `{ id: '…', label: '…', category: …`) suivent sans modification.
 
@@ -135,7 +135,7 @@ Les quatre pages montrent des valeurs de jetons **lues dans le CSS réellement c
 - **Couleur** : `readColor(sonde, '--mat-sys-…')` pose `color: var(--x, transparent)` sur un élément masqué, lit `getComputedStyle().color` et analyse le `rgb()` obtenu. Passer par une vraie propriété est nécessaire : `getPropertyValue('--x')` renverrait le texte `light-dark(…)`. Le repli `transparent` signale une variable absente (sans lui, la sonde hériterait la couleur du parent). `light-dark()` est résolu selon le `color-scheme` de la sonde.
 - **Autres valeurs** (typographie, rayons, espacements, opacités) : `readValue(élément, propriété)` sur l'élément d'échantillon.
 - **Relecture** : `afterRenderEffect` (phase `read`) qui lit `injectThemeKey()` (thème, mode et, en mode système, préférence du système via `matchMedia`). `ThemeService` pose les classes de `<html>` dans un effet racine : un `effect` ordinaire lirait l'ancien thème.
-- **Matrice** : indépendante du thème courant. Huit sondes masquées portent la classe `theme-<famille>` et `style="color-scheme: light|dark"` ; elles redéfinissent `--md-sys-color-*` et `--app-color-*` (déclarés sur ces classes), lus **une seule fois** après le premier rendu. Les `--mat-sys-*` ne sont pas lus dans les sondes : ils sont résolus sur `<html>`.
+- **Matrice** (page débranchée du registre, code conservé) : indépendante du thème courant. Huit sondes masquées portent la classe `theme-<famille>` et `style="color-scheme: light|dark"` ; elles redéfinissent `--md-sys-color-*` et `--app-color-*` (déclarés sur ces classes), lus **une seule fois** après le premier rendu. Les `--mat-sys-*` ne sont pas lus dans les sondes : ils sont résolus sur `<html>`.
 - **Contraste** : formule WCAG 2.x ; le rapport est **tronqué** (et non arrondi) à deux décimales à l'affichage, comme axe-core ; la conformité compare la valeur brute au seuil.
 - jsdom ne connaît pas `light-dark()` : seuls les calculs purs et les données sont testés unitairement ; la lecture se vérifie dans Chrome.
 

@@ -8,7 +8,7 @@ Public : designers, intégrateurs, développeurs front. Langue de l'interface : 
 
 ## Parcours utilisateur
 
-1. **Accueil** (`/`) : bandeau de présentation (compteurs : 35 composants, 7 catégories, thèmes) puis une carte par catégorie listant ses pages (« 4 pages » pour Fondations, « N composants » ailleurs).
+1. **Accueil** (`/`) : bandeau de présentation (compteurs : 35 composants, 7 catégories, thèmes) puis une carte par catégorie listant ses pages (« 3 pages » pour Fondations, « N composants » ailleurs).
 2. **Navigation latérale** : toujours visible sur ordinateur (`side`), tiroir sur mobile (`over`, ouvert par le bouton menu). Composants groupés par catégorie, lien actif mis en évidence (`aria-current="page"`).
 3. **Page de composant** (`/composants/<id>`) : un `<h1>` puis des sections de specimens.
 4. **Sélecteur de thème** (bouton « Thème : Azur » en haut à droite) : thème, mode, densité.
@@ -42,20 +42,21 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 - Les popups (dialog, bottom-sheet, snackbar, menu, tooltip) sont présentés par un bouton déclencheur, sans aperçu statique.
 - **Section « Personnalisation (jetons) »** : 33 pages sur 35 (toutes sauf Bouton et Icône, dont les sections Tailles/Couleurs/Formes jouent ce rôle) se terminent par une section qui montre comment restyler le composant avec son mixin Sass `mat.<composant>-overrides` : rôles de couleur (secondaire, tertiaire, erreur), formes (`--mat-sys-corner-*`), tailles et hauteurs, élévation, typographie (`--mat-sys-*-size`). Le champ `api` du specimen nomme le mixin et le premier jeton ; le snippet donne le template et le SCSS. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
 
-## Fondations (4 pages)
+## Fondations (3 pages)
 
 Catégorie placée **en tête** du menu et de l'accueil. Les pages montrent les jetons eux-mêmes (rôles de couleur, typographie, formes) lus dans le CSS chargé, et non un composant. URL `/composants/<id>` comme les autres pages ; l'inspecteur de contraste y est disponible.
 
 | Page | Id | Contenu | Thème utilisé |
 |---|---|---|---|
 | Couleurs | `couleurs` | rôles de couleur en paires texte / fond : échantillon rendu, valeurs hexadécimales, rapport de contraste WCAG 2.x, statut (icône et texte « Conforme » / « Insuffisant, minimum 4,5 : 1 »), puis les rôles hors paires (pastille, nom, hex) | thème courant |
-| Matrice de contraste | `matrice-contraste` | toutes les paires × les **8 modes du design system** (4 familles × clair / sombre) côte à côte, échecs et régressions | indépendant du thème courant |
+| *Matrice de contraste (débranchée)* | `matrice-contraste` | toutes les paires × les **8 modes du design system** (4 familles × clair / sombre) côte à côte, échecs et régressions | indépendant du thème courant |
 | Typographie | `typographie` | les 15 styles MD3 rendus avec leurs valeurs (police, taille, interligne, graisse, interlettrage) ; graisses renforcées du design system | thème courant |
 | Formes et espacements | `formes-espacements` | rayons MD3 et Expressive, espacements (10 jetons), élévations, opacités d'état | thème courant |
 
 - **Couleurs** : une section par groupe de rôles (Primaire, Secondaire, Tertiaire, Erreur, Surfaces, Contours et inverses, Couleurs fixes, Succès, Info, Alerte). Les paires d'éléments d'interface (`outline`, seuil 3) et décoratives (`outline-variant`, sans seuil) sont montrées par un cadre de 2 px, sans texte dans la couleur testée. Le rapport est **tronqué** à deux décimales, comme dans axe-core (4,4896 s'affiche « 4,48 : 1 »).
 - **Matrice de contraste** : résumé par mode (nombre d'échecs et de régressions), filtres « Échecs et régressions seulement » et « Inclure les paires décoratives », puis un tableau natif (en-têtes à deux niveaux : famille, puis clair / sombre) groupé par rôle. Chaque cellule montre fond et texte en deux mini-pastilles, le ratio, une icône et le statut. Une **régression** est une cellule dont le ratio est inférieur de plus de 0,01 à celui de la famille précédente, dans le même mode (Standard → Contraste moyen → Contraste élevé ; Monochrome hors progression). Sur petit écran, le tableau défile horizontalement dans une région focusable.
 - **Jetons propres au design system** (`--app-*` : succès, info, alerte, rayons Expressive, espacements, graisses renforcées) : affichés avec un thème Design system ; avec un thème Angular Material, une phrase invite à choisir un thème Design system.
+- La **matrice de contraste** est écrite (`pages/fondations/matrice-contraste/`) mais **absente du registre** : ni route, ni menu, ni accueil. Pour la rebrancher, ré-ajouter son entrée dans `CATALOG` (voir [decisions-et-limites.md](decisions-et-limites.md)).
 - Les snippets de ces pages sont dérivés des données (ex. `color: var(--mat-sys-on-primary); background: var(--mat-sys-primary);`) ; la matrice n'en a pas.
 
 ## Composants couverts (35 pages)
