@@ -50,7 +50,7 @@ function describe(values: TypeValues | undefined): string {
   imports: [Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Typographie</h1>
-    <p class="intro">
+    <p class="page-intro">
       Les 15 styles de texte Material Design 3 du thème courant, avec les valeurs lues dans le CSS
       chargé : police, taille, interligne, graisse et interlettrage.
     </p>
@@ -63,7 +63,7 @@ function describe(values: TypeValues | undefined): string {
             [api]="'--mat-sys-' + style.id"
             [snippet]="style.snippet"
           >
-            <div class="contenu">
+            <div class="specimen-contenu">
               <div
                 #echantillon
                 class="echantillon"
@@ -88,7 +88,7 @@ function describe(values: TypeValues | undefined): string {
       >
         @for (style of emphasized(); track style.id) {
           <app-specimen [label]="style.label" [api]="style.weightVar" [snippet]="style.snippet">
-            <div class="contenu">
+            <div class="specimen-contenu">
               <app-token-badge [custom]="style.custom" />
               <div class="comparaison" [style.font]="'var(--mat-sys-' + style.id + ')'">
                 <span>Normal</span>
@@ -106,29 +106,10 @@ function describe(values: TypeValues | undefined): string {
         }
       </app-specimen-section>
     } @else {
-      <app-specimen-section
-        title="Graisses renforcées (design system)"
-        description="Jetons propres au design system : choisir un thème Design system pour les voir."
-      />
+      <app-specimen-section title="Graisses renforcées (design system)" designSystemOnly />
     }
   `,
   styles: `
-    .intro {
-      max-width: 80ch;
-      margin: 0 0 24px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    /* Ancré en haut de la zone d'exemple (sinon centrée, donc décalée quand le pied de card fait 2 lignes), sous le bouton </> de la card (en position absolue, 52 px depuis le haut). */
-    .contenu {
-      display: grid;
-      align-self: stretch;
-      align-content: start;
-      margin-block-start: 28px;
-      gap: 12px;
-      width: 100%;
-    }
-
     .echantillon,
     .comparaison {
       overflow-wrap: anywhere;

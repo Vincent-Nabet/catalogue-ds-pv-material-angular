@@ -114,10 +114,15 @@ Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'UR
 Inputs : `label` (requis), `api` (texte affiché en `<code>`), `snippet` (code, active le bouton `</>`). Contenu projeté dans une zone `surface-container-low`. Ouvre `SnippetDialog` via `MatDialog` (largeur 640 px, `maxWidth: 95vw`). Le bouton a `aria-label="Voir le code : <label>"`.
 
 ### `SpecimenSection` (`app-specimen-section`)
-Inputs : `title` (requis), `description`, `minWidth` (défaut `300px`, exposé en `--specimen-min`). Grille `repeat(auto-fill, minmax(min(100%, var(--specimen-min)), 1fr))`. Le titre est un `<h2>`.
+Inputs : `title` (requis), `description`, `minWidth` (défaut `300px`, exposé en `--specimen-min`), `designSystemOnly` (booléen : remplace la description par le message standard `DESIGN_SYSTEM_ONLY_MESSAGE`, « Jetons propres au design system : choisir un thème Design system pour les voir. », utilisé par les pages Fondations quand un thème Angular Material est actif). Grille `repeat(auto-fill, minmax(min(100%, var(--specimen-min)), 1fr))`. Le titre est un `<h2>`.
 
 ### `SnippetDialog`
 Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, focusable pour l'accessibilité), bouton « Copier » (CDK `Clipboard` + `MatSnackBar`), bouton « Fermer ». Pas de coloration syntaxique (pas de dépendance ajoutée).
+
+### Classes globales des pages Fondations (`src/styles.scss`)
+
+- `.page-intro` : paragraphe d'introduction sous le `<h1>` (largeur max 80 ch, couleur `on-surface-variant`).
+- `.specimen-contenu` : contenu d'un `app-specimen` ancré en haut de la zone d'exemple (grille, marge de 28 px sous le bouton `</>`, `gap` 12 px, pleine largeur). Une page qui a besoin d'un réglage de plus l'ajoute dans son propre `styles` (ex. `justify-items: start` dans Formes et espacements, via une classe locale posée à côté).
 
 ## Libellés français (`core/i18n/intl-fr.ts`)
 

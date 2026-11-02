@@ -43,7 +43,7 @@ function minimumText(min: number): string {
   imports: [MatIcon, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Couleurs</h1>
-    <p class="intro">
+    <p class="page-intro">
       Rôles de couleur du thème courant, par paires texte / fond, avec le rapport de contraste
       WCAG&nbsp;2.x lu dans le CSS chargé. Changer de thème ou de mode relit les valeurs. Le rapport
       est tronqué à deux décimales, comme dans axe-core.
@@ -58,7 +58,7 @@ function minimumText(min: number): string {
       >
         @for (row of section.rows; track row.pair.id) {
           <app-specimen [label]="row.label" [api]="row.api" [snippet]="row.snippet">
-            <div class="contenu">
+            <div class="specimen-contenu">
               @if (row.pair.origin === 'design-system') {
                 <app-token-badge />
               }
@@ -91,10 +91,7 @@ function minimumText(min: number): string {
     }
 
     @if (!designSystem()) {
-      <app-specimen-section
-        title="Jetons du design system"
-        description="Jetons propres au design system : choisir un thème Design system pour les voir."
-      />
+      <app-specimen-section title="Jetons du design system" designSystemOnly />
     }
 
     <app-specimen-section
@@ -119,22 +116,6 @@ function minimumText(min: number): string {
     </app-specimen-section>
   `,
   styles: `
-    .intro {
-      max-width: 80ch;
-      margin: 0 0 24px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    /* Ancré en haut de la zone d'exemple (sinon centrée, donc décalée quand le pied de card fait 2 lignes), sous le bouton </> de la card (en position absolue, 52 px depuis le haut). */
-    .contenu {
-      display: grid;
-      align-self: stretch;
-      align-content: start;
-      margin-block-start: 28px;
-      gap: 12px;
-      width: 100%;
-    }
-
     .echantillon {
       padding: 16px;
       border-radius: var(--mat-sys-corner-small);

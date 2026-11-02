@@ -1,4 +1,8 @@
-import { Component, input } from '@angular/core';
+import { booleanAttribute, Component, computed, input } from '@angular/core';
+
+/** Description des sections de jetons propres au design system, quand un thème Angular Material est actif. */
+export const DESIGN_SYSTEM_ONLY_MESSAGE =
+  'Jetons propres au design system : choisir un thème Design system pour les voir.';
 
 @Component({
   selector: 'app-specimen-section',
@@ -6,8 +10,8 @@ import { Component, input } from '@angular/core';
   template: `
     <section>
       <h2>{{ title() }}</h2>
-      @if (description()) {
-        <p>{{ description() }}</p>
+      @if (texte()) {
+        <p>{{ texte() }}</p>
       }
       <div class="grille">
         <ng-content />
@@ -43,4 +47,10 @@ export class SpecimenSection {
   readonly description = input<string>();
   /** Largeur minimale d'une colonne de la grille. */
   readonly minWidth = input('300px');
+  /** Section de jetons propres au design system, affichée sans thème Design system : remplace la description par le message standard. */
+  readonly designSystemOnly = input(false, { transform: booleanAttribute });
+
+  protected readonly texte = computed(() =>
+    this.designSystemOnly() ? DESIGN_SYSTEM_ONLY_MESSAGE : this.description(),
+  );
 }
