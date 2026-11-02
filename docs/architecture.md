@@ -36,7 +36,9 @@ src/
       tokens/                       pages Fondations seulement (jamais dans le bundle initial) :
                                     contrast.ts (WCAG 2.x, fonctions pures), color-roles.ts (rôles et paires, source unique),
                                     read-css.ts (lecture des valeurs dans le DOM), contrast-matrix.ts (matrice, régressions),
-                                    theme-key.ts (relecture au changement de thème ou de mode)
+                                    theme-key.ts (relecture au changement de thème ou de mode),
+                                    discover-tokens.ts (détection des variables --app-* du CSS chargé, fonctions pures),
+                                    token-catalog.ts (@Service : noms détectés, relus à chaque changement de thème)
     layout/
       shell/                 barre d'outils + sidenav + <router-outlet>
       theme-picker/          bouton + menu thème / mode / densité
@@ -45,6 +47,7 @@ src/
       specimen/              cadre d'une variante + bouton snippet
       specimen-section/      titre + grille de specimens
       token-badge/           pastille « Jeton personnalisé » (variable `--app-*`) ou « Jeton MD3 », pour les pages Fondations
+      missing-tokens/        note « Jetons attendus mais absents du CSS chargé » (pages Fondations, mode design system)
       snippet-dialog/        dialog « Code — … » avec bouton Copier
     pages/
       accueil/accueil.ts
@@ -142,6 +145,7 @@ Les quatre pages montrent des valeurs de jetons **lues dans le CSS réellement c
 - **Couleur** : `readColor(sonde, '--mat-sys-…')` pose `color: var(--x, transparent)` sur un élément masqué, lit `getComputedStyle().color` et analyse le `rgb()` obtenu. Passer par une vraie propriété est nécessaire : `getPropertyValue('--x')` renverrait le texte `light-dark(…)`. Le repli `transparent` signale une variable absente (sans lui, la sonde hériterait la couleur du parent). `light-dark()` est résolu selon le `color-scheme` de la sonde.
 - **Autres valeurs** (typographie, rayons, espacements, opacités) : `readValue(élément, propriété)` sur l'élément d'échantillon.
 - **Relecture** : `afterRenderEffect` (phase `read`) qui lit `injectThemeKey()` (thème, mode et, en mode système, préférence du système via `matchMedia`). `ThemeService` pose les classes de `<html>` dans un effet racine : un `effect` ordinaire lirait l'ancien thème.
+- **Détection des jetons** : les noms des jetons restent des listes écrites à la main (libellés, ordre, paires), complétées par ce que le CSS déclare. `declaredProperties` (`discover-tokens.ts`) parcourt `document.styleSheets` (règles de groupe, imbriquées, `@import` ; feuille inaccessible ignorée) et renvoie l'union des variables `--app-*` de tous les blocs, donc de tous les thèmes. `TokenCatalog` (`@Service`) l'expose en signal `names`, relu dans un `afterRenderEffect` cadencé par `injectThemeKey()` ; `null` tant qu'aucune variable n'est trouvée (un résultat vide n'est pas mémorisé). Les pages y ajoutent les jetons absents de leurs listes (`detectedRoles`, `detectedIds`) et passent à `app-missing-tokens` ceux des listes qui manquent (`missing`). Détail et limites : [decisions-et-limites.md](decisions-et-limites.md#détection-dynamique-des-jetons).
 - **Matrice** (page débranchée du registre, code conservé) : indépendante du thème courant. Huit sondes masquées portent la classe `theme-<famille>` et `style="color-scheme: light|dark"` ; elles redéfinissent `--md-sys-color-*` et `--app-color-*` (déclarés sur ces classes), lus **une seule fois** après le premier rendu. Les `--mat-sys-*` ne sont pas lus dans les sondes : ils sont résolus sur `<html>`.
 - **Contraste** : formule WCAG 2.x ; le rapport est **tronqué** (et non arrondi) à deux décimales à l'affichage, comme axe-core ; la conformité compare la valeur brute au seuil.
 - jsdom ne connaît pas `light-dark()` : seuls les calculs purs et les données sont testés unitairement ; la lecture se vérifie dans Chrome.
