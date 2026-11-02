@@ -4,7 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { ThemeService } from '../../core/theme/theme.service';
-import { DENSITIES, SCHEMES, THEME_GROUPS, THEMES } from '../../core/theme/themes';
+import { DENSITIES, SCHEMES, THEME_GROUPS, THEMES, themeInfo } from '../../core/theme/themes';
 
 @Component({
   selector: 'app-theme-picker',
@@ -20,7 +20,5 @@ export class ThemePicker {
   }));
   protected readonly schemes = SCHEMES;
   protected readonly densities = DENSITIES;
-  protected readonly courant = computed(
-    () => THEMES.find((theme) => theme.id === this.service.theme()) ?? THEMES[0],
-  );
+  protected readonly courant = computed(() => themeInfo(this.service.theme()) ?? THEMES[0]);
 }

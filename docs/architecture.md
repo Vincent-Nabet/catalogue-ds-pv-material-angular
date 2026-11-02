@@ -28,7 +28,7 @@ src/
     app.routes.ts            routes générées depuis le registre
     core/
       catalog/catalog.registry.ts   SOURCE UNIQUE des composants + catégories
-      theme/themes.ts               types et listes (thèmes, modes, densités)
+      theme/themes.ts               types et listes (thèmes, modes, densités), `themeInfo(id)` (recherche d'un thème)
       theme/theme.service.ts        @Service : état du thème + persistance
       i18n/intl-fr.ts               libellés français (paginator, datepicker, stepper)
       a11y/contrast-items.ts        résultats axe → éléments d'inspection (fonctions pures)

@@ -1,4 +1,4 @@
-import { THEMES, ThemeId } from '../theme/themes';
+import { ThemeId, themeInfo } from '../theme/themes';
 import { ColorPair, PairKind } from './color-roles';
 import { Rgba, contrastRatio, meetsMinimum } from './contrast';
 
@@ -25,7 +25,7 @@ export const MODES: readonly Mode[] = FAMILIES.flatMap((family) =>
 );
 
 export function familyLabel(family: ThemeId): string {
-  return THEMES.find((theme) => theme.id === family)?.shortLabel ?? family;
+  return themeInfo(family)?.shortLabel ?? family;
 }
 
 /** Les familles dont une régression se mesure par rapport à la précédente (Monochrome exclu). */
