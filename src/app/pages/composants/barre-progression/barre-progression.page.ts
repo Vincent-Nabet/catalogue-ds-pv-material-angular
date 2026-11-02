@@ -10,6 +10,41 @@ const SNIPPETS = {
   requete: `<mat-progress-bar mode="query" aria-label="Chargement" />`,
   zero: `<mat-progress-bar mode="determinate" value="0" aria-label="Chargement" />`,
   complet: `<mat-progress-bar mode="determinate" value="100" aria-label="Chargement" />`,
+  couleurs: `<mat-progress-bar mode="determinate" value="60" class="secondaire" aria-label="Chargement" />
+<mat-progress-bar mode="determinate" value="60" class="tertiaire" aria-label="Chargement" />
+<mat-progress-bar mode="determinate" value="60" class="erreur" aria-label="Chargement" />
+
+@use '@angular/material' as mat;
+
+@mixin role($indicateur, $piste) {
+  @include mat.progress-bar-overrides((
+    active-indicator-color: $indicateur,
+    track-color: $piste,
+  ));
+}
+
+.secondaire {
+  @include role(var(--mat-sys-secondary), var(--mat-sys-secondary-container));
+}
+
+.tertiaire {
+  @include role(var(--mat-sys-tertiary), var(--mat-sys-tertiary-container));
+}
+
+.erreur {
+  @include role(var(--mat-sys-error), var(--mat-sys-error-container));
+}`,
+  epaisse: `<mat-progress-bar mode="determinate" value="60" class="epaisse" aria-label="Chargement" />
+
+@use '@angular/material' as mat;
+
+.epaisse {
+  @include mat.progress-bar-overrides((
+    active-indicator-height: 12px,
+    track-height: 12px,
+    track-shape: var(--mat-sys-corner-full),
+  ));
+}`,
 };
 
 @Component({
@@ -41,10 +76,57 @@ const SNIPPETS = {
         <mat-progress-bar mode="determinate" value="100" aria-label="Chargement" />
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Le mixin Sass mat.progress-bar-overrides modifie couleurs, épaisseur et forme ; les noms de jetons sont validés à la compilation. Indicateur et piste prennent la paire de jetons système --mat-sys-* d’un même rôle."
+    >
+      <app-specimen label="Rôles de couleur" api="mat.progress-bar-overrides : active-indicator-color" [snippet]="snippets.couleurs">
+        <mat-progress-bar mode="determinate" value="60" class="secondaire" aria-label="Chargement" />
+        <mat-progress-bar mode="determinate" value="60" class="tertiaire" aria-label="Chargement" />
+        <mat-progress-bar mode="determinate" value="60" class="erreur" aria-label="Chargement" />
+      </app-specimen>
+      <app-specimen label="Épaisse et arrondie" api="mat.progress-bar-overrides : track-height, track-shape" [snippet]="snippets.epaisse">
+        <mat-progress-bar mode="determinate" value="60" class="epaisse" aria-label="Chargement" />
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-progress-bar {
       min-width: 160px;
+    }
+
+    @mixin role($indicateur, $piste) {
+      @include mat.progress-bar-overrides(
+        (
+          active-indicator-color: $indicateur,
+          track-color: $piste,
+        )
+      );
+    }
+
+    .secondaire {
+      @include role(var(--mat-sys-secondary), var(--mat-sys-secondary-container));
+    }
+
+    .tertiaire {
+      @include role(var(--mat-sys-tertiary), var(--mat-sys-tertiary-container));
+    }
+
+    .erreur {
+      @include role(var(--mat-sys-error), var(--mat-sys-error-container));
+    }
+
+    .epaisse {
+      @include mat.progress-bar-overrides(
+        (
+          active-indicator-height: 12px,
+          track-height: 12px,
+          track-shape: var(--mat-sys-corner-full),
+        )
+      );
     }
   `,
 })

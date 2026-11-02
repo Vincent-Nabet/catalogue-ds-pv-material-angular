@@ -38,6 +38,48 @@ const SNIPPETS = {
     Contenu assombri par le fond
   </mat-sidenav-content>
 </mat-sidenav-container>`,
+  couleurs: `<mat-sidenav-container class="menu-teinte" style="height: 200px">
+  <mat-sidenav mode="side" opened>Menu</mat-sidenav>
+  <mat-sidenav-content>Contenu principal</mat-sidenav-content>
+</mat-sidenav-container>
+
+@use '@angular/material' as mat;
+
+.menu-teinte {
+  @include mat.sidenav-overrides((
+    container-background-color: var(--mat-sys-secondary-container),
+    container-text-color: var(--mat-sys-on-secondary-container),
+  ));
+}`,
+  separateur: `<mat-sidenav-container class="menu-separe" style="height: 200px">
+  <mat-sidenav mode="side" opened>Menu</mat-sidenav>
+  <mat-sidenav-content>Contenu principal</mat-sidenav-content>
+</mat-sidenav-container>
+
+@use '@angular/material' as mat;
+
+.menu-separe {
+  @include mat.sidenav-overrides((
+    container-divider-color: var(--mat-sys-outline-variant),
+    container-shape: var(--mat-sys-corner-none),
+  ));
+}`,
+  ombre: `<mat-sidenav-container class="menu-releve" style="height: 200px">
+  <mat-sidenav #menu mode="over">Menu</mat-sidenav>
+  <mat-sidenav-content>
+    <button matButton (click)="menu.toggle()">Basculer le menu</button>
+    Ombre portée et fond teinté
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+@use '@angular/material' as mat;
+
+.menu-releve {
+  @include mat.sidenav-overrides((
+    container-elevation-shadow: var(--mat-sys-level3),
+    scrim-color: color-mix(in srgb, var(--mat-sys-primary) 32%, transparent),
+  ));
+}`,
 };
 
 @Component({
@@ -99,15 +141,77 @@ const SNIPPETS = {
         </mat-sidenav-container>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="400px"
+      title="Personnalisation (jetons)"
+      description="Le mixin Sass mat.sidenav-overrides règle couleurs, séparateur, forme, ombre et fond du menu ; les noms de jetons sont validés à la compilation. Les couleurs viennent des jetons système --mat-sys-*, fond et texte ensemble pour garder le contraste."
+    >
+      <app-specimen label="Menu teinté" api="mat.sidenav-overrides : container-background-color" [snippet]="snippets.couleurs">
+        <mat-sidenav-container class="conteneur menu-teinte">
+          <mat-sidenav mode="side" opened>Menu</mat-sidenav>
+          <mat-sidenav-content class="contenu">Contenu principal</mat-sidenav-content>
+        </mat-sidenav-container>
+      </app-specimen>
+      <app-specimen label="Séparateur et angles droits" api="mat.sidenav-overrides : container-divider-color" [snippet]="snippets.separateur">
+        <mat-sidenav-container class="conteneur menu-separe">
+          <mat-sidenav mode="side" opened>Menu</mat-sidenav>
+          <mat-sidenav-content class="contenu">Contenu principal</mat-sidenav-content>
+        </mat-sidenav-container>
+      </app-specimen>
+      <app-specimen label="Ombre et fond teinté" api="mat.sidenav-overrides : container-elevation-shadow, scrim-color" [snippet]="snippets.ombre">
+        <mat-sidenav-container class="conteneur menu-releve">
+          <mat-sidenav #releve mode="over">Menu</mat-sidenav>
+          <mat-sidenav-content class="contenu">
+            <button matButton="outlined" (click)="releve.toggle()">Basculer le menu</button>
+            <p>Ombre portée et fond teinté</p>
+          </mat-sidenav-content>
+        </mat-sidenav-container>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     .conteneur {
       width: 100%;
       height: 200px;
+
+      @include mat.sidenav-overrides(
+        (
+          container-width: 100px,
+        )
+      );
+    }
+
+    .menu-teinte {
+      @include mat.sidenav-overrides(
+        (
+          container-background-color: var(--mat-sys-secondary-container),
+          container-text-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .menu-separe {
+      @include mat.sidenav-overrides(
+        (
+          container-divider-color: var(--mat-sys-outline-variant),
+          container-shape: var(--mat-sys-corner-none),
+        )
+      );
+    }
+
+    .menu-releve {
+      @include mat.sidenav-overrides(
+        (
+          container-elevation-shadow: var(--mat-sys-level3),
+          scrim-color: color-mix(in srgb, var(--mat-sys-primary) 32%, transparent),
+        )
+      );
     }
 
     mat-sidenav {
-      width: 100px;
       padding: 16px;
     }
 

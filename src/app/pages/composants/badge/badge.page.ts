@@ -19,6 +19,50 @@ const SNIPPETS = {
   desactive: `<mat-icon matBadge="3" matBadgeDisabled>mail</mat-icon>`,
   description: `<mat-icon matBadge="3" matBadgeDescription="3 messages non lus" aria-hidden="false" aria-label="Messages">mail</mat-icon>`,
   texte: `<mat-icon matBadge="99+" matBadgeSize="large" aria-hidden="false" aria-label="Notifications">notifications</mat-icon>`,
+  couleurs: `<mat-icon matBadge="4" class="primaire" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+<mat-icon matBadge="4" class="secondaire" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+<mat-icon matBadge="4" class="tertiaire" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+
+@use '@angular/material' as mat;
+
+@mixin couleur($fond, $texte) {
+  @include mat.badge-overrides((
+    background-color: $fond,
+    text-color: $texte,
+  ));
+}
+
+.primaire {
+  @include couleur(var(--mat-sys-primary), var(--mat-sys-on-primary));
+}
+
+.secondaire {
+  @include couleur(var(--mat-sys-secondary), var(--mat-sys-on-secondary));
+}
+
+.tertiaire {
+  @include couleur(var(--mat-sys-tertiary), var(--mat-sys-on-tertiary));
+}`,
+  forme: `<mat-icon matBadge="4" class="angles-droits" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+
+@use '@angular/material' as mat;
+
+.angles-droits {
+  @include mat.badge-overrides((
+    container-shape: var(--mat-sys-corner-extra-small),
+  ));
+}`,
+  grand: `<mat-icon matBadge="8" matBadgeSize="large" class="grand" aria-hidden="false" aria-label="8 notifications">mail</mat-icon>
+
+@use '@angular/material' as mat;
+
+.grand {
+  @include mat.badge-overrides((
+    large-size-container-size: 24px,
+    large-size-line-height: 24px,
+    large-size-text-size: var(--mat-sys-label-large-size),
+  ));
+}`,
 };
 
 @Component({
@@ -67,6 +111,65 @@ const SNIPPETS = {
         <mat-icon matBadge="99+" matBadgeSize="large" aria-hidden="false" aria-label="Notifications">notifications</mat-icon>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Le mixin Sass mat.badge-overrides modifie couleurs, forme et taille ; les noms de jetons sont validés à la compilation. Les couleurs viennent des jetons système --mat-sys-*, fond et texte ensemble pour garder le contraste."
+    >
+      <app-specimen label="Rôles de couleur" api="mat.badge-overrides : background-color" [snippet]="snippets.couleurs">
+        <mat-icon matBadge="4" class="primaire" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+        <mat-icon matBadge="4" class="secondaire" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+        <mat-icon matBadge="4" class="tertiaire" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+      </app-specimen>
+      <app-specimen label="Forme" api="mat.badge-overrides : container-shape" [snippet]="snippets.forme">
+        <mat-icon matBadge="4" class="angles-droits" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
+      </app-specimen>
+      <app-specimen label="Grande taille" api="mat.badge-overrides : large-size-container-size" [snippet]="snippets.grand">
+        <mat-icon matBadge="8" matBadgeSize="large" class="grand" aria-hidden="false" aria-label="8 notifications">mail</mat-icon>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    @mixin couleur($fond, $texte) {
+      @include mat.badge-overrides(
+        (
+          background-color: $fond,
+          text-color: $texte,
+        )
+      );
+    }
+
+    .primaire {
+      @include couleur(var(--mat-sys-primary), var(--mat-sys-on-primary));
+    }
+
+    .secondaire {
+      @include couleur(var(--mat-sys-secondary), var(--mat-sys-on-secondary));
+    }
+
+    .tertiaire {
+      @include couleur(var(--mat-sys-tertiary), var(--mat-sys-on-tertiary));
+    }
+
+    .angles-droits {
+      @include mat.badge-overrides(
+        (
+          container-shape: var(--mat-sys-corner-extra-small),
+        )
+      );
+    }
+
+    .grand {
+      @include mat.badge-overrides(
+        (
+          large-size-container-size: 24px,
+          large-size-line-height: 24px,
+          large-size-text-size: var(--mat-sys-label-large-size),
+        )
+      );
+    }
   `,
 })
 export class BadgePage {

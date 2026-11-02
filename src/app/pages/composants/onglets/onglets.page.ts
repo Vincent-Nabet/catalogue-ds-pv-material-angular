@@ -92,6 +92,62 @@ const SNIPPETS = {
   <a mat-tab-link active>Général</a>
   <a mat-tab-link>Détails du dossier</a>
 </nav>`,
+  couleurs: `<mat-tab-group class="secondaire">…</mat-tab-group>
+<mat-tab-group class="tertiaire">…</mat-tab-group>
+<mat-tab-group class="erreur">…</mat-tab-group>
+
+@use '@angular/material' as mat;
+
+@mixin role($couleur) {
+  @include mat.tabs-overrides((
+    active-indicator-color: $couleur,
+    active-hover-indicator-color: $couleur,
+    active-focus-indicator-color: $couleur,
+    active-label-text-color: $couleur,
+    active-hover-label-text-color: $couleur,
+    active-focus-label-text-color: $couleur,
+    active-ripple-color: $couleur,
+  ));
+}
+
+.secondaire {
+  @include role(var(--mat-sys-secondary));
+}
+
+.tertiaire {
+  @include role(var(--mat-sys-tertiary));
+}
+
+.erreur {
+  @include role(var(--mat-sys-error));
+}`,
+  indicateur: `<mat-tab-group class="indicateur-epais">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>
+
+@use '@angular/material' as mat;
+
+.indicateur-epais {
+  @include mat.tabs-overrides((
+    active-indicator-height: 4px,
+    active-indicator-shape: var(--mat-sys-corner-full),
+  ));
+}`,
+  grands: `<mat-tab-group class="onglets-grands">
+  <mat-tab label="Général">…</mat-tab>
+  <mat-tab label="Détails">…</mat-tab>
+</mat-tab-group>
+
+@use '@angular/material' as mat;
+
+.onglets-grands {
+  @include mat.tabs-overrides((
+    container-height: 64px,
+    label-text-size: var(--mat-sys-title-medium-size),
+    label-text-line-height: var(--mat-sys-title-medium-line-height),
+  ));
+}`,
 };
 
 @Component({
@@ -233,10 +289,90 @@ const SNIPPETS = {
         </mat-tab-group>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="340px"
+      title="Personnalisation (jetons)"
+      description="Le mixin Sass mat.tabs-overrides règle couleurs, indicateur et dimensions des onglets ; les noms de jetons sont validés à la compilation. Les couleurs viennent des jetons système --mat-sys-* (rôles sur fond de surface, contraste conservé)."
+    >
+      <app-specimen label="Rôles de couleur" api="mat.tabs-overrides : active-indicator-color" [snippet]="snippets.couleurs">
+        <mat-tab-group class="onglets secondaire">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+        <mat-tab-group class="onglets tertiaire">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+        <mat-tab-group class="onglets erreur">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Indicateur épais et arrondi" api="mat.tabs-overrides : active-indicator-height" [snippet]="snippets.indicateur">
+        <mat-tab-group class="onglets indicateur-epais">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+      <app-specimen label="Onglets hauts, texte plus grand" api="mat.tabs-overrides : container-height" [snippet]="snippets.grands">
+        <mat-tab-group class="onglets onglets-grands">
+          <mat-tab label="Général"><p>Contenu général</p></mat-tab>
+          <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+        </mat-tab-group>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     .onglets {
       width: 100%;
+    }
+
+    @mixin role($couleur) {
+      @include mat.tabs-overrides(
+        (
+          active-indicator-color: $couleur,
+          active-hover-indicator-color: $couleur,
+          active-focus-indicator-color: $couleur,
+          active-label-text-color: $couleur,
+          active-hover-label-text-color: $couleur,
+          active-focus-label-text-color: $couleur,
+          active-ripple-color: $couleur,
+        )
+      );
+    }
+
+    .secondaire {
+      @include role(var(--mat-sys-secondary));
+    }
+
+    .tertiaire {
+      @include role(var(--mat-sys-tertiary));
+    }
+
+    .erreur {
+      @include role(var(--mat-sys-error));
+    }
+
+    .indicateur-epais {
+      @include mat.tabs-overrides(
+        (
+          active-indicator-height: 4px,
+          active-indicator-shape: var(--mat-sys-corner-full),
+        )
+      );
+    }
+
+    .onglets-grands {
+      @include mat.tabs-overrides(
+        (
+          container-height: 64px,
+          label-text-size: var(--mat-sys-title-medium-size),
+          label-text-line-height: var(--mat-sys-title-medium-line-height),
+        )
+      );
     }
   `,
 })
