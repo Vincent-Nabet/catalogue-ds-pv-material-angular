@@ -1,7 +1,10 @@
-import { Component, ElementRef, afterRenderEffect, signal, viewChildren } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, computed, inject, signal, viewChildren } from '@angular/core';
 import { DS_PREFIX } from '../../../core/tokens/color-roles';
+import { detectedIds, missing } from '../../../core/tokens/discover-tokens';
 import { formatCssValue, readValue } from '../../../core/tokens/read-css';
+import { TokenCatalog } from '../../../core/tokens/token-catalog';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
+import { MissingTokens } from '../../../shared/missing-tokens/missing-tokens';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { TokenBadge } from '../../../shared/token-badge/token-badge';
@@ -38,13 +41,14 @@ const KEY = {
 
 @Component({
   selector: 'app-formes-espacements-page',
-  imports: [Specimen, SpecimenSection, TokenBadge],
+  imports: [MissingTokens, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Formes et espacements</h1>
     <p class="page-intro">
       Rayons, espacements, élévations et opacités d'état du thème courant, avec les valeurs lues
       dans le CSS chargé.
     </p>
+    <app-missing-tokens [names]="missingTokens()" />
 
     <app-specimen-section title="Rayons" minWidth="180px">
       @for (name of corners; track name) {
@@ -73,7 +77,7 @@ const KEY = {
         description="Rayons au-delà de l'échelle MD3. Jeton personnalisé : absent de Material Design 3, le design system le génère en variable --app-shape-corner-*."
         minWidth="180px"
       >
-        @for (name of expressiveCorners; track name) {
+        @for (name of expressiveCorners(); track name) {
           <app-specimen
             [label]="name"
             [api]="prefix + 'shape-corner-' + name"
@@ -99,7 +103,7 @@ const KEY = {
         description="Largeur de chaque barre = valeur du jeton. Jeton personnalisé : absent de Material Design 3, le design system le génère en variable --app-spacing-*."
         minWidth="280px"
       >
-        @for (name of spacings; track name) {
+        @for (name of spacings(); track name) {
           <app-specimen
             [label]="name"
             [api]="prefix + 'spacing-' + name"
@@ -259,8 +263,16 @@ const KEY = {
 })
 export class FormesEspacementsPage {
   protected readonly corners = CORNERS;
-  protected readonly expressiveCorners = EXPRESSIVE_CORNERS;
-  protected readonly spacings = SPACINGS;
+  private readonly found = inject(TokenCatalog).names;
+  /** Listes écrites à la main, suivies des jetons `--app-*` détectés dans le CSS qui n'y figurent pas. */
+  protected readonly expressiveCorners = computed(() => [
+    ...EXPRESSIVE_CORNERS,
+    ...detectedIds(this.found() ?? [], DS_PREFIX, 'corner', EXPRESSIVE_CORNERS),
+  ]);
+  protected readonly spacings = computed(() => [
+    ...SPACINGS,
+    ...detectedIds(this.found() ?? [], DS_PREFIX, 'spacing', SPACINGS),
+  ]);
   protected readonly levels = LEVELS;
   protected readonly states = STATES.map(([id, label]) => ({ id, label }));
   protected readonly keys = KEY;
@@ -268,6 +280,14 @@ export class FormesEspacementsPage {
 
   private readonly themeKey = injectThemeKey();
   protected readonly designSystem = injectIsDesignSystem();
+  protected readonly missingTokens = computed(() => {
+    const found = this.found();
+    const listed = [
+      ...EXPRESSIVE_CORNERS.map((name) => `${this.prefix}shape-corner-${name}`),
+      ...SPACINGS.map((name) => `${this.prefix}spacing-${name}`),
+    ];
+    return this.designSystem() && found ? missing(listed, found) : [];
+  });
 
   private readonly probes = viewChildren<ElementRef<HTMLElement>>('lecture');
   private readonly values = signal<Record<string, string>>({});

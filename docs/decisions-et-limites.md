@@ -75,8 +75,31 @@ La page est conservée (`src/app/pages/fondations/matrice-contraste/matrice-cont
 
 puis passer le test du registre à 4 pages Fondations et mettre à jour les compteurs de la documentation. Les mentions de la matrice ci-dessous décrivent la page telle qu'elle a été vérifiée avant son retrait.
 
-### Limites des pages Fondations
+### Détection dynamique des jetons
 
+Un nouveau jeton `--app-*` du design system apparaît sans modifier le code ; un jeton attendu mais absent est signalé. Les listes écrites à la main (`COLOR_ROLES`, `COLOR_PAIRS`, `CORNERS`…) restent la référence pour les libellés, l'ordre et les paires de contraste : les jetons détectés sont une couche en plus.
+
+| Sujet | Décision | Pourquoi |
+|---|---|---|
+| Quand | À l'exécution : parcours de `document.styleSheets`, pas de manifeste généré ; `scripts/themes/` inchangé | Couvre aussi un CSS ajouté à la main ; pas d'étape de plus à oublier. Vérifié en `ng serve` et sur le build de production (41 jetons trouvés dans les deux) |
+| Jeton attendu mais absent | Note visible discrète « Jetons attendus mais absents du CSS chargé », en mode design system seulement ; ni `console.error` ni alerte | `npm run a11y` échoue sur les erreurs console ; un thème Angular Material n'est pas censé avoir ces jetons |
+| Couleurs détectées | Section « Autres rôles » (pastille, hex, « Jeton personnalisé »), sans paire de contraste | Le fond d'un rôle inconnu ne se devine pas : une paire = une ligne dans `color-roles.ts` |
+| Jetons MD3 (`--mat-sys-*`) | Non détectés | Jeu stable ; un nom MD3 est ambigu (couleur, typographie, niveau ?) |
+
+**Ce qui est détecté** (préfixe `--app-`, `DS_PREFIX`) : `--app-color-<rôle>` (page Couleurs), `--app-shape-corner-<nom>` (Rayons Expressive), `--app-spacing-<nom>` (Espacements), et tout `--app-typescale-*` absent des 13 graisses renforcées montrées (« Autres jetons de typographie », valeur brute ; y compris une éventuelle `--app-typescale-emphasized-label-large-weight`, les graisses de Label Large et Moyen restant celles de Material).
+
+**Ce qui ne l'est pas** :
+
+- les jetons MD3 ;
+- les jetons `--app-*` de forme de nom inconnue (autre que `color-`, `shape-corner-`, `spacing-`, `typescale-`) : aucune section « Autres jetons du design system » n'a été ajoutée (affichage sans mise en forme, à décider avec les designers) ;
+- un rôle `--app-color-<nom>` dont le nom existe déjà dans `COLOR_ROLES` (même en MD3, ex. `--app-color-primary`) : ambigu, il est ignoré ;
+- une feuille de style cross-origin (Google Fonts) : ignorée, elle ne porte pas de jeton.
+
+**Jeton déclaré par une seule famille de thème** : la détection fait l'union de tous les blocs (`.theme-app`, `.theme-app-contraste-moyen`…), mais un rôle de couleur détecté qui n'a pas de valeur dans le thème courant est **masqué** (pas de ligne « — » parasite) ; il apparaît dans le thème qui le déclare. Les rôles listés à la main, eux, gardent « — ».
+
+**Note « absents »** : comparée à l'union de tous les thèmes (un jeton déclaré dans un seul thème n'est pas « absent »). Elle n'apparaît qu'une fois au moins une variable `--app-*` trouvée : tant que le CSS n'est pas chargé, ou si aucune variable `--app-*` n'existe du tout, rien n'est affiché.
+
+### Limites des pages Fondations
 - **WCAG 2.x seulement** (pas d'APCA) ; texte (4,5), éléments d'interface (3) et décoratif (sans seuil). Pas de contraste des états (survol, focus).
 - **Paires « observées dans les composants » à compléter à la main** (2 aujourd'hui : `on-surface` sur `secondary-container`, `primary` sur `surface-container-low`) : voir [ajouter-un-composant.md](ajouter-un-composant.md) §6.
 - **Régressions peu sélectives** : la règle « plus de 0,01 sous la famille précédente » signale aussi des écarts anodins (ex. `on-surface` sur `surface-container-low` : 16,00 en Standard, 15,63 en Contraste moyen, tous deux très conformes). En Contraste moyen clair, 15 paires sont ainsi marquées. Le filtre « Échecs et régressions seulement » les inclut ; seuls les **échecs** correspondent à une non-conformité.

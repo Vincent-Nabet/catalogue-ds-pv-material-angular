@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (59, Vitest)
+## Tests (76, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -27,6 +27,9 @@
 | `core/tokens/contrast.spec.ts` | noir/blanc = 21, olive `#86A315` sur `#FAFAF5` ≈ 2,76, analyse de `rgb()` / `rgba()`, alpha < 1 sans ratio, troncature (4,4999 → « 4,49 : 1 »), seuil à la frontière |
 | `core/tokens/color-roles.spec.ts` | ids de paires uniques, rôles connus, un seul groupe par rôle, 49 rôles MD3 + 15 du design system, pas de `shadow` / `scrim` en paire, seuil selon le type |
 | `core/tokens/contrast-matrix.spec.ts` | statuts (ok, échec, sans seuil, absent), régression (élevé < moyen, même mode seulement, tolérance 0,01), Monochrome jamais en régression, résumé par mode |
+| `core/tokens/discover-tokens.spec.ts` | détection des variables (règle simple, `@media` / `@layer` / `@supports`, `@import`, feuille inaccessible ignorée, union des classes `theme-*`, préfixe, noms hors préfixe), classement des noms, différences d'ensembles dans l'ordre d'apparition |
+| `shared/missing-tokens/missing-tokens.spec.ts` | rien d'affiché sans jeton manquant, liste des jetons manquants |
+| `color-roles.spec.ts` (ajouts) | `colorVar` d'un rôle hors liste avec origine explicite, variables attendues du design system, rôles détectés (rôles déjà listés et jetons hors couleur ignorés) |
 | `catalog.registry.spec.ts` (ajouts) | `fondations` en première catégorie avec 3 pages, `COMPONENT_ENTRIES` = 35 |
 
 ### Tests du script de génération des thèmes (`node:test`)

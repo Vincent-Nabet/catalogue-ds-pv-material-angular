@@ -20,6 +20,11 @@ export function readValue(element: HTMLElement, property: keyof CSSStyleDeclarat
   return String(getComputedStyle(element)[property]);
 }
 
+/** Texte d'une propriété personnalisée (`--x`) tel que déclaré, vu depuis l'élément (elle s'hérite). */
+export function readCustomProperty(element: HTMLElement, cssVar: string): string {
+  return getComputedStyle(element).getPropertyValue(cssVar).trim();
+}
+
 /** `57px` → `57 px`, `-0.25px` → `-0,25 px`, `0.08` → `0,08` : valeur calculée, à la française. */
 export function formatCssValue(value: string): string {
   return value.replace('.', ',').replace(/px$/, ' px');

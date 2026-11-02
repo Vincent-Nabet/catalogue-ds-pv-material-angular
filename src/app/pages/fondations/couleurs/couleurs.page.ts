@@ -1,10 +1,22 @@
-import { Component, ElementRef, afterRenderEffect, computed, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, afterRenderEffect, computed, inject, signal, viewChild } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { COLOR_ROLES, ColorPair, colorVar, pairLabel, pairsOfGroup, unpairedRoles } from '../../../core/tokens/color-roles';
+import {
+  COLOR_ROLES,
+  ColorPair,
+  colorVar,
+  detectedRoles,
+  listedDesignSystemColorVars,
+  pairLabel,
+  pairsOfGroup,
+  unpairedRoles,
+} from '../../../core/tokens/color-roles';
+import { missing } from '../../../core/tokens/discover-tokens';
 import { Rgba, contrastRatio, formatContrast, toHex } from '../../../core/tokens/contrast';
 import { CellStatus, STATUS_VIEW, pairStatus } from '../../../core/tokens/contrast-matrix';
 import { readColor } from '../../../core/tokens/read-css';
+import { TokenCatalog } from '../../../core/tokens/token-catalog';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
+import { MissingTokens } from '../../../shared/missing-tokens/missing-tokens';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { TokenBadge } from '../../../shared/token-badge/token-badge';
@@ -40,7 +52,7 @@ function minimumText(min: number): string {
 
 @Component({
   selector: 'app-couleurs-page',
-  imports: [MatIcon, Specimen, SpecimenSection, TokenBadge],
+  imports: [MatIcon, MissingTokens, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Couleurs</h1>
     <p class="page-intro">
@@ -48,6 +60,7 @@ function minimumText(min: number): string {
       WCAG&nbsp;2.x lu dans le CSS chargé. Changer de thème ou de mode relit les valeurs. Le rapport
       est tronqué à deux décimales, comme dans axe-core.
     </p>
+    <app-missing-tokens [names]="missingTokens()" />
     <span #probe hidden aria-hidden="true"></span>
 
     @for (section of sections(); track section.group.id) {
@@ -184,6 +197,13 @@ export class CouleursPage {
   private readonly themeKey = injectThemeKey();
 
   protected readonly designSystem = injectIsDesignSystem();
+  private readonly catalog = inject(TokenCatalog);
+  /** Rôles `--app-color-*` déclarés dans le CSS mais absents de `COLOR_ROLES` : une couche en plus de la liste écrite à la main. */
+  private readonly detected = computed(() => detectedRoles(this.catalog.names() ?? []));
+  protected readonly missingTokens = computed(() => {
+    const found = this.catalog.names();
+    return this.designSystem() && found ? missing(listedDesignSystemColorVars(), found) : [];
+  });
   private readonly colors = signal<Record<string, Rgba | null>>({});
 
   protected readonly sections = computed(() => {
@@ -200,7 +220,7 @@ export class CouleursPage {
   protected readonly others = computed(() => {
     const colors = this.colors();
     const designSystem = this.designSystem();
-    return unpairedRoles()
+    const listed = unpairedRoles()
       .filter(({ group }) => designSystem || group.origin === 'md3')
       .map(({ group, role }) => ({
         role,
@@ -208,6 +228,18 @@ export class CouleursPage {
         css: `var(${colorVar(role, '--mat-sys-')})`,
         hex: this.hex(colors[role]),
       }));
+    // Un rôle détecté sans valeur dans le thème courant (déclaré par une autre famille seulement) est masqué.
+    const detected = designSystem
+      ? this.detected()
+          .filter((role) => colors[role])
+          .map((role) => ({
+            role,
+            custom: true,
+            css: `var(${colorVar(role, '--mat-sys-', 'design-system')})`,
+            hex: this.hex(colors[role]),
+          }))
+      : [];
+    return [...listed, ...detected];
   });
 
   constructor() {
@@ -215,8 +247,10 @@ export class CouleursPage {
       read: () => {
         this.themeKey();
         const probe = this.probe().nativeElement;
+        const listed = ALL_ROLES.map((role) => [role, colorVar(role, '--mat-sys-')]);
+        const detected = this.detected().map((role) => [role, colorVar(role, '--mat-sys-', 'design-system')]);
         this.colors.set(
-          Object.fromEntries(ALL_ROLES.map((role) => [role, readColor(probe, colorVar(role, '--mat-sys-'))])),
+          Object.fromEntries([...listed, ...detected].map(([role, cssVar]) => [role, readColor(probe, cssVar)])),
         );
       },
     });

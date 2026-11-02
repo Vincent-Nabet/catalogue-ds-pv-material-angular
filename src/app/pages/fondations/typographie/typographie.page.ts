@@ -1,6 +1,10 @@
-import { Component, ElementRef, afterRenderEffect, computed, signal, viewChildren } from '@angular/core';
-import { formatCssValue, readValue } from '../../../core/tokens/read-css';
+import { Component, ElementRef, afterRenderEffect, computed, inject, signal, viewChildren } from '@angular/core';
+import { DS_PREFIX } from '../../../core/tokens/color-roles';
+import { missing, unlisted } from '../../../core/tokens/discover-tokens';
+import { formatCssValue, readCustomProperty, readValue } from '../../../core/tokens/read-css';
+import { TokenCatalog } from '../../../core/tokens/token-catalog';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
+import { MissingTokens } from '../../../shared/missing-tokens/missing-tokens';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { TokenBadge } from '../../../shared/token-badge/token-badge';
@@ -30,6 +34,12 @@ const FAMILIES = [
   }),
 }));
 
+const TYPESCALE = `--${DS_PREFIX}-typescale-`;
+/** Les graisses renforcées déjà montrées : tout autre `--app-typescale-*` détecté va dans « Autres jetons ». */
+const SHOWN_WEIGHTS = FAMILIES.flatMap((family) => family.styles)
+  .map((style) => style.weightVar)
+  .filter((weightVar) => weightVar.startsWith(TYPESCALE));
+
 interface TypeValues {
   font: string;
   size: string;
@@ -47,13 +57,14 @@ function describe(values: TypeValues | undefined): string {
 
 @Component({
   selector: 'app-typographie-page',
-  imports: [Specimen, SpecimenSection, TokenBadge],
+  imports: [MissingTokens, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Typographie</h1>
     <p class="page-intro">
       Les 15 styles de texte Material Design 3 du thème courant, avec les valeurs lues dans le CSS
       chargé : police, taille, interligne, graisse et interlettrage.
     </p>
+    <app-missing-tokens [names]="missingTokens()" />
 
     @for (family of sections(); track family.id) {
       <app-specimen-section [title]="family.label" [minWidth]="family.minWidth">
@@ -105,6 +116,22 @@ function describe(values: TypeValues | undefined): string {
           </app-specimen>
         }
       </app-specimen-section>
+      @if (otherTokens().length > 0) {
+        <app-specimen-section
+          title="Autres jetons de typographie (design system)"
+          description="Jetons --app-typescale-* détectés dans le CSS, absents des graisses renforcées ci-dessus : valeur brute."
+          minWidth="420px"
+        >
+          @for (token of otherTokens(); track token.name) {
+            <app-specimen [label]="token.label" [api]="token.name">
+              <div class="specimen-contenu">
+                <app-token-badge />
+                <p class="valeurs">{{ token.value }}</p>
+              </div>
+            </app-specimen>
+          }
+        </app-specimen-section>
+      }
     } @else {
       <app-specimen-section title="Graisses renforcées (design system)" designSystemOnly />
     }
@@ -131,6 +158,20 @@ function describe(values: TypeValues | undefined): string {
 export class TypographiePage {
   private readonly themeKey = injectThemeKey();
   protected readonly designSystem = injectIsDesignSystem();
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly found = inject(TokenCatalog).names;
+  private readonly otherNames = computed(() =>
+    unlisted(
+      Array.from(this.found() ?? []).filter((name) => name.startsWith(TYPESCALE)),
+      SHOWN_WEIGHTS,
+    ),
+  );
+  protected readonly missingTokens = computed(() => {
+    const found = this.found();
+    return this.designSystem() && found ? missing(SHOWN_WEIGHTS, found) : [];
+  });
+  private readonly otherValues = signal<Record<string, string>>({});
 
   private readonly samples = viewChildren<ElementRef<HTMLElement>>('echantillon');
   private readonly emphasizedSamples = viewChildren<ElementRef<HTMLElement>>('renforce');
@@ -162,6 +203,14 @@ export class TypographiePage {
     }));
   });
 
+  protected readonly otherTokens = computed(() =>
+    this.otherNames().map((name) => ({
+      name,
+      label: name.slice(TYPESCALE.length),
+      value: this.otherValues()[name] ?? '',
+    })),
+  );
+
   constructor() {
     afterRenderEffect({
       read: () => {
@@ -177,6 +226,9 @@ export class TypographiePage {
           };
         }
         this.values.set(values);
+        this.otherValues.set(
+          Object.fromEntries(this.otherNames().map((name) => [name, readCustomProperty(this.host, name)])),
+        );
         this.emphasizedWeights.set(
           Object.fromEntries(
             this.emphasizedSamples().map(({ nativeElement: el }) => [

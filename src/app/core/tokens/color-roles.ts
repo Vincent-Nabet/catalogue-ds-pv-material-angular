@@ -2,6 +2,7 @@
  * Source unique des rôles de couleur et des paires (texte / fond) contrôlées, utilisée par les
  * pages Couleurs et Matrice de contraste. Ajouter une paire ou un rôle = une ligne ici.
  */
+import { classifyToken } from './discover-tokens';
 
 /**
  * Préfixe des variables propres au design system (`--app-color-*`), le `--nom` de
@@ -182,9 +183,36 @@ export function roleOrigin(role: string): RoleOrigin {
   return findGroup(role)?.origin ?? 'md3';
 }
 
-/** Nom de la variable CSS d'un rôle (`on-primary` → `--mat-sys-on-primary`, `--app-color-success`…). */
-export function colorVar(role: string, md3Prefix: Md3Prefix): string {
-  return roleOrigin(role) === 'md3' ? `${md3Prefix}${role}` : `--${DS_PREFIX}-color-${role}`;
+/**
+ * Nom de la variable CSS d'un rôle (`on-primary` → `--mat-sys-on-primary`, `--app-color-success`…).
+ * L'origine se déduit de `COLOR_ROLES` ; un rôle détecté dans le CSS mais absent de la liste doit
+ * la recevoir explicitement (sinon il serait pris pour un rôle MD3).
+ */
+export function colorVar(
+  role: string,
+  md3Prefix: Md3Prefix,
+  origin: RoleOrigin = roleOrigin(role),
+): string {
+  return origin === 'md3' ? `${md3Prefix}${role}` : `--${DS_PREFIX}-color-${role}`;
+}
+
+/** Variables `--app-color-*` attendues : les rôles du design system de `COLOR_ROLES`. */
+export function listedDesignSystemColorVars(): string[] {
+  return COLOR_ROLES.filter((group) => group.origin === 'design-system').flatMap((group) =>
+    group.roles.map((role) => colorVar(role, '--mat-sys-')),
+  );
+}
+
+/**
+ * Rôles `--app-color-*` présents dans `found` (noms de variables CSS) mais absents de `COLOR_ROLES`,
+ * dans l'ordre d'apparition. Un nom déjà listé (même en MD3) est ignoré : le rôle serait ambigu.
+ */
+export function detectedRoles(found: Iterable<string>): string[] {
+  const known = new Set(COLOR_ROLES.flatMap((group) => group.roles));
+  return Array.from(found)
+    .map((name) => classifyToken(name, DS_PREFIX))
+    .filter(({ kind, id }) => kind === 'color' && !known.has(id))
+    .map(({ id }) => id);
 }
 
 /** Groupe d'une paire : celui de son rôle de premier plan. */
