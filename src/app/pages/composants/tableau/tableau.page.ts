@@ -1,6 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatCell, MatCellDef, MatColumnDef, MatFooterCell, MatFooterCellDef, MatFooterRow, MatFooterRowDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable, MatNoDataRow, MatTextColumn } from '@angular/material/table';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -132,6 +134,25 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<table mat-table class="${id}" [dataSource]="produits">
+  <!-- colonnes : référence, nom, prix -->
+  <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+  <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+</table>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.table-overrides((
+    background-color: var(--app-color-${id}-container),
+    header-headline-color: var(--app-color-on-${id}-container),
+    row-item-label-text-color: var(--app-color-on-${id}-container),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-tableau-page',
   imports: [
@@ -155,6 +176,7 @@ const SNIPPETS = {
     SpecimenSection,
     MatNoDataRow,
     MatTextColumn,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Tableau</h1>
@@ -364,6 +386,37 @@ const SNIPPETS = {
         </table>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="360px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond du tableau et texte des lignes et de l’en-tête ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <table mat-table class="perso" [dataSource]="produits" [attr.aria-label]="'Produits, couleurs ' + family.label">
+                <ng-container matColumnDef="reference">
+                  <th mat-header-cell *matHeaderCellDef>Référence</th>
+                  <td mat-cell *matCellDef="let produit">{{ produit.reference }}</td>
+                </ng-container>
+                <ng-container matColumnDef="nom">
+                  <th mat-header-cell *matHeaderCellDef>Nom</th>
+                  <td mat-cell *matCellDef="let produit">{{ produit.nom }}</td>
+                </ng-container>
+                <ng-container matColumnDef="prix">
+                  <th mat-header-cell *matHeaderCellDef>Prix</th>
+                  <td mat-cell *matCellDef="let produit">{{ produit.prix | currency: 'EUR' }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="colonnes"></tr>
+                <tr mat-row *matRowDef="let row; columns: colonnes"></tr>
+              </table>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -378,6 +431,16 @@ const SNIPPETS = {
           background-color: var(--mat-sys-secondary-container),
           header-headline-color: var(--mat-sys-on-secondary-container),
           row-item-label-text-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .perso {
+      @include mat.table-overrides(
+        (
+          background-color: var(--r-c),
+          header-headline-color: var(--r-sc),
+          row-item-label-text-color: var(--r-sc),
         )
       );
     }
@@ -434,6 +497,19 @@ const SNIPPETS = {
 })
 export class TableauPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: 'mat.table-overrides : background-color',
+      snippet: customSnippet(id),
+    })),
+  );
+
   protected readonly colonnes = ['reference', 'nom', 'prix'];
   protected readonly colonnesSelection = ['selection', 'nom', 'prix'];
   protected readonly produits: Produit[] = [
