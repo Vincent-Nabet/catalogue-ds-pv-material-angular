@@ -24,6 +24,51 @@ const SNIPPETS = {
   <mat-divider />
   <mat-list-item>Documents</mat-list-item>
 </mat-list>`,
+  epais: `<p>Au-dessus</p>
+<mat-divider class="trait-epais" />
+<p>En dessous</p>
+
+<div style="display: flex; align-items: center; gap: 16px; height: 40px">
+  <span>Gauche</span>
+  <mat-divider vertical class="trait-epais" style="height: 100%" />
+  <span>Droite</span>
+</div>
+
+@use '@angular/material' as mat;
+
+.trait-epais {
+  @include mat.divider-overrides((
+    width: 4px,
+  ));
+}`,
+  couleurs: `<mat-divider class="trait-primaire" />
+<p>Primaire</p>
+<mat-divider class="trait-tertiaire" />
+<p>Tertiaire</p>
+<mat-divider class="trait-erreur" />
+
+@use '@angular/material' as mat;
+
+.trait-primaire {
+  @include mat.divider-overrides((
+    width: 2px,
+    color: var(--mat-sys-primary),
+  ));
+}
+
+.trait-tertiaire {
+  @include mat.divider-overrides((
+    width: 2px,
+    color: var(--mat-sys-tertiary),
+  ));
+}
+
+.trait-erreur {
+  @include mat.divider-overrides((
+    width: 2px,
+    color: var(--mat-sys-error),
+  ));
+}`,
 };
 
 @Component({
@@ -66,8 +111,67 @@ const SNIPPETS = {
         </mat-list>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="340px"
+      title="Personnalisation (jetons)"
+      description="Épaisseur et couleur du trait se règlent avec le mixin Sass mat.divider-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Trait épais" api="mat.divider-overrides : width" [snippet]="snippets.epais">
+        <div class="bloc">
+          <p>Au-dessus</p>
+          <mat-divider class="trait-epais" />
+          <p>En dessous</p>
+        </div>
+        <div class="ligne">
+          <span>Gauche</span>
+          <mat-divider vertical class="vertical trait-epais" />
+          <span>Droite</span>
+        </div>
+      </app-specimen>
+      <app-specimen label="Couleurs de rôle" api="mat.divider-overrides : color" [snippet]="snippets.couleurs">
+        <div class="bloc">
+          <mat-divider class="trait-primaire" />
+          <p>Primaire</p>
+          <mat-divider class="trait-tertiaire" />
+          <p>Tertiaire</p>
+          <mat-divider class="trait-erreur" />
+        </div>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
+    .trait-epais {
+      @include mat.divider-overrides(
+        (
+          width: 4px,
+        )
+      );
+    }
+
+    @mixin trait($couleur) {
+      @include mat.divider-overrides(
+        (
+          width: 2px,
+          color: $couleur,
+        )
+      );
+    }
+
+    .trait-primaire {
+      @include trait(var(--mat-sys-primary));
+    }
+
+    .trait-tertiaire {
+      @include trait(var(--mat-sys-tertiary));
+    }
+
+    .trait-erreur {
+      @include trait(var(--mat-sys-error));
+    }
+
     .bloc {
       width: 100%;
     }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatGridList, MatGridTile, MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
+import { MatGridList, MatGridTile, MatGridTileFooterCssMatStyler, MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -45,11 +45,32 @@ const SNIPPETS = {
   <mat-grid-tile>1</mat-grid-tile>
   <mat-grid-tile>2</mat-grid-tile>
 </mat-grid-list>`,
+  texteEntete: `<mat-grid-list class="grille-texte" cols="2" rowHeight="128px" gutterSize="8px">
+  <mat-grid-tile>
+    <mat-grid-tile-header>Titre</mat-grid-tile-header>
+    Contenu
+    <mat-grid-tile-footer>Pied</mat-grid-tile-footer>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-grid-tile-header>Titre</mat-grid-tile-header>
+    Contenu
+    <mat-grid-tile-footer>Pied</mat-grid-tile-footer>
+  </mat-grid-tile>
+</mat-grid-list>
+
+@use '@angular/material' as mat;
+
+.grille-texte {
+  @include mat.grid-list-overrides((
+    tile-header-primary-text-size: var(--mat-sys-title-large-size),
+    tile-footer-primary-text-size: var(--mat-sys-label-large-size),
+  ));
+}`,
 };
 
 @Component({
   selector: 'app-grille-page',
-  imports: [MatGridList, MatGridTile, MatGridTileHeaderCssMatStyler, Specimen, SpecimenSection],
+  imports: [MatGridList, MatGridTile, MatGridTileFooterCssMatStyler, MatGridTileHeaderCssMatStyler, Specimen, SpecimenSection],
   template: `
     <h1>Grille</h1>
 
@@ -111,8 +132,31 @@ const SNIPPETS = {
         </mat-grid-list>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="360px"
+      title="Personnalisation (jetons)"
+      description="Le mixin Sass mat.grid-list-overrides règle uniquement la taille du texte des en-têtes et des pieds de tuile ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Texte d’en-tête et de pied" api="mat.grid-list-overrides : tile-header-primary-text-size" [snippet]="snippets.texteEntete">
+        <mat-grid-list class="grille-texte" cols="2" rowHeight="128px" gutterSize="8px">
+          <mat-grid-tile>
+            <mat-grid-tile-header>Titre</mat-grid-tile-header>
+            Contenu
+            <mat-grid-tile-footer>Pied</mat-grid-tile-footer>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-grid-tile-header>Titre</mat-grid-tile-header>
+            Contenu
+            <mat-grid-tile-footer>Pied</mat-grid-tile-footer>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-grid-list {
       width: 100%;
     }
@@ -122,6 +166,16 @@ const SNIPPETS = {
       color: var(--mat-sys-on-primary-container);
     }
 
+    .grille-texte {
+      @include mat.grid-list-overrides(
+        (
+          tile-header-primary-text-size: var(--mat-sys-title-large-size),
+          tile-footer-primary-text-size: var(--mat-sys-label-large-size),
+        )
+      );
+    }
+
+    mat-grid-tile .mat-grid-tile-footer,
     mat-grid-tile .mat-grid-tile-header {
       background: var(--mat-sys-primary);
       color: var(--mat-sys-on-primary);

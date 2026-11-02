@@ -23,6 +23,32 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
   unePage: `<mat-paginator [length]="5" [pageSize]="10" aria-label="Pagination" />`,
   panneau: `<mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
   [selectConfig]="{ disableOptionCentering: true }" aria-label="Pagination" />`,
+  couleurs: `<mat-paginator class="pagination-secondaire" [length]="100" [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]" aria-label="Pagination" />
+
+@use '@angular/material' as mat;
+
+.pagination-secondaire {
+  @include mat.paginator-overrides((
+    container-background-color: var(--mat-sys-secondary-container),
+    container-text-color: var(--mat-sys-on-secondary-container),
+    enabled-icon-color: var(--mat-sys-on-secondary-container),
+  ));
+}`,
+  grande: `<mat-paginator class="pagination-grande" [length]="100" [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]" aria-label="Pagination" />
+
+@use '@angular/material' as mat;
+
+.pagination-grande {
+  @include mat.paginator-overrides((
+    container-size: 72px,
+    container-text-size: var(--mat-sys-body-large-size),
+    container-text-line-height: var(--mat-sys-body-large-line-height),
+    select-trigger-text-size: var(--mat-sys-body-large-size),
+    page-size-select-width: 96px,
+  ));
+}`,
 };
 
 @Component({
@@ -73,10 +99,59 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
         />
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="440px"
+      title="Personnalisation (jetons)"
+      description="Couleurs, hauteur et typographie du paginateur se règlent avec le mixin Sass mat.paginator-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Couleurs de rôle (secondaire)" api="mat.paginator-overrides : container-background-color" [snippet]="snippets.couleurs">
+        <mat-paginator
+          class="pagination-secondaire"
+          [length]="100"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25]"
+          aria-label="Pagination secondaire"
+        />
+      </app-specimen>
+      <app-specimen label="Grande taille" api="mat.paginator-overrides : container-size" [snippet]="snippets.grande">
+        <mat-paginator
+          class="pagination-grande"
+          [length]="100"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 25]"
+          aria-label="Pagination grande taille"
+        />
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-paginator {
       width: 100%;
+    }
+
+    .pagination-secondaire {
+      @include mat.paginator-overrides(
+        (
+          container-background-color: var(--mat-sys-secondary-container),
+          container-text-color: var(--mat-sys-on-secondary-container),
+          enabled-icon-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .pagination-grande {
+      @include mat.paginator-overrides(
+        (
+          container-size: 72px,
+          container-text-size: var(--mat-sys-body-large-size),
+          container-text-line-height: var(--mat-sys-body-large-line-height),
+          select-trigger-text-size: var(--mat-sys-body-large-size),
+          page-size-select-width: 96px,
+        )
+      );
     }
   `,
 })

@@ -88,6 +88,87 @@ const SNIPPETS = {
   <mat-list-option>Petite</mat-list-option>
   <mat-list-option selected>Moyenne</mat-list-option>
 </mat-selection-list>`,
+  couleurs: `<mat-list class="liste-tertiaire">
+  <mat-list-item>
+    <mat-icon matListItemIcon>folder</mat-icon>
+    <span matListItemTitle>Photos</span>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon matListItemIcon>description</mat-icon>
+    <span matListItemTitle>Documents</span>
+  </mat-list-item>
+</mat-list>
+
+@use '@angular/material' as mat;
+
+.liste-tertiaire {
+  @include mat.list-overrides((
+    list-item-container-color: var(--mat-sys-tertiary-container),
+    list-item-label-text-color: var(--mat-sys-on-tertiary-container),
+    list-item-hover-label-text-color: var(--mat-sys-on-tertiary-container),
+    list-item-focus-label-text-color: var(--mat-sys-on-tertiary-container),
+    list-item-leading-icon-color: var(--mat-sys-on-tertiary-container),
+    list-item-hover-leading-icon-color: var(--mat-sys-on-tertiary-container),
+  ));
+}`,
+  indicateur: `<mat-nav-list class="liste-indicateur" aria-label="Navigation à indicateur personnalisé">
+  <a mat-list-item [activated]="true">Accueil</a>
+  <a mat-list-item>Documents</a>
+  <a mat-list-item>Paramètres</a>
+</mat-nav-list>
+
+@use '@angular/material' as mat;
+
+.liste-indicateur {
+  @include mat.list-overrides((
+    active-indicator-color: var(--mat-sys-tertiary-container),
+    active-indicator-shape: var(--mat-sys-corner-small),
+  ));
+}`,
+  compacte: `<mat-list class="liste-compacte">
+  <mat-list-item>
+    <mat-icon matListItemIcon>folder</mat-icon>
+    <span matListItemTitle>Photos</span>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon matListItemIcon>description</mat-icon>
+    <span matListItemTitle>Documents</span>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon matListItemIcon>music_note</mat-icon>
+    <span matListItemTitle>Musique</span>
+  </mat-list-item>
+</mat-list>
+
+@use '@angular/material' as mat;
+
+.liste-compacte {
+  @include mat.list-overrides((
+    list-item-one-line-container-height: 40px,
+    list-item-leading-icon-size: 20px,
+    list-item-label-text-size: var(--mat-sys-body-medium-size),
+  ));
+}`,
+  typographie: `<mat-list class="liste-typo">
+  <mat-list-item>
+    <span matListItemTitle>Photos</span>
+    <span matListItemLine>Mis à jour hier</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Documents</span>
+    <span matListItemLine>Mis à jour aujourd’hui</span>
+  </mat-list-item>
+</mat-list>
+
+@use '@angular/material' as mat;
+
+.liste-typo {
+  @include mat.list-overrides((
+    list-item-label-text-weight: var(--mat-sys-title-medium-weight),
+    list-item-supporting-text-size: var(--mat-sys-body-small-size),
+    list-item-supporting-text-color: var(--mat-sys-primary),
+  ));
+}`,
 };
 
 @Component({
@@ -214,12 +295,112 @@ const SNIPPETS = {
         </mat-selection-list>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="360px"
+      title="Personnalisation (jetons)"
+      description="Couleurs, indicateur actif, hauteur des lignes et typographie se règlent avec le mixin Sass mat.list-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Couleurs de rôle (tertiaire)" api="mat.list-overrides : list-item-container-color" [snippet]="snippets.couleurs">
+        <mat-list class="liste-tertiaire">
+          <mat-list-item>
+            <mat-icon matListItemIcon>folder</mat-icon>
+            <span matListItemTitle>Photos</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>description</mat-icon>
+            <span matListItemTitle>Documents</span>
+          </mat-list-item>
+        </mat-list>
+      </app-specimen>
+      <app-specimen label="Indicateur actif personnalisé" api="mat.list-overrides : active-indicator-shape" [snippet]="snippets.indicateur">
+        <mat-nav-list class="liste-indicateur" aria-label="Navigation à indicateur personnalisé">
+          <a mat-list-item [activated]="true">Accueil</a>
+          <a mat-list-item>Documents</a>
+          <a mat-list-item>Paramètres</a>
+        </mat-nav-list>
+      </app-specimen>
+      <app-specimen label="Liste compacte" api="mat.list-overrides : list-item-one-line-container-height" [snippet]="snippets.compacte">
+        <mat-list class="liste-compacte">
+          <mat-list-item>
+            <mat-icon matListItemIcon>folder</mat-icon>
+            <span matListItemTitle>Photos</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>description</mat-icon>
+            <span matListItemTitle>Documents</span>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>music_note</mat-icon>
+            <span matListItemTitle>Musique</span>
+          </mat-list-item>
+        </mat-list>
+      </app-specimen>
+      <app-specimen label="Typographie" api="mat.list-overrides : list-item-label-text-weight" [snippet]="snippets.typographie">
+        <mat-list class="liste-typo">
+          <mat-list-item>
+            <span matListItemTitle>Photos</span>
+            <span matListItemLine>Mis à jour hier</span>
+          </mat-list-item>
+          <mat-list-item>
+            <span matListItemTitle>Documents</span>
+            <span matListItemLine>Mis à jour aujourd’hui</span>
+          </mat-list-item>
+        </mat-list>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-list,
     mat-action-list,
     mat-selection-list {
       width: 100%;
+    }
+
+    .liste-tertiaire {
+      @include mat.list-overrides(
+        (
+          list-item-container-color: var(--mat-sys-tertiary-container),
+          list-item-label-text-color: var(--mat-sys-on-tertiary-container),
+          list-item-hover-label-text-color: var(--mat-sys-on-tertiary-container),
+          list-item-focus-label-text-color: var(--mat-sys-on-tertiary-container),
+          list-item-leading-icon-color: var(--mat-sys-on-tertiary-container),
+          list-item-hover-leading-icon-color: var(--mat-sys-on-tertiary-container),
+        )
+      );
+    }
+
+    .liste-indicateur {
+      width: 100%;
+
+      @include mat.list-overrides(
+        (
+          active-indicator-color: var(--mat-sys-tertiary-container),
+          active-indicator-shape: var(--mat-sys-corner-small),
+        )
+      );
+    }
+
+    .liste-compacte {
+      @include mat.list-overrides(
+        (
+          list-item-one-line-container-height: 40px,
+          list-item-leading-icon-size: 20px,
+          list-item-label-text-size: var(--mat-sys-body-medium-size),
+        )
+      );
+    }
+
+    .liste-typo {
+      @include mat.list-overrides(
+        (
+          list-item-label-text-weight: var(--mat-sys-title-medium-weight),
+          list-item-supporting-text-size: var(--mat-sys-body-small-size),
+          list-item-supporting-text-color: var(--mat-sys-primary),
+        )
+      );
     }
 
     .avatar {

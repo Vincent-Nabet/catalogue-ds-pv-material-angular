@@ -40,6 +40,49 @@ const SNIPPETS = {
   indentation: `<mat-tree-node *matTreeNodeDef="let noeud" matTreeNodePadding [matTreeNodePaddingIndent]="40">
   {{ noeud.nom }}
 </mat-tree-node>`,
+  couleurs: `<mat-tree class="arbre-colore" [dataSource]="donnees" [childrenAccessor]="enfants" #arbre>
+  <mat-tree-node *matTreeNodeDef="let noeud" matTreeNodePadding>
+    <button matIconButton disabled aria-hidden="true"></button>
+    {{ noeud.nom }}
+  </mat-tree-node>
+  <mat-tree-node *matTreeNodeDef="let noeud; when: aEnfants" matTreeNodePadding matTreeNodeToggle>
+    <button matIconButton matTreeNodeToggle [attr.aria-label]="'Basculer ' + noeud.nom">
+      <mat-icon>{{ arbre.isExpanded(noeud) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+    </button>
+    {{ noeud.nom }}
+  </mat-tree-node>
+</mat-tree>
+
+@use '@angular/material' as mat;
+
+.arbre-colore {
+  @include mat.tree-overrides((
+    container-background-color: var(--mat-sys-secondary-container),
+    node-text-color: var(--mat-sys-on-secondary-container),
+  ));
+}`,
+  grand: `<mat-tree class="arbre-grand" [dataSource]="donnees" [childrenAccessor]="enfants" #arbre>
+  <mat-tree-node *matTreeNodeDef="let noeud" matTreeNodePadding>
+    <button matIconButton disabled aria-hidden="true"></button>
+    {{ noeud.nom }}
+  </mat-tree-node>
+  <mat-tree-node *matTreeNodeDef="let noeud; when: aEnfants" matTreeNodePadding matTreeNodeToggle>
+    <button matIconButton matTreeNodeToggle [attr.aria-label]="'Basculer ' + noeud.nom">
+      <mat-icon>{{ arbre.isExpanded(noeud) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+    </button>
+    {{ noeud.nom }}
+  </mat-tree-node>
+</mat-tree>
+
+@use '@angular/material' as mat;
+
+.arbre-grand {
+  @include mat.tree-overrides((
+    node-min-height: 64px,
+    node-text-size: var(--mat-sys-title-large-size),
+    node-text-weight: var(--mat-sys-title-medium-weight),
+  ));
+}`,
 };
 
 @Component({
@@ -109,11 +152,73 @@ const SNIPPETS = {
         </mat-tree>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="360px"
+      title="Personnalisation (jetons)"
+      description="Fond, couleur du texte, hauteur des nœuds et typographie se règlent avec le mixin Sass mat.tree-overrides ; les noms de jetons sont validés à la compilation."
+    >
+      <app-specimen label="Couleurs de rôle (secondaire)" api="mat.tree-overrides : container-background-color" [snippet]="snippets.couleurs">
+        <mat-tree class="arbre-colore" [dataSource]="donnees" [childrenAccessor]="enfants" #colore>
+          <mat-tree-node *matTreeNodeDef="let noeud" matTreeNodePadding>
+            <button matIconButton disabled aria-hidden="true"></button>
+            {{ noeud.nom }}
+          </mat-tree-node>
+          <mat-tree-node *matTreeNodeDef="let noeud; when: aEnfants" matTreeNodePadding matTreeNodeToggle>
+            <button matIconButton matTreeNodeToggle [attr.aria-label]="'Basculer ' + noeud.nom">
+              <mat-icon>{{ colore.isExpanded(noeud) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+            </button>
+            {{ noeud.nom }}
+          </mat-tree-node>
+        </mat-tree>
+      </app-specimen>
+      <app-specimen label="Nœuds hauts et texte plus grand" api="mat.tree-overrides : node-min-height" [snippet]="snippets.grand">
+        <mat-tree class="arbre-grand" [dataSource]="donnees" [childrenAccessor]="enfants" #grand>
+          <mat-tree-node *matTreeNodeDef="let noeud" matTreeNodePadding>
+            <button matIconButton disabled aria-hidden="true"></button>
+            {{ noeud.nom }}
+          </mat-tree-node>
+          <mat-tree-node *matTreeNodeDef="let noeud; when: aEnfants" matTreeNodePadding matTreeNodeToggle>
+            <button matIconButton matTreeNodeToggle [attr.aria-label]="'Basculer ' + noeud.nom">
+              <mat-icon>{{ grand.isExpanded(noeud) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+            </button>
+            {{ noeud.nom }}
+          </mat-tree-node>
+        </mat-tree>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     mat-tree {
       width: 100%;
-      background: transparent;
+
+      // Les arbres se fondent dans le fond du specimen
+      @include mat.tree-overrides(
+        (
+          container-background-color: transparent,
+        )
+      );
+    }
+
+    .arbre-colore {
+      @include mat.tree-overrides(
+        (
+          container-background-color: var(--mat-sys-secondary-container),
+          node-text-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .arbre-grand {
+      @include mat.tree-overrides(
+        (
+          node-min-height: 64px,
+          node-text-size: var(--mat-sys-title-large-size),
+          node-text-weight: var(--mat-sys-title-medium-weight),
+        )
+      );
     }
     .noeud {
       display: flex;
