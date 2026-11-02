@@ -106,6 +106,8 @@ Angular Material 22 n'a pas d'API de taille. Pour montrer une taille ou une form
 .petit { @include taille(32px, 12px, 12px); }
 ```
 
+Pour une forme, passer par `mat.button-overrides` avec un jeton de l'échelle de formes plutôt qu'une valeur en dur : `filled-container-shape: var(--mat-sys-corner-small)` (`corner-none`, `extra-small`, `small`, `medium`, `large`, `extra-large`, `full`). Les noms de jetons sont validés à la compilation.
+
 Pour un bouton icône, surcharger aussi la taille du `.mat-icon` interne (le jeton `--mat-icon-button-icon-size` ne redimensionne pas `mat-icon`). Indiquer dans la description de section que la variante est obtenue par jetons et non par une API native, et mettre le CSS dans le snippet.
 
 ## 6. Ajouter un thème, un mode ou une densité

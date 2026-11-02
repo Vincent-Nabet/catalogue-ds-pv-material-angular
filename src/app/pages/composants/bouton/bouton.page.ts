@@ -79,13 +79,21 @@ const SNIPPETS = {
 }`,
   angulaire: `<button matButton="filled" class="angulaire">Angulaire</button>
 
+@use '@angular/material' as mat;
+
 .angulaire {
-  --mat-button-filled-container-shape: 0;
+  @include mat.button-overrides((
+    filled-container-shape: var(--mat-sys-corner-none),
+  ));
 }`,
   arrondi: `<button matButton="filled" class="arrondi">Arrondi</button>
 
+@use '@angular/material' as mat;
+
 .arrondi {
-  --mat-button-filled-container-shape: 8px;
+  @include mat.button-overrides((
+    filled-container-shape: var(--mat-sys-corner-small),
+  ));
 }`,
   couleurPrimaire: `<button matButton="filled">Rempli</button>
 
@@ -388,16 +396,16 @@ const SNIPPETS = {
       </app-specimen>
     </app-specimen-section>
 
-    <app-specimen-section title="Formes" description="Rayon des angles via le jeton --mat-button-*-container-shape.">
+    <app-specimen-section title="Formes" description="Rayon des angles : le mixin mat.button-overrides reçoit un jeton de l’échelle de formes --mat-sys-corner-* (container-shape).">
       <app-specimen label="Pilule (défaut)" api="corner-full" [snippet]="snippets.pilule">
         <button matButton="filled">Rempli</button>
         <button matButton="outlined">Contour</button>
       </app-specimen>
-      <app-specimen label="Arrondi" api="--mat-button-*-container-shape: 8px" [snippet]="snippets.arrondi">
+      <app-specimen label="Arrondi" api="--mat-sys-corner-small" [snippet]="snippets.arrondi">
         <button matButton="filled" class="arrondi">Rempli</button>
         <button matButton="outlined" class="arrondi">Contour</button>
       </app-specimen>
-      <app-specimen label="Angulaire" api="--mat-button-*-container-shape: 0" [snippet]="snippets.angulaire">
+      <app-specimen label="Angulaire" api="--mat-sys-corner-none" [snippet]="snippets.angulaire">
         <button matButton="filled" class="angulaire">Rempli</button>
         <button matButton="outlined" class="angulaire">Contour</button>
       </app-specimen>
@@ -438,9 +446,15 @@ const SNIPPETS = {
     }
 
     @mixin forme($rayon) {
-      @each $variante in (filled, tonal, outlined, text, protected) {
-        --mat-button-#{$variante}-container-shape: #{$rayon};
-      }
+      @include mat.button-overrides(
+        (
+          filled-container-shape: $rayon,
+          tonal-container-shape: $rayon,
+          outlined-container-shape: $rayon,
+          text-container-shape: $rayon,
+          protected-container-shape: $rayon,
+        )
+      );
     }
 
     .petit {
@@ -456,11 +470,11 @@ const SNIPPETS = {
     }
 
     .arrondi {
-      @include forme(8px);
+      @include forme(var(--mat-sys-corner-small));
     }
 
     .angulaire {
-      @include forme(0);
+      @include forme(var(--mat-sys-corner-none));
     }
 
     .secondaire,
