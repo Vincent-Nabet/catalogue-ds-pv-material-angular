@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "dist/poc-ds-isagri/browser"
+
+# SPA Angular : toute route inconnue est servie par index.html (le routeur Angular prend le relais).
+# Sans status 200, l'URL resterait en 404. Les fichiers statiques existants (JS, CSS, images) restent
+# prioritaires : Netlify n'applique la règle que si aucun fichier ne correspond (force = false par défaut).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
