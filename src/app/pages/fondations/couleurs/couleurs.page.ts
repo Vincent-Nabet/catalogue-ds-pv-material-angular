@@ -2,7 +2,7 @@ import { Component, ElementRef, afterRenderEffect, computed, signal, viewChild }
 import { MatIcon } from '@angular/material/icon';
 import { COLOR_ROLES, ColorPair, colorVar, pairLabel, pairsOfGroup, unpairedRoles } from '../../../core/tokens/color-roles';
 import { Rgba, contrastRatio, formatContrast, toHex } from '../../../core/tokens/contrast';
-import { STATUS_VIEW, pairStatus } from '../../../core/tokens/contrast-matrix';
+import { CellStatus, STATUS_VIEW, pairStatus } from '../../../core/tokens/contrast-matrix';
 import { readColor } from '../../../core/tokens/read-css';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -16,6 +16,18 @@ function snippetOf(pair: ColorPair, fgVar: string, bgVar: string): string {
     ? `color: var(${fgVar});\nbackground: var(${bgVar});`
     : `border: 2px solid var(${fgVar});\nbackground: var(${bgVar});`;
 }
+
+/**
+ * Couleur de la pastille de statut (en plus de l'icône et du texte, jamais seule). Le vert est celui
+ * du design system, défini sur `:root` quel que soit le thème (famille Standard avec un thème
+ * Angular Material) : Material n'a pas de rôle « succès ».
+ */
+const TONES: Record<CellStatus, string> = {
+  ok: 'succes',
+  echec: 'erreur',
+  'sans-seuil': 'neutre',
+  absent: 'neutre',
+};
 
 function minimumText(min: number): string {
   return `${String(min).replace('.', ',')} : 1`;
@@ -55,7 +67,7 @@ function minimumText(min: number): string {
                   <code>{{ row.fgHex }}</code> sur <code>{{ row.bgHex }}</code>
                 </span>
                 <strong>{{ row.ratio }}</strong>
-                <span class="statut">
+                <span [class]="'statut ' + row.tone">
                   <mat-icon>{{ row.icon }}</mat-icon>
                   {{ row.statusText }}
                 </span>
@@ -135,6 +147,23 @@ function minimumText(min: number): string {
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      padding: 2px 12px 2px 8px;
+      border-radius: var(--mat-sys-corner-full);
+    }
+
+    .statut.succes {
+      background: var(--app-color-success-container);
+      color: var(--app-color-on-success-container);
+    }
+
+    .statut.erreur {
+      background: var(--mat-sys-error-container);
+      color: var(--mat-sys-on-error-container);
+    }
+
+    .statut.neutre {
+      background: var(--mat-sys-surface-variant);
+      color: var(--mat-sys-on-surface-variant);
     }
 
     .role {
@@ -215,6 +244,7 @@ export class CouleursPage {
       fgHex: this.hex(fg),
       bgHex: this.hex(bg),
       ratio: ratio === null ? '—' : formatContrast(ratio),
+      tone: TONES[status],
       icon: STATUS_VIEW[status].icon,
       statusText:
         status === 'echec' && pair.min !== null
