@@ -34,32 +34,48 @@ const SNIPPETS = {
 </button>`,
   petit: `<button matButton="filled" class="petit">Petit</button>
 
-/* Surcharge des jetons : Angular Material n'a pas d'API de taille */
+/* Angular Material n'a pas d'API de taille : on surcharge les jetons du bouton */
+@use '@angular/material' as mat;
+
 .petit {
-  --mat-button-filled-container-height: 32px;
-  --mat-button-filled-horizontal-padding: 12px;
-  --mat-button-filled-label-text-size: 12px;
+  @include mat.button-overrides((
+    filled-container-height: 32px,
+    filled-horizontal-padding: 12px,
+    filled-label-text-size: var(--mat-sys-label-medium-size),
+  ));
 }`,
   standard: `<button matButton="filled">Standard</button>`,
   grand: `<button matButton="filled" class="grand">Grand</button>
 
+@use '@angular/material' as mat;
+
 .grand {
-  --mat-button-filled-container-height: 56px;
-  --mat-button-filled-horizontal-padding: 32px;
-  --mat-button-filled-label-text-size: 18px;
+  @include mat.button-overrides((
+    filled-container-height: 56px,
+    filled-horizontal-padding: 32px,
+    filled-label-text-size: var(--mat-sys-title-medium-size),
+  ));
 }`,
   tresGrand: `<button matButton="filled" class="tres-grand">Très grand</button>
 
+@use '@angular/material' as mat;
+
 .tres-grand {
-  --mat-button-filled-container-height: 72px;
-  --mat-button-filled-horizontal-padding: 40px;
-  --mat-button-filled-label-text-size: 22px;
+  @include mat.button-overrides((
+    filled-container-height: 72px,
+    filled-horizontal-padding: 40px,
+    filled-label-text-size: var(--mat-sys-title-large-size),
+  ));
 }`,
   iconePetit: `<button matIconButton class="icone-petit" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 
+@use '@angular/material' as mat;
+
 .icone-petit {
-  --mat-icon-button-state-layer-size: 32px;
-  --mat-icon-button-icon-size: 18px;
+  @include mat.icon-button-overrides((
+    state-layer-size: 32px,
+    icon-size: 18px,
+  ));
 }
 .icone-petit .mat-icon {
   width: 18px;
@@ -68,9 +84,13 @@ const SNIPPETS = {
 }`,
   iconeGrand: `<button matIconButton class="icone-grand" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 
+@use '@angular/material' as mat;
+
 .icone-grand {
-  --mat-icon-button-state-layer-size: 56px;
-  --mat-icon-button-icon-size: 32px;
+  @include mat.icon-button-overrides((
+    state-layer-size: 56px,
+    icon-size: 32px,
+  ));
 }
 .icone-grand .mat-icon {
   width: 32px;
@@ -314,9 +334,9 @@ const SNIPPETS = {
 
     <app-specimen-section
       title="Tailles"
-      description="Angular Material n’expose pas d’API de taille : ces variantes surchargent les jetons CSS --mat-button-* (hauteur, marges, texte). La densité du thème agit aussi sur la hauteur."
+      description="Angular Material n’expose pas d’API de taille : ces variantes passent par les mixins mat.button-overrides et mat.icon-button-overrides (hauteur, marges, texte). Le texte reprend l’échelle typographique --mat-sys-*-size ; hauteurs et marges n’ont pas de jeton système. La densité du thème agit aussi sur la hauteur."
     >
-      <app-specimen label="Petit" api="--mat-button-*-container-height: 32px" [snippet]="snippets.petit">
+      <app-specimen label="Petit" api="container-height: 32px" [snippet]="snippets.petit">
         <button matButton="text" class="petit">Texte</button>
         <button matButton="filled" class="petit">Rempli</button>
         <button matButton="tonal" class="petit">Tonal</button>
@@ -328,20 +348,20 @@ const SNIPPETS = {
         <button matButton="tonal">Tonal</button>
         <button matButton="outlined">Contour</button>
       </app-specimen>
-      <app-specimen label="Grand" api="--mat-button-*-container-height: 56px" [snippet]="snippets.grand">
+      <app-specimen label="Grand" api="container-height: 56px" [snippet]="snippets.grand">
         <button matButton="text" class="grand">Texte</button>
         <button matButton="filled" class="grand">Rempli</button>
         <button matButton="tonal" class="grand">Tonal</button>
         <button matButton="outlined" class="grand">Contour</button>
       </app-specimen>
-      <app-specimen label="Très grand" api="--mat-button-*-container-height: 72px" [snippet]="snippets.tresGrand">
+      <app-specimen label="Très grand" api="container-height: 72px" [snippet]="snippets.tresGrand">
         <button matButton="filled" class="tres-grand">Rempli</button>
         <button matButton="outlined" class="tres-grand">Contour</button>
       </app-specimen>
-      <app-specimen label="Bouton icône petit" api="--mat-icon-button-state-layer-size: 32px" [snippet]="snippets.iconePetit">
+      <app-specimen label="Bouton icône petit" api="state-layer-size: 32px" [snippet]="snippets.iconePetit">
         <button matIconButton class="icone-petit" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
       </app-specimen>
-      <app-specimen label="Bouton icône grand" api="--mat-icon-button-state-layer-size: 56px" [snippet]="snippets.iconeGrand">
+      <app-specimen label="Bouton icône grand" api="state-layer-size: 56px" [snippet]="snippets.iconeGrand">
         <button matIconButton class="icone-grand" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
       </app-specimen>
     </app-specimen-section>
@@ -378,13 +398,13 @@ const SNIPPETS = {
         <button matButton="elevated" class="erreur">Relevé</button>
         <button matButton="outlined" class="erreur">Contour</button>
       </app-specimen>
-      <app-specimen label="Boutons icône" api="--mat-icon-button-icon-color" [snippet]="snippets.couleurIcone">
+      <app-specimen label="Boutons icône" api="icon-button-overrides : icon-color" [snippet]="snippets.couleurIcone">
         <button matIconButton aria-label="Favori primaire"><mat-icon>favorite</mat-icon></button>
         <button matIconButton class="secondaire" aria-label="Favori secondaire"><mat-icon>favorite</mat-icon></button>
         <button matIconButton class="tertiaire" aria-label="Favori tertiaire"><mat-icon>favorite</mat-icon></button>
         <button matIconButton class="erreur" aria-label="Favori erreur"><mat-icon>favorite</mat-icon></button>
       </app-specimen>
-      <app-specimen label="FAB" api="--mat-fab-container-color" [snippet]="snippets.couleurFab">
+      <app-specimen label="FAB" api="fab-overrides : container-color" [snippet]="snippets.couleurFab">
         <button matFab aria-label="Modifier primaire"><mat-icon>edit</mat-icon></button>
         <button matFab class="secondaire" aria-label="Modifier secondaire"><mat-icon>edit</mat-icon></button>
         <button matFab class="tertiaire" aria-label="Modifier tertiaire"><mat-icon>edit</mat-icon></button>
@@ -438,11 +458,25 @@ const SNIPPETS = {
     @use '@angular/material' as mat;
 
     @mixin taille($hauteur, $marge, $texte) {
-      @each $variante in (filled, tonal, outlined, text, protected) {
-        --mat-button-#{$variante}-container-height: #{$hauteur};
-        --mat-button-#{$variante}-horizontal-padding: #{$marge};
-        --mat-button-#{$variante}-label-text-size: #{$texte};
-      }
+      @include mat.button-overrides(
+        (
+          filled-container-height: $hauteur,
+          filled-horizontal-padding: $marge,
+          filled-label-text-size: $texte,
+          tonal-container-height: $hauteur,
+          tonal-horizontal-padding: $marge,
+          tonal-label-text-size: $texte,
+          outlined-container-height: $hauteur,
+          outlined-horizontal-padding: $marge,
+          outlined-label-text-size: $texte,
+          text-container-height: $hauteur,
+          text-horizontal-padding: $marge,
+          text-label-text-size: $texte,
+          protected-container-height: $hauteur,
+          protected-horizontal-padding: $marge,
+          protected-label-text-size: $texte,
+        )
+      );
     }
 
     @mixin forme($rayon) {
@@ -458,15 +492,15 @@ const SNIPPETS = {
     }
 
     .petit {
-      @include taille(32px, 12px, 12px);
+      @include taille(32px, 12px, var(--mat-sys-label-medium-size));
     }
 
     .grand {
-      @include taille(56px, 32px, 18px);
+      @include taille(56px, 32px, var(--mat-sys-title-medium-size));
     }
 
     .tres-grand {
-      @include taille(72px, 40px, 22px);
+      @include taille(72px, 40px, var(--mat-sys-title-large-size));
     }
 
     .arrondi {
@@ -540,8 +574,12 @@ const SNIPPETS = {
     }
 
     @mixin taille-icone($zone, $icone) {
-      --mat-icon-button-state-layer-size: #{$zone};
-      --mat-icon-button-icon-size: #{$icone};
+      @include mat.icon-button-overrides(
+        (
+          state-layer-size: $zone,
+          icon-size: $icone,
+        )
+      );
 
       .mat-icon {
         width: $icone;
