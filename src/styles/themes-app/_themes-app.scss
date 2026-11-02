@@ -1,7 +1,11 @@
 /* Fichier généré par `npm run themes` — ne pas modifier.
- * Source : tokens — 2026-10-30 */
+ * Source : tokens — 2026-11-02 */
 
 @use '@angular/material' as mat;
+
+/// Classes `theme-app[-<famille>]` des familles de contraste générées (une par paire clair/sombre).
+/// Usage : `@each $classe in themes-app.$classes { html.#{$classe} { @include themes-app.theme(); } }`
+$classes: ('theme-app', 'theme-app-contraste-moyen', 'theme-app-contraste-eleve', 'theme-app-monochrome');
 
 /// Thème Angular Material branché sur les variables CSS de `index.css` (--md-sys-*, --md-ref-*).
 /// Les valeurs de la palette de repli (chartreuse) ne subsistent que pour les variables sans source dans les tokens.

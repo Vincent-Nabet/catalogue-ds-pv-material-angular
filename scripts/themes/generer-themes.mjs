@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { validerNom } from './correspondance.mjs';
 import { ecrireFichiers } from './ecrire-fichiers.mjs';
+import { classeFamille, genererManifeste } from './ecrire-manifeste.mjs';
 import { controlerMaterial, genererMaterial, PALETTE_REPLI_DEFAUT, validerPaletteRepli } from './ecrire-material.mjs';
 import { genererVariables } from './ecrire-variables.mjs';
 import { lireSource } from './lire-source.mjs';
@@ -35,13 +36,15 @@ export function generer({ source = resolve(racine, 'tokens'), nom = 'app', sorti
 
   const tokens = lireSource(chemin);
   const variables = genererVariables(tokens, { nom, palettes });
-  const material = genererMaterial({ nom, variables: variables.variables, paletteRepli });
+  const classes = variables.rapport.familles.map((f) => classeFamille(f, nom));
+  const material = genererMaterial({ nom, variables: variables.variables, paletteRepli, classes });
   const controle = controlerMaterial({ nom, scss: material.fichiers.get(`_themes-${nom}.scss`), surcharges: material.surcharges });
   if (controle.ecarts.length > 0) {
     throw new Error(`Le thème Material généré ne se compile pas comme prévu :\n  ${controle.ecarts.join('\n  ')}`);
   }
 
-  const fichiers = new Map([...variables.fichiers, ...material.fichiers]);
+  const manifeste = new Map([['familles.ts', genererManifeste({ nom, familles: variables.rapport.familles })]]);
+  const fichiers = new Map([...variables.fichiers, ...material.fichiers, ...manifeste]);
   const ecriture = ecrireFichiers(dossierSortie, fichiers, chemin);
   return {
     source: chemin,

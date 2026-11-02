@@ -99,12 +99,17 @@ avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <su
 
 ## Intégration au catalogue
 
+Les thèmes du design system du catalogue sont **dynamiques** : ils suivent les familles réellement générées.
+
+- `familles.ts` (généré avec les CSS) liste les familles : `id` (`app`, `app-contraste-moyen`…), libellé, couleur d'aperçu (primary clair), famille par défaut, appartenance à la progression du contraste. `core/theme/themes.ts` en tire les entrées du groupe « Design system » (sélecteur, compteur de l'accueil, `ThemeService`, matrice de contraste).
+- `_themes-app.scss` exporte `$classes` (les classes `theme-app[-<famille>]`) ; `src/styles.scss` boucle dessus (`@each`) pour inclure le mixin : plus de liste de classes écrite à la main.
 - `angular.json` : `src/styles/themes-app/index.css` ajouté à `styles` (variables `--md-sys-*`, `--app-*`).
-- `src/styles.scss` : `@use './styles/themes-app/themes-app'` et un bloc `html.theme-app, html.theme-app-contraste-moyen, html.theme-app-contraste-eleve, html.theme-app-monochrome { @include themes-app.theme(); }` (un seul bloc : le mixin ne référence que des variables, qui changent déjà selon la classe).
-- `core/theme/themes.ts` : 4 entrées `app*` dans `ThemeId` et `THEMES` ; `ThemeService` pose `theme-<id>` sans autre changement, le sélecteur et le compteur de l'accueil suivent.
-- Si `--nom` change, adapter ces trois endroits.
+- Thème par défaut : `app-contraste-moyen` s'il existe, sinon la famille par défaut (`DEFAULT_THEME_ID`).
+- Le nom reste `app` pour le catalogue (les pages lisent des variables `--app-*`) ; si `--nom` change, adapter `styles.scss`, `angular.json` et l'import de `themes.ts`.
 - Coût : +34 kB au bundle initial (budget d'avertissement relevé à 880 kB).
 - Contrôle des contrastes obtenus : l'[inspecteur de contraste](inspecteur-contraste.md) du catalogue les affiche écran par écran.
+- Vérifier le catalogue avec d'autres jeux de tokens : `node testing/run-variantes.mjs` puis `node testing/run-site.mjs` (génère, compile et contrôle le site pour chaque variante, puis restaure `src/styles/themes-app`).
+- Limites : les tests Angular (`ng test`) et la page débranchée *Matrice de contraste* décrivent le jeu actuel (4 familles) ; ils ne sont garantis qu'avec lui.
 
 ## Utilisation hors Angular
 

@@ -175,3 +175,16 @@ test('ecrireFichiers : idempotent, supprime les fichiers périmés, refuse un do
   assert.throws(() => ecrireFichiers(autre, jeu, 'tokens'), /aucun fichier généré/);
   assert.equal(readFileSync(join(autre, 'perso.txt'), 'utf8'), 'important');
 });
+
+test('manifeste familles.ts et classes SCSS suivent les familles générées', async () => {
+  const { genererManifeste } = await import('./ecrire-manifeste.mjs');
+  const manifeste = genererManifeste({ nom: 'app', familles: rapport.familles });
+  assert.match(manifeste, /\{ id: 'app', libelle: 'Standard', apercu: '#86a315', defaut: true, progression: true \}/);
+  assert.match(manifeste, /\{ id: 'app-contraste-moyen', libelle: 'Contraste moyen', apercu: '#657c08', defaut: false, progression: true \}/);
+  assert.match(manifeste, /\{ id: 'app-monochrome', libelle: 'Monochrome', apercu: '#1a1a1a', defaut: false, progression: false \}/);
+  const copie = structuredClone(source);
+  for (const mode of Object.keys(copie.semantiques)) if (mode !== 'light' && mode !== 'dark') delete copie.semantiques[mode];
+  const seule = genererManifeste({ nom: 'pv', familles: genererVariables(copie, { nom: 'pv' }).rapport.familles });
+  assert.equal(seule.match(/id: '/g).length, 1);
+  assert.match(seule, /id: 'pv'/);
+});

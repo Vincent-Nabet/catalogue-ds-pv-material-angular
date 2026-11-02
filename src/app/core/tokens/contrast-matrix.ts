@@ -1,4 +1,4 @@
-import { ThemeId, themeInfo } from '../theme/themes';
+import { THEMES, ThemeId, themeInfo } from '../theme/themes';
 import { ColorPair, PairKind } from './color-roles';
 import { Rgba, contrastRatio, meetsMinimum } from './contrast';
 
@@ -11,15 +11,10 @@ export interface Mode {
   scheme: ModeScheme;
 }
 
-/** Familles du design system dans l'ordre de la progression du contraste (Monochrome en dernier, hors progression). */
-export const FAMILIES: readonly ThemeId[] = [
-  'app',
-  'app-contraste-moyen',
-  'app-contraste-eleve',
-  'app-monochrome',
-];
+/** Familles du design system (générées) dans l'ordre de la progression du contraste, les familles libres (Monochrome…) ensuite. */
+export const FAMILIES: readonly ThemeId[] = THEMES.filter((t) => t.group === 'design-system').map((t) => t.id);
 
-/** Les 8 modes du design system : 4 familles × clair / sombre. */
+/** Les modes du design system : chaque famille générée × clair / sombre. */
 export const MODES: readonly Mode[] = FAMILIES.flatMap((family) =>
   (['light', 'dark'] as const).map((scheme) => ({ id: `${family}:${scheme}`, family, scheme })),
 );
@@ -29,7 +24,7 @@ export function familyLabel(family: ThemeId): string {
 }
 
 /** Les familles dont une régression se mesure par rapport à la précédente (Monochrome exclu). */
-const PROGRESSION: readonly ThemeId[] = ['app', 'app-contraste-moyen', 'app-contraste-eleve'];
+const PROGRESSION: readonly ThemeId[] = THEMES.filter((t) => t.group === 'design-system' && t.progression).map((t) => t.id);
 
 /** Tolérance sur l'écart entre deux familles avant de parler de régression. */
 const REGRESSION_TOLERANCE = 0.01;

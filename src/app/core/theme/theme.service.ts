@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Service, effect, inject, signal } from '@angular/core';
-import { DENSITIES, Density, SCHEMES, Scheme, THEMES, ThemeId } from './themes';
+import { DEFAULT_THEME_ID, DENSITIES, Density, SCHEMES, Scheme, THEMES, ThemeId } from './themes';
 
 const STORAGE_KEY = 'catalogue-material-theme';
 
@@ -15,7 +15,7 @@ export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly stored = this.read();
 
-  readonly theme = signal<ThemeId>(this.stored.theme ?? 'app-contraste-moyen');
+  readonly theme = signal<ThemeId>(this.stored.theme ?? DEFAULT_THEME_ID);
   readonly scheme = signal<Scheme>(this.stored.scheme ?? 'light');
   readonly density = signal<Density>(this.stored.density ?? 0);
 

@@ -151,7 +151,7 @@ for (const [nom, args, attendu] of lancerCas) {
 // Contrôles sur les sorties produites.
 const lire = (dossier, f) => readFileSync(join(dossier, f), 'utf8');
 const sansEntete = (t) => t.split('\n').slice(3).join('\n');
-const fichiersDe = ['index.css', 'md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', 'essai.css', '_themes-essai.scss'];
+const fichiersDe = ['index.css', 'md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', 'essai.css', '_themes-essai.scss', 'familles.ts'];
 const dossierRef = sortieDe('ref-dossier');
 lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
 for (const [nom, d] of [['zip-racine', 'zip-racine'], ['zip-sous-dossier', 'zip-sous-dossier'], ['zip-macosx', 'zip-macosx'], ['zip-bom-crlf', 'zip-bom']]) {
@@ -163,7 +163,7 @@ verdict('dossier étranger intact', readFileSync(join(etranger, 'perso.txt'), 'u
 verdict('--palettes expose les primitives', /--essai-ref-olive-012:/.test(lire(sortieDe('palettes'), 'md3/ref.css')), '--essai-ref-olive-012');
 verdict('palette-repli azure dans le scss', /mat\.\$azure-palette/.test(lire(sortieDe('p2'), '_themes-essai.scss')), 'mat.$azure-palette');
 const passe2 = lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
-verdict('2e passe idempotente', /0 écrit\(s\), 6 inchangé\(s\)/.test(passe2.stdout), '0 écrit, 6 inchangés');
+verdict('2e passe idempotente', /0 écrit\(s\), 7 inchangé\(s\)/.test(passe2.stdout), '0 écrit, 7 inchangés');
 const tout = (n) => fichiersDe.concat([]).map((f) => f.replace('essai', n)).map((f) => lire(sortieDe(n), f)).join('\n');
 verdict('thèmes a et b sans collision', !/-b-|theme-b|--b-/.test(tout('a')) && !/theme-a\b|--a-/.test(tout('b')) && /\.theme-a-contraste-moyen/.test(tout('a')) && /\.theme-b-contraste-moyen/.test(tout('b')), 'préfixes disjoints');
 console.log(echecs === 0 ? '\nTout est conforme.' : `\n${echecs} écart(s) par rapport à l'attendu.`);

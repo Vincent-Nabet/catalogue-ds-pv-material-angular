@@ -1,14 +1,7 @@
-export type ThemeId =
-  | 'app'
-  | 'app-contraste-moyen'
-  | 'app-contraste-eleve'
-  | 'app-monochrome'
-  | 'azur'
-  | 'violet'
-  | 'rose'
-  | 'vert'
-  | 'orange'
-  | 'cyan';
+import { FAMILLES_DESIGN_SYSTEM } from '../../../styles/themes-app/familles';
+
+/** Identifiant de thème : familles du design system (générées, cf. `npm run themes`) ou thème Angular Material. */
+export type ThemeId = string;
 export type ThemeGroupId = 'design-system' | 'angular-material';
 export type Scheme = 'light' | 'dark' | 'system';
 export type Density = 0 | 1 | 2 | 3 | 4;
@@ -22,6 +15,8 @@ export interface ThemeInfo {
   shortLabel: string;
   /** Couleur d'aperçu (pastille du sélecteur). */
   color: string;
+  /** Famille du design system faisant partie de la progression du contraste (standard, moyen, élevé). */
+  progression?: boolean;
 }
 
 export interface SchemeInfo {
@@ -35,11 +30,17 @@ export const THEME_GROUPS: readonly { id: ThemeGroupId; label: string }[] = [
   { id: 'angular-material', label: 'Thèmes Angular Material' },
 ];
 
-export const THEMES: readonly ThemeInfo[] = [
-  { id: 'app', group: 'design-system', label: 'Design system', shortLabel: 'Standard', color: '#86a315' },
-  { id: 'app-contraste-moyen', group: 'design-system', label: 'Design system, contraste moyen', shortLabel: 'Contraste moyen', color: '#657c08' },
-  { id: 'app-contraste-eleve', group: 'design-system', label: 'Design system, contraste élevé', shortLabel: 'Contraste élevé', color: '#465900' },
-  { id: 'app-monochrome', group: 'design-system', label: 'Design system, monochrome', shortLabel: 'Monochrome', color: '#1a1a1a' },
+/** Thèmes du design system : une entrée par famille générée (la famille par défaut d'abord). */
+const DESIGN_SYSTEM_THEMES: readonly ThemeInfo[] = FAMILLES_DESIGN_SYSTEM.map((famille) => ({
+  id: famille.id,
+  group: 'design-system',
+  label: famille.defaut ? 'Design system' : `Design system, ${famille.libelle.toLowerCase()}`,
+  shortLabel: famille.libelle,
+  color: famille.apercu,
+  progression: famille.progression,
+}));
+
+const ANGULAR_MATERIAL_THEMES: readonly ThemeInfo[] = [
   { id: 'azur', group: 'angular-material', label: 'Azur', shortLabel: 'Azur', color: '#005cbb' },
   { id: 'violet', group: 'angular-material', label: 'Violet', shortLabel: 'Violet', color: '#6750a4' },
   { id: 'rose', group: 'angular-material', label: 'Rose', shortLabel: 'Rose', color: '#b4236b' },
@@ -47,6 +48,11 @@ export const THEMES: readonly ThemeInfo[] = [
   { id: 'orange', group: 'angular-material', label: 'Orange', shortLabel: 'Orange', color: '#a04a00' },
   { id: 'cyan', group: 'angular-material', label: 'Cyan', shortLabel: 'Cyan', color: '#006874' },
 ];
+
+export const THEMES: readonly ThemeInfo[] = [...DESIGN_SYSTEM_THEMES, ...ANGULAR_MATERIAL_THEMES];
+
+/** Thème par défaut : « contraste moyen » du design system s'il existe, sinon sa première famille. */
+export const DEFAULT_THEME_ID: ThemeId = (DESIGN_SYSTEM_THEMES.find((t) => t.id === 'app-contraste-moyen') ?? DESIGN_SYSTEM_THEMES[0]).id;
 
 export function themeInfo(id: ThemeId): ThemeInfo | undefined {
   return THEMES.find((theme) => theme.id === id);

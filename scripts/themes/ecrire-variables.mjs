@@ -106,6 +106,9 @@ export function genererVariables(source, { nom, palettes = false }) {
     ].join('\n')],
   ]);
 
+  // Couleur d'aperçu d'une famille (pastille du sélecteur de thème du catalogue) : primary clair.
+  const apercu = (famille) => parMode.get(famille.clair).jetons.find((j) => j.variable === '--md-sys-color-primary')?.valeur.toLowerCase() ?? '#808080';
+
   const variables = new Set([...reference.jetons.map((j) => j.variable), ...etats.map(([v]) => v)]);
   const rapport = {
     md3: reference.jetons.filter((j) => j.cible === 'md3').length + etats.length,
@@ -113,7 +116,7 @@ export function genererVariables(source, { nom, palettes = false }) {
     ignores: reference.ignores,
     inconnus: reference.inconnus,
     modesIgnores,
-    familles,
+    familles: familles.map((f) => ({ ...f, apercu: apercu(f) })),
   };
   return { fichiers, variables, rapport };
 }

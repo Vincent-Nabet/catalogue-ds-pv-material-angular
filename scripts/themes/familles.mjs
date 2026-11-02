@@ -31,7 +31,7 @@ const capitaliser = (texte) => texte.charAt(0).toUpperCase() + texte.slice(1);
 /**
  * `nomsModes` : noms des fichiers sémantiques (sans `.tokens.json`).
  * Retourne `{ familles, ignores }` : `familles` triées (la famille par défaut d'abord), chacune
- * `{ id, cle, suffixe, libelle, clair, sombre, defaut }` ; `ignores` : modes sans schéma reconnu.
+ * `{ id, cle, suffixe, libelle, clair, sombre, defaut, progression }` ; `ignores` : modes sans schéma reconnu.
  */
 export function detecterFamilles(nomsModes) {
   const groupes = new Map();
@@ -99,5 +99,6 @@ export function detecterFamilles(nomsModes) {
     throw new Error(`Familles de même nom de classe : ${doublons.map((f) => `« ${f.clair} » / « ${f.sombre} »`).join(', ')}.`);
   }
   // Famille par défaut (appliquée aussi sur :root) : la standard (clé vide), sinon la première.
-  return { familles: familles.map(({ rang, ...f }, i) => ({ ...f, defaut: i === 0 })), ignores };
+  // `progression` : familles de la progression du contraste (standard, moyen, élevé), hors familles libres.
+  return { familles: familles.map(({ rang, ...f }, i) => ({ ...f, defaut: i === 0, progression: rang < 100 })), ignores };
 }
