@@ -1,20 +1,25 @@
 export type ThemeId =
+  | 'app'
+  | 'app-contraste-moyen'
+  | 'app-contraste-eleve'
+  | 'app-monochrome'
   | 'azur'
   | 'violet'
   | 'rose'
   | 'vert'
   | 'orange'
-  | 'cyan'
-  | 'app'
-  | 'app-contraste-moyen'
-  | 'app-contraste-eleve'
-  | 'app-monochrome';
+  | 'cyan';
+export type ThemeGroupId = 'design-system' | 'angular-material';
 export type Scheme = 'light' | 'dark' | 'system';
 export type Density = 0 | 1 | 2 | 3 | 4;
 
 export interface ThemeInfo {
   id: ThemeId;
+  group: ThemeGroupId;
+  /** Libellé complet (bouton du sélecteur). */
   label: string;
+  /** Libellé dans le sous-menu de son groupe. */
+  shortLabel: string;
   /** Couleur d'aperçu (pastille du sélecteur). */
   color: string;
 }
@@ -25,17 +30,22 @@ export interface SchemeInfo {
   icon: string;
 }
 
+export const THEME_GROUPS: readonly { id: ThemeGroupId; label: string }[] = [
+  { id: 'design-system', label: 'Design system' },
+  { id: 'angular-material', label: 'Thèmes Angular Material' },
+];
+
 export const THEMES: readonly ThemeInfo[] = [
-  { id: 'azur', label: 'Azur', color: '#005cbb' },
-  { id: 'violet', label: 'Violet', color: '#6750a4' },
-  { id: 'rose', label: 'Rose', color: '#b4236b' },
-  { id: 'vert', label: 'Vert', color: '#146c2e' },
-  { id: 'orange', label: 'Orange', color: '#a04a00' },
-  { id: 'cyan', label: 'Cyan', color: '#006874' },
-  { id: 'app', label: 'Design system', color: '#86a315' },
-  { id: 'app-contraste-moyen', label: 'Design system, contraste moyen', color: '#657c08' },
-  { id: 'app-contraste-eleve', label: 'Design system, contraste élevé', color: '#465900' },
-  { id: 'app-monochrome', label: 'Design system, monochrome', color: '#1a1a1a' },
+  { id: 'app', group: 'design-system', label: 'Design system', shortLabel: 'Standard', color: '#86a315' },
+  { id: 'app-contraste-moyen', group: 'design-system', label: 'Design system, contraste moyen', shortLabel: 'Contraste moyen', color: '#657c08' },
+  { id: 'app-contraste-eleve', group: 'design-system', label: 'Design system, contraste élevé', shortLabel: 'Contraste élevé', color: '#465900' },
+  { id: 'app-monochrome', group: 'design-system', label: 'Design system, monochrome', shortLabel: 'Monochrome', color: '#1a1a1a' },
+  { id: 'azur', group: 'angular-material', label: 'Azur', shortLabel: 'Azur', color: '#005cbb' },
+  { id: 'violet', group: 'angular-material', label: 'Violet', shortLabel: 'Violet', color: '#6750a4' },
+  { id: 'rose', group: 'angular-material', label: 'Rose', shortLabel: 'Rose', color: '#b4236b' },
+  { id: 'vert', group: 'angular-material', label: 'Vert', shortLabel: 'Vert', color: '#146c2e' },
+  { id: 'orange', group: 'angular-material', label: 'Orange', shortLabel: 'Orange', color: '#a04a00' },
+  { id: 'cyan', group: 'angular-material', label: 'Cyan', shortLabel: 'Cyan', color: '#006874' },
 ];
 
 export const SCHEMES: readonly SchemeInfo[] = [

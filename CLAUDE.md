@@ -19,7 +19,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 
 - **35 pages** (6 catégories) générées depuis un registre unique : `src/app/core/catalog/catalog.registry.ts`. Ajouter un composant = 1 entrée de registre + 1 fichier `src/app/pages/composants/<id>/<id>.page.ts` (lazy, template inline, snippets écrits à la main dans `const SNIPPETS`).
 - Une page = `<h1>` + `app-specimen-section` (`title`, `description`, `minWidth`) contenant des `app-specimen` (`label` FR, `api`, `snippet`). Le bouton `</>` ouvre `SnippetDialog` (copie + snackbar).
-- Thème : `ThemeService` (`@Service`, signaux `theme` / `scheme` / `density`, `localStorage` clé `catalogue-material-theme`) pose des classes `theme-*`, `scheme-*`, `density-*` sur `<html>` ; couleurs dans `src/styles.scss` (palettes Material prédéfinies, `mat.theme()` + `light-dark()`). Défaut : azur, **clair**, densité 0.
+- Thème : `ThemeService` (`@Service`, signaux `theme` / `scheme` / `density`, `localStorage` clé `catalogue-material-theme`) pose des classes `theme-*`, `scheme-*`, `density-*` sur `<html>` ; couleurs dans `src/styles.scss` (palettes Material prédéfinies, `mat.theme()` + `light-dark()`). Défaut : Design system contraste moyen (`app-contraste-moyen`), **clair**, densité 0.
 - Shell : `layout/shell` (toolbar primaire + sidenav `side`/`over` selon `(max-width: 959.98px)`), focus donné à `<main>` après chaque navigation ; `layout/theme-picker`.
 - Police **Poppins**, icônes **Material Symbols Outlined** (défini comme jeu par défaut de `mat-icon` dans `app.config.ts`), toutes deux via Google Fonts.
 - Libellés Material en français : `core/i18n/intl-fr.ts`, fournis **au niveau des pages** (pagination, sélecteur de date, étapes).

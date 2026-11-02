@@ -12,7 +12,7 @@ describe('ThemeService', () => {
   it('should apply default classes on <html>', () => {
     TestBed.inject(ThemeService);
     TestBed.tick();
-    expect(html.classList).toContain('theme-azur');
+    expect(html.classList).toContain('theme-app-contraste-moyen');
     expect(html.classList).toContain('scheme-light');
     expect(html.classList).toContain('density-0');
   });
@@ -25,7 +25,7 @@ describe('ThemeService', () => {
     service.density.set(3);
     TestBed.tick();
     expect(html.classList).toContain('theme-violet');
-    expect(html.classList).not.toContain('theme-azur');
+    expect(html.classList).not.toContain('theme-app-contraste-moyen');
     expect(html.classList).toContain('scheme-dark');
     expect(html.classList).not.toContain('scheme-light');
     expect(html.classList).toContain('density-3');
@@ -52,7 +52,7 @@ describe('ThemeService', () => {
       JSON.stringify({ theme: 'inconnu', scheme: 'x', density: 9 }),
     );
     const service = TestBed.inject(ThemeService);
-    expect(service.theme()).toBe('azur');
+    expect(service.theme()).toBe('app-contraste-moyen');
     expect(service.scheme()).toBe('light');
     expect(service.density()).toBe(0);
   });

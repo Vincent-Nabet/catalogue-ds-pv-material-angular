@@ -19,11 +19,11 @@ Public : designers, intégrateurs, développeurs front. Langue de l'interface : 
 
 | Réglage | Valeurs | Défaut |
 |---|---|---|
-| Thème | Azur, Violet, Rose, Vert, Orange, Cyan, puis 4 thèmes du design system : Design system, contraste moyen, contraste élevé, monochrome (pastille de couleur + coche sur l'actif) | Azur |
+| Thème | Deux sous-menus : **Design system** (Standard, Contraste moyen, Contraste élevé, Monochrome) et **Thèmes Angular Material** (Azur, Violet, Rose, Vert, Orange, Cyan) ; pastille de couleur + coche sur l'actif | Design system, contraste moyen |
 | Mode | Clair, Sombre, Système | **Clair** |
 | Densité | 0 (par défaut), −1, −2, −3, −4 | 0 |
 
-Les préférences sont conservées dans `localStorage` (clé `catalogue-material-theme`). Le bouton affiche le thème courant (« Thème : Violet »). Sous 600 px, seul l'icône et la pastille restent visibles (le libellé reste lu par les lecteurs d'écran).
+Les préférences sont conservées dans `localStorage` (clé `catalogue-material-theme`). Le bouton affiche le thème courant (« Thème : Violet », « Thème : Design system, contraste moyen »). Sous 600 px, seul l'icône et la pastille restent visibles (le libellé reste lu par les lecteurs d'écran).
 
 ## Anatomie d'une page de composant
 

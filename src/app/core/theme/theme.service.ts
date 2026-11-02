@@ -15,7 +15,7 @@ export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly stored = this.read();
 
-  readonly theme = signal<ThemeId>(this.stored.theme ?? 'azur');
+  readonly theme = signal<ThemeId>(this.stored.theme ?? 'app-contraste-moyen');
   readonly scheme = signal<Scheme>(this.stored.scheme ?? 'light');
   readonly density = signal<Density>(this.stored.density ?? 0);
 

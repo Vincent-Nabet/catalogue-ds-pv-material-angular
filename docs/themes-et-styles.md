@@ -48,7 +48,7 @@ La densité agit sur la hauteur des composants (champs, boutons, listes…). Ell
 ## Ajouter un thème
 
 1. `styles.scss` : ajouter une entrée dans `$themes` (clé entre guillemets).
-2. `core/theme/themes.ts` : étendre le type `ThemeId` et ajouter `{ id, label, color }` à `THEMES` (la couleur sert de pastille d'aperçu, valeur approchée du primaire).
+2. `core/theme/themes.ts` : étendre le type `ThemeId` et ajouter `{ id, group, label, shortLabel, color }` à `THEMES` (`group` = sous-menu du sélecteur, voir `THEME_GROUPS`) (la couleur sert de pastille d'aperçu, valeur approchée du primaire).
 3. Le service, le sélecteur et l'accueil s'adaptent seuls (compteur « N thèmes » dérivé de `THEMES.length`).
 
 ## Typographie

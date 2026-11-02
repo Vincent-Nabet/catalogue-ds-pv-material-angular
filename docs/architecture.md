@@ -94,7 +94,7 @@ Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories), `CATALOG` (
 `@Service()` (équivalent d'un singleton racine, Angular 22).
 
 - Signaux publics et modifiables : `theme` (`ThemeId`), `scheme` (`'light' | 'dark' | 'system'`), `density` (`0..4`).
-- Lecture initiale depuis `localStorage` (clé `catalogue-material-theme`, JSON, valeurs validées, `try/catch`), valeurs par défaut : `azur`, `light`, `0`.
+- Lecture initiale depuis `localStorage` (clé `catalogue-material-theme`, JSON, valeurs validées, `try/catch`), valeurs par défaut : `app-contraste-moyen`, `light`, `0`.
 - Un `effect()` retire puis repose les classes `theme-<id>`, `scheme-<mode>`, `density-<n>` sur `<html>` et sauvegarde.
 - Les couleurs viennent entièrement du SCSS (voir [themes-et-styles.md](themes-et-styles.md)) : le service ne manipule que des classes.
 - `index.html` pose `class="scheme-light"` en dur pour éviter un flash selon le thème du système avant l'initialisation.
