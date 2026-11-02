@@ -40,6 +40,9 @@ const cas = {
   'clair-sombre-seulement': (d) => { for (const f of readdirSync(join(d, 'semantics'))) if (!['light.tokens.json', 'dark.tokens.json'].includes(f)) rmSync(join(d, 'semantics', f)); },
   'sans-mode-sombre': (d) => rmSync(join(d, 'semantics/dark.tokens.json')),
   'noms-renommes': (d) => { for (const f of readdirSync(join(d, 'semantics'))) renameSync(join(d, 'semantics', f), join(d, 'semantics', 'theme-' + f.replace('monochrome-lt', 'mono-clair').replace('monochrome-dt', 'mono-sombre'))); },
+  'noms-francais-une-paire': (d) => { for (const f of readdirSync(join(d, 'semantics'))) if (!['light.tokens.json', 'dark.tokens.json'].includes(f)) rmSync(join(d, 'semantics', f)); renameSync(join(d, 'semantics/light.tokens.json'), join(d, 'semantics/marque-clair.tokens.json')); renameSync(join(d, 'semantics/dark.tokens.json'), join(d, 'semantics/marque-sombre.tokens.json')); },
+  'abreviations-mc-hc': (d) => { for (const [a, b] of [['light-medium-contrast', 'light-mc'], ['dark-medium-contrast', 'dark-mc'], ['light-high-contrast', 'light-hc'], ['dark-high-contrast', 'dark-hc']]) renameSync(join(d, `semantics/${a}.tokens.json`), join(d, `semantics/${b}.tokens.json`)); },
+  'famille-sepia-ajoutee': (d) => { for (const [src, cible] of [['light', 'sepia-light'], ['dark', 'sepia-dark']]) cpSync(join(d, `semantics/${src}.tokens.json`), join(d, `semantics/${cible}.tokens.json`)); },
   'mode-supplementaire': (d) => cpSync(join(d, 'semantics/light.tokens.json'), join(d, 'semantics/brand-extra.tokens.json')),
   'sans-semantics': (d) => rmSync(join(d, 'semantics'), { recursive: true }),
   'sans-primitives': (d) => rmSync(join(d, 'primitives.tokens.json')),
@@ -50,6 +53,9 @@ const cas = {
 
 // Contrôles de la sortie générée, pour les cas qui doivent réussir.
 const controles = {
+  'noms-francais-une-paire': (css) => (/:root, \.theme-essai \{/.test(css) && !/theme-essai-/.test(css) ? 'une seule famille, classe .theme-essai' : 'sortie inattendue'),
+  'abreviations-mc-hc': (css) => (/\.theme-essai-contraste-moyen \{/.test(css) && /\.theme-essai-contraste-eleve \{/.test(css) ? 'classes contraste-moyen / contraste-eleve' : 'sortie inattendue'),
+  'famille-sepia-ajoutee': (css) => (/\.theme-essai-sepia \{/.test(css) ? 'classe .theme-essai-sepia générée' : 'famille sepia NON générée'),
   'nouvelle-famille-info': (css) => (/--essai-color-info:/.test(css) && /--essai-color-on-info-container:/.test(css) ? 'famille --essai-color-info générée' : 'famille Info NON générée'),
 };
 

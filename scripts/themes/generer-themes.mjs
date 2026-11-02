@@ -45,6 +45,7 @@ export function generer({ source = resolve(racine, 'tokens'), nom = 'app', sorti
   const ecriture = ecrireFichiers(dossierSortie, fichiers, chemin);
   return {
     source: chemin,
+    nom,
     sortie: dossierSortie,
     modes: Object.keys(tokens.semantiques).sort(),
     variables: variables.rapport,
@@ -59,7 +60,8 @@ export function formaterRapport(r) {
   const ignores = [...parRaison].map(([raison, liste]) => `    - ${liste.length} : ${raison}`);
   const { ecrits, inchanges, supprimes } = r.ecriture;
   const lignes = [
-    `Source : ${r.source} (${r.modes.length} modes)`,
+    `Source : ${r.source} (${r.modes.length} modes, ${r.variables.familles.length} famille(s))`,
+    ...r.variables.familles.map((f) => `    ${f.defaut ? '*' : '-'} ${f.libelle} : ${f.clair} / ${f.sombre} → .theme-${r.nom}${f.suffixe ? `-${f.suffixe}` : ''}`),
     `Sortie : ${r.sortie}`,
     `Fichiers : ${ecrits.length} écrit(s), ${inchanges.length} inchangé(s), ${supprimes.length} supprimé(s)`,
     ...ecrits.map((f) => `    + ${f}`),
@@ -77,7 +79,7 @@ export function formaterRapport(r) {
   const avertissements = [
     ...r.variables.inconnus.map((c) => `token non reconnu, non écrit : ${c}`),
     ...r.material.repliInattendu.map((v) => `variable Material sans source dans les tokens (nouvelle version de Material ?) : ${v}`),
-    ...r.variables.modesIgnores.map((m) => `mode non utilisé : ${m}`),
+    ...r.variables.modesIgnores.map((m) => `mode non utilisé (ni clair ni sombre reconnu dans son nom) : ${m}`),
     ...r.ecriture.etrangers.map((f) => `fichier étranger laissé en place dans la sortie : ${f}`),
   ];
   if (r.material.repliAttendu.length > 0) lignes.push(`    attendues : ${r.material.repliAttendu.join(', ')}`);
