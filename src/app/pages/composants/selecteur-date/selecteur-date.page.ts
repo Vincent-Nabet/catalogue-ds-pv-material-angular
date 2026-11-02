@@ -78,6 +78,48 @@ joursOuvres = (date: Date | null) => !!date && date.getDay() !== 0 && date.getDa
   <mat-datepicker-toggle matIconSuffix [for]="picker" />
   <mat-date-range-picker #picker />
 </mat-form-field>`,
+  calendrierTertiaire: `<mat-calendar class="perso-calendrier-tertiaire" [selected]="selection" [startAt]="selection" />
+
+@use '@angular/material' as mat;
+
+.perso-calendrier-tertiaire {
+  @include mat.datepicker-overrides((
+    calendar-date-selected-state-background-color: var(--mat-sys-tertiary),
+    calendar-date-selected-state-text-color: var(--mat-sys-on-tertiary),
+  ));
+}`,
+  plageSecondaire: `<mat-form-field>
+  <mat-label>Période</mat-label>
+  <mat-date-range-input [rangePicker]="picker">
+    <input matStartDate placeholder="Début" />
+    <input matEndDate placeholder="Fin" />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matIconSuffix [for]="picker" />
+  <mat-date-range-picker #picker panelClass="perso-calendrier-secondaire" />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+/* Le calendrier est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-calendrier-secondaire {
+  @include mat.datepicker-overrides((
+    calendar-date-selected-state-background-color: var(--mat-sys-secondary),
+    calendar-date-selected-state-text-color: var(--mat-sys-on-secondary),
+    calendar-date-in-range-state-background-color: var(--mat-sys-secondary-container),
+    calendar-date-today-outline-color: var(--mat-sys-secondary),
+    calendar-date-preview-state-outline-color: var(--mat-sys-secondary),
+  ));
+}`,
+  calendrierTexte: `<mat-calendar class="perso-calendrier-texte" [selected]="selection" [startAt]="selection" />
+
+@use '@angular/material' as mat;
+
+.perso-calendrier-texte {
+  @include mat.datepicker-overrides((
+    calendar-text-size: var(--mat-sys-body-large-size),
+    calendar-period-button-text-size: var(--mat-sys-title-large-size),
+  ));
+}`,
 };
 
 @Component({
@@ -197,10 +239,67 @@ joursOuvres = (date: Date | null) => !!date && date.getDay() !== 0 && date.getDa
         <mat-calendar class="calendrier" [selected]="selection" [startAt]="selection" [minDate]="min" [maxDate]="max" />
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="360px"
+      title="Personnalisation (jetons)"
+      description="Le mixin mat.datepicker-overrides reçoit les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. Dans un champ, le calendrier est rendu dans une surcouche : sa classe passe par panelClass (elle s’applique au calendrier, pas à son conteneur : fond, forme et ombre du conteneur ne sont donc pas modifiables ainsi)."
+    >
+      <app-specimen label="Date sélectionnée en tertiaire" api="mat.datepicker-overrides : calendar-date-selected-state-background-color" [snippet]="snippets.calendrierTertiaire">
+        <mat-calendar class="calendrier perso-calendrier-tertiaire" [selected]="selection" [startAt]="selection" />
+      </app-specimen>
+      <app-specimen label="Plage en secondaire (panelClass)" api="mat.datepicker-overrides : calendar-date-in-range-state-background-color" [snippet]="snippets.plageSecondaire">
+        <mat-form-field>
+          <mat-label>Période</mat-label>
+          <mat-date-range-input [rangePicker]="plageSecondaire">
+            <input matStartDate placeholder="Début" />
+            <input matEndDate placeholder="Fin" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="plageSecondaire" />
+          <mat-date-range-picker #plageSecondaire panelClass="perso-calendrier-secondaire" />
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Texte du calendrier agrandi" api="mat.datepicker-overrides : calendar-text-size" [snippet]="snippets.calendrierTexte">
+        <mat-calendar class="calendrier perso-calendrier-texte" [selected]="selection" [startAt]="selection" />
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     .calendrier {
       width: 296px;
+    }
+
+    .perso-calendrier-tertiaire {
+      @include mat.datepicker-overrides(
+        (
+          calendar-date-selected-state-background-color: var(--mat-sys-tertiary),
+          calendar-date-selected-state-text-color: var(--mat-sys-on-tertiary),
+        )
+      );
+    }
+
+    .perso-calendrier-texte {
+      @include mat.datepicker-overrides(
+        (
+          calendar-text-size: var(--mat-sys-body-large-size),
+          calendar-period-button-text-size: var(--mat-sys-title-large-size),
+        )
+      );
+    }
+
+    /* Le calendrier d’un champ est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-calendrier-secondaire {
+      @include mat.datepicker-overrides(
+        (
+          calendar-date-selected-state-background-color: var(--mat-sys-secondary),
+          calendar-date-selected-state-text-color: var(--mat-sys-on-secondary),
+          calendar-date-in-range-state-background-color: var(--mat-sys-secondary-container),
+          calendar-date-today-outline-color: var(--mat-sys-secondary),
+          calendar-date-preview-state-outline-color: var(--mat-sys-secondary),
+        )
+      );
     }
   `,
 })

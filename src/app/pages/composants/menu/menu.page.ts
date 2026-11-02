@@ -63,6 +63,60 @@ const SNIPPETS = {
   sansFond: `<mat-menu #menu="matMenu" [hasBackdrop]="false">
   <button mat-menu-item>Modifier</button>
 </mat-menu>`,
+  secondaire: `<button matButton="outlined" [matMenuTriggerFor]="menu">Actions</button>
+<mat-menu #menu="matMenu" class="perso-menu-secondaire">
+  <button mat-menu-item><mat-icon>edit</mat-icon>Modifier</button>
+  <button mat-menu-item><mat-icon>content_copy</mat-icon>Dupliquer</button>
+  <mat-divider />
+  <button mat-menu-item><mat-icon>delete</mat-icon>Supprimer</button>
+</mat-menu>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-menu-secondaire {
+  @include mat.menu-overrides((
+    container-color: var(--mat-sys-secondary-container),
+    item-label-text-color: var(--mat-sys-on-secondary-container),
+    item-hover-state-layer-color: color-mix(in srgb, var(--mat-sys-on-secondary-container) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+    item-focus-state-layer-color: color-mix(in srgb, var(--mat-sys-on-secondary-container) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+    divider-color: var(--mat-sys-outline),
+  ));
+}`,
+  arrondi: `<button matButton="outlined" [matMenuTriggerFor]="menu">Ouvrir</button>
+<mat-menu #menu="matMenu" class="perso-menu-arrondi">
+  <button mat-menu-item>Modifier</button>
+  <button mat-menu-item>Dupliquer</button>
+  <button mat-menu-item>Supprimer</button>
+</mat-menu>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-menu-arrondi {
+  @include mat.menu-overrides((
+    container-shape: var(--mat-sys-corner-large),
+    container-elevation-shadow: var(--mat-sys-level4),
+  ));
+}`,
+  texteMenu: `<button matButton="outlined" [matMenuTriggerFor]="menu">Ouvrir</button>
+<mat-menu #menu="matMenu" class="perso-menu-texte">
+  <button mat-menu-item>Modifier</button>
+  <button mat-menu-item>Dupliquer</button>
+  <button mat-menu-item>Supprimer</button>
+</mat-menu>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-menu-texte {
+  @include mat.menu-overrides((
+    item-label-text-size: var(--mat-sys-title-medium-size),
+    item-label-text-line-height: var(--mat-sys-title-medium-line-height),
+    item-leading-spacing: 24px,
+    item-trailing-spacing: 24px,
+  ));
+}`,
 };
 
 @Component({
@@ -158,8 +212,74 @@ const SNIPPETS = {
         </mat-menu>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Le mixin mat.menu-overrides reçoit les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. Le panneau étant rendu dans une surcouche, sa classe passe par l’attribut class de mat-menu. Marges et espacements n’ont pas de jeton système : valeurs en px."
+    >
+      <app-specimen label="Panneau secondaire" api="mat.menu-overrides : container-color" [snippet]="snippets.secondaire">
+        <button matButton="outlined" [matMenuTriggerFor]="persoSecondaire">Actions</button>
+        <mat-menu #persoSecondaire="matMenu" class="perso-menu-secondaire">
+          <button mat-menu-item><mat-icon>edit</mat-icon>Modifier</button>
+          <button mat-menu-item><mat-icon>content_copy</mat-icon>Dupliquer</button>
+          <mat-divider />
+          <button mat-menu-item><mat-icon>delete</mat-icon>Supprimer</button>
+        </mat-menu>
+      </app-specimen>
+      <app-specimen label="Angles arrondis et élévation" api="mat.menu-overrides : container-shape" [snippet]="snippets.arrondi">
+        <button matButton="outlined" [matMenuTriggerFor]="persoArrondi">Ouvrir</button>
+        <mat-menu #persoArrondi="matMenu" class="perso-menu-arrondi">
+          <button mat-menu-item>Modifier</button>
+          <button mat-menu-item>Dupliquer</button>
+          <button mat-menu-item>Supprimer</button>
+        </mat-menu>
+      </app-specimen>
+      <app-specimen label="Texte et marges des éléments" api="mat.menu-overrides : item-label-text-size" [snippet]="snippets.texteMenu">
+        <button matButton="outlined" [matMenuTriggerFor]="persoTexte">Ouvrir</button>
+        <mat-menu #persoTexte="matMenu" class="perso-menu-texte">
+          <button mat-menu-item>Modifier</button>
+          <button mat-menu-item>Dupliquer</button>
+          <button mat-menu-item>Supprimer</button>
+        </mat-menu>
+      </app-specimen>
+    </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
+    /* Le panneau est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-menu-secondaire {
+      @include mat.menu-overrides(
+        (
+          container-color: var(--mat-sys-secondary-container),
+          item-label-text-color: var(--mat-sys-on-secondary-container),
+          item-hover-state-layer-color: color-mix(in srgb, var(--mat-sys-on-secondary-container) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+          item-focus-state-layer-color: color-mix(in srgb, var(--mat-sys-on-secondary-container) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+          divider-color: var(--mat-sys-outline),
+        )
+      );
+    }
+
+    ::ng-deep .perso-menu-arrondi {
+      @include mat.menu-overrides(
+        (
+          container-shape: var(--mat-sys-corner-large),
+          container-elevation-shadow: var(--mat-sys-level4),
+        )
+      );
+    }
+
+    ::ng-deep .perso-menu-texte {
+      @include mat.menu-overrides(
+        (
+          item-label-text-size: var(--mat-sys-title-medium-size),
+          item-label-text-line-height: var(--mat-sys-title-medium-line-height),
+          item-leading-spacing: 24px,
+          item-trailing-spacing: 24px,
+        )
+      );
+    }
+
     .zone-contexte {
       display: flex;
       align-items: center;

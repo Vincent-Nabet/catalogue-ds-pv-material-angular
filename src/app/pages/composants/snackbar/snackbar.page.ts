@@ -73,6 +73,36 @@ this.snackBar.openFromComponent(MessageSnack, { duration: 5000 });`,
   politeness: 'assertive',
 });
 // Annonce immédiate par les lecteurs d'écran`,
+  erreur: `this.snackBar.open('Échec de l’envoi', 'Réessayer', {
+  duration: 5000,
+  panelClass: 'perso-snack-erreur',
+});
+
+@use '@angular/material' as mat;
+
+/* La snackbar est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-snack-erreur {
+  @include mat.snack-bar-overrides((
+    container-color: var(--mat-sys-error),
+    supporting-text-color: var(--mat-sys-on-error),
+    button-color: var(--mat-sys-on-error),
+  ));
+}`,
+  pilule: `this.snackBar.open('Message en pilule', 'Fermer', {
+  duration: 5000,
+  panelClass: 'perso-snack-pilule',
+});
+
+@use '@angular/material' as mat;
+
+/* La snackbar est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-snack-pilule {
+  @include mat.snack-bar-overrides((
+    container-shape: var(--mat-sys-corner-full),
+    supporting-text-size: var(--mat-sys-body-large-size),
+    supporting-text-line-height: var(--mat-sys-body-large-line-height),
+  ));
+}`,
 };
 
 @Component({
@@ -116,14 +146,50 @@ this.snackBar.openFromComponent(MessageSnack, { duration: 5000 });`,
         <button matButton="outlined" (click)="afficherAssertive()">Afficher</button>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Le mixin mat.snack-bar-overrides reçoit les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. La snackbar étant rendue dans une surcouche, sa classe passe par panelClass."
+    >
+      <app-specimen label="Rôle erreur" api="mat.snack-bar-overrides : container-color" [snippet]="snippets.erreur">
+        <button matButton="outlined" (click)="afficher('Échec de l’envoi', 'Réessayer', 5000, 'perso-snack-erreur')">Afficher</button>
+      </app-specimen>
+      <app-specimen label="Pilule, texte agrandi" api="mat.snack-bar-overrides : container-shape" [snippet]="snippets.pilule">
+        <button matButton="outlined" (click)="afficher('Message en pilule', 'Fermer', 5000, 'perso-snack-pilule')">Afficher</button>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    /* La snackbar est rendue dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-snack-erreur {
+      @include mat.snack-bar-overrides(
+        (
+          container-color: var(--mat-sys-error),
+          supporting-text-color: var(--mat-sys-on-error),
+          button-color: var(--mat-sys-on-error),
+        )
+      );
+    }
+
+    ::ng-deep .perso-snack-pilule {
+      @include mat.snack-bar-overrides(
+        (
+          container-shape: var(--mat-sys-corner-full),
+          supporting-text-size: var(--mat-sys-body-large-size),
+          supporting-text-line-height: var(--mat-sys-body-large-line-height),
+        )
+      );
+    }
   `,
 })
 export class SnackbarPage {
   protected readonly snippets = SNIPPETS;
   private readonly snackBar = inject(MatSnackBar);
 
-  protected afficher(message: string, action?: string, duration?: number): void {
-    this.snackBar.open(message, action, { duration });
+  protected afficher(message: string, action?: string, duration?: number, panelClass?: string): void {
+    this.snackBar.open(message, action, { duration, panelClass });
   }
 
   protected afficherEnHaut(): void {

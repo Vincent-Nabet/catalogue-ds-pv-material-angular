@@ -74,6 +74,27 @@ ouvrir() {
   sansFond: `this.feuille.open(MesActions, { hasBackdrop: false });`,
   bloquee: `this.feuille.open(MesActions, { disableClose: true });
 // Échap et le clic à l'extérieur ne ferment plus la feuille.`,
+  tertiaire: `this.feuille.open(MonContenu, { panelClass: 'perso-feuille-tertiaire' });
+
+@use '@angular/material' as mat;
+
+/* La feuille est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-feuille-tertiaire {
+  @include mat.bottom-sheet-overrides((
+    container-background-color: var(--mat-sys-tertiary-container),
+    container-text-color: var(--mat-sys-on-tertiary-container),
+  ));
+}`,
+  anglesDroits: `this.feuille.open(MonContenu, { panelClass: 'perso-feuille-angulaire' });
+
+@use '@angular/material' as mat;
+
+/* La feuille est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-feuille-angulaire {
+  @include mat.bottom-sheet-overrides((
+    container-shape: var(--mat-sys-corner-none),
+  ));
+}`,
 };
 
 @Component({
@@ -99,6 +120,39 @@ ouvrir() {
         <button matButton="outlined" (click)="ouvrirBloquee()">Ouvrir</button>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Le mixin mat.bottom-sheet-overrides reçoit les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. La feuille étant rendue dans une surcouche, sa classe passe par panelClass. Les angles arrondis ne s’appliquent qu’aux écrans larges."
+    >
+      <app-specimen label="Teinte tertiaire" api="mat.bottom-sheet-overrides : container-background-color" [snippet]="snippets.tertiaire">
+        <button matButton="outlined" (click)="ouvrirTertiaire()">Ouvrir</button>
+      </app-specimen>
+      <app-specimen label="Angles droits" api="mat.bottom-sheet-overrides : container-shape" [snippet]="snippets.anglesDroits">
+        <button matButton="outlined" (click)="ouvrirAnglesDroits()">Ouvrir</button>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    /* La feuille est rendue dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-feuille-tertiaire {
+      @include mat.bottom-sheet-overrides(
+        (
+          container-background-color: var(--mat-sys-tertiary-container),
+          container-text-color: var(--mat-sys-on-tertiary-container),
+        )
+      );
+    }
+
+    ::ng-deep .perso-feuille-angulaire {
+      @include mat.bottom-sheet-overrides(
+        (
+          container-shape: var(--mat-sys-corner-none),
+        )
+      );
+    }
   `,
 })
 export class FeuilleDuBasPage {
@@ -119,5 +173,13 @@ export class FeuilleDuBasPage {
 
   protected ouvrirBloquee(): void {
     this.feuille.open(ActionsFeuille, { disableClose: true });
+  }
+
+  protected ouvrirTertiaire(): void {
+    this.feuille.open(TexteFeuille, { panelClass: 'perso-feuille-tertiaire' });
+  }
+
+  protected ouvrirAnglesDroits(): void {
+    this.feuille.open(TexteFeuille, { panelClass: 'perso-feuille-angulaire' });
   }
 }

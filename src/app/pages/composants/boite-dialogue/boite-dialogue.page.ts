@@ -19,7 +19,7 @@ interface ContenuDialogData {
   align?: 'start' | 'center' | 'end';
 }
 
-interface OptionsOuverture extends Pick<MatDialogConfig, 'width' | 'height' | 'maxWidth' | 'maxHeight' | 'disableClose' | 'position'> {
+interface OptionsOuverture extends Pick<MatDialogConfig, 'width' | 'height' | 'maxWidth' | 'maxHeight' | 'disableClose' | 'position' | 'panelClass'> {
   align?: 'start' | 'center' | 'end';
 }
 
@@ -107,6 +107,50 @@ protected readonly data = inject(MAT_DIALOG_DATA);`,
   maxHeight: '100vh',
 });`,
   enHaut: `this.dialog.open(MonDialogue, { position: { top: '24px' } });`,
+  tertiaire: `this.dialog.open(MonDialogue, { panelClass: 'perso-dialogue-tertiaire' });
+
+@use '@angular/material' as mat;
+
+/* La boîte est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-dialogue-tertiaire {
+  @include mat.dialog-overrides((
+    container-color: var(--mat-sys-tertiary-container),
+    subhead-color: var(--mat-sys-on-tertiary-container),
+    supporting-text-color: var(--mat-sys-on-tertiary-container),
+  ));
+  /* Les boutons reprennent la même paire de rôle, pour garder le contraste */
+  @include mat.button-overrides((
+    text-label-text-color: var(--mat-sys-on-tertiary-container),
+    text-state-layer-color: var(--mat-sys-on-tertiary-container),
+    filled-container-color: var(--mat-sys-tertiary),
+    filled-label-text-color: var(--mat-sys-on-tertiary),
+    filled-state-layer-color: var(--mat-sys-on-tertiary),
+  ));
+}`,
+  angulaire: `this.dialog.open(MonDialogue, { panelClass: 'perso-dialogue-angulaire' });
+
+@use '@angular/material' as mat;
+
+/* La boîte est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-dialogue-angulaire {
+  @include mat.dialog-overrides((
+    container-shape: var(--mat-sys-corner-none),
+    container-elevation-shadow: var(--mat-sys-level5),
+  ));
+}`,
+  texteAgrandi: `this.dialog.open(MonDialogue, { panelClass: 'perso-dialogue-texte' });
+
+@use '@angular/material' as mat;
+
+/* La boîte est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-dialogue-texte {
+  @include mat.dialog-overrides((
+    subhead-size: var(--mat-sys-headline-medium-size),
+    subhead-line-height: var(--mat-sys-headline-medium-line-height),
+    supporting-text-size: var(--mat-sys-body-large-size),
+    supporting-text-line-height: var(--mat-sys-body-large-line-height),
+  ));
+}`,
 };
 
 @Component({
@@ -158,6 +202,65 @@ protected readonly data = inject(MAT_DIALOG_DATA);`,
         <button matButton="outlined" (click)="ouvrir('Position en haut', 1, false, { position: { top: '24px' } })">Ouvrir</button>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="300px"
+      title="Personnalisation (jetons)"
+      description="Le mixin mat.dialog-overrides reçoit les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. La boîte étant rendue dans une surcouche, sa classe passe par panelClass."
+    >
+      <app-specimen label="Teinte tertiaire" api="mat.dialog-overrides : container-color" [snippet]="snippets.tertiaire">
+        <button matButton="outlined" (click)="ouvrir('Confirmation', 1, true, { panelClass: 'perso-dialogue-tertiaire' })">Ouvrir</button>
+      </app-specimen>
+      <app-specimen label="Angles droits et élévation" api="mat.dialog-overrides : container-shape" [snippet]="snippets.angulaire">
+        <button matButton="outlined" (click)="ouvrir('Angles droits', 1, true, { panelClass: 'perso-dialogue-angulaire' })">Ouvrir</button>
+      </app-specimen>
+      <app-specimen label="Titre et texte agrandis" api="mat.dialog-overrides : subhead-size" [snippet]="snippets.texteAgrandi">
+        <button matButton="outlined" (click)="ouvrir('Texte agrandi', 1, true, { panelClass: 'perso-dialogue-texte' })">Ouvrir</button>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    /* La boîte est rendue dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-dialogue-tertiaire {
+      @include mat.dialog-overrides(
+        (
+          container-color: var(--mat-sys-tertiary-container),
+          subhead-color: var(--mat-sys-on-tertiary-container),
+          supporting-text-color: var(--mat-sys-on-tertiary-container),
+        )
+      );
+      @include mat.button-overrides(
+        (
+          text-label-text-color: var(--mat-sys-on-tertiary-container),
+          text-state-layer-color: var(--mat-sys-on-tertiary-container),
+          filled-container-color: var(--mat-sys-tertiary),
+          filled-label-text-color: var(--mat-sys-on-tertiary),
+          filled-state-layer-color: var(--mat-sys-on-tertiary),
+        )
+      );
+    }
+
+    ::ng-deep .perso-dialogue-angulaire {
+      @include mat.dialog-overrides(
+        (
+          container-shape: var(--mat-sys-corner-none),
+          container-elevation-shadow: var(--mat-sys-level5),
+        )
+      );
+    }
+
+    ::ng-deep .perso-dialogue-texte {
+      @include mat.dialog-overrides(
+        (
+          subhead-size: var(--mat-sys-headline-medium-size),
+          subhead-line-height: var(--mat-sys-headline-medium-line-height),
+          supporting-text-size: var(--mat-sys-body-large-size),
+          supporting-text-line-height: var(--mat-sys-body-large-line-height),
+        )
+      );
+    }
   `,
 })
 export class BoiteDialoguePage {

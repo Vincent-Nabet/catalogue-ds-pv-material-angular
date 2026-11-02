@@ -43,6 +43,52 @@ const SNIPPETS = {
   <mat-timepicker-toggle matIconSuffix [for]="picker" />
   <mat-timepicker #picker />
 </mat-form-field>`,
+  panneauTertiaire: `<mat-form-field>
+  <mat-label>Heure</mat-label>
+  <input matInput [matTimepicker]="picker" [value]="heureChoisie" />
+  <mat-timepicker-toggle matIconSuffix [for]="picker" />
+  <mat-timepicker #picker panelClass="perso-heure-tertiaire" />
+</mat-form-field>
+
+heureChoisie = new Date(2026, 9, 15, 9, 30);
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-heure-tertiaire {
+  @include mat.timepicker-overrides((
+    container-background-color: var(--mat-sys-tertiary-container),
+    container-shape: var(--mat-sys-corner-large),
+    container-elevation-shadow: var(--mat-sys-level3),
+  ));
+  @include mat.option-overrides((
+    label-text-color: var(--mat-sys-on-tertiary-container),
+    hover-state-layer-color: color-mix(in srgb, var(--mat-sys-on-tertiary-container) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+    focus-state-layer-color: color-mix(in srgb, var(--mat-sys-on-tertiary-container) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+    selected-state-layer-color: var(--mat-sys-tertiary),
+    selected-state-label-text-color: var(--mat-sys-on-tertiary),
+  ));
+}`,
+  panneauSureleve: `<mat-form-field>
+  <mat-label>Heure</mat-label>
+  <input matInput [matTimepicker]="picker" />
+  <mat-timepicker-toggle matIconSuffix [for]="picker" />
+  <mat-timepicker #picker panelClass="perso-heure-sureleve" />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-heure-sureleve {
+  @include mat.timepicker-overrides((
+    container-background-color: var(--mat-sys-surface-container-highest),
+    container-elevation-shadow: var(--mat-sys-level5),
+  ));
+  @include mat.option-overrides((
+    label-text-size: var(--mat-sys-title-large-size),
+    label-text-line-height: var(--mat-sys-title-large-line-height),
+  ));
+}`,
 };
 
 @Component({
@@ -116,8 +162,69 @@ const SNIPPETS = {
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      title="Personnalisation (jetons)"
+      description="Les mixins mat.timepicker-overrides et mat.option-overrides reçoivent les jetons système --mat-sys-* ; les noms de jetons sont validés à la compilation. Le panneau étant rendu dans une surcouche, sa classe passe par panelClass."
+    >
+      <app-specimen label="Panneau tertiaire, angles arrondis" api="mat.timepicker-overrides : container-background-color" [snippet]="snippets.panneauTertiaire">
+        <mat-form-field>
+          <mat-label>Heure</mat-label>
+          <input matInput [matTimepicker]="tertiaire" [value]="heureChoisie" />
+          <mat-timepicker-toggle matIconSuffix [for]="tertiaire" />
+          <mat-timepicker #tertiaire panelClass="perso-heure-tertiaire" />
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Panneau surélevé, texte agrandi" api="mat.timepicker-overrides : container-elevation-shadow" [snippet]="snippets.panneauSureleve">
+        <mat-form-field>
+          <mat-label>Heure</mat-label>
+          <input matInput [matTimepicker]="sureleve" />
+          <mat-timepicker-toggle matIconSuffix [for]="sureleve" />
+          <mat-timepicker #sureleve panelClass="perso-heure-sureleve" />
+        </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    /* Le panneau est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    ::ng-deep .perso-heure-tertiaire {
+      @include mat.timepicker-overrides(
+        (
+          container-background-color: var(--mat-sys-tertiary-container),
+          container-shape: var(--mat-sys-corner-large),
+          container-elevation-shadow: var(--mat-sys-level3),
+        )
+      );
+      @include mat.option-overrides(
+        (
+          label-text-color: var(--mat-sys-on-tertiary-container),
+          hover-state-layer-color: color-mix(in srgb, var(--mat-sys-on-tertiary-container) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+          focus-state-layer-color: color-mix(in srgb, var(--mat-sys-on-tertiary-container) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+          selected-state-layer-color: var(--mat-sys-tertiary),
+          selected-state-label-text-color: var(--mat-sys-on-tertiary),
+        )
+      );
+    }
+
+    ::ng-deep .perso-heure-sureleve {
+      @include mat.timepicker-overrides(
+        (
+          container-background-color: var(--mat-sys-surface-container-highest),
+          container-elevation-shadow: var(--mat-sys-level5),
+        )
+      );
+      @include mat.option-overrides(
+        (
+          label-text-size: var(--mat-sys-title-large-size),
+          label-text-line-height: var(--mat-sys-title-large-line-height),
+        )
+      );
+    }
   `,
 })
 export class SelecteurHeurePage {
   protected readonly snippets = SNIPPETS;
+  protected readonly heureChoisie = new Date(2026, 9, 15, 9, 30);
 }
