@@ -92,117 +92,145 @@ const SNIPPETS = {
 /* Couleur primaire : défaut du thème, aucune surcharge */`,
   couleurSecondaire: `<button matButton="filled" class="secondaire">Rempli</button>
 
+@use '@angular/material' as mat;
+
 .secondaire {
-  --mat-button-filled-container-color: var(--mat-sys-secondary);
-  --mat-button-filled-label-text-color: var(--mat-sys-on-secondary);
-  --mat-button-filled-state-layer-color: var(--mat-sys-on-secondary);
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-secondary),
+    filled-label-text-color: var(--mat-sys-on-secondary),
+    filled-state-layer-color: var(--mat-sys-on-secondary),
 
-  --mat-button-tonal-container-color: var(--mat-sys-secondary-container);
-  --mat-button-tonal-label-text-color: var(--mat-sys-on-secondary-container);
-  --mat-button-tonal-state-layer-color: var(--mat-sys-on-secondary-container);
+    tonal-container-color: var(--mat-sys-secondary-container),
+    tonal-label-text-color: var(--mat-sys-on-secondary-container),
+    tonal-state-layer-color: var(--mat-sys-on-secondary-container),
 
-  --mat-button-outlined-label-text-color: var(--mat-sys-secondary);
-  --mat-button-outlined-outline-color: var(--mat-sys-secondary);
-  --mat-button-outlined-state-layer-color: var(--mat-sys-secondary);
+    outlined-label-text-color: var(--mat-sys-secondary),
+    outlined-outline-color: var(--mat-sys-secondary),
+    outlined-state-layer-color: var(--mat-sys-secondary),
 
-  --mat-button-text-label-text-color: var(--mat-sys-secondary);
-  --mat-button-text-state-layer-color: var(--mat-sys-secondary);
+    text-label-text-color: var(--mat-sys-secondary),
+    text-state-layer-color: var(--mat-sys-secondary),
 
-  --mat-button-protected-label-text-color: var(--mat-sys-secondary);
-  --mat-button-protected-state-layer-color: var(--mat-sys-secondary);
+    protected-label-text-color: var(--mat-sys-secondary),
+    protected-state-layer-color: var(--mat-sys-secondary),
+  ));
 }`,
   couleurTertiaire: `<button matButton="filled" class="tertiaire">Rempli</button>
 
+@use '@angular/material' as mat;
+
 .tertiaire {
-  --mat-button-filled-container-color: var(--mat-sys-tertiary);
-  --mat-button-filled-label-text-color: var(--mat-sys-on-tertiary);
-  --mat-button-filled-state-layer-color: var(--mat-sys-on-tertiary);
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-tertiary),
+    filled-label-text-color: var(--mat-sys-on-tertiary),
+    filled-state-layer-color: var(--mat-sys-on-tertiary),
 
-  --mat-button-tonal-container-color: var(--mat-sys-tertiary-container);
-  --mat-button-tonal-label-text-color: var(--mat-sys-on-tertiary-container);
-  --mat-button-tonal-state-layer-color: var(--mat-sys-on-tertiary-container);
+    tonal-container-color: var(--mat-sys-tertiary-container),
+    tonal-label-text-color: var(--mat-sys-on-tertiary-container),
+    tonal-state-layer-color: var(--mat-sys-on-tertiary-container),
 
-  --mat-button-outlined-label-text-color: var(--mat-sys-tertiary);
-  --mat-button-outlined-outline-color: var(--mat-sys-tertiary);
-  --mat-button-outlined-state-layer-color: var(--mat-sys-tertiary);
+    outlined-label-text-color: var(--mat-sys-tertiary),
+    outlined-outline-color: var(--mat-sys-tertiary),
+    outlined-state-layer-color: var(--mat-sys-tertiary),
 
-  --mat-button-text-label-text-color: var(--mat-sys-tertiary);
-  --mat-button-text-state-layer-color: var(--mat-sys-tertiary);
+    text-label-text-color: var(--mat-sys-tertiary),
+    text-state-layer-color: var(--mat-sys-tertiary),
 
-  --mat-button-protected-label-text-color: var(--mat-sys-tertiary);
-  --mat-button-protected-state-layer-color: var(--mat-sys-tertiary);
+    protected-label-text-color: var(--mat-sys-tertiary),
+    protected-state-layer-color: var(--mat-sys-tertiary),
+  ));
 }`,
   couleurErreur: `<button matButton="filled" class="erreur">Rempli</button>
 
+@use '@angular/material' as mat;
+
 .erreur {
-  --mat-button-filled-container-color: var(--mat-sys-error);
-  --mat-button-filled-label-text-color: var(--mat-sys-on-error);
-  --mat-button-filled-state-layer-color: var(--mat-sys-on-error);
+  @include mat.button-overrides((
+    filled-container-color: var(--mat-sys-error),
+    filled-label-text-color: var(--mat-sys-on-error),
+    filled-state-layer-color: var(--mat-sys-on-error),
 
-  --mat-button-tonal-container-color: var(--mat-sys-error-container);
-  --mat-button-tonal-label-text-color: var(--mat-sys-on-error-container);
-  --mat-button-tonal-state-layer-color: var(--mat-sys-on-error-container);
+    tonal-container-color: var(--mat-sys-error-container),
+    tonal-label-text-color: var(--mat-sys-on-error-container),
+    tonal-state-layer-color: var(--mat-sys-on-error-container),
 
-  --mat-button-outlined-label-text-color: var(--mat-sys-error);
-  --mat-button-outlined-outline-color: var(--mat-sys-error);
-  --mat-button-outlined-state-layer-color: var(--mat-sys-error);
+    outlined-label-text-color: var(--mat-sys-error),
+    outlined-outline-color: var(--mat-sys-error),
+    outlined-state-layer-color: var(--mat-sys-error),
 
-  --mat-button-text-label-text-color: var(--mat-sys-error);
-  --mat-button-text-state-layer-color: var(--mat-sys-error);
+    text-label-text-color: var(--mat-sys-error),
+    text-state-layer-color: var(--mat-sys-error),
 
-  --mat-button-protected-label-text-color: var(--mat-sys-error);
-  --mat-button-protected-state-layer-color: var(--mat-sys-error);
+    protected-label-text-color: var(--mat-sys-error),
+    protected-state-layer-color: var(--mat-sys-error),
+  ));
 }`,
   couleurIcone: `<button matIconButton aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 <button matIconButton class="secondaire" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 <button matIconButton class="tertiaire" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 <button matIconButton class="erreur" aria-label="Favori"><mat-icon>favorite</mat-icon></button>
 
+@use '@angular/material' as mat;
+
 .secondaire {
-  --mat-icon-button-icon-color: var(--mat-sys-secondary);
-  --mat-icon-button-state-layer-color: var(--mat-sys-secondary);
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-secondary),
+    state-layer-color: var(--mat-sys-secondary),
+  ));
 }
 
 .tertiaire {
-  --mat-icon-button-icon-color: var(--mat-sys-tertiary);
-  --mat-icon-button-state-layer-color: var(--mat-sys-tertiary);
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-tertiary),
+    state-layer-color: var(--mat-sys-tertiary),
+  ));
 }
 
 .erreur {
-  --mat-icon-button-icon-color: var(--mat-sys-error);
-  --mat-icon-button-state-layer-color: var(--mat-sys-error);
+  @include mat.icon-button-overrides((
+    icon-color: var(--mat-sys-error),
+    state-layer-color: var(--mat-sys-error),
+  ));
 }`,
   couleurFab: `<button matFab aria-label="Modifier"><mat-icon>edit</mat-icon></button>
 <button matFab class="secondaire" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
 <button matFab class="tertiaire" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
 <button matFab class="erreur" aria-label="Modifier"><mat-icon>edit</mat-icon></button>
 
+@use '@angular/material' as mat;
+
 /* Mêmes classes et jetons pour matMiniFab et matFab extended */
 .secondaire {
-  --mat-fab-container-color: var(--mat-sys-secondary-container);
-  --mat-fab-foreground-color: var(--mat-sys-on-secondary-container);
-  --mat-fab-state-layer-color: var(--mat-sys-on-secondary-container);
-  --mat-fab-small-container-color: var(--mat-sys-secondary-container);
-  --mat-fab-small-foreground-color: var(--mat-sys-on-secondary-container);
-  --mat-fab-small-state-layer-color: var(--mat-sys-on-secondary-container);
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-secondary-container),
+    foreground-color: var(--mat-sys-on-secondary-container),
+    state-layer-color: var(--mat-sys-on-secondary-container),
+    small-container-color: var(--mat-sys-secondary-container),
+    small-foreground-color: var(--mat-sys-on-secondary-container),
+    small-state-layer-color: var(--mat-sys-on-secondary-container),
+  ));
 }
 
 .tertiaire {
-  --mat-fab-container-color: var(--mat-sys-tertiary-container);
-  --mat-fab-foreground-color: var(--mat-sys-on-tertiary-container);
-  --mat-fab-state-layer-color: var(--mat-sys-on-tertiary-container);
-  --mat-fab-small-container-color: var(--mat-sys-tertiary-container);
-  --mat-fab-small-foreground-color: var(--mat-sys-on-tertiary-container);
-  --mat-fab-small-state-layer-color: var(--mat-sys-on-tertiary-container);
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-tertiary-container),
+    foreground-color: var(--mat-sys-on-tertiary-container),
+    state-layer-color: var(--mat-sys-on-tertiary-container),
+    small-container-color: var(--mat-sys-tertiary-container),
+    small-foreground-color: var(--mat-sys-on-tertiary-container),
+    small-state-layer-color: var(--mat-sys-on-tertiary-container),
+  ));
 }
 
 .erreur {
-  --mat-fab-container-color: var(--mat-sys-error-container);
-  --mat-fab-foreground-color: var(--mat-sys-on-error-container);
-  --mat-fab-state-layer-color: var(--mat-sys-on-error-container);
-  --mat-fab-small-container-color: var(--mat-sys-error-container);
-  --mat-fab-small-foreground-color: var(--mat-sys-on-error-container);
-  --mat-fab-small-state-layer-color: var(--mat-sys-on-error-container);
+  @include mat.fab-overrides((
+    container-color: var(--mat-sys-error-container),
+    foreground-color: var(--mat-sys-on-error-container),
+    state-layer-color: var(--mat-sys-on-error-container),
+    small-container-color: var(--mat-sys-error-container),
+    small-foreground-color: var(--mat-sys-on-error-container),
+    small-state-layer-color: var(--mat-sys-on-error-container),
+  ));
 }`,
   pilule: `<button matButton="filled">Pilule (défaut)</button>`,
   chargement: `<button matButton="filled" [showProgress]="true" aria-label="Enregistrement en cours">
@@ -312,7 +340,7 @@ const SNIPPETS = {
 
     <app-specimen-section
       title="Couleurs"
-      description="L’entrée color est réservée aux thèmes M2 et reste sans effet ici. Les rôles de couleur M3 s’obtiennent en surchargeant les jetons --mat-button-* avec les jetons système --mat-sys-* (fond et texte ensemble, pour garder le contraste)."
+      description="L’entrée color est réservée aux thèmes M2 et reste sans effet ici. Les rôles de couleur M3 s’obtiennent avec les mixins Sass mat.button-overrides, mat.icon-button-overrides et mat.fab-overrides, en leur passant les jetons système --mat-sys-* (fond et texte ensemble, pour garder le contraste)."
     >
       <app-specimen label="Primaire (défaut)" api="--mat-sys-primary" [snippet]="snippets.couleurPrimaire">
         <button matButton="text">Texte</button>
@@ -399,6 +427,8 @@ const SNIPPETS = {
     </app-specimen-section>
   `,
   styles: `
+    @use '@angular/material' as mat;
+
     @mixin taille($hauteur, $marge, $texte) {
       @each $variante in (filled, tonal, outlined, text, protected) {
         --mat-button-#{$variante}-container-height: #{$hauteur};
@@ -436,27 +466,44 @@ const SNIPPETS = {
     .secondaire,
     .tertiaire,
     .erreur {
-      --mat-button-filled-container-color: var(--r-f);
-      --mat-button-filled-label-text-color: var(--r-sf);
-      --mat-button-filled-state-layer-color: var(--r-sf);
-      --mat-button-tonal-container-color: var(--r-c);
-      --mat-button-tonal-label-text-color: var(--r-sc);
-      --mat-button-tonal-state-layer-color: var(--r-sc);
-      --mat-button-outlined-label-text-color: var(--r-f);
-      --mat-button-outlined-outline-color: var(--r-f);
-      --mat-button-outlined-state-layer-color: var(--r-f);
-      --mat-button-text-label-text-color: var(--r-f);
-      --mat-button-text-state-layer-color: var(--r-f);
-      --mat-button-protected-label-text-color: var(--r-f);
-      --mat-button-protected-state-layer-color: var(--r-f);
-      --mat-icon-button-icon-color: var(--r-f);
-      --mat-icon-button-state-layer-color: var(--r-f);
-      --mat-fab-container-color: var(--r-c);
-      --mat-fab-foreground-color: var(--r-sc);
-      --mat-fab-state-layer-color: var(--r-sc);
-      --mat-fab-small-container-color: var(--r-c);
-      --mat-fab-small-foreground-color: var(--r-sc);
-      --mat-fab-small-state-layer-color: var(--r-sc);
+      $f: var(--r-f);
+      $sf: var(--r-sf);
+      $c: var(--r-c);
+      $sc: var(--r-sc);
+
+      @include mat.button-overrides(
+        (
+          filled-container-color: $f,
+          filled-label-text-color: $sf,
+          filled-state-layer-color: $sf,
+          tonal-container-color: $c,
+          tonal-label-text-color: $sc,
+          tonal-state-layer-color: $sc,
+          outlined-label-text-color: $f,
+          outlined-outline-color: $f,
+          outlined-state-layer-color: $f,
+          text-label-text-color: $f,
+          text-state-layer-color: $f,
+          protected-label-text-color: $f,
+          protected-state-layer-color: $f,
+        )
+      );
+      @include mat.icon-button-overrides(
+        (
+          icon-color: $f,
+          state-layer-color: $f,
+        )
+      );
+      @include mat.fab-overrides(
+        (
+          container-color: $c,
+          foreground-color: $sc,
+          state-layer-color: $sc,
+          small-container-color: $c,
+          small-foreground-color: $sc,
+          small-state-layer-color: $sc,
+        )
+      );
     }
 
     @mixin role($role) {

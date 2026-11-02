@@ -104,5 +104,5 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 
 ## Ce que le catalogue ne montre volontairement pas
 
-- Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici. Les rôles de couleur M3 sont montrés par surcharge de jetons (page Bouton, section « Couleurs »).
+- Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici. Les rôles de couleur M3 sont montrés par les mixins `mat.*-overrides` (page Bouton, section « Couleurs »).
 - Les cartes avec image (nécessiteraient un asset et `NgOptimizedImage`).
