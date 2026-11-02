@@ -1,4 +1,4 @@
-import { classifyToken, declaredProperties, missing, unlisted } from './discover-tokens';
+import { classifyToken, declaredProperties, detectedIds, missing, unlisted } from './discover-tokens';
 
 /** Feuille réelle construite par l'environnement de test (jsdom). */
 function sheetOf(css: string): CSSStyleSheet {
@@ -105,5 +105,20 @@ describe('unlisted and missing', () => {
   it('should return nothing when both sides agree', () => {
     expect(unlisted(['--a'], ['--a'])).toEqual([]);
     expect(missing(['--a'], ['--a'])).toEqual([]);
+  });
+});
+
+describe('detectedIds', () => {
+  it('should return the ids of one family that are not listed', () => {
+    const found = [
+      '--app-spacing-small',
+      '--app-spacing-test',
+      '--app-shape-corner-test',
+      '--app-color-test',
+      '--mat-sys-spacing-other',
+    ];
+    expect(detectedIds(found, 'app', 'spacing', ['small'])).toEqual(['test']);
+    expect(detectedIds(found, 'app', 'corner', ['small'])).toEqual(['test']);
+    expect(detectedIds(found, 'app', 'spacing', ['small', 'test'])).toEqual([]);
   });
 });

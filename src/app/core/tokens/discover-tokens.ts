@@ -97,3 +97,17 @@ export function missing(listed: Iterable<string>, found: Iterable<string>): stri
   const present = new Set(found);
   return Array.from(listed).filter((name) => !present.has(name));
 }
+
+/** Identifiants des jetons détectés d'une famille (`kind`) qui ne figurent pas dans `listed`. */
+export function detectedIds(
+  found: Iterable<string>,
+  prefix: string,
+  kind: TokenKind,
+  listed: Iterable<string>,
+): string[] {
+  const ids = Array.from(found)
+    .map((name) => classifyToken(name, prefix))
+    .filter((token) => token.kind === kind)
+    .map((token) => token.id);
+  return unlisted(ids, listed);
+}
