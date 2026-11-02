@@ -129,6 +129,64 @@ const SNIPPETS = {
   <mat-label>Nom</mat-label>
   <input matInput value="Désactivé" disabledInteractive disabled />
 </mat-form-field>`,
+  contourArrondi: `<mat-form-field appearance="outline" class="contour-arrondi">
+  <mat-label>Nom</mat-label>
+  <input matInput />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+.contour-arrondi {
+  @include mat.form-field-overrides((
+    outlined-container-shape: var(--mat-sys-corner-large),
+    outlined-outline-width: 2px,
+    outlined-focus-outline-width: 3px,
+  ));
+}`,
+  roles: `<mat-form-field appearance="outline" class="secondaire">
+  <mat-label>Secondaire</mat-label>
+  <input matInput />
+</mat-form-field>
+<mat-form-field appearance="outline" class="tertiaire">
+  <mat-label>Tertiaire</mat-label>
+  <input matInput />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+.secondaire {
+  @include mat.form-field-overrides((
+    outlined-outline-color: var(--mat-sys-secondary),
+    outlined-hover-outline-color: var(--mat-sys-secondary),
+    outlined-focus-outline-color: var(--mat-sys-secondary),
+    outlined-label-text-color: var(--mat-sys-secondary),
+    outlined-hover-label-text-color: var(--mat-sys-secondary),
+    outlined-focus-label-text-color: var(--mat-sys-secondary),
+    outlined-caret-color: var(--mat-sys-secondary),
+  ));
+}
+
+/* Mêmes jetons avec --mat-sys-tertiary (.tertiaire) */`,
+  fondTeinte: `<mat-form-field appearance="fill" class="fond-teinte">
+  <mat-label>Nom</mat-label>
+  <input matInput />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+.fond-teinte {
+  @include mat.form-field-overrides((
+    filled-container-color: var(--mat-sys-secondary-container),
+    filled-input-text-color: var(--mat-sys-on-secondary-container),
+    filled-label-text-color: var(--mat-sys-on-secondary-container),
+    filled-hover-label-text-color: var(--mat-sys-on-secondary-container),
+    filled-focus-label-text-color: var(--mat-sys-on-secondary-container),
+    filled-active-indicator-color: var(--mat-sys-on-secondary-container),
+    filled-hover-active-indicator-color: var(--mat-sys-on-secondary-container),
+    filled-focus-active-indicator-color: var(--mat-sys-on-secondary-container),
+    filled-caret-color: var(--mat-sys-on-secondary-container),
+  ));
+}`,
 };
 
 @Component({
@@ -354,6 +412,86 @@ const SNIPPETS = {
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>
+
+    <app-specimen-section
+      minWidth="340px"
+      title="Personnalisation (jetons)"
+      description="Forme, épaisseur et couleurs du champ via le mixin mat.form-field-overrides, avec les jetons système --mat-sys-* (noms de jetons validés à la compilation). La couleur d’erreur est déjà gérée par l’état invalide (mat-error) ; les largeurs de trait n’ont pas de jeton système."
+    >
+      <app-specimen label="Contour arrondi et épais" api="form-field-overrides : outlined-container-shape" [snippet]="snippets.contourArrondi">
+        <mat-form-field appearance="outline" class="contour-arrondi">
+          <mat-label>Nom</mat-label>
+          <input matInput />
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Rôles de couleur (contour)" api="form-field-overrides : outlined-outline-color" [snippet]="snippets.roles">
+        <mat-form-field appearance="outline" class="secondaire">
+          <mat-label>Secondaire</mat-label>
+          <input matInput />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="tertiaire">
+          <mat-label>Tertiaire</mat-label>
+          <input matInput />
+        </mat-form-field>
+      </app-specimen>
+      <app-specimen label="Rempli teinté" api="form-field-overrides : filled-container-color" [snippet]="snippets.fondTeinte">
+        <mat-form-field appearance="fill" class="fond-teinte">
+          <mat-label>Nom</mat-label>
+          <input matInput />
+        </mat-form-field>
+      </app-specimen>
+    </app-specimen-section>
+  `,
+  styles: `
+    @use '@angular/material' as mat;
+
+    .contour-arrondi {
+      @include mat.form-field-overrides(
+        (
+          outlined-container-shape: var(--mat-sys-corner-large),
+          outlined-outline-width: 2px,
+          outlined-focus-outline-width: 3px,
+        )
+      );
+    }
+
+    @mixin role($role) {
+      @include mat.form-field-overrides(
+        (
+          outlined-outline-color: var(--mat-sys-#{$role}),
+          outlined-hover-outline-color: var(--mat-sys-#{$role}),
+          outlined-focus-outline-color: var(--mat-sys-#{$role}),
+          outlined-label-text-color: var(--mat-sys-#{$role}),
+          outlined-hover-label-text-color: var(--mat-sys-#{$role}),
+          outlined-focus-label-text-color: var(--mat-sys-#{$role}),
+          outlined-caret-color: var(--mat-sys-#{$role}),
+        )
+      );
+    }
+
+    .secondaire {
+      @include role(secondary);
+    }
+
+    .tertiaire {
+      @include role(tertiary);
+    }
+
+    .fond-teinte {
+      @include mat.form-field-overrides(
+        (
+          filled-container-color: var(--mat-sys-secondary-container),
+          filled-input-text-color: var(--mat-sys-on-secondary-container),
+          filled-label-text-color: var(--mat-sys-on-secondary-container),
+          filled-hover-label-text-color: var(--mat-sys-on-secondary-container),
+          filled-focus-label-text-color: var(--mat-sys-on-secondary-container),
+          filled-active-indicator-color: var(--mat-sys-on-secondary-container),
+          filled-hover-active-indicator-color: var(--mat-sys-on-secondary-container),
+          filled-focus-active-indicator-color: var(--mat-sys-on-secondary-container),
+          filled-caret-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
   `,
 })
 export class ChampSaisiePage {
