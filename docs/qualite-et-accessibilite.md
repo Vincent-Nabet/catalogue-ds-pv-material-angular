@@ -64,7 +64,8 @@ Deux scripts Node (`scripts/`), qui s'appuient sur `puppeteer-core` (Chrome déj
 Ouvre chaque page (accueil + 3 pages Fondations + 35 composants) avec un thème et un mode imposés, exécute axe-core (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `best-practice`) et relève les messages console de niveau erreur ou avertissement. Affiche `ok` / `ÉCHEC` par page, un résumé, et **retourne le code 1** s'il reste une violation ou une erreur console.
 
 ```bash
-npm run a11y                                              # azur, clair + sombre, toutes les pages
+npm run a11y -- --console                                 # erreurs console seulement, sans axe : contrôle courant, rapide
+npm run a11y                                              # azur, clair + sombre, toutes les pages, avec axe (long)
 npm run a11y -- --themes=azur,violet --schemes=dark       # thèmes et modes précis
 npm run a11y -- --themes=tous                             # les 10 thèmes
 npm run a11y -- --routes=accueil,bouton,carte             # quelques pages
@@ -94,6 +95,7 @@ npm run captures -- --width=480 --density=4 --out=captures/mobile        # mobil
 | `--width=N` | largeur du viewport en px (captures) | `1280` |
 | `--out=dossier` | dossier de sortie (captures) | `captures` |
 | `--strict` | ne tolère aucune exception connue (a11y) | désactivé |
+| `--console` | erreurs console seulement, sans axe-core (a11y) : le contrôle courant | désactivé |
 
 Variables d'environnement : `BASE_URL` (utiliser un serveur déjà lancé, ex. `http://localhost:4200`), `PORT` (port du serveur démarré par les scripts), `CHROME_PATH` (Chrome ou Chromium si non détecté automatiquement).
 
