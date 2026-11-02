@@ -300,28 +300,28 @@ function customSnippet(id: string): string {
       <app-specimen-section
         minWidth="360px"
         title="Couleurs personnalisées"
-        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (sélection, plage et texte de la même famille ensemble). Dans un champ, le calendrier est rendu dans une surcouche : la famille y est posée avant l’ouverture et la classe s’applique au calendrier, pas à son conteneur."
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (sélection, plage et texte de la même famille ensemble). Dans un champ, le calendrier s’ouvre dans le champ ou dans une surcouche : la famille est posée sur les deux (sur la surcouche, à l’ouverture), et la classe s’applique au calendrier, pas à son conteneur."
       >
         @for (family of families(); track family.id) {
           <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
             <span [appColorFamily]="family.id">
               <mat-calendar class="calendrier perso-calendrier-famille" [selected]="selection" [startAt]="selection" />
+              <mat-form-field>
+                <mat-label>Période {{ family.label }}</mat-label>
+                <mat-date-range-input [rangePicker]="plageFamille">
+                  <input matStartDate placeholder="Début" />
+                  <input matEndDate placeholder="Fin" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="plageFamille" />
+                <mat-date-range-picker #plageFamille panelClass="perso-calendrier-famille" (opened)="overlayFamily.apply(family.id)" />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Date {{ family.label }}</mat-label>
+                <input matInput [matDatepicker]="dateFamille" />
+                <mat-datepicker-toggle matIconSuffix [for]="dateFamille" />
+                <mat-datepicker #dateFamille panelClass="perso-calendrier-famille" (opened)="overlayFamily.apply(family.id)" />
+              </mat-form-field>
             </span>
-            <mat-form-field (focusin)="overlayFamily.apply(family.id)" (click)="overlayFamily.apply(family.id)">
-              <mat-label>Période {{ family.label }}</mat-label>
-              <mat-date-range-input [rangePicker]="plageFamille">
-                <input matStartDate placeholder="Début" />
-                <input matEndDate placeholder="Fin" />
-              </mat-date-range-input>
-              <mat-datepicker-toggle matIconSuffix [for]="plageFamille" />
-              <mat-date-range-picker #plageFamille panelClass="perso-calendrier-famille" />
-            </mat-form-field>
-            <mat-form-field (focusin)="overlayFamily.apply(family.id)" (click)="overlayFamily.apply(family.id)">
-              <mat-label>Date {{ family.label }}</mat-label>
-              <input matInput [matDatepicker]="dateFamille" />
-              <mat-datepicker-toggle matIconSuffix [for]="dateFamille" />
-              <mat-datepicker #dateFamille panelClass="perso-calendrier-famille" />
-            </mat-form-field>
           </app-specimen>
         }
       </app-specimen-section>

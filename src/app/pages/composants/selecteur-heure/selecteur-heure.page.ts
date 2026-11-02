@@ -3,6 +3,7 @@ import { MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/fo
 import { MatInput } from '@angular/material/input';
 import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular/material/timepicker';
 import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
@@ -134,6 +135,7 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
     MatTimepickerToggle,
     Specimen,
     SpecimenSection,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Sélecteur d’heure</h1>
@@ -218,16 +220,18 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
     @if (families().length > 0) {
       <app-specimen-section
         title="Couleurs personnalisées"
-        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (conteneur, texte et option sélectionnée de la même famille ensemble). Le panneau étant rendu dans une surcouche, la famille est posée sur celle-ci avant l’ouverture."
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (conteneur, texte et option sélectionnée de la même famille ensemble). Le panneau s’ouvre dans le champ : la famille est posée sur ce dernier et, à l’ouverture, sur la surcouche."
       >
         @for (family of families(); track family.id) {
           <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
-            <mat-form-field (focusin)="overlayFamily.apply(family.id)" (click)="overlayFamily.apply(family.id)">
-              <mat-label>Heure {{ family.label }}</mat-label>
-              <input matInput [matTimepicker]="heureFamille" [value]="heureChoisie" />
-              <mat-timepicker-toggle matIconSuffix [for]="heureFamille" />
-              <mat-timepicker #heureFamille panelClass="perso-heure-famille" />
-            </mat-form-field>
+            <span [appColorFamily]="family.id">
+              <mat-form-field>
+                <mat-label>Heure {{ family.label }}</mat-label>
+                <input matInput [matTimepicker]="heureFamille" [value]="heureChoisie" />
+                <mat-timepicker-toggle matIconSuffix [for]="heureFamille" />
+                <mat-timepicker #heureFamille panelClass="perso-heure-famille" (opened)="overlayFamily.apply(family.id)" />
+              </mat-form-field>
+            </span>
           </app-specimen>
         }
       </app-specimen-section>
