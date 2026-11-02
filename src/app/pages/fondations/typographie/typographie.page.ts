@@ -1,9 +1,10 @@
 import { Component, ElementRef, afterRenderEffect, computed, inject, signal, viewChildren } from '@angular/core';
 import { DS_PREFIX } from '../../../core/tokens/color-roles';
-import { unlisted } from '../../../core/tokens/discover-tokens';
+import { missing, unlisted } from '../../../core/tokens/discover-tokens';
 import { formatCssValue, readCustomProperty, readValue } from '../../../core/tokens/read-css';
 import { TokenCatalog } from '../../../core/tokens/token-catalog';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
+import { MissingTokens } from '../../../shared/missing-tokens/missing-tokens';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { TokenBadge } from '../../../shared/token-badge/token-badge';
@@ -56,13 +57,14 @@ function describe(values: TypeValues | undefined): string {
 
 @Component({
   selector: 'app-typographie-page',
-  imports: [Specimen, SpecimenSection, TokenBadge],
+  imports: [MissingTokens, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Typographie</h1>
     <p class="page-intro">
       Les 15 styles de texte Material Design 3 du thème courant, avec les valeurs lues dans le CSS
       chargé : police, taille, interligne, graisse et interlettrage.
     </p>
+    <app-missing-tokens [names]="missingTokens()" />
 
     @for (family of sections(); track family.id) {
       <app-specimen-section [title]="family.label" [minWidth]="family.minWidth">
@@ -165,6 +167,10 @@ export class TypographiePage {
       SHOWN_WEIGHTS,
     ),
   );
+  protected readonly missingTokens = computed(() => {
+    const found = this.found();
+    return this.designSystem() && found ? missing(SHOWN_WEIGHTS, found) : [];
+  });
   private readonly otherValues = signal<Record<string, string>>({});
 
   private readonly samples = viewChildren<ElementRef<HTMLElement>>('echantillon');

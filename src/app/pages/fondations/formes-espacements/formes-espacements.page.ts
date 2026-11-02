@@ -1,9 +1,10 @@
 import { Component, ElementRef, afterRenderEffect, computed, inject, signal, viewChildren } from '@angular/core';
 import { DS_PREFIX } from '../../../core/tokens/color-roles';
-import { detectedIds } from '../../../core/tokens/discover-tokens';
+import { detectedIds, missing } from '../../../core/tokens/discover-tokens';
 import { formatCssValue, readValue } from '../../../core/tokens/read-css';
 import { TokenCatalog } from '../../../core/tokens/token-catalog';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
+import { MissingTokens } from '../../../shared/missing-tokens/missing-tokens';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { TokenBadge } from '../../../shared/token-badge/token-badge';
@@ -40,13 +41,14 @@ const KEY = {
 
 @Component({
   selector: 'app-formes-espacements-page',
-  imports: [Specimen, SpecimenSection, TokenBadge],
+  imports: [MissingTokens, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Formes et espacements</h1>
     <p class="page-intro">
       Rayons, espacements, élévations et opacités d'état du thème courant, avec les valeurs lues
       dans le CSS chargé.
     </p>
+    <app-missing-tokens [names]="missingTokens()" />
 
     <app-specimen-section title="Rayons" minWidth="180px">
       @for (name of corners; track name) {
@@ -278,6 +280,14 @@ export class FormesEspacementsPage {
 
   private readonly themeKey = injectThemeKey();
   protected readonly designSystem = injectIsDesignSystem();
+  protected readonly missingTokens = computed(() => {
+    const found = this.found();
+    const listed = [
+      ...EXPRESSIVE_CORNERS.map((name) => `${this.prefix}shape-corner-${name}`),
+      ...SPACINGS.map((name) => `${this.prefix}spacing-${name}`),
+    ];
+    return this.designSystem() && found ? missing(listed, found) : [];
+  });
 
   private readonly probes = viewChildren<ElementRef<HTMLElement>>('lecture');
   private readonly values = signal<Record<string, string>>({});
