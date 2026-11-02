@@ -3,6 +3,7 @@ import { formatCssValue, readValue } from '../../../core/tokens/read-css';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { TokenBadge } from '../../../shared/token-badge/token-badge';
 
 const SIZES = [
   ['large', 'Large'],
@@ -46,7 +47,7 @@ function describe(values: TypeValues | undefined): string {
 
 @Component({
   selector: 'app-typographie-page',
-  imports: [Specimen, SpecimenSection],
+  imports: [Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Typographie</h1>
     <p class="intro">
@@ -82,12 +83,13 @@ function describe(values: TypeValues | undefined): string {
     @if (designSystem()) {
       <app-specimen-section
         title="Graisses renforcées (design system)"
-        description="Pour chaque style, le texte normal puis le texte avec la graisse renforcée du design system."
+        description="Pour chaque style, le texte normal puis le texte avec la graisse renforcée. Jeton personnalisé : absent de Material Design 3, le design system le génère en variable --app-typescale-emphasized-*. Seuls Label Large et Label Moyen ont un jeton MD3 natif (…-weight-prominent)."
         minWidth="420px"
       >
         @for (style of emphasized(); track style.id) {
           <app-specimen [label]="style.label" [api]="style.weightVar" [snippet]="style.snippet">
             <div class="contenu">
+              <app-token-badge [custom]="style.custom" />
               <div class="comparaison" [style.font]="'var(--mat-sys-' + style.id + ')'">
                 <span>Normal</span>
                 <span
@@ -171,6 +173,7 @@ export class TypographiePage {
     const emphasized = this.emphasizedWeights();
     return FAMILIES.flatMap((family) => family.styles).map((style) => ({
       ...style,
+      custom: style.weightVar.startsWith('--app-'),
       values: normal[style.id]
         ? `normal : ${normal[style.id].weight} · renforcé : ${emphasized[style.id] ?? '—'}`
         : '',

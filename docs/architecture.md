@@ -44,6 +44,7 @@ src/
     shared/
       specimen/              cadre d'une variante + bouton snippet
       specimen-section/      titre + grille de specimens
+      token-badge/           pastille « Jeton personnalisé » (variable `--app-*`) ou « Jeton MD3 », pour les pages Fondations
       snippet-dialog/        dialog « Code — … » avec bouton Copier
     pages/
       accueil/accueil.ts

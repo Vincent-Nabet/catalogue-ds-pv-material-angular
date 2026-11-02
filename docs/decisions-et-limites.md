@@ -52,7 +52,8 @@ Détail : [fonctionnel.md](fonctionnel.md) et [architecture.md](architecture.md)
 | Matrice indépendante du thème | Huit sondes portant `theme-<famille>` et un `color-scheme` | Le résultat est le même quel que soit le thème choisi |
 | Snippets | Dérivés des données (paires, styles, jetons) | Il n'y a pas de composant Material à recopier, seulement l'usage des variables (exception à la règle des snippets écrits à la main) |
 | Ratios | Tronqués à 2 décimales à l'affichage, comparés bruts au seuil | Un échec à 4,4996 ne doit jamais s'afficher « 4,50 : 1 » ; même troncature qu'axe, donc mêmes chiffres que l'inspecteur |
-| Statut | Icône et texte, jamais la couleur seule | WCAG 1.4.1 |
+| Statut | Icône et texte, jamais la couleur seule ; pastille verte (succès du design system, dans tous les thèmes : Material n'a pas de rôle succès), rouge (`error-container`) ou neutre | WCAG 1.4.1 ; lisibilité |
+| Jetons personnalisés | Pastille « Jeton personnalisé » (paire `inverse-on-surface` / `inverse-surface`) sur chaque exemple en `--app-*`, rappel dans la description de la section | Le designer doit voir qu'un jeton qu'il crée génère une variable hors MD3 |
 | Fichiers | `pages/fondations/<id>/`, URL `/composants/<id>` | Routes, menu, accueil, inspecteur et scripts suivent sans modification |
 
 ### Page Matrice de contraste : débranchée

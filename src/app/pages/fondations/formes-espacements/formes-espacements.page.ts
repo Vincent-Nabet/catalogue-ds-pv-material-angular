@@ -4,6 +4,7 @@ import { formatCssValue, readValue } from '../../../core/tokens/read-css';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { TokenBadge } from '../../../shared/token-badge/token-badge';
 
 const CORNERS = ['none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full'];
 const EXPRESSIVE_CORNERS = ['large-increased', 'extra-large-increased', 'extra-extra-large'];
@@ -37,7 +38,7 @@ const KEY = {
 
 @Component({
   selector: 'app-formes-espacements-page',
-  imports: [Specimen, SpecimenSection],
+  imports: [Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Formes et espacements</h1>
     <p class="intro">
@@ -69,7 +70,7 @@ const KEY = {
     @if (designSystem()) {
       <app-specimen-section
         title="Rayons Expressive (design system)"
-        description="Rayons du design system au-delà de l'échelle MD3."
+        description="Rayons au-delà de l'échelle MD3. Jeton personnalisé : absent de Material Design 3, le design system le génère en variable --app-shape-corner-*."
         minWidth="180px"
       >
         @for (name of expressiveCorners; track name) {
@@ -79,6 +80,7 @@ const KEY = {
             [snippet]="'border-radius: var(' + prefix + 'shape-corner-' + name + ');'"
           >
             <div class="contenu">
+              <app-token-badge />
               <div
                 #lecture
                 class="carre"
@@ -94,7 +96,7 @@ const KEY = {
 
       <app-specimen-section
         title="Espacements (design system)"
-        description="Largeur de chaque barre = valeur du jeton."
+        description="Largeur de chaque barre = valeur du jeton. Jeton personnalisé : absent de Material Design 3, le design system le génère en variable --app-spacing-*."
         minWidth="280px"
       >
         @for (name of spacings; track name) {
@@ -104,6 +106,7 @@ const KEY = {
             [snippet]="'padding: var(' + prefix + 'spacing-' + name + ');'"
           >
             <div class="contenu">
+              <app-token-badge />
               <div
                 #lecture
                 class="barre"

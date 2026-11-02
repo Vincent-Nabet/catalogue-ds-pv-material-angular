@@ -7,6 +7,7 @@ import { readColor } from '../../../core/tokens/read-css';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { TokenBadge } from '../../../shared/token-badge/token-badge';
 
 const ALL_ROLES = COLOR_ROLES.flatMap((group) => group.roles);
 
@@ -29,13 +30,17 @@ const TONES: Record<CellStatus, string> = {
   absent: 'neutre',
 };
 
+/** Rappel affiché sur les sections de jetons propres au design system. */
+const CUSTOM_NOTE =
+  'Jeton personnalisé : absent de Material Design 3, le design system le génère en variable --app-color-*.';
+
 function minimumText(min: number): string {
   return `${String(min).replace('.', ',')} : 1`;
 }
 
 @Component({
   selector: 'app-couleurs-page',
-  imports: [MatIcon, Specimen, SpecimenSection],
+  imports: [MatIcon, Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Couleurs</h1>
     <p class="intro">
@@ -46,10 +51,17 @@ function minimumText(min: number): string {
     <span #probe hidden aria-hidden="true"></span>
 
     @for (section of sections(); track section.group.id) {
-      <app-specimen-section [title]="section.group.label" minWidth="280px">
+      <app-specimen-section
+        [title]="section.group.label"
+        [description]="section.group.origin === 'design-system' ? customNote : ''"
+        minWidth="280px"
+      >
         @for (row of section.rows; track row.pair.id) {
           <app-specimen [label]="row.label" [api]="row.api" [snippet]="row.snippet">
             <div class="contenu">
+              @if (row.pair.origin === 'design-system') {
+                <app-token-badge />
+              }
               @if (row.pair.kind === 'texte') {
                 <div class="echantillon" [style.color]="row.fgCss" [style.background]="row.bgCss">
                   Aa Texte d'exemple
@@ -87,7 +99,7 @@ function minimumText(min: number): string {
 
     <app-specimen-section
       title="Autres rôles"
-      description="Rôles qui n'entrent dans aucune paire de texte : couleurs fixes atténuées, ombre, voile, teinte de surface."
+      description="Rôles qui n'entrent dans aucune paire de texte : couleurs fixes atténuées, ombre, voile, teinte de surface. Les rôles marqués « Jeton personnalisé » viennent du design system."
       minWidth="220px"
     >
       @for (item of others(); track item.role) {
@@ -97,6 +109,10 @@ function minimumText(min: number): string {
             <code>{{ item.role }}</code>
             <br />
             {{ item.hex }}
+            @if (item.custom) {
+              <br />
+              <app-token-badge />
+            }
           </span>
         </div>
       }
@@ -182,6 +198,7 @@ function minimumText(min: number): string {
   `,
 })
 export class CouleursPage {
+  protected readonly customNote = CUSTOM_NOTE;
   private readonly probe = viewChild.required<ElementRef<HTMLElement>>('probe');
   private readonly themeKey = injectThemeKey();
 
@@ -204,8 +221,9 @@ export class CouleursPage {
     const designSystem = this.designSystem();
     return unpairedRoles()
       .filter(({ group }) => designSystem || group.origin === 'md3')
-      .map(({ role }) => ({
+      .map(({ group, role }) => ({
         role,
+        custom: group.origin === 'design-system',
         css: `var(${colorVar(role, '--mat-sys-')})`,
         hex: this.hex(colors[role]),
       }));
