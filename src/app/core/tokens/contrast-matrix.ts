@@ -36,6 +36,14 @@ const REGRESSION_TOLERANCE = 0.01;
 
 export type CellStatus = 'ok' | 'echec' | 'sans-seuil' | 'absent';
 
+/** Icône et texte d'un statut : il n'est jamais porté par la couleur seule. */
+export const STATUS_VIEW: Record<CellStatus, { icon: string; text: string }> = {
+  ok: { icon: 'check_circle', text: 'Conforme' },
+  echec: { icon: 'error', text: 'Insuffisant' },
+  'sans-seuil': { icon: 'remove_circle', text: 'Décoratif' },
+  absent: { icon: 'help', text: 'Indisponible' },
+};
+
 export interface MatrixCell {
   mode: Mode;
   /** Valeur brute ; `null` quand une des deux couleurs est absente ou transparente. */
@@ -54,7 +62,8 @@ export interface MatrixRow {
 /** Couleurs lues par mode : `values[mode.id][rôle]`. */
 export type ModeValues = Record<string, Record<string, Rgba | null>>;
 
-function statusOf(ratio: number | null, pair: ColorPair): CellStatus {
+/** Statut d'une paire pour un rapport brut (`null` : une des deux couleurs est absente). */
+export function pairStatus(ratio: number | null, pair: ColorPair): CellStatus {
   if (ratio === null) {
     return 'absent';
   }
@@ -82,7 +91,7 @@ export function buildMatrix(values: ModeValues, pairs: readonly ColorPair[]): Ma
       return {
         mode,
         ratio,
-        status: statusOf(ratio, pair),
+        status: pairStatus(ratio, pair),
         regression,
         previousRatio: regression ? previousRatio : null,
       };
