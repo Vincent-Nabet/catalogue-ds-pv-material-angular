@@ -1,7 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-checkbox class="${id}" checked>${id}</mat-checkbox>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.checkbox-overrides((
+    selected-icon-color: var(--app-color-${id}),
+    selected-hover-icon-color: var(--app-color-${id}),
+    selected-focus-icon-color: var(--app-color-${id}),
+    selected-pressed-icon-color: var(--app-color-${id}),
+    selected-checkmark-color: var(--app-color-on-${id}),
+    selected-hover-state-layer-color: var(--app-color-${id}),
+    selected-focus-state-layer-color: var(--app-color-${id}),
+    selected-pressed-state-layer-color: var(--app-color-${id}),
+  ));
+}`;
+}
 
 const SNIPPETS = {
   decochee: `<mat-checkbox>Décochée</mat-checkbox>`,
@@ -58,7 +80,7 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-case-a-cocher-page',
-  imports: [MatCheckbox, Specimen, SpecimenSection],
+  imports: [MatCheckbox, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Case à cocher</h1>
 
@@ -126,6 +148,21 @@ const SNIPPETS = {
         <mat-checkbox class="invalide" required>J’accepte les conditions</mat-checkbox>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond et coche ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-checkbox class="perso" checked>{{ family.label }}</mat-checkbox>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -154,6 +191,10 @@ const SNIPPETS = {
       @include roles.checkbox(error);
     }
 
+    .perso {
+      @include roles.checkbox(custom);
+    }
+
     .invalide {
       @include mat.checkbox-overrides(
         (
@@ -171,4 +212,11 @@ const SNIPPETS = {
 })
 export class CaseACocherPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'checkbox-overrides : selected-icon-color', snippet: customSnippet(id) })),
+  );
 }

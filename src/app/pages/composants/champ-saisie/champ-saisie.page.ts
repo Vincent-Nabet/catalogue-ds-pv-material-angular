@@ -1,12 +1,56 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatIconButton } from '@angular/material/button';
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  const couleur = `var(--app-color-${id})`;
+  const conteneur = `var(--app-color-on-${id}-container)`;
+  return `<mat-form-field appearance="outline" class="${id}">
+  <mat-label>${id}</mat-label>
+  <input matInput />
+</mat-form-field>
+<mat-form-field appearance="fill" class="${id}-rempli">
+  <mat-label>${id}</mat-label>
+  <input matInput />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.form-field-overrides((
+    outlined-outline-color: ${couleur},
+    outlined-hover-outline-color: ${couleur},
+    outlined-focus-outline-color: ${couleur},
+    outlined-label-text-color: ${couleur},
+    outlined-hover-label-text-color: ${couleur},
+    outlined-focus-label-text-color: ${couleur},
+    outlined-caret-color: ${couleur},
+  ));
+}
+
+.${id}-rempli {
+  @include mat.form-field-overrides((
+    filled-container-color: var(--app-color-${id}-container),
+    filled-input-text-color: ${conteneur},
+    filled-label-text-color: ${conteneur},
+    filled-hover-label-text-color: ${conteneur},
+    filled-focus-label-text-color: ${conteneur},
+    filled-active-indicator-color: ${conteneur},
+    filled-hover-active-indicator-color: ${conteneur},
+    filled-focus-active-indicator-color: ${conteneur},
+    filled-caret-color: ${conteneur},
+  ));
+}`;
+}
 
 const SNIPPETS = {
   rempli: `<mat-form-field appearance="fill">
@@ -205,6 +249,7 @@ const SNIPPETS = {
     SpecimenSection,
     CdkTextareaAutosize,
     MatIconButton,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Champ de saisie</h1>
@@ -441,6 +486,29 @@ const SNIPPETS = {
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="340px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (contour et libellé, ou fond du conteneur et texte ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-form-field appearance="outline" class="perso">
+                <mat-label>{{ family.label }} (contour)</mat-label>
+                <input matInput />
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="perso-rempli">
+                <mat-label>{{ family.label }} (rempli)</mat-label>
+                <input matInput />
+              </mat-form-field>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -464,6 +532,26 @@ const SNIPPETS = {
       @include roles.form-field(tertiary);
     }
 
+    .perso {
+      @include roles.form-field(custom);
+    }
+
+    .perso-rempli {
+      @include mat.form-field-overrides(
+        (
+          filled-container-color: var(--r-c),
+          filled-input-text-color: var(--r-sc),
+          filled-label-text-color: var(--r-sc),
+          filled-hover-label-text-color: var(--r-sc),
+          filled-focus-label-text-color: var(--r-sc),
+          filled-active-indicator-color: var(--r-sc),
+          filled-hover-active-indicator-color: var(--r-sc),
+          filled-focus-active-indicator-color: var(--r-sc),
+          filled-caret-color: var(--r-sc),
+        )
+      );
+    }
+
     .fond-teinte {
       @include mat.form-field-overrides(
         (
@@ -484,6 +572,13 @@ const SNIPPETS = {
 export class ChampSaisiePage {
   protected readonly snippets = SNIPPETS;
   protected readonly nom = new FormControl('', { nonNullable: true, validators: Validators.required });
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'form-field-overrides : outlined-outline-color', snippet: customSnippet(id) })),
+  );
 
   constructor() {
     this.nom.markAsTouched();

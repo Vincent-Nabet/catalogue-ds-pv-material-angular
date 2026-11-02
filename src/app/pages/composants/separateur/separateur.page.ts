@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatDivider } from '@angular/material/divider';
 import { MatListItem, MatListSubheaderCssMatStyler, MatList } from '@angular/material/list';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -71,9 +73,24 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-divider class="trait-${id}" />
+<p>${id}</p>
+
+@use '@angular/material' as mat;
+
+.trait-${id} {
+  @include mat.divider-overrides((
+    width: 2px,
+    color: var(--app-color-${id}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-separateur-page',
-  imports: [MatDivider, MatList, MatListItem, MatListSubheaderCssMatStyler, Specimen, SpecimenSection],
+  imports: [MatDivider, MatList, MatListItem, MatListSubheaderCssMatStyler, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Séparateur</h1>
 
@@ -139,6 +156,26 @@ const SNIPPETS = {
         </div>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="340px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (couleur du trait, sur la surface de la page)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <div class="bloc">
+                <p>Au-dessus, {{ family.label }}</p>
+                <mat-divider class="trait-perso" />
+                <p>En dessous</p>
+              </div>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -164,6 +201,10 @@ const SNIPPETS = {
       @include roles.divider(var(--mat-sys-error));
     }
 
+    .trait-perso {
+      @include roles.divider(var(--r-f));
+    }
+
     .bloc {
       width: 100%;
     }
@@ -182,4 +223,11 @@ const SNIPPETS = {
 })
 export class SeparateurPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.divider-overrides : color', snippet: customSnippet(id) })),
+  );
 }

@@ -2,17 +2,47 @@
 // Un mixin par composant : `@include roles.checkbox(secondary);` sur une classe de la page.
 @use '@angular/material' as mat;
 
+// Les mixins par rôle acceptent aussi `custom` : ils lisent alors les variables --r-* posées sur une
+// famille de couleur du design system (--app-color-*, voir ColorFamilyScope) au lieu de --mat-sys-*.
+@function fg($role) {
+  @if $role == custom {
+    @return var(--r-f);
+  }
+  @return var(--mat-sys-#{$role});
+}
+
+@function on-fg($role) {
+  @if $role == custom {
+    @return var(--r-sf);
+  }
+  @return var(--mat-sys-on-#{$role});
+}
+
+@function container($role) {
+  @if $role == custom {
+    @return var(--r-c);
+  }
+  @return var(--mat-sys-#{$role}-container);
+}
+
+@function on-container($role) {
+  @if $role == custom {
+    @return var(--r-sc);
+  }
+  @return var(--mat-sys-on-#{$role}-container);
+}
+
 @mixin checkbox($role) {
   @include mat.checkbox-overrides(
     (
-      selected-icon-color: var(--mat-sys-#{$role}),
-      selected-hover-icon-color: var(--mat-sys-#{$role}),
-      selected-focus-icon-color: var(--mat-sys-#{$role}),
-      selected-pressed-icon-color: var(--mat-sys-#{$role}),
-      selected-checkmark-color: var(--mat-sys-on-#{$role}),
-      selected-hover-state-layer-color: var(--mat-sys-#{$role}),
-      selected-focus-state-layer-color: var(--mat-sys-#{$role}),
-      selected-pressed-state-layer-color: var(--mat-sys-#{$role}),
+      selected-icon-color: fg($role),
+      selected-hover-icon-color: fg($role),
+      selected-focus-icon-color: fg($role),
+      selected-pressed-icon-color: fg($role),
+      selected-checkmark-color: on-fg($role),
+      selected-hover-state-layer-color: fg($role),
+      selected-focus-state-layer-color: fg($role),
+      selected-pressed-state-layer-color: fg($role),
     )
   );
 }
@@ -20,11 +50,11 @@
 @mixin radio($role) {
   @include mat.radio-overrides(
     (
-      selected-icon-color: var(--mat-sys-#{$role}),
-      selected-hover-icon-color: var(--mat-sys-#{$role}),
-      selected-focus-icon-color: var(--mat-sys-#{$role}),
-      selected-pressed-icon-color: var(--mat-sys-#{$role}),
-      checked-ripple-color: var(--mat-sys-#{$role}),
+      selected-icon-color: fg($role),
+      selected-hover-icon-color: fg($role),
+      selected-focus-icon-color: fg($role),
+      selected-pressed-icon-color: fg($role),
+      checked-ripple-color: fg($role),
     )
   );
 }
@@ -32,25 +62,25 @@
 @mixin slide-toggle($role) {
   @include mat.slide-toggle-overrides(
     (
-      selected-track-color: var(--mat-sys-#{$role}),
-      selected-hover-track-color: var(--mat-sys-#{$role}),
-      selected-focus-track-color: var(--mat-sys-#{$role}),
-      selected-pressed-track-color: var(--mat-sys-#{$role}),
-      selected-handle-color: var(--mat-sys-on-#{$role}),
-      selected-hover-handle-color: var(--mat-sys-#{$role}-container),
-      selected-focus-handle-color: var(--mat-sys-#{$role}-container),
-      selected-pressed-handle-color: var(--mat-sys-#{$role}-container),
-      selected-icon-color: var(--mat-sys-on-#{$role}-container),
-      selected-hover-state-layer-color: var(--mat-sys-#{$role}),
-      selected-focus-state-layer-color: var(--mat-sys-#{$role}),
-      selected-pressed-state-layer-color: var(--mat-sys-#{$role}),
+      selected-track-color: fg($role),
+      selected-hover-track-color: fg($role),
+      selected-focus-track-color: fg($role),
+      selected-pressed-track-color: fg($role),
+      selected-handle-color: on-fg($role),
+      selected-hover-handle-color: container($role),
+      selected-focus-handle-color: container($role),
+      selected-pressed-handle-color: container($role),
+      selected-icon-color: on-container($role),
+      selected-hover-state-layer-color: fg($role),
+      selected-focus-state-layer-color: fg($role),
+      selected-pressed-state-layer-color: fg($role),
     )
   );
 }
 
 @mixin slider($role) {
-  $couleur: var(--mat-sys-#{$role});
-  $sur-couleur: var(--mat-sys-on-#{$role});
+  $couleur: fg($role);
+  $sur-couleur: on-fg($role);
 
   @include mat.slider-overrides(
     (
@@ -72,21 +102,21 @@
 @mixin chips($role) {
   @include mat.chips-overrides(
     (
-      elevated-selected-container-color: var(--mat-sys-#{$role}-container),
-      selected-label-text-color: var(--mat-sys-on-#{$role}-container),
-      selected-hover-state-layer-color: var(--mat-sys-on-#{$role}-container),
-      selected-focus-state-layer-color: var(--mat-sys-on-#{$role}-container),
+      elevated-selected-container-color: container($role),
+      selected-label-text-color: on-container($role),
+      selected-hover-state-layer-color: on-container($role),
+      selected-focus-state-layer-color: on-container($role),
     )
   );
 }
 
 @mixin card($role) {
-  color: var(--mat-sys-on-#{$role}-container);
+  color: on-container($role);
 
   @include mat.card-overrides(
     (
-      filled-container-color: var(--mat-sys-#{$role}-container),
-      subtitle-text-color: var(--mat-sys-on-#{$role}-container),
+      filled-container-color: container($role),
+      subtitle-text-color: on-container($role),
     )
   );
 }
@@ -94,13 +124,13 @@
 @mixin form-field($role) {
   @include mat.form-field-overrides(
     (
-      outlined-outline-color: var(--mat-sys-#{$role}),
-      outlined-hover-outline-color: var(--mat-sys-#{$role}),
-      outlined-focus-outline-color: var(--mat-sys-#{$role}),
-      outlined-label-text-color: var(--mat-sys-#{$role}),
-      outlined-hover-label-text-color: var(--mat-sys-#{$role}),
-      outlined-focus-label-text-color: var(--mat-sys-#{$role}),
-      outlined-caret-color: var(--mat-sys-#{$role}),
+      outlined-outline-color: fg($role),
+      outlined-hover-outline-color: fg($role),
+      outlined-focus-outline-color: fg($role),
+      outlined-label-text-color: fg($role),
+      outlined-hover-label-text-color: fg($role),
+      outlined-focus-label-text-color: fg($role),
+      outlined-caret-color: fg($role),
     )
   );
 }
@@ -108,13 +138,13 @@
 @mixin stepper($role) {
   @include mat.stepper-overrides(
     (
-      header-selected-state-icon-background-color: var(--mat-sys-#{$role}),
-      header-selected-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
-      header-done-state-icon-background-color: var(--mat-sys-#{$role}),
-      header-done-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
-      header-edit-state-icon-background-color: var(--mat-sys-#{$role}),
-      header-edit-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
-      line-color: var(--mat-sys-#{$role}),
+      header-selected-state-icon-background-color: fg($role),
+      header-selected-state-icon-foreground-color: on-fg($role),
+      header-done-state-icon-background-color: fg($role),
+      header-done-state-icon-foreground-color: on-fg($role),
+      header-edit-state-icon-background-color: fg($role),
+      header-edit-state-icon-foreground-color: on-fg($role),
+      line-color: fg($role),
     )
   );
 }
@@ -189,10 +219,10 @@
 // Bouton : les rôles posent des variables intermédiaires (--r-*), lues une seule fois par `button-tokens`
 // sur le groupe de classes de rôle (évite de répéter la quinzaine de jetons pour chaque rôle).
 @mixin button($role) {
-  --r-f: var(--mat-sys-#{$role});
-  --r-sf: var(--mat-sys-on-#{$role});
-  --r-c: var(--mat-sys-#{$role}-container);
-  --r-sc: var(--mat-sys-on-#{$role}-container);
+  --r-f: fg($role);
+  --r-sf: on-fg($role);
+  --r-c: container($role);
+  --r-sc: on-container($role);
 }
 
 @mixin button-tokens {
@@ -232,6 +262,60 @@
       small-container-color: $c,
       small-foreground-color: $sc,
       small-state-layer-color: $sc,
+    )
+  );
+}
+
+// Surcouches (menu, snackbar, sélecteurs de date et d'heure) : les mixins acceptent `custom` (variables
+// --r-* posées sur le conteneur de la surcouche par OverlayFamily) comme les autres rôles.
+@mixin menu($role) {
+  @include mat.menu-overrides(
+    (
+      container-color: container($role),
+      item-label-text-color: on-container($role),
+      item-icon-color: on-container($role),
+      item-hover-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+      item-focus-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+      divider-color: var(--mat-sys-outline),
+    )
+  );
+}
+
+@mixin snack-bar($role) {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: fg($role),
+      supporting-text-color: on-fg($role),
+      button-color: on-fg($role),
+    )
+  );
+}
+
+@mixin datepicker($role) {
+  @include mat.datepicker-overrides(
+    (
+      calendar-date-selected-state-background-color: fg($role),
+      calendar-date-selected-state-text-color: on-fg($role),
+      calendar-date-in-range-state-background-color: container($role),
+      calendar-date-today-outline-color: fg($role),
+      calendar-date-preview-state-outline-color: fg($role),
+    )
+  );
+}
+
+@mixin timepicker($role) {
+  @include mat.timepicker-overrides(
+    (
+      container-background-color: container($role),
+    )
+  );
+  @include mat.option-overrides(
+    (
+      label-text-color: on-container($role),
+      hover-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+      focus-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+      selected-state-layer-color: fg($role),
+      selected-state-label-text-color: on-fg($role),
     )
   );
 }

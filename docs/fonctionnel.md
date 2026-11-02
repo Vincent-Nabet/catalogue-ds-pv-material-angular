@@ -41,6 +41,7 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 - Les états non forçables (survol, appui) ne sont pas montrés.
 - Les popups (dialog, bottom-sheet, snackbar, menu, tooltip) sont présentés par un bouton déclencheur, sans aperçu statique.
 - **Section « Personnalisation (jetons) »** : 33 pages sur 35 (toutes sauf Bouton et Icône, dont les sections Tailles/Couleurs/Formes jouent ce rôle) se terminent par une section qui montre comment restyler le composant avec son mixin Sass `mat.<composant>-overrides` : rôles de couleur (secondaire, tertiaire, erreur), formes (`--mat-sys-corner-*`), tailles et hauteurs, élévation, typographie (`--mat-sys-*-size`). Le champ `api` du specimen nomme le mixin et le premier jeton ; le snippet donne le template et le SCSS. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
+- **Section « Couleurs personnalisées »** : 25 pages (Bouton, Bouton bascule, Badge, Icône, Barre de progression, Indicateur circulaire, Ripple, Champ de saisie, Case à cocher, Bouton radio, Interrupteur, Curseur, Sélecteur de date, Sélecteur d'heure, Chips, Barre d'outils, Menu, Onglets, Carte, Séparateur, Liste, Étapes, Snackbar, Tableau, Pagination), celles qui ont déjà des exemples de rôles de couleur, présentent en fin de page un exemple **par famille de couleur du design system** (`--app-color-<famille>` complète : rôle, `on-`, `-container`, `on-…-container`). Les familles sont **détectées dans le CSS chargé** (aujourd'hui Succès, Info, Alerte) : une nouvelle famille livrée par le design system apparaît sur toutes ces pages sans toucher au code. Chaque exemple porte la pastille « Jeton personnalisé ». Avec un thème Angular Material (aucune famille), la section est masquée. Les pages sans exemple de couleur (Autocomplétion, Liste déroulante, Boîte de dialogue, Feuille du bas, Infobulle, Panneau extensible, Menu latéral, Grille, Arbre, Tri) n'en ont pas. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5 bis.
 
 ## Fondations (3 pages)
 
@@ -122,5 +123,5 @@ Catégorie placée **en tête** du menu et de l'accueil. Les pages montrent les 
 
 ## Ce que le catalogue ne montre volontairement pas
 
-- Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici. Les rôles de couleur M3 sont montrés par les mixins `mat.*-overrides` (page Bouton, section « Couleurs »).
+- Les entrées `color` des composants : elles ne s'appliquent qu'aux thèmes M2, sans effet avec le thème M3 utilisé ici. Les rôles de couleur M3 sont montrés par les mixins `mat.*-overrides` (page Bouton, section « Couleurs »), les familles du design system par la section « Couleurs personnalisées » de chaque page.
 - Les cartes avec image (nécessiteraient un asset et `NgOptimizedImage`).

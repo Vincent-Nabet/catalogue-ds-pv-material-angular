@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
   MatCard,
@@ -11,9 +11,33 @@ import {
   MatCardTitle,
 } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatProgressBar } from '@angular/material/progress-bar';
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-card appearance="filled" class="carte-${id}">
+  <mat-card-header>
+    <mat-card-title>${id}</mat-card-title>
+    <mat-card-subtitle>Sous-titre</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>Contenu de la carte.</mat-card-content>
+</mat-card>
+
+@use '@angular/material' as mat;
+
+/* Le texte du titre et du contenu hérite de color : à fixer avec le fond */
+.carte-${id} {
+  color: var(--app-color-on-${id}-container);
+  @include mat.card-overrides((
+    filled-container-color: var(--app-color-${id}-container),
+    subtitle-text-color: var(--app-color-on-${id}-container),
+  ));
+}`;
+}
 
 const SNIPPETS = {
   releve: `<mat-card appearance="raised">
@@ -176,6 +200,7 @@ const SNIPPETS = {
     Specimen,
     SpecimenSection,
     MatProgressBar,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Carte</h1>
@@ -313,6 +338,28 @@ const SNIPPETS = {
         </mat-card>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="360px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond du conteneur et texte ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-card appearance="filled" class="perso">
+                <mat-card-header>
+                  <mat-card-title>{{ family.label }}</mat-card-title>
+                  <mat-card-subtitle>Sous-titre</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>Contenu de la carte.</mat-card-content>
+              </mat-card>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -333,6 +380,10 @@ const SNIPPETS = {
 
     .carte-erreur {
       @include roles.card(error);
+    }
+
+    .perso {
+      @include roles.card(custom);
     }
 
     .carte-angulaire {
@@ -361,4 +412,11 @@ const SNIPPETS = {
 })
 export class CartePage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.card-overrides : filled-container-color', snippet: customSnippet(id) })),
+  );
 }

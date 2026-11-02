@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatIcon } from '@angular/material/icon';
 import {
   MatActionList,
@@ -171,6 +173,41 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-list class="${id}">
+  <mat-list-item>
+    <mat-icon matListItemIcon>folder</mat-icon>
+    <span matListItemTitle>Photos</span>
+  </mat-list-item>
+  <mat-list-item>
+    <mat-icon matListItemIcon>description</mat-icon>
+    <span matListItemTitle>Documents</span>
+  </mat-list-item>
+</mat-list>
+
+<mat-nav-list class="${id}" aria-label="Navigation ${id}">
+  <a mat-list-item [activated]="true">Accueil</a>
+  <a mat-list-item>Documents</a>
+</mat-nav-list>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.list-overrides((
+    list-item-container-color: var(--app-color-${id}-container),
+    list-item-label-text-color: var(--app-color-on-${id}-container),
+    list-item-hover-label-text-color: var(--app-color-on-${id}-container),
+    list-item-focus-label-text-color: var(--app-color-on-${id}-container),
+    list-item-leading-icon-color: var(--app-color-on-${id}-container),
+    list-item-hover-leading-icon-color: var(--app-color-on-${id}-container),
+    /* Indicateur actif : texte sur-conteneur à 16 % sur le conteneur, pour garder le texte lisible */
+    active-indicator-color: color-mix(in srgb, var(--app-color-on-${id}-container) 16%, var(--app-color-${id}-container)),
+    active-indicator-shape: var(--mat-sys-corner-small),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-liste-page',
   imports: [
@@ -188,6 +225,7 @@ const SNIPPETS = {
     MatSelectionList,
     Specimen,
     SpecimenSection,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Liste</h1>
@@ -349,6 +387,36 @@ const SNIPPETS = {
         </mat-list>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="360px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond et texte du conteneur ensemble ; l’indicateur actif de la liste de navigation en est un dérivé)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-list class="perso">
+                <mat-list-item>
+                  <mat-icon matListItemIcon>folder</mat-icon>
+                  <span matListItemTitle>Photos {{ family.label }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <mat-icon matListItemIcon>description</mat-icon>
+                  <span matListItemTitle>Documents {{ family.label }}</span>
+                </mat-list-item>
+              </mat-list>
+              <mat-nav-list class="perso" [attr.aria-label]="'Navigation ' + family.label">
+                <a mat-list-item [activated]="true">Accueil</a>
+                <a mat-list-item>Documents</a>
+                <a mat-list-item>Paramètres</a>
+              </mat-nav-list>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -378,6 +446,23 @@ const SNIPPETS = {
       @include mat.list-overrides(
         (
           active-indicator-color: var(--mat-sys-tertiary-container),
+          active-indicator-shape: var(--mat-sys-corner-small),
+        )
+      );
+    }
+
+    .perso {
+      width: 100%;
+
+      @include mat.list-overrides(
+        (
+          list-item-container-color: var(--r-c),
+          list-item-label-text-color: var(--r-sc),
+          list-item-hover-label-text-color: var(--r-sc),
+          list-item-focus-label-text-color: var(--r-sc),
+          list-item-leading-icon-color: var(--r-sc),
+          list-item-hover-leading-icon-color: var(--r-sc),
+          active-indicator-color: color-mix(in srgb, var(--r-sc) 16%, var(--r-c)),
           active-indicator-shape: var(--mat-sys-corner-small),
         )
       );
@@ -414,4 +499,16 @@ const SNIPPETS = {
 })
 export class ListePage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: 'mat.list-overrides : list-item-container-color',
+      snippet: customSnippet(id),
+    })),
+  );
 }

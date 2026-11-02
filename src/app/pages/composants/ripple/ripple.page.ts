@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatRipple } from '@angular/material/core';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
@@ -39,9 +41,22 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<div matRipple class="zone vague-${id}">Cliquer ici</div>
+
+@use '@angular/material' as mat;
+
+.vague-${id} {
+  @include mat.ripple-overrides((
+    color: color-mix(in srgb, var(--app-color-${id}) 25%, transparent),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-ripple-page',
-  imports: [MatRipple, Specimen, SpecimenSection, MatButton],
+  imports: [MatRipple, Specimen, SpecimenSection, MatButton, ColorFamilyScope],
   template: `
     <h1>Ripple</h1>
 
@@ -94,6 +109,21 @@ const SNIPPETS = {
         <div matRipple class="zone vague-erreur" tabindex="0" role="button">Cliquer ici</div>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (couleur de la famille à 25 % d’opacité, sur la surface de la page)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <div matRipple class="zone vague-perso" tabindex="0" role="button">Cliquer ici, {{ family.label }}</div>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use 'roles';
@@ -110,6 +140,10 @@ const SNIPPETS = {
       @include roles.ripple(var(--mat-sys-error));
     }
 
+    .vague-perso {
+      @include roles.ripple(var(--r-f));
+    }
+
     .zone {
       display: flex;
       align-items: center;
@@ -124,4 +158,11 @@ const SNIPPETS = {
 })
 export class RipplePage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.ripple-overrides : color', snippet: customSnippet(id) })),
+  );
 }

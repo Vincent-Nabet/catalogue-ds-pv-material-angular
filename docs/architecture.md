@@ -33,12 +33,14 @@ src/
       i18n/intl-fr.ts               libellés français (paginator, datepicker, stepper)
       a11y/contrast-items.ts        résultats axe → éléments d'inspection (fonctions pures)
       a11y/contrast-inspector.ts    @Service : état de l'inspecteur de contraste + exécution d'axe (chargé à la demande)
-      tokens/                       pages Fondations seulement (jamais dans le bundle initial) :
+      tokens/                       pages Fondations et pages de composants (chargés en différé, jamais dans le bundle initial) :
                                     contrast.ts (WCAG 2.x, fonctions pures), color-roles.ts (rôles et paires, source unique),
                                     read-css.ts (lecture des valeurs dans le DOM), contrast-matrix.ts (matrice, régressions),
                                     theme-key.ts (relecture au changement de thème ou de mode),
                                     discover-tokens.ts (détection des variables --app-* du CSS chargé, fonctions pures),
-                                    token-catalog.ts (@Service : noms détectés, relus à chaque changement de thème)
+                                    token-catalog.ts (@Service : noms détectés, relus à chaque changement de thème),
+                                    color-families.ts (injectColorFamilies() : familles --app-color-* complètes, vides hors thème
+                                    Design system ; familyVariables(id) : variables --r-*), utilisé aussi par les pages de composants (lazy)
     layout/
       shell/                 barre d'outils + sidenav + <router-outlet>
       theme-picker/          bouton + menu thème / mode / densité
@@ -49,6 +51,8 @@ src/
       token-badge/           pastille « Jeton personnalisé » (variable `--app-*`) ou « Jeton MD3 », pour les pages Fondations
       missing-tokens/        note « Jetons attendus mais absents du CSS chargé » (pages Fondations, mode design system)
       snippet-dialog/        dialog « Code — … » avec bouton Copier
+      color-family-scope/    directive ColorFamilyScope (pose --r-* d'une famille sur ses descendants, display: contents)
+                             et @Service OverlayFamily (même chose sur le conteneur de la surcouche CDK)
     pages/
       accueil/accueil.ts
       fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre

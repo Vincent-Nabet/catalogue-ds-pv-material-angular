@@ -37,7 +37,7 @@ Le `body` utilise `--mat-sys-surface`, `--mat-sys-on-surface` et `--mat-sys-body
 
 ## Partial `src/styles/_roles.scss`
 
-Mixins Sass « rôle de couleur appliqué à un composant Material » (`roles.checkbox(secondary)`, `roles.button(error)`…), partagés par les pages de composants. Ce n'est pas une feuille globale : rien n'est émis tant qu'une page ne l'inclut pas. Il est résolu par `stylePreprocessorOptions.includePaths: ["src/styles"]` (`angular.json`), donc `@use 'roles';` suffit dans un `styles:` inline. Les classes `.secondaire`, `.tertiaire`, `.erreur` restent propres à chaque page. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
+Mixins Sass « rôle de couleur appliqué à un composant Material » (`roles.checkbox(secondary)`, `roles.button(error)`…), partagés par les pages de composants. Ce n'est pas une feuille globale : rien n'est émis tant qu'une page ne l'inclut pas. Il est résolu par `stylePreprocessorOptions.includePaths: ["src/styles"]` (`angular.json`), donc `@use 'roles';` suffit dans un `styles:` inline. Les classes `.secondaire`, `.tertiaire`, `.erreur` restent propres à chaque page. Les mixins par rôle acceptent aussi `custom` (variables `--r-f`, `--r-sf`, `--r-c`, `--r-sc` posées par `ColorFamilyScope`) pour les familles `--app-color-*` du design system. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
 
 ## Combinaisons
 

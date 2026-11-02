@@ -42,7 +42,7 @@ npm start            # ng serve, http://localhost:4200
 npm run build        # ng build (production, budgets appliqués)
 npm run lint         # ng lint
 npm test             # ng test (Vitest) ; ajouter -- --watch=false pour un seul passage
-npm run a11y         # audit axe-core + erreurs console sur toutes les pages
+npm run a11y -- --console   # erreurs console sur toutes les pages (rapide) ; sans --console : + audit axe-core, long, ciblé ou à la demande
 npm run captures     # captures pleine page par thème et mode (dossier captures/)
 npm run themes       # génère les thèmes depuis tokens/ (ou --source design.zip --nom <nom>)
 node --test scripts/themes/   # tests du script de génération

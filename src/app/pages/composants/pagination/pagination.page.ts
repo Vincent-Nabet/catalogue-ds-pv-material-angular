@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorIntlFr } from '../../../core/i18n/intl-fr';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -51,9 +53,25 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-paginator class="${id}" [length]="100" [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25]" aria-label="Pagination" />
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.paginator-overrides((
+    container-background-color: var(--app-color-${id}-container),
+    container-text-color: var(--app-color-on-${id}-container),
+    enabled-icon-color: var(--app-color-on-${id}-container),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-pagination-page',
-  imports: [MatPaginator, Specimen, SpecimenSection],
+  imports: [MatPaginator, Specimen, SpecimenSection, ColorFamilyScope],
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }],
   template: `
     <h1>Pagination</h1>
@@ -124,6 +142,28 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
         />
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="440px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond du paginateur et texte ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-paginator
+                class="perso"
+                [length]="100"
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25]"
+                [attr.aria-label]="'Pagination ' + family.label"
+              />
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -138,6 +178,16 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
           container-background-color: var(--mat-sys-secondary-container),
           container-text-color: var(--mat-sys-on-secondary-container),
           enabled-icon-color: var(--mat-sys-on-secondary-container),
+        )
+      );
+    }
+
+    .perso {
+      @include mat.paginator-overrides(
+        (
+          container-background-color: var(--r-c),
+          container-text-color: var(--r-sc),
+          enabled-icon-color: var(--r-sc),
         )
       );
     }
@@ -157,4 +207,16 @@ providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }]`,
 })
 export class PaginationPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: 'mat.paginator-overrides : container-background-color',
+      snippet: customSnippet(id),
+    })),
+  );
 }

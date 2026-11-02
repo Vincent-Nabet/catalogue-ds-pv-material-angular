@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import {
   MatChip,
   MatChipAvatar,
@@ -13,8 +13,29 @@ import {
 } from '@angular/material/chips';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-chip-listbox aria-label="${id}" multiple>
+  <mat-chip-option selected class="${id}">${id}</mat-chip-option>
+  <mat-chip-option class="${id}">Non sélectionnée</mat-chip-option>
+</mat-chip-listbox>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.chips-overrides((
+    elevated-selected-container-color: var(--app-color-${id}-container),
+    selected-label-text-color: var(--app-color-on-${id}-container),
+    selected-hover-state-layer-color: var(--app-color-on-${id}-container),
+    selected-focus-state-layer-color: var(--app-color-on-${id}-container),
+  ));
+}`;
+}
 
 const SNIPPETS = {
   ensemble: `<mat-chip-set aria-label="Technologies">
@@ -163,6 +184,7 @@ const SNIPPETS = {
     MatIcon,
     Specimen,
     SpecimenSection,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Chips</h1>
@@ -293,6 +315,24 @@ const SNIPPETS = {
         </mat-chip-set>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond du conteneur et texte ensemble, à l’état sélectionné)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-chip-listbox [attr.aria-label]="'Sélection ' + family.label" multiple>
+                <mat-chip-option selected class="perso">{{ family.label }}</mat-chip-option>
+                <mat-chip-option class="perso">Non sélectionnée</mat-chip-option>
+              </mat-chip-listbox>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -326,6 +366,10 @@ const SNIPPETS = {
       @include roles.chips(error);
     }
 
+    .perso {
+      @include roles.chips(custom);
+    }
+
     .remplis {
       @include mat.chips-overrides(
         (
@@ -347,4 +391,16 @@ const SNIPPETS = {
 })
 export class ChipsPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: 'chips-overrides : elevated-selected-container-color',
+      snippet: customSnippet(id),
+    })),
+  );
 }

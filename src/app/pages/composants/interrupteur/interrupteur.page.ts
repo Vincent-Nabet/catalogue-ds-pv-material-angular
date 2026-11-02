@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
@@ -52,9 +54,34 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  const role = `--app-color-${id}`;
+  return `<mat-slide-toggle class="${id}" checked>Libellé</mat-slide-toggle>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.slide-toggle-overrides((
+    selected-track-color: var(${role}),
+    selected-hover-track-color: var(${role}),
+    selected-focus-track-color: var(${role}),
+    selected-pressed-track-color: var(${role}),
+    selected-handle-color: var(--app-color-on-${id}),
+    selected-hover-handle-color: var(${role}-container),
+    selected-focus-handle-color: var(${role}-container),
+    selected-pressed-handle-color: var(${role}-container),
+    selected-icon-color: var(--app-color-on-${id}-container),
+    selected-hover-state-layer-color: var(${role}),
+    selected-focus-state-layer-color: var(${role}),
+    selected-pressed-state-layer-color: var(${role}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-interrupteur-page',
-  imports: [MatSlideToggle, Specimen, SpecimenSection],
+  imports: [MatSlideToggle, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Interrupteur</h1>
 
@@ -116,6 +143,22 @@ const SNIPPETS = {
         <mat-slide-toggle class="carre" checked>Allumé</mat-slide-toggle>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="320px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (piste, poignée et icône ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-slide-toggle class="perso" checked>{{ family.label }}</mat-slide-toggle>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -133,6 +176,10 @@ const SNIPPETS = {
       @include roles.slide-toggle(error);
     }
 
+    .perso {
+      @include roles.slide-toggle(custom);
+    }
+
     .carre {
       @include mat.slide-toggle-overrides(
         (
@@ -145,4 +192,11 @@ const SNIPPETS = {
 })
 export class InterrupteurPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'slide-toggle-overrides : selected-track-color', snippet: customSnippet(id) })),
+  );
 }

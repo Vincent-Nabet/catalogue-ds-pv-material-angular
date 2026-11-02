@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -66,9 +68,23 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-toolbar class="${id}">${id}</mat-toolbar>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.toolbar-overrides((
+    container-background-color: var(--app-color-${id}-container),
+    container-text-color: var(--app-color-on-${id}-container),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-barre-outils-page',
-  imports: [MatToolbar, MatToolbarRow, MatIconButton, MatIcon, Specimen, SpecimenSection],
+  imports: [MatToolbar, MatToolbarRow, MatIconButton, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Barre d’outils</h1>
 
@@ -110,6 +126,22 @@ const SNIPPETS = {
         <mat-toolbar class="relevee">Titre de la page</mat-toolbar>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="320px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond et texte du conteneur ensemble)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-toolbar class="perso">{{ family.label }}</mat-toolbar>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -129,6 +161,10 @@ const SNIPPETS = {
 
     .tertiaire {
       @include roles.toolbar(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
+    }
+
+    .perso {
+      @include roles.toolbar(var(--r-c), var(--r-sc));
     }
 
     .haute {
@@ -158,4 +194,11 @@ const SNIPPETS = {
 })
 export class BarreOutilsPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.toolbar-overrides : container-background-color', snippet: customSnippet(id) })),
+  );
 }
