@@ -1,0 +1,1348 @@
+{
+  "Colors": {
+    "Schemes": {
+      "Primary": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-007}"
+      },
+      "Surface Tint": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-002}"
+      },
+      "On Primary": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Primary Container": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-008}"
+      },
+      "On Primary Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-035}"
+      },
+      "Secondary": {
+        "$type": "color",
+        "$value": "{Colors.Sage.Shade-003}"
+      },
+      "On Secondary": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Secondary Container": {
+        "$type": "color",
+        "$value": "{Colors.Sage.Shade-008}"
+      },
+      "On Secondary Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-035}"
+      },
+      "Tertiary": {
+        "$type": "color",
+        "$value": "{Colors.Mint.Shade-006}"
+      },
+      "On Tertiary": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Tertiary Container": {
+        "$type": "color",
+        "$value": "{Colors.Mint.Shade-007}"
+      },
+      "On Tertiary Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-035}"
+      },
+      "Error": {
+        "$type": "color",
+        "$value": "{Colors.Red.Shade-003}"
+      },
+      "On Error": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Error Container": {
+        "$type": "color",
+        "$value": "{Colors.Red.Shade-008}"
+      },
+      "On Error Container": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Background": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-062}"
+      },
+      "On Background": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-001}"
+      },
+      "Surface": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-061}"
+      },
+      "On Surface": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.900}"
+      },
+      "Surface Variant": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-050}"
+      },
+      "On Surface Variant": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.900}"
+      },
+      "Outline": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-028}"
+      },
+      "Outline Variant": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-030}"
+      },
+      "Shadow": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-001}"
+      },
+      "Scrim": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-001}"
+      },
+      "Inverse Surface": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-013}"
+      },
+      "Inverse On Surface": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Inverse Primary": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-019}"
+      },
+      "Primary Fixed": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-019}"
+      },
+      "On Primary Fixed": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.900}"
+      },
+      "Primary Fixed Dim": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-016}"
+      },
+      "On Primary Fixed Variant": {
+        "$type": "color",
+        "$value": "{Colors.Olive.Shade-003}"
+      },
+      "Secondary Fixed": {
+        "$type": "color",
+        "$value": "{Colors.Sage.Shade-014}"
+      },
+      "On Secondary Fixed": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.900}"
+      },
+      "Secondary Fixed Dim": {
+        "$type": "color",
+        "$value": "{Colors.Sage.Shade-011}"
+      },
+      "On Secondary Fixed Variant": {
+        "$type": "color",
+        "$value": "{Colors.Sage.Shade-001}"
+      },
+      "Tertiary Fixed": {
+        "$type": "color",
+        "$value": "{Colors.Mint.Shade-015}"
+      },
+      "On Tertiary Fixed": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.900}"
+      },
+      "Tertiary Fixed Dim": {
+        "$type": "color",
+        "$value": "{Colors.Mint.Shade-011}"
+      },
+      "On Tertiary Fixed Variant": {
+        "$type": "color",
+        "$value": "{Colors.Mint.Shade-001}"
+      },
+      "Surface Dim": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-039}"
+      },
+      "Surface Bright": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-061}"
+      },
+      "Surface Container Lowest": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Surface Container Low": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-057}"
+      },
+      "Surface Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-052}"
+      },
+      "Surface Container High": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-045}"
+      },
+      "Surface Container Highest": {
+        "$type": "color",
+        "$value": "{Colors.Neutral Variant.Shade-041}"
+      },
+      "Success": {
+        "$type": "color",
+        "$value": "{Colors.Green.Shade-005}"
+      },
+      "Info": {
+        "$type": "color",
+        "$value": "{Colors.Green.Shade-005}"
+      },
+      "Warning": {
+        "$type": "color",
+        "$value": "{Colors.Amber.Shade-005}"
+      },
+      "On Warning": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "On Success": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "On Info": {
+        "$type": "color",
+        "$value": "{Colors.Schemes.Neutral.0}"
+      },
+      "Warning Container": {
+        "$type": "color",
+        "$value": "{Colors.Amber.Shade-007}"
+      },
+      "On Warning Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-035}"
+      },
+      "Success Container": {
+        "$type": "color",
+        "$value": "{Colors.Green.Shade-006}"
+      },
+      "On Success Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-035}"
+      },
+      "Info Container": {
+        "$type": "color",
+        "$value": "{Colors.Green.Shade-006}"
+      },
+      "On Info Container": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-035}"
+      },
+      "Neutral": {
+        "0": {
+          "$type": "color",
+          "$value": "{Colors.Neutral.Shade-035}"
+        },
+        "900": {
+          "$type": "color",
+          "$value": "{Colors.Neutral.Shade-005}"
+        }
+      }
+    },
+    "State Layers": {
+      "Primary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary}"
+        }
+      },
+      "On Primary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary}"
+        }
+      },
+      "Primary Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Container}"
+        }
+      },
+      "On Primary Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Container}"
+        }
+      },
+      "Primary Fixed": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Fixed}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Fixed}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Fixed}"
+        }
+      },
+      "On Primary Fixed": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Fixed}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Fixed}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Fixed}"
+        }
+      },
+      "Primary Fixed Dim": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Fixed Dim}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Fixed Dim}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Primary Fixed Dim}"
+        }
+      },
+      "On Primary Fixed Variant": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Fixed Variant}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Fixed Variant}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Primary Fixed Variant}"
+        }
+      },
+      "Secondary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary}"
+        }
+      },
+      "On Secondary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary}"
+        }
+      },
+      "Secondary Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Container}"
+        }
+      },
+      "On Secondary Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Container}"
+        }
+      },
+      "Secondary Fixed": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Fixed}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Fixed}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Fixed}"
+        }
+      },
+      "On Secondary Fixed": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Fixed}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Fixed}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Fixed}"
+        }
+      },
+      "Secondary Fixed Dim": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Fixed Dim}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Fixed Dim}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Secondary Fixed Dim}"
+        }
+      },
+      "On Secondary Fixed Variant": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Fixed Variant}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Fixed Variant}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Secondary Fixed Variant}"
+        }
+      },
+      "Tertiary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary}"
+        }
+      },
+      "On Tertiary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary}"
+        }
+      },
+      "Tertiary Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Container}"
+        }
+      },
+      "On Tertiary Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Container}"
+        }
+      },
+      "Tertiary Fixed": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Fixed}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Fixed}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Fixed}"
+        }
+      },
+      "On Tertiary Fixed": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Fixed}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Fixed}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Fixed}"
+        }
+      },
+      "Tertiary Fixed Dim": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Fixed Dim}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Fixed Dim}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Tertiary Fixed Dim}"
+        }
+      },
+      "On Tertiary Fixed Variant": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Fixed Variant}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Fixed Variant}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Tertiary Fixed Variant}"
+        }
+      },
+      "Error": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Error}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Error}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Error}"
+        }
+      },
+      "On Error": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Error}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Error}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Error}"
+        }
+      },
+      "Error Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Error Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Error Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Error Container}"
+        }
+      },
+      "On Error Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Error Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Error Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Error Container}"
+        }
+      },
+      "Outline": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Outline}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Outline}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Outline}"
+        }
+      },
+      "Background": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Background}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Background}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Background}"
+        }
+      },
+      "On Background": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Background}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Background}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Background}"
+        }
+      },
+      "Surface": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface}"
+        }
+      },
+      "On Surface": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Surface}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Surface}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Surface}"
+        }
+      },
+      "Surface Variant": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Variant}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Variant}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Variant}"
+        }
+      },
+      "On Surface Variant": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Surface Variant}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Surface Variant}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.On Surface Variant}"
+        }
+      },
+      "Inverse Surface": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse Surface}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse Surface}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse Surface}"
+        }
+      },
+      "Inverse On Surface": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse On Surface}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse On Surface}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse On Surface}"
+        }
+      },
+      "Inverse Primary": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse Primary}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse Primary}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Inverse Primary}"
+        }
+      },
+      "Shadow": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Shadow}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Shadow}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Shadow}"
+        }
+      },
+      "Surface Tint": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Tint}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Tint}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Tint}"
+        }
+      },
+      "Outline Variant": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Outline Variant}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Outline Variant}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Outline Variant}"
+        }
+      },
+      "Scrim": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Scrim}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Scrim}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Scrim}"
+        }
+      },
+      "Surface Container Highest": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Highest}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Highest}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Highest}"
+        }
+      },
+      "Surface Container High": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container High}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container High}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container High}"
+        }
+      },
+      "Surface Container": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container}"
+        }
+      },
+      "Surface Container Low": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Low}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Low}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Low}"
+        }
+      },
+      "Surface Container Lowest": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Lowest}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Lowest}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Container Lowest}"
+        }
+      },
+      "Surface Bright": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Bright}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Bright}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Bright}"
+        }
+      },
+      "Surface Dim": {
+        "Opacity-08": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Dim}"
+        },
+        "Opacity-10": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Dim}"
+        },
+        "Opacity-16": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Surface Dim}"
+        }
+      }
+    },
+    "Add-ons": {
+      "Section background": {
+        "$type": "color",
+        "$value": "{Colors.Neutral.Shade-033}"
+      }
+    }
+  },
+  "Typescale": {
+    "Static": {
+      "Display Large": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "57px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "-0.25px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "64px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Display Medium": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "45px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "52px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Display Small": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "36px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "44px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Headline Large": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "32px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "40px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Headline Medium": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "28px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "36px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Headline Small": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "24px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "32px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Title Large": {
+        "Size": {
+          "$type": "dimension",
+          "$value": "22px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "28px"
+        },
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Brand}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Title Medium": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "16px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.15000000596046448px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "24px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Bold}"
+        }
+      },
+      "Title Small": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "14px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.10000000149011612px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "20px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Bold}"
+        }
+      },
+      "Label Large": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "14px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.10000000149011612px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "20px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Bold}"
+        }
+      },
+      "Label Medium": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "12px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.5px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "16px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Bold}"
+        }
+      },
+      "Label Small": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "11px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.5px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "16px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Bold}"
+        }
+      },
+      "Body Large": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "16px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.5px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "24px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Body Medium": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "14px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.25px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "20px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      },
+      "Body Small": {
+        "Font": {
+          "$type": "fontFamily",
+          "$value": "{Font theme.Static.Font.Plain}"
+        },
+        "Weight": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Regular}"
+        },
+        "Size": {
+          "$type": "dimension",
+          "$value": "12px"
+        },
+        "Tracking": {
+          "$type": "dimension",
+          "$value": "0.4000000059604645px"
+        },
+        "Line Height": {
+          "$type": "dimension",
+          "$value": "16px"
+        },
+        "Weight-emphasized": {
+          "$type": "fontWeight",
+          "$value": "{Font theme.Static.Weight.Medium}"
+        }
+      }
+    }
+  }
+}
