@@ -202,8 +202,12 @@ const KEY = {
       color: var(--mat-sys-on-surface-variant);
     }
 
+    /* Ancré en haut de la zone d'exemple (sinon centrée, donc décalée quand le pied de card fait 2 lignes), sous le bouton </> de la card. */
     .contenu {
       display: grid;
+      align-self: stretch;
+      align-content: start;
+      margin-block-start: 28px;
       justify-items: start;
       gap: 12px;
       width: 100%;
@@ -229,6 +233,7 @@ const KEY = {
 
     .carte {
       display: grid;
+      align-self: flex-start;
       place-items: center;
       width: 100%;
       margin-block-start: 28px; /* sous le bouton </> de la card */
