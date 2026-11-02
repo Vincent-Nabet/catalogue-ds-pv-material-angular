@@ -1,7 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatSlider, MatSliderRangeThumb, MatSliderThumb } from '@angular/material/slider';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  const couleur = `var(--app-color-${id})`;
+  return `<mat-slider discrete showTickMarks min="0" max="100" step="10" class="${id}">
+  <input matSliderThumb value="40" aria-label="Volume ${id}" />
+</mat-slider>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  $couleur: ${couleur};
+
+  @include mat.slider-overrides((
+    active-track-color: $couleur,
+    handle-color: $couleur,
+    hover-handle-color: $couleur,
+    focus-handle-color: $couleur,
+    ripple-color: $couleur,
+    hover-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+    focus-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+    label-container-color: $couleur,
+    label-label-text-color: var(--app-color-on-${id}),
+    with-overlap-handle-outline-color: var(--app-color-on-${id}),
+    with-tick-marks-active-container-color: var(--app-color-on-${id}),
+  ));
+}`;
+}
 
 const SNIPPETS = {
   simple: `<mat-slider>
@@ -97,7 +127,7 @@ pourcentage = (valeur: number) => valeur + ' %';`,
 
 @Component({
   selector: 'app-curseur-page',
-  imports: [MatSlider, MatSliderThumb, MatSliderRangeThumb, Specimen, SpecimenSection],
+  imports: [MatSlider, MatSliderThumb, MatSliderRangeThumb, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Curseur</h1>
 
@@ -178,6 +208,23 @@ pourcentage = (valeur: number) => valeur + ' %';`,
         </mat-slider>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (rail et poignée, avec le texte de l’étiquette et les graduations en couleur « sur »)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-slider discrete showTickMarks min="0" max="100" step="10" class="perso">
+                <input matSliderThumb value="40" [attr.aria-label]="'Volume ' + family.label" />
+              </mat-slider>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -193,6 +240,10 @@ pourcentage = (valeur: number) => valeur + ' %';`,
 
     .erreur {
       @include roles.slider(error);
+    }
+
+    .perso {
+      @include roles.slider(custom);
     }
 
     .rail-epais {
@@ -223,4 +274,11 @@ pourcentage = (valeur: number) => valeur + ' %';`,
 export class CurseurPage {
   protected readonly snippets = SNIPPETS;
   protected readonly pourcentage = (valeur: number): string => `${valeur} %`;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'slider-overrides : active-track-color', snippet: customSnippet(id) })),
+  );
 }

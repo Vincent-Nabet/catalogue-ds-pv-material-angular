@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger, MatContextMenuTrigger, MatMenuContent } from '@angular/material/menu';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -118,6 +120,32 @@ const SNIPPETS = {
   ));
 }`,
 };
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  const role = `--app-color-${id}`;
+  return `<button matButton="outlined" [matMenuTriggerFor]="menu">Actions</button>
+<mat-menu #menu="matMenu" class="perso-menu-${id}">
+  <button mat-menu-item><mat-icon>edit</mat-icon>Modifier</button>
+  <button mat-menu-item><mat-icon>content_copy</mat-icon>Dupliquer</button>
+  <mat-divider />
+  <button mat-menu-item><mat-icon>delete</mat-icon>Supprimer</button>
+</mat-menu>
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-menu-${id} {
+  @include mat.menu-overrides((
+    container-color: var(${role}-container),
+    item-label-text-color: var(--app-color-on-${id}-container),
+    item-icon-color: var(--app-color-on-${id}-container),
+    item-hover-state-layer-color: color-mix(in srgb, var(--app-color-on-${id}-container) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+    item-focus-state-layer-color: color-mix(in srgb, var(--app-color-on-${id}-container) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+    divider-color: var(--mat-sys-outline),
+  ));
+}`;
+}
 
 @Component({
   selector: 'app-menu-page',
@@ -243,9 +271,31 @@ const SNIPPETS = {
         </mat-menu>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (conteneur et texte de la même famille ensemble). Le panneau étant rendu dans une surcouche, la famille est posée sur celle-ci avant l’ouverture."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <button matButton="outlined" [matMenuTriggerFor]="menuFamille" (click)="overlayFamily.apply(family.id)">
+              Actions {{ family.label }}
+            </button>
+            <mat-menu #menuFamille="matMenu" class="perso-menu-famille">
+              <button mat-menu-item><mat-icon>edit</mat-icon>Modifier</button>
+              <button mat-menu-item><mat-icon>content_copy</mat-icon>Dupliquer</button>
+              <mat-divider />
+              <button mat-menu-item><mat-icon>delete</mat-icon>Supprimer</button>
+            </mat-menu>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     /* Le panneau est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
     ::ng-deep .perso-menu-secondaire {
@@ -258,6 +308,10 @@ const SNIPPETS = {
           divider-color: var(--mat-sys-outline),
         )
       );
+    }
+
+    ::ng-deep .perso-menu-famille {
+      @include roles.menu(custom);
     }
 
     ::ng-deep .perso-menu-arrondi {
@@ -293,4 +347,17 @@ const SNIPPETS = {
 })
 export class MenuPage {
   protected readonly snippets = SNIPPETS;
+  protected readonly overlayFamily = inject(OverlayFamily);
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: `mat.menu-overrides : --app-color-${id}-container`,
+      snippet: customSnippet(id),
+    })),
+  );
 }

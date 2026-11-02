@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -67,9 +69,26 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-radio-button class="${id}" checked>${id}</mat-radio-button>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.radio-overrides((
+    selected-icon-color: var(--app-color-${id}),
+    selected-hover-icon-color: var(--app-color-${id}),
+    selected-focus-icon-color: var(--app-color-${id}),
+    selected-pressed-icon-color: var(--app-color-${id}),
+    checked-ripple-color: var(--app-color-${id}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-bouton-radio-page',
-  imports: [MatRadioGroup, MatRadioButton, Specimen, SpecimenSection],
+  imports: [MatRadioGroup, MatRadioButton, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Bouton radio</h1>
 
@@ -142,6 +161,21 @@ const SNIPPETS = {
         </mat-radio-group>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (pastille et ondulation de la même famille)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-radio-button class="perso" checked>{{ family.label }}</mat-radio-button>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -164,6 +198,10 @@ const SNIPPETS = {
       @include roles.radio(error);
     }
 
+    .perso {
+      @include roles.radio(custom);
+    }
+
     .libelle-titre {
       @include mat.radio-overrides(
         (
@@ -177,4 +215,11 @@ const SNIPPETS = {
 })
 export class BoutonRadioPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'radio-overrides : selected-icon-color', snippet: customSnippet(id) })),
+  );
 }

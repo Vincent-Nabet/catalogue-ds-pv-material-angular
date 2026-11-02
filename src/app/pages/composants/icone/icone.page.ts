@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatIcon } from '@angular/material/icon';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
@@ -55,9 +57,22 @@ const SNIPPETS = {
 <mat-icon style="font-variation-settings: 'opsz' 48">settings</mat-icon>`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-icon class="${id}">favorite</mat-icon>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.icon-overrides((
+    color: var(--app-color-${id}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-icone-page',
-  imports: [MatIcon, Specimen, SpecimenSection],
+  imports: [MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Icône</h1>
 
@@ -90,6 +105,23 @@ const SNIPPETS = {
         <mat-icon class="remplie">favorite</mat-icon>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (couleur de la famille sur la surface de la page, via le jeton color de mat.icon-overrides)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-icon class="perso" aria-hidden="true">favorite</mat-icon>
+              <mat-icon class="perso" aria-hidden="true">star</mat-icon>
+              <mat-icon class="perso" aria-hidden="true">bolt</mat-icon>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
 
     <app-specimen-section title="Accessibilité">
       <app-specimen label="Décorative" api='aria-hidden="true"' [snippet]="snippets.decorative">
@@ -161,6 +193,14 @@ const SNIPPETS = {
       );
     }
 
+    .perso {
+      @include mat.icon-overrides(
+        (
+          color: var(--r-f),
+        )
+      );
+    }
+
     .groupe {
       display: flex;
       gap: 12px;
@@ -196,4 +236,11 @@ const SNIPPETS = {
 })
 export class IconePage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.icon-overrides : color', snippet: customSnippet(id) })),
+  );
 }

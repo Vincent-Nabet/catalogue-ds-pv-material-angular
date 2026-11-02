@@ -215,6 +215,38 @@ export function detectedRoles(found: Iterable<string>): string[] {
     .map(({ id }) => id);
 }
 
+export interface ColorFamily {
+  /** Suffixe de base : `success` pour `--app-color-success`. */
+  id: string;
+  label: string;
+}
+
+/**
+ * Familles `--app-color-*` complètes présentes dans `found` (noms de variables CSS) : le rôle, son
+ * `on-`, son `-container` et son `on-…-container`, soit de quoi colorer un composant comme le font
+ * `secondary` ou `tertiary` en MD3. Détectées dans le CSS, donc une nouvelle famille du design
+ * system apparaît sans toucher à ce fichier ; le libellé vient de `COLOR_ROLES` quand il y est.
+ */
+export function detectedColorFamilies(found: Iterable<string>): ColorFamily[] {
+  const ids = new Set(
+    Array.from(found)
+      .map((name) => classifyToken(name, DS_PREFIX))
+      .filter(({ kind }) => kind === 'color')
+      .map(({ id }) => id),
+  );
+  return Array.from(ids)
+    .filter(
+      (id) =>
+        !id.startsWith('on-') &&
+        !id.endsWith('-container') &&
+        FAMILY(id).slice(1).every((role) => ids.has(role)),
+    )
+    .map((id) => ({
+      id,
+      label: COLOR_ROLES.find((group) => group.origin === 'design-system' && group.roles[0] === id)?.label ?? id,
+    }));
+}
+
 /** Groupe d'une paire : celui de son rôle de premier plan. */
 export function pairGroup(colorPair: ColorPair): ColorRoleGroup {
   return findGroup(colorPair.fg) as ColorRoleGroup;

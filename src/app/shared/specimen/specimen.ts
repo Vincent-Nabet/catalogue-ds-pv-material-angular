@@ -3,10 +3,11 @@ import { MatIconButton } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { SnippetDialog, SnippetDialogData } from '../snippet-dialog/snippet-dialog';
+import { TokenBadge } from '../token-badge/token-badge';
 
 @Component({
   selector: 'app-specimen',
-  imports: [MatIconButton, MatIcon],
+  imports: [MatIconButton, MatIcon, TokenBadge],
   template: `
     <div class="rendu">
       <ng-content />
@@ -15,6 +16,9 @@ import { SnippetDialog, SnippetDialogData } from '../snippet-dialog/snippet-dial
       <span class="nom">{{ label() }}</span>
       @if (api()) {
         <code>{{ api() }}</code>
+      }
+      @if (custom()) {
+        <app-token-badge />
       }
     </div>
     @if (snippet()) {
@@ -58,6 +62,11 @@ import { SnippetDialog, SnippetDialogData } from '../snippet-dialog/snippet-dial
       font: var(--mat-sys-label-large);
     }
 
+    app-token-badge {
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+
     code {
       color: var(--mat-sys-on-surface-variant);
       font-size: var(--mat-sys-label-medium-size);
@@ -81,6 +90,8 @@ export class Specimen {
   readonly label = input.required<string>();
   readonly api = input<string>();
   readonly snippet = input<string>();
+  /** Vrai quand l'exemple repose sur un jeton personnalisé du design system : affiche le badge. */
+  readonly custom = input(false);
 
   private readonly dialog = inject(MatDialog);
 

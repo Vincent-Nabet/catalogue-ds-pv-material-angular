@@ -1,10 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatStep, MatStepper, MatStepperIntl, MatStepperNext, MatStepperPrevious, MatStepperIcon } from '@angular/material/stepper';
 import { StepperIntlFr } from '../../../core/i18n/intl-fr';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatIcon } from '@angular/material/icon';
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-stepper class="etapes-${id}" [selectedIndex]="1">
+  <mat-step label="Identité" [completed]="true">…</mat-step>
+  <mat-step label="Adresse">…</mat-step>
+  <mat-step label="Validation">…</mat-step>
+</mat-stepper>
+
+@use '@angular/material' as mat;
+
+.etapes-${id} {
+  @include mat.stepper-overrides((
+    header-selected-state-icon-background-color: var(--app-color-${id}),
+    header-selected-state-icon-foreground-color: var(--app-color-on-${id}),
+    header-done-state-icon-background-color: var(--app-color-${id}),
+    header-done-state-icon-foreground-color: var(--app-color-on-${id}),
+    header-edit-state-icon-background-color: var(--app-color-${id}),
+    header-edit-state-icon-foreground-color: var(--app-color-on-${id}),
+    line-color: var(--app-color-${id}),
+  ));
+}`;
+}
 
 const SNIPPETS = {
   horizontal: `<mat-stepper>
@@ -120,7 +145,18 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-etapes-page',
-  imports: [MatButton, MatStep, MatStepper, MatStepperNext, MatStepperPrevious, Specimen, SpecimenSection, MatStepperIcon, MatIcon],
+  imports: [
+    MatButton,
+    MatStep,
+    MatStepper,
+    MatStepperNext,
+    MatStepperPrevious,
+    Specimen,
+    SpecimenSection,
+    MatStepperIcon,
+    MatIcon,
+    ColorFamilyScope,
+  ],
   providers: [{ provide: MatStepperIntl, useClass: StepperIntlFr }],
   template: `
     <h1>Étapes</h1>
@@ -238,6 +274,26 @@ const SNIPPETS = {
         </mat-stepper>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="420px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (pastille et icône ensemble, trait de liaison)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-stepper class="perso" [selectedIndex]="1">
+                <mat-step label="Identité" [completed]="true"><p>Terminée.</p></mat-step>
+                <mat-step label="Adresse"><p>En cours ({{ family.label }}).</p></mat-step>
+                <mat-step label="Validation"><p>À venir.</p></mat-step>
+              </mat-stepper>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -255,6 +311,10 @@ const SNIPPETS = {
       @include roles.stepper(tertiary);
     }
 
+    .perso {
+      @include roles.stepper(custom);
+    }
+
     .etapes-compactes {
       @include mat.stepper-overrides(
         (
@@ -268,4 +328,16 @@ const SNIPPETS = {
 })
 export class EtapesPage {
   protected readonly snippets = SNIPPETS;
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: 'mat.stepper-overrides : header-selected-state-icon-background-color',
+      snippet: customSnippet(id),
+    })),
+  );
 }

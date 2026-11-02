@@ -3,6 +3,7 @@
 //   npm run a11y
 //   npm run a11y -- --themes=azur,violet --schemes=dark --routes=bouton,carte
 //   npm run a11y -- --strict        (ne tolère aucune exception connue)
+//   npm run a11y -- --console       (erreurs console seulement, sans axe : rapide, pour le contrôle courant)
 //
 // Sortie : un résumé par page ; code de retour 1 s'il reste des violations ou des erreurs console.
 import { readFileSync } from 'node:fs';
@@ -16,6 +17,7 @@ const { values } = parseArgs({
     schemes: { type: 'string' },
     routes: { type: 'string' },
     strict: { type: 'boolean', default: false },
+    console: { type: 'boolean', default: false },
     help: { type: 'boolean', default: false },
   },
 });
@@ -26,6 +28,7 @@ if (values.help) {
   --schemes=light,dark     modes testés (défaut : light,dark)
   --routes=bouton,accueil  pages testées (défaut : toutes)
   --strict                 ne tolère aucune exception connue
+  --console                erreurs console seulement (pas d'axe-core) : beaucoup plus rapide
 Variables : BASE_URL (serveur déjà lancé), PORT (défaut 4300), CHROME_PATH.`);
   process.exit(0);
 }
@@ -58,11 +61,14 @@ await avecServeur(async (baseUrl) => {
         for (const route of routes) {
           erreurs.length = 0;
           await charger(page, baseUrl, route);
-          await page.evaluate(axeSource);
-          const resultat = await page.evaluate(() =>
-            // @ts-ignore axe est injecté dans la page
-            axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }),
-          );
+          let resultat = { violations: [] };
+          if (!values.console) {
+            await page.evaluate(axeSource);
+            resultat = await page.evaluate(() =>
+              // @ts-ignore axe est injecté dans la page
+              axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'] }),
+            );
+          }
 
           const retenues = [];
           for (const violation of resultat.violations) {
