@@ -265,3 +265,57 @@
     )
   );
 }
+
+// Surcouches (menu, snackbar, sélecteurs de date et d'heure) : les mixins acceptent `custom` (variables
+// --r-* posées sur le conteneur de la surcouche par OverlayFamily) comme les autres rôles.
+@mixin menu($role) {
+  @include mat.menu-overrides(
+    (
+      container-color: container($role),
+      item-label-text-color: on-container($role),
+      item-icon-color: on-container($role),
+      item-hover-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+      item-focus-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+      divider-color: var(--mat-sys-outline),
+    )
+  );
+}
+
+@mixin snack-bar($role) {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: fg($role),
+      supporting-text-color: on-fg($role),
+      button-color: on-fg($role),
+    )
+  );
+}
+
+@mixin datepicker($role) {
+  @include mat.datepicker-overrides(
+    (
+      calendar-date-selected-state-background-color: fg($role),
+      calendar-date-selected-state-text-color: on-fg($role),
+      calendar-date-in-range-state-background-color: container($role),
+      calendar-date-today-outline-color: fg($role),
+      calendar-date-preview-state-outline-color: fg($role),
+    )
+  );
+}
+
+@mixin timepicker($role) {
+  @include mat.timepicker-overrides(
+    (
+      container-background-color: container($role),
+    )
+  );
+  @include mat.option-overrides(
+    (
+      label-text-color: on-container($role),
+      hover-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+      focus-state-layer-color: color-mix(in srgb, on-container($role) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+      selected-state-layer-color: fg($role),
+      selected-state-label-text-color: on-fg($role),
+    )
+  );
+}

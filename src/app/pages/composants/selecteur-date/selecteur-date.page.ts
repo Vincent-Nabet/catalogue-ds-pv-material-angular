@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
 import {
   MatCalendar,
@@ -13,6 +13,9 @@ import {
 import { MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { DatepickerIntlFr } from '../../../core/i18n/intl-fr';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
+import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -122,6 +125,34 @@ joursOuvres = (date: Date | null) => !!date && date.getDay() !== 0 && date.getDa
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-calendar class="perso-calendrier-${id}" [selected]="selection" [startAt]="selection" />
+
+<mat-form-field>
+  <mat-label>Période</mat-label>
+  <mat-date-range-input [rangePicker]="picker">
+    <input matStartDate placeholder="Début" />
+    <input matEndDate placeholder="Fin" />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matIconSuffix [for]="picker" />
+  <mat-date-range-picker #picker panelClass="perso-calendrier-${id}" />
+</mat-form-field>
+
+@use '@angular/material' as mat;
+
+/* Dans un champ, le calendrier est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-calendrier-${id} {
+  @include mat.datepicker-overrides((
+    calendar-date-selected-state-background-color: var(--app-color-${id}),
+    calendar-date-selected-state-text-color: var(--app-color-on-${id}),
+    calendar-date-in-range-state-background-color: var(--app-color-${id}-container),
+    calendar-date-today-outline-color: var(--app-color-${id}),
+    calendar-date-preview-state-outline-color: var(--app-color-${id}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-selecteur-date-page',
   imports: [
@@ -140,6 +171,7 @@ joursOuvres = (date: Date | null) => !!date && date.getDay() !== 0 && date.getDa
     MatInput,
     Specimen,
     SpecimenSection,
+    ColorFamilyScope,
   ],
   providers: [{ provide: MatDatepickerIntl, useClass: DatepickerIntlFr }],
   template: `
@@ -263,9 +295,41 @@ joursOuvres = (date: Date | null) => !!date && date.getDay() !== 0 && date.getDa
         <mat-calendar class="calendrier perso-calendrier-texte" [selected]="selection" [startAt]="selection" />
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="360px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (sélection, plage et texte de la même famille ensemble). Dans un champ, le calendrier est rendu dans une surcouche : la famille y est posée avant l’ouverture et la classe s’applique au calendrier, pas à son conteneur."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-calendar class="calendrier perso-calendrier-famille" [selected]="selection" [startAt]="selection" />
+            </span>
+            <mat-form-field (focusin)="overlayFamily.apply(family.id)" (click)="overlayFamily.apply(family.id)">
+              <mat-label>Période {{ family.label }}</mat-label>
+              <mat-date-range-input [rangePicker]="plageFamille">
+                <input matStartDate placeholder="Début" />
+                <input matEndDate placeholder="Fin" />
+              </mat-date-range-input>
+              <mat-datepicker-toggle matIconSuffix [for]="plageFamille" />
+              <mat-date-range-picker #plageFamille panelClass="perso-calendrier-famille" />
+            </mat-form-field>
+            <mat-form-field (focusin)="overlayFamily.apply(family.id)" (click)="overlayFamily.apply(family.id)">
+              <mat-label>Date {{ family.label }}</mat-label>
+              <input matInput [matDatepicker]="dateFamille" />
+              <mat-datepicker-toggle matIconSuffix [for]="dateFamille" />
+              <mat-datepicker #dateFamille panelClass="perso-calendrier-famille" />
+            </mat-form-field>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .calendrier {
       width: 296px;
@@ -289,7 +353,12 @@ joursOuvres = (date: Date | null) => !!date && date.getDay() !== 0 && date.getDa
       );
     }
 
-    /* Le calendrier d’un champ est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
+    /* Le calendrier d’un champ est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep
+       (cette règle sert aussi au mat-calendar posé dans la page). */
+    ::ng-deep .perso-calendrier-famille {
+      @include roles.datepicker(custom);
+    }
+
     ::ng-deep .perso-calendrier-secondaire {
       @include mat.datepicker-overrides(
         (
@@ -310,4 +379,17 @@ export class SelecteurDatePage {
   protected readonly selection = new Date(2026, 9, 15);
   protected readonly joursOuvres = (date: Date | null): boolean =>
     !!date && date.getDay() !== 0 && date.getDay() !== 6;
+  protected readonly overlayFamily = inject(OverlayFamily);
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: `mat.datepicker-overrides : --app-color-${id}`,
+      snippet: customSnippet(id),
+    })),
+  );
 }

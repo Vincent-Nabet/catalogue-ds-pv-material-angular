@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatTimepicker, MatTimepickerInput, MatTimepickerToggle } from '@angular/material/timepicker';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -90,6 +92,34 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
   ));
 }`,
 };
+
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `<mat-form-field>
+  <mat-label>Heure</mat-label>
+  <input matInput [matTimepicker]="picker" [value]="heureChoisie" />
+  <mat-timepicker-toggle matIconSuffix [for]="picker" />
+  <mat-timepicker #picker panelClass="perso-heure-${id}" />
+</mat-form-field>
+
+heureChoisie = new Date(2026, 9, 15, 9, 30);
+
+@use '@angular/material' as mat;
+
+/* Le panneau est rendu dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-heure-${id} {
+  @include mat.timepicker-overrides((
+    container-background-color: var(--app-color-${id}-container),
+  ));
+  @include mat.option-overrides((
+    label-text-color: var(--app-color-on-${id}-container),
+    hover-state-layer-color: color-mix(in srgb, var(--app-color-on-${id}-container) calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
+    focus-state-layer-color: color-mix(in srgb, var(--app-color-on-${id}-container) calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
+    selected-state-layer-color: var(--app-color-${id}),
+    selected-state-label-text-color: var(--app-color-on-${id}),
+  ));
+}`;
+}
 
 @Component({
   selector: 'app-selecteur-heure-page',
@@ -184,9 +214,28 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
         </mat-form-field>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (conteneur, texte et option sélectionnée de la même famille ensemble). Le panneau étant rendu dans une surcouche, la famille est posée sur celle-ci avant l’ouverture."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <mat-form-field (focusin)="overlayFamily.apply(family.id)" (click)="overlayFamily.apply(family.id)">
+              <mat-label>Heure {{ family.label }}</mat-label>
+              <input matInput [matTimepicker]="heureFamille" [value]="heureChoisie" />
+              <mat-timepicker-toggle matIconSuffix [for]="heureFamille" />
+              <mat-timepicker #heureFamille panelClass="perso-heure-famille" />
+            </mat-form-field>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     /* Le panneau est rendu dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
     ::ng-deep .perso-heure-tertiaire {
@@ -208,6 +257,10 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
       );
     }
 
+    ::ng-deep .perso-heure-famille {
+      @include roles.timepicker(custom);
+    }
+
     ::ng-deep .perso-heure-sureleve {
       @include mat.timepicker-overrides(
         (
@@ -227,4 +280,17 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
 export class SelecteurHeurePage {
   protected readonly snippets = SNIPPETS;
   protected readonly heureChoisie = new Date(2026, 9, 15, 9, 30);
+  protected readonly overlayFamily = inject(OverlayFamily);
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: `mat.timepicker-overrides : --app-color-${id}-container`,
+      snippet: customSnippet(id),
+    })),
+  );
 }

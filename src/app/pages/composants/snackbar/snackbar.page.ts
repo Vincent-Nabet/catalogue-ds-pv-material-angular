@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -8,6 +8,8 @@ import {
   MatSnackBarLabel,
   MatSnackBarRef,
 } from '@angular/material/snack-bar';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -105,6 +107,25 @@ this.snackBar.openFromComponent(MessageSnack, { duration: 5000 });`,
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  return `this.snackBar.open('Message de la famille ${id}', 'Fermer', {
+  duration: 5000,
+  panelClass: 'perso-snack-${id}',
+});
+
+@use '@angular/material' as mat;
+
+/* La snackbar est rendue dans une surcouche : règle globale (::ng-deep dans un composant) */
+.perso-snack-${id} {
+  @include mat.snack-bar-overrides((
+    container-color: var(--app-color-${id}),
+    supporting-text-color: var(--app-color-on-${id}),
+    button-color: var(--app-color-on-${id}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-snackbar-page',
   imports: [MatButton, Specimen, SpecimenSection],
@@ -158,9 +179,23 @@ this.snackBar.openFromComponent(MessageSnack, { duration: 5000 });`,
         <button matButton="outlined" (click)="afficher('Message en pilule', 'Fermer', 5000, 'perso-snack-pilule')">Afficher</button>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (fond, texte et action de la même famille ensemble). La snackbar étant rendue dans une surcouche, la famille est posée sur celle-ci avant l’affichage."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <button matButton="outlined" (click)="afficherFamille(family.id, family.label)">Afficher {{ family.label }}</button>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     /* La snackbar est rendue dans une surcouche, hors de l’encapsulation du composant : d’où ::ng-deep. */
     ::ng-deep .perso-snack-erreur {
@@ -171,6 +206,10 @@ this.snackBar.openFromComponent(MessageSnack, { duration: 5000 });`,
           button-color: var(--mat-sys-on-error),
         )
       );
+    }
+
+    ::ng-deep .perso-snack-famille {
+      @include roles.snack-bar(custom);
     }
 
     ::ng-deep .perso-snack-pilule {
@@ -187,6 +226,25 @@ this.snackBar.openFromComponent(MessageSnack, { duration: 5000 });`,
 export class SnackbarPage {
   protected readonly snippets = SNIPPETS;
   private readonly snackBar = inject(MatSnackBar);
+  private readonly overlayFamily = inject(OverlayFamily);
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({
+      id,
+      label,
+      api: `mat.snack-bar-overrides : --app-color-${id}`,
+      snippet: customSnippet(id),
+    })),
+  );
+
+  /** Pose la famille sur la surcouche avant l'ouverture : le panneau lit les variables --r-*. */
+  protected afficherFamille(id: string, label: string): void {
+    this.overlayFamily.apply(id);
+    this.snackBar.open(`Message de la famille ${label}`, 'Fermer', { duration: 5000, panelClass: 'perso-snack-famille' });
+  }
 
   protected afficher(message: string, action?: string, duration?: number, panelClass?: string): void {
     this.snackBar.open(message, action, { duration, panelClass });
