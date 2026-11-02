@@ -1,5 +1,5 @@
 import { routes } from '../../app.routes';
-import { CATALOG, CATALOG_CATEGORIES, CATALOG_GROUPS } from './catalog.registry';
+import { CATALOG, CATALOG_CATEGORIES, CATALOG_GROUPS, COMPONENT_ENTRIES } from './catalog.registry';
 
 describe('catalog registry', () => {
   it('should generate one route per entry', () => {
@@ -22,5 +22,15 @@ describe('catalog registry', () => {
   it('should group every entry exactly once', () => {
     const grouped = CATALOG_GROUPS.flatMap((group) => group.entries);
     expect(grouped.length).toBe(CATALOG.length);
+  });
+
+  it('should list Fondations first, with 4 pages', () => {
+    expect(CATALOG_CATEGORIES[0].id).toBe('fondations');
+    expect(CATALOG_GROUPS[0].entries.length).toBe(4);
+  });
+
+  it('should count the 35 component pages apart from Fondations', () => {
+    expect(COMPONENT_ENTRIES.length).toBe(35);
+    expect(COMPONENT_ENTRIES.every((entry) => entry.category !== 'fondations')).toBe(true);
   });
 });
