@@ -97,8 +97,11 @@ function minimumText(min: number): string {
       color: var(--mat-sys-on-surface-variant);
     }
 
+    /* Ancré en haut de la zone d'exemple (sinon centrée, donc décalée quand le pied de card fait 2 lignes). */
     .contenu {
       display: grid;
+      align-self: stretch;
+      align-content: start;
       gap: 12px;
       width: 100%;
     }
