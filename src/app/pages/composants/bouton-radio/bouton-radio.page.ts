@@ -145,34 +145,23 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .colonne {
       display: flex;
       flex-direction: column;
     }
 
-    @mixin role($role) {
-      @include mat.radio-overrides(
-        (
-          selected-icon-color: var(--mat-sys-#{$role}),
-          selected-hover-icon-color: var(--mat-sys-#{$role}),
-          selected-focus-icon-color: var(--mat-sys-#{$role}),
-          selected-pressed-icon-color: var(--mat-sys-#{$role}),
-          checked-ripple-color: var(--mat-sys-#{$role}),
-        )
-      );
-    }
-
     .secondaire {
-      @include role(secondary);
+      @include roles.radio(secondary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.radio(tertiary);
     }
 
     .erreur {
-      @include role(error);
+      @include roles.radio(error);
     }
 
     .libelle-titre {

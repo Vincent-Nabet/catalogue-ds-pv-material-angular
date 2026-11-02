@@ -113,30 +113,22 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     mat-toolbar {
       width: 100%;
     }
 
-    @mixin role($fond, $texte) {
-      @include mat.toolbar-overrides(
-        (
-          container-background-color: $fond,
-          container-text-color: $texte,
-        )
-      );
-    }
-
     .primaire {
-      @include role(var(--mat-sys-primary), var(--mat-sys-on-primary));
+      @include roles.toolbar(var(--mat-sys-primary), var(--mat-sys-on-primary));
     }
 
     .secondaire {
-      @include role(var(--mat-sys-secondary-container), var(--mat-sys-on-secondary-container));
+      @include roles.toolbar(var(--mat-sys-secondary-container), var(--mat-sys-on-secondary-container));
     }
 
     .tertiaire {
-      @include role(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
+      @include roles.toolbar(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
     }
 
     .haute {

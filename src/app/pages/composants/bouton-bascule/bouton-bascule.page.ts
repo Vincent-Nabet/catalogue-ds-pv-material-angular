@@ -235,6 +235,7 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .angles-arrondis {
       @include mat.button-toggle-overrides(
@@ -252,25 +253,16 @@ const SNIPPETS = {
       );
     }
 
-    @mixin selection($fond, $texte) {
-      @include mat.button-toggle-overrides(
-        (
-          selected-state-background-color: $fond,
-          selected-state-text-color: $texte,
-        )
-      );
-    }
-
     .selection-primaire {
-      @include selection(var(--mat-sys-primary), var(--mat-sys-on-primary));
+      @include roles.button-toggle(var(--mat-sys-primary), var(--mat-sys-on-primary));
     }
 
     .selection-tertiaire {
-      @include selection(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
+      @include roles.button-toggle(var(--mat-sys-tertiary-container), var(--mat-sys-on-tertiary-container));
     }
 
     .selection-erreur {
-      @include selection(var(--mat-sys-error-container), var(--mat-sys-on-error-container));
+      @include roles.button-toggle(var(--mat-sys-error-container), var(--mat-sys-on-error-container));
     }
 
     .grand {

@@ -96,26 +96,18 @@ const SNIPPETS = {
     </app-specimen-section>
   `,
   styles: `
-    @use '@angular/material' as mat;
-
-    @mixin vague($couleur) {
-      @include mat.ripple-overrides(
-        (
-          color: color-mix(in srgb, $couleur 25%, transparent),
-        )
-      );
-    }
+    @use 'roles';
 
     .vague-secondaire {
-      @include vague(var(--mat-sys-secondary));
+      @include roles.ripple(var(--mat-sys-secondary));
     }
 
     .vague-tertiaire {
-      @include vague(var(--mat-sys-tertiary));
+      @include roles.ripple(var(--mat-sys-tertiary));
     }
 
     .vague-erreur {
-      @include vague(var(--mat-sys-error));
+      @include roles.ripple(var(--mat-sys-error));
     }
 
     .zone {

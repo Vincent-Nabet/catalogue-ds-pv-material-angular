@@ -50,6 +50,7 @@ src/
       accueil/accueil.ts
       fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre
       composants/<id>/<id>.page.ts   une page par composant (35)
+  styles/_roles.scss         mixins « rôle de couleur » par composant (voir docs/themes-et-styles.md), résolu via `includePaths`
   styles/themes-<nom>/       GÉNÉRÉ par `npm run themes` (défaut : themes-app), ne pas éditer à la main :
                              index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
 scripts/

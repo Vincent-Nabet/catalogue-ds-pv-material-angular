@@ -241,31 +241,18 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     mat-stepper {
       width: 100%;
     }
 
-    @mixin role($role) {
-      @include mat.stepper-overrides(
-        (
-          header-selected-state-icon-background-color: var(--mat-sys-#{$role}),
-          header-selected-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
-          header-done-state-icon-background-color: var(--mat-sys-#{$role}),
-          header-done-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
-          header-edit-state-icon-background-color: var(--mat-sys-#{$role}),
-          header-edit-state-icon-foreground-color: var(--mat-sys-on-#{$role}),
-          line-color: var(--mat-sys-#{$role}),
-        )
-      );
-    }
-
     .etapes-secondaire {
-      @include role(secondary);
+      @include roles.stepper(secondary);
     }
 
     .etapes-tertiaire {
-      @include role(tertiary);
+      @include roles.stepper(tertiary);
     }
 
     .etapes-compactes {

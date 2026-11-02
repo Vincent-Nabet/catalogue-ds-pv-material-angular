@@ -325,35 +325,22 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .onglets {
       width: 100%;
     }
 
-    @mixin role($couleur) {
-      @include mat.tabs-overrides(
-        (
-          active-indicator-color: $couleur,
-          active-hover-indicator-color: $couleur,
-          active-focus-indicator-color: $couleur,
-          active-label-text-color: $couleur,
-          active-hover-label-text-color: $couleur,
-          active-focus-label-text-color: $couleur,
-          active-ripple-color: $couleur,
-        )
-      );
-    }
-
     .secondaire {
-      @include role(var(--mat-sys-secondary));
+      @include roles.tabs(var(--mat-sys-secondary));
     }
 
     .tertiaire {
-      @include role(var(--mat-sys-tertiary));
+      @include roles.tabs(var(--mat-sys-tertiary));
     }
 
     .erreur {
-      @include role(var(--mat-sys-error));
+      @include roles.tabs(var(--mat-sys-error));
     }
 
     .indicateur-epais {

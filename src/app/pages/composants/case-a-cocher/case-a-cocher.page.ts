@@ -129,6 +129,7 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .imbriquees,
     .imbriquees ul {
@@ -141,31 +142,16 @@ const SNIPPETS = {
       padding-inline-start: 32px;
     }
 
-    @mixin role($role) {
-      @include mat.checkbox-overrides(
-        (
-          selected-icon-color: var(--mat-sys-#{$role}),
-          selected-hover-icon-color: var(--mat-sys-#{$role}),
-          selected-focus-icon-color: var(--mat-sys-#{$role}),
-          selected-pressed-icon-color: var(--mat-sys-#{$role}),
-          selected-checkmark-color: var(--mat-sys-on-#{$role}),
-          selected-hover-state-layer-color: var(--mat-sys-#{$role}),
-          selected-focus-state-layer-color: var(--mat-sys-#{$role}),
-          selected-pressed-state-layer-color: var(--mat-sys-#{$role}),
-        )
-      );
-    }
-
     .secondaire {
-      @include role(secondary);
+      @include roles.checkbox(secondary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.checkbox(tertiary);
     }
 
     .erreur {
-      @include role(error);
+      @include roles.checkbox(error);
     }
 
     .invalide {

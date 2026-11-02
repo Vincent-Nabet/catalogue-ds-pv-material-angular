@@ -456,6 +456,7 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     @mixin taille($hauteur, $marge, $texte) {
       @include mat.button-overrides(
@@ -514,63 +515,19 @@ const SNIPPETS = {
     .secondaire,
     .tertiaire,
     .erreur {
-      $f: var(--r-f);
-      $sf: var(--r-sf);
-      $c: var(--r-c);
-      $sc: var(--r-sc);
-
-      @include mat.button-overrides(
-        (
-          filled-container-color: $f,
-          filled-label-text-color: $sf,
-          filled-state-layer-color: $sf,
-          tonal-container-color: $c,
-          tonal-label-text-color: $sc,
-          tonal-state-layer-color: $sc,
-          outlined-label-text-color: $f,
-          outlined-outline-color: $f,
-          outlined-state-layer-color: $f,
-          text-label-text-color: $f,
-          text-state-layer-color: $f,
-          protected-label-text-color: $f,
-          protected-state-layer-color: $f,
-        )
-      );
-      @include mat.icon-button-overrides(
-        (
-          icon-color: $f,
-          state-layer-color: $f,
-        )
-      );
-      @include mat.fab-overrides(
-        (
-          container-color: $c,
-          foreground-color: $sc,
-          state-layer-color: $sc,
-          small-container-color: $c,
-          small-foreground-color: $sc,
-          small-state-layer-color: $sc,
-        )
-      );
-    }
-
-    @mixin role($role) {
-      --r-f: var(--mat-sys-#{$role});
-      --r-sf: var(--mat-sys-on-#{$role});
-      --r-c: var(--mat-sys-#{$role}-container);
-      --r-sc: var(--mat-sys-on-#{$role}-container);
+      @include roles.button-tokens;
     }
 
     .secondaire {
-      @include role(secondary);
+      @include roles.button(secondary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.button(tertiary);
     }
 
     .erreur {
-      @include role(error);
+      @include roles.button(error);
     }
 
     @mixin taille-icone($zone, $icone) {

@@ -316,33 +316,23 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     mat-card {
       width: 100%;
     }
 
     // Le texte du titre et du contenu hérite de color : on le fixe avec le fond
-    @mixin role($role) {
-      color: var(--mat-sys-on-#{$role}-container);
-
-      @include mat.card-overrides(
-        (
-          filled-container-color: var(--mat-sys-#{$role}-container),
-          subtitle-text-color: var(--mat-sys-on-#{$role}-container),
-        )
-      );
-    }
-
     .carte-secondaire {
-      @include role(secondary);
+      @include roles.card(secondary);
     }
 
     .carte-tertiaire {
-      @include role(tertiary);
+      @include roles.card(tertiary);
     }
 
     .carte-erreur {
-      @include role(error);
+      @include roles.card(error);
     }
 
     .carte-angulaire {
