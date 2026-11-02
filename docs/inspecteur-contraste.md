@@ -6,7 +6,7 @@ L'inspecteur **mesure et affiche, il ne corrige rien** : aucune couleur, aucun t
 
 ## Utilisation
 
-1. Ouvrir une **page de composant**, puis cliquer sur le bouton **« Contraste »** (icône ◐) de la barre d'outils, à gauche du sélecteur de thème (sous 600 px, seule l'icône reste visible ; le libellé reste lu par les lecteurs d'écran). Il porte `aria-pressed` et un anneau tant que le mode est actif. Le bouton n'existe pas sur l'accueil, et quitter les pages de composants désactive le mode.
+1. Ouvrir une **page de composant** (ou une page Fondations : même préfixe d'URL `/composants/`), puis cliquer sur le bouton **« Contraste »** (icône ◐) de la barre d'outils, à gauche du sélecteur de thème (sous 600 px, seule l'icône reste visible ; le libellé reste lu par les lecteurs d'écran). Il porte `aria-pressed` et un anneau tant que le mode est actif. Le bouton n'existe pas sur l'accueil, et quitter les pages de composants désactive le mode.
 2. Attendre l'analyse (« Analyse en cours… », 1 à 2 secondes). Elle est relancée seule à chaque changement de **page, thème, mode ou densité** ; le bouton « Relancer » du panneau la relance à la main (après avoir ouvert un menu, déplié un panneau…).
 3. Lire les badges :
 
@@ -33,7 +33,7 @@ src/app/layout/contrast-inspector/
 ```
 
 - **Zone mesurée** : `<main>` uniquement (`axe.run({ include: ['main'] })`). Le shell (barre d'outils, menu latéral) et le calque de l'inspecteur sont hors de `<main>` : ils ne sont pas mesurés. C'est ce qui évite les résultats « à vérifier » du menu latéral (fond recouvert par la couche d'état de chaque entrée).
-- **Disponibilité** : `ContrastInspector.available` est vrai quand l'URL commence par `/composants/` ; le bouton n'est rendu que dans ce cas, et un effet désactive l'inspecteur dès qu'on en sort.
+- **Disponibilité** : `ContrastInspector.available` est vrai quand l'URL commence par `/composants/` (donc aussi sur les pages Fondations : sur la page Couleurs, les badges des échantillons de texte affichent les mêmes rapports que la page, à 0,01 près) ; le bouton n'est rendu que dans ce cas, et un effet désactive l'inspecteur dès qu'on en sort.
 - **Mesure** : règle `color-contrast` d'**axe-core**, le moteur de `npm run a11y` : mêmes résultats que l'audit (ex. `2,65 : 1` pour l'olive `#86a315` sur `#f5f6ef`, `2,40 : 1` pour la ligne sélectionnée du tableau en contraste élevé). `axe.run()` est appelé avec `elementRef: true` pour récupérer les éléments DOM, et `resultTypes: violations, passes, incomplete`.
 - **Chargement à la demande** : axe-core (≈ 675 kB, chunk différé) n'est importé (`import()`) qu'à la première analyse ; le bundle initial ne grossit que de ≈ 9 kB (le code de l'inspecteur). Le chargement passe par le jeton `AXE_LOADER`, remplaçable dans les tests. `angular.json` déclare `axe-core` dans `allowedCommonJsDependencies` (module CommonJS).
 - **Relance** : un `effect` du service lit `active`, `ThemeService.theme/scheme/density` et les `NavigationEnd`, puis relance avec un anti-rebond de 300 ms (le temps du rendu). Un compteur d'analyse écarte les résultats périmés (changement de page ou fermeture pendant l'analyse). `running` passe à vrai dès la planification : le panneau n'affiche jamais de comptes périmés.

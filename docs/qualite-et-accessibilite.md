@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (27, Vitest)
+## Tests (56, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -23,6 +23,10 @@
 | `shared/specimen/specimen.spec.ts` | bouton snippet présent seulement avec un snippet, ouverture du dialog |
 | `core/a11y/contrast-items.spec.ts` | conversion des résultats axe (statuts, tri, éléments ignorés), formatage et libellés de l'inspecteur de contraste |
 | `core/a11y/contrast-inspector.spec.ts` | service de l'inspecteur : activation, appel d'axe sur `main`, disponibilité limitée aux pages de composants, relance au changement de thème, fermeture pendant l'analyse, erreur |
+| `core/tokens/contrast.spec.ts` | noir/blanc = 21, olive `#86A315` sur `#FAFAF5` ≈ 2,76, analyse de `rgb()` / `rgba()`, alpha < 1 sans ratio, troncature (4,4999 → « 4,49 : 1 »), seuil à la frontière |
+| `core/tokens/color-roles.spec.ts` | ids de paires uniques, rôles connus, un seul groupe par rôle, 49 rôles MD3 + 15 du design system, pas de `shadow` / `scrim` en paire, seuil selon le type |
+| `core/tokens/contrast-matrix.spec.ts` | statuts (ok, échec, sans seuil, absent), régression (élevé < moyen, même mode seulement, tolérance 0,01), Monochrome jamais en régression, résumé par mode |
+| `catalog.registry.spec.ts` (ajouts) | `fondations` en première catégorie avec 4 pages, `COMPONENT_ENTRIES` = 35 |
 
 ### Tests du script de génération des thèmes (`node:test`)
 
@@ -53,7 +57,7 @@ Deux scripts Node (`scripts/`), qui s'appuient sur `puppeteer-core` (Chrome déj
 
 ### `npm run a11y` : accessibilité et erreurs console
 
-Ouvre chaque page (accueil + 35 composants) avec un thème et un mode imposés, exécute axe-core (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `best-practice`) et relève les messages console de niveau erreur ou avertissement. Affiche `ok` / `ÉCHEC` par page, un résumé, et **retourne le code 1** s'il reste une violation ou une erreur console.
+Ouvre chaque page (accueil + 4 pages Fondations + 35 composants) avec un thème et un mode imposés, exécute axe-core (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `best-practice`) et relève les messages console de niveau erreur ou avertissement. Affiche `ok` / `ÉCHEC` par page, un résumé, et **retourne le code 1** s'il reste une violation ou une erreur console.
 
 ```bash
 npm run a11y                                              # azur, clair + sombre, toutes les pages
@@ -95,7 +99,9 @@ Les identifiants de pages et de thèmes sont lus dans `catalog.registry.ts` et `
 
 Les scripts ne remplacent pas un coup d'œil : parcourir au moins Bouton, Champ de saisie et Tableau dans deux thèmes, en clair et en sombre (`npm run captures`). Vérifier à la main : ouverture d'un snippet, « Copier » (snackbar « Code copié »), Échap, changement de thème / mode / densité puis rechargement (persistance), focus sur `<main>` après navigation, tiroir sur mobile.
 
-Résultat de référence : 36 routes sans erreur console ; axe : 0 violation partout sauf l'exception ci-dessus.
+Résultat de référence : 40 routes sans erreur console ; axe (azur) : 0 violation partout sauf l'exception ci-dessus. Pages Fondations avec les thèmes du design system : voir « Violations axe admises sur la page Couleurs » dans [decisions-et-limites.md](decisions-et-limites.md).
+
+`npm run a11y` n'évalue que la zone visible du viewport (1280 × 900) : le contenu défile dans `mat-sidenav-content`, ce qui est plus bas n'est pas mesuré. Pour une page haute (Couleurs, Matrice), agrandir le viewport avant d'exécuter axe, comme `npm run captures`.
 
 ## Budgets
 

@@ -9,7 +9,7 @@
 {
   id: 'mon-composant',
   label: 'Mon composant',                 // libellé français, affiché partout
-  category: 'formulaires',                // une des 6 catégories
+  category: 'formulaires',                // une des 7 catégories (`fondations` : pages Fondations)
   icon: 'edit_note',                      // ligature Material Symbols
   loadComponent: () =>
     import('../../pages/composants/mon-composant/mon-composant.page').then((m) => m.MonComposantPage),
@@ -116,10 +116,18 @@ Règles :
 - Dans la page, indiquer en description de section que la variante vient des mixins et non d'une API native ; le snippet contient le template **et** le SCSS.
 - Garder le SCSS compact (budget `anyComponentStyle` 5 kB / 8 kB) : mixins locaux et sélecteurs groupés. Utile pour des rôles de couleur : définir des variables intermédiaires (`--r-f`, `--r-c`…) par rôle puis passer `var(--r-f)` aux mixins, plutôt que répéter `var(--mat-sys-*)` pour chaque variante.
 
-## 6. Ajouter un thème, un mode ou une densité
+## 6. Ajouter une paire ou un rôle de couleur (pages Fondations)
+
+Les pages Couleurs et Matrice de contraste lisent une source unique : `src/app/core/tokens/color-roles.ts`.
+
+- **Une paire** = une ligne dans `COLOR_PAIRS` : `text('on-surface', 'secondary-container', 'Ligne sélectionnée du tableau')` (texte, seuil 4,5), ou `pair('outline', 'surface', 'interface', …)` (seuil 3) / `'decoratif'` (ratio affiché, sans seuil). Les rôles sont des suffixes (`on-primary`) ; la paire se range dans le groupe de son rôle de premier plan et apparaît partout (page Couleurs, matrice, résumés). Les paires « usages observés dans les composants » se complètent à la main quand l'[inspecteur de contraste](inspecteur-contraste.md) révèle une paire non couverte. Pas de `shadow` ni de `scrim` (transparents, donc sans ratio).
+- **Un rôle** = un suffixe dans un groupe de `COLOR_ROLES` (origine `md3` : lu en `--mat-sys-<suffixe>` sur le thème courant et en `--md-sys-color-<suffixe>` dans la matrice ; origine `design-system` : `--app-color-<suffixe>`, le préfixe étant `DS_PREFIX`). `color-roles.spec.ts` vérifie l'unicité et que chaque paire n'utilise que des rôles connus.
+- Les snippets de ces pages sont **dérivés des données** (exception à la règle des snippets écrits à la main : il n'y a pas de composant Material à recopier, seulement l'usage des variables).
+
+## 7. Ajouter un thème, un mode ou une densité
 
 Voir [themes-et-styles.md](themes-et-styles.md) : le thème se déclare à la fois dans `src/styles.scss` (map `$themes`) et dans `src/app/core/theme/themes.ts` (liste `THEMES` avec libellé et couleur d'aperçu, type `ThemeId`).
 
-## 7. Vérification d'une nouvelle page
+## 8. Vérification d'une nouvelle page
 
 Voir [qualite-et-accessibilite.md](qualite-et-accessibilite.md) : build, lint, tests, contrôle visuel dans au moins deux thèmes en clair et en sombre, passe axe-core.
