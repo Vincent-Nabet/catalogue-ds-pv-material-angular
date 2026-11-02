@@ -4,7 +4,8 @@
 import { cpSync, mkdtempSync, readdirSync, readFileSync, renameSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { zipSync } from 'fflate';
 import { fileURLToPath } from 'node:url';
 
 const racine = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
@@ -74,4 +75,98 @@ for (const [nom, modifier] of Object.entries(cas)) {
   }
   console.log(`${nom.padEnd(24)} ${res}`);
 }
+
+// ───────────────────────── Zips et options du CLI ─────────────────────────
+// Chaque cas : [nom, arguments CLI, attendu] avec attendu = 'OK' ou une RegExp du message d'erreur (code 1).
+const zips = join(racine, 'testing/zips');
+rmSync(zips, { recursive: true, force: true });
+mkdirSync(zips, { recursive: true });
+const jsons = () => Object.fromEntries([
+  ['primitives.tokens.json', readFileSync(join(base, 'primitives.tokens.json'))],
+  ...readdirSync(join(base, 'semantics')).map((f) => [`semantics/${f}`, readFileSync(join(base, 'semantics', f))]),
+]);
+const prefixer = (fichiers, prefixe) => Object.fromEntries(Object.entries(fichiers).map(([c, v]) => [prefixe + c, v]));
+const ecrireZip = (nom, fichiers) => { const f = join(zips, `${nom}.zip`); writeFileSync(f, zipSync(fichiers)); return f; };
+const octets = (texte) => new TextEncoder().encode(texte);
+
+const zipRacine = ecrireZip('racine', jsons());
+const zipSousDossier = ecrireZip('sous-dossier', prefixer(jsons(), 'tokens/'));
+const zipDeuxNiveaux = ecrireZip('deux-niveaux', prefixer(jsons(), 'a/b/'));
+const zipMacosx = ecrireZip('macosx', { ...jsons(), '__MACOSX/._primitives.tokens.json': octets('x'), '__MACOSX/semantics/._light.tokens.json': octets('x'), 'semantics/._dark.tokens.json': octets('x') });
+const zipBomCrlf = ecrireZip('bom-crlf', Object.fromEntries(Object.entries(jsons()).map(([c, v]) => [c, octets('\uFEFF' + new TextDecoder().decode(v).replaceAll('\r\n', '\n').replaceAll('\n', '\r\n'))])));
+const zipCorrompu = join(zips, 'corrompu.zip');
+writeFileSync(zipCorrompu, 'ceci n\'est pas une archive');
+const zipSansPrimitives = ecrireZip('sans-primitives', Object.fromEntries(Object.entries(jsons()).filter(([c]) => c.startsWith('semantics/'))));
+
+// Dossiers avec fichiers parasites ou noms en majuscules.
+const parasites = join(variantes, 'fichiers-parasites');
+cpSync(base, parasites, { recursive: true });
+writeFileSync(join(parasites, 'semantics/notes.md'), '# notes');
+writeFileSync(join(parasites, 'semantics/brouillon.json'), '{}');
+mkdirSync(join(parasites, 'semantics/archive'));
+cpSync(join(base, 'semantics/light.tokens.json'), join(parasites, 'semantics/archive/light.tokens.json'));
+const majuscules = join(variantes, 'noms-majuscules');
+cpSync(base, majuscules, { recursive: true });
+for (const f of readdirSync(join(majuscules, 'semantics'))) if (!['light.tokens.json', 'dark.tokens.json'].includes(f)) rmSync(join(majuscules, 'semantics', f));
+renameSync(join(majuscules, 'semantics/light.tokens.json'), join(majuscules, 'semantics/Light.tokens.json'));
+renameSync(join(majuscules, 'semantics/dark.tokens.json'), join(majuscules, 'semantics/DARK.tokens.json'));
+
+const etranger = join(sortie, 'dossier-etranger');
+mkdirSync(etranger);
+writeFileSync(join(etranger, 'perso.txt'), 'important');
+
+const lancer = (args) => spawnSync('node', ['scripts/themes/generer-themes.mjs', ...args], { cwd: racine, encoding: 'utf8' });
+const sortieDe = (n) => join(sortie, n);
+const lancerCas = [
+  ['zip-racine', ['--source', zipRacine, '--nom', 'essai', '--sortie', sortieDe('zip-racine')], 'OK'],
+  ['zip-sous-dossier', ['--source', zipSousDossier, '--nom', 'essai', '--sortie', sortieDe('zip-sous-dossier')], 'OK'],
+  ['zip-deux-niveaux', ['--source', zipDeuxNiveaux, '--sortie', sortieDe('zip-deux-niveaux')], /trop profonde/],
+  ['zip-macosx-et-._', ['--source', zipMacosx, '--nom', 'essai', '--sortie', sortieDe('zip-macosx')], 'OK'],
+  ['zip-bom-crlf', ['--source', zipBomCrlf, '--nom', 'essai', '--sortie', sortieDe('zip-bom')], 'OK'],
+  ['zip-corrompu', ['--source', zipCorrompu, '--sortie', sortieDe('zip-corrompu')], /Archive illisible/],
+  ['zip-sans-primitives', ['--source', zipSansPrimitives, '--sortie', sortieDe('zip-sp')], /introuvable/],
+  ['dossier-fichiers-parasites', ['--source', parasites, '--nom', 'essai', '--sortie', sortieDe('parasites')], 'OK'],
+  ['dossier-noms-majuscules', ['--source', majuscules, '--nom', 'essai', '--sortie', sortieDe('majuscules')], 'OK'],
+  ['source-inexistante', ['--source', join(racine, 'testing/nexiste-pas'), '--sortie', sortieDe('x')], /introuvable/],
+  ...['md', 'mat', 'Pv', '1pv', 'a-b', ''].map((n) => [`nom-invalide « ${n} »`, ['--source', base, '--nom', n, '--sortie', sortieDe('nom-invalide')], /nom|Nom/]),
+  ['nom-valide pv2', ['--source', base, '--nom', 'pv2', '--sortie', sortieDe('pv2')], 'OK'],
+  ['palette-repli inconnue', ['--source', base, '--nom', 'essai', '--palette-repli', 'nexistepas', '--sortie', sortieDe('p1')], /inconnue/],
+  ['palette-repli azure', ['--source', base, '--nom', 'essai', '--palette-repli', 'azure', '--sortie', sortieDe('p2')], 'OK'],
+  ['sortie = dossier étranger', ['--source', base, '--nom', 'essai', '--sortie', etranger], /aucun fichier généré/],
+  ['--palettes', ['--source', base, '--nom', 'essai', '--palettes', '--sortie', sortieDe('palettes')], 'OK'],
+  ['theme a', ['--source', base, '--nom', 'a', '--sortie', sortieDe('a')], 'OK'],
+  ['theme b', ['--source', base, '--nom', 'b', '--sortie', sortieDe('b')], 'OK'],
+];
+
+let echecs = 0;
+const verdict = (nom, ok, detail) => { if (!ok) echecs++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${nom.padEnd(28)} ${detail}`); };
+console.log('\n── zips et options (attendu → obtenu) ──');
+for (const [nom, args, attendu] of lancerCas) {
+  const r = lancer(args);
+  const message = (r.stderr || '').trim().split('\n')[0];
+  if (attendu === 'OK') verdict(nom, r.status === 0, r.status === 0 ? 'OK' : message);
+  else verdict(nom, r.status === 1 && attendu.test(message), `échec attendu : ${message.slice(0, 90)}`);
+}
+
+// Contrôles sur les sorties produites.
+const lire = (dossier, f) => readFileSync(join(dossier, f), 'utf8');
+const sansEntete = (t) => t.split('\n').slice(3).join('\n');
+const fichiersDe = ['index.css', 'md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', 'essai.css', '_themes-essai.scss'];
+const dossierRef = sortieDe('ref-dossier');
+lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
+for (const [nom, d] of [['zip-racine', 'zip-racine'], ['zip-sous-dossier', 'zip-sous-dossier'], ['zip-macosx', 'zip-macosx'], ['zip-bom-crlf', 'zip-bom']]) {
+  verdict(`sortie ${nom} = dossier`, fichiersDe.every((f) => sansEntete(lire(sortieDe(d), f)) === sansEntete(lire(dossierRef, f))), 'contenu identique hors en-tête');
+}
+verdict('fichiers parasites ignorés', lire(sortieDe('parasites'), 'essai.css') === lire(dossierRef, 'essai.css') || sansEntete(lire(sortieDe('parasites'), 'essai.css')) === sansEntete(lire(dossierRef, 'essai.css')), 'même sortie que la référence');
+verdict('majuscules → 1 famille', !/theme-essai-/.test(lire(sortieDe('majuscules'), 'md3/couleurs.css')), 'classe .theme-essai seule');
+verdict('dossier étranger intact', readFileSync(join(etranger, 'perso.txt'), 'utf8') === 'important' && readdirSync(etranger).length === 1, 'perso.txt seul, inchangé');
+verdict('--palettes expose les primitives', /--essai-ref-olive-012:/.test(lire(sortieDe('palettes'), 'md3/ref.css')), '--essai-ref-olive-012');
+verdict('palette-repli azure dans le scss', /mat\.\$azure-palette/.test(lire(sortieDe('p2'), '_themes-essai.scss')), 'mat.$azure-palette');
+const passe2 = lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
+verdict('2e passe idempotente', /0 écrit\(s\), 6 inchangé\(s\)/.test(passe2.stdout), '0 écrit, 6 inchangés');
+const tout = (n) => fichiersDe.concat([]).map((f) => f.replace('essai', n)).map((f) => lire(sortieDe(n), f)).join('\n');
+verdict('thèmes a et b sans collision', !/-b-|theme-b|--b-/.test(tout('a')) && !/theme-a\b|--a-/.test(tout('b')) && /\.theme-a-contraste-moyen/.test(tout('a')) && /\.theme-b-contraste-moyen/.test(tout('b')), 'préfixes disjoints');
+console.log(echecs === 0 ? '\nTout est conforme.' : `\n${echecs} écart(s) par rapport à l'attendu.`);
+process.exitCode = echecs === 0 ? 0 : 1;
+
 rmSync(sortie, { recursive: true, force: true });
