@@ -33,6 +33,10 @@ src/
       i18n/intl-fr.ts               libellés français (paginator, datepicker, stepper)
       a11y/contrast-items.ts        résultats axe → éléments d'inspection (fonctions pures)
       a11y/contrast-inspector.ts    @Service : état de l'inspecteur de contraste + exécution d'axe (chargé à la demande)
+      tokens/                       pages Fondations seulement (jamais dans le bundle initial) :
+                                    contrast.ts (WCAG 2.x, fonctions pures), color-roles.ts (rôles et paires, source unique),
+                                    read-css.ts (lecture des valeurs dans le DOM), contrast-matrix.ts (matrice, régressions),
+                                    theme-key.ts (relecture au changement de thème ou de mode)
     layout/
       shell/                 barre d'outils + sidenav + <router-outlet>
       theme-picker/          bouton + menu thème / mode / densité
@@ -40,9 +44,11 @@ src/
     shared/
       specimen/              cadre d'une variante + bouton snippet
       specimen-section/      titre + grille de specimens
+      token-badge/           pastille « Jeton personnalisé » (variable `--app-*`) ou « Jeton MD3 », pour les pages Fondations
       snippet-dialog/        dialog « Code — … » avec bouton Copier
     pages/
       accueil/accueil.ts
+      fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre
       composants/<id>/<id>.page.ts   une page par composant (35)
   styles/themes-<nom>/       GÉNÉRÉ par `npm run themes` (défaut : themes-app), ne pas éditer à la main :
                              index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
@@ -63,14 +69,16 @@ Une seule source alimente le routage, la navigation et l'accueil.
 interface CatalogEntry {
   id: string;                 // 'bouton' → /composants/bouton
   label: string;              // 'Bouton' (français)
-  category: CatalogCategory;  // 'boutons-indicateurs' | 'formulaires' | 'navigation'
+  category: CatalogCategory;  // 'fondations' | 'boutons-indicateurs' | 'formulaires' | 'navigation'
                               // | 'mise-en-page' | 'popups-modales' | 'donnees'
   icon: string;               // nom de ligature Material Symbols
   loadComponent: () => Promise<Type<unknown>>;   // import() dynamique de la page
 }
 ```
 
-Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories), `CATALOG` (les 35 entrées), `CATALOG_GROUPS` (catégories non vides avec leurs entrées, utilisé par la navigation et l'accueil).
+Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories, `fondations` en tête), `CATALOG` (les 38 entrées, les 3 pages Fondations en premier), `COMPONENT_ENTRIES` (les 35 pages de composants, sans Fondations : compteur « composants » de l'accueil), `CATALOG_GROUPS` (catégories non vides avec leurs entrées, utilisé par la navigation et l'accueil).
+
+Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'URL `/composants/<id>` : routes, navigation, inspecteur de contraste et scripts (qui lisent le registre par expression régulière : garder le format `{ id: '…', label: '…', category: …`) suivent sans modification.
 
 **Ajouter un composant = 1 entrée dans `CATALOG` + 1 page.** L'ordre des entrées dans le tableau est l'ordre d'affichage dans une catégorie.
 
@@ -121,6 +129,17 @@ Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, fo
 - `provideNativeDateAdapter()` + `MAT_DATE_LOCALE = 'fr-FR'` (datepicker et timepicker).
 - `provideAppInitializer` : `MatIconRegistry.setDefaultFontSetClass('material-symbols-outlined')` pour que `<mat-icon>` utilise Material Symbols au lieu de l'ancienne police Material Icons.
 
+## Pages Fondations : lecture des valeurs (`core/tokens/`)
+
+Les quatre pages montrent des valeurs de jetons **lues dans le CSS réellement chargé**, sans fichier de données généré (le script `npm run themes` n'est pas concerné).
+
+- **Couleur** : `readColor(sonde, '--mat-sys-…')` pose `color: var(--x, transparent)` sur un élément masqué, lit `getComputedStyle().color` et analyse le `rgb()` obtenu. Passer par une vraie propriété est nécessaire : `getPropertyValue('--x')` renverrait le texte `light-dark(…)`. Le repli `transparent` signale une variable absente (sans lui, la sonde hériterait la couleur du parent). `light-dark()` est résolu selon le `color-scheme` de la sonde.
+- **Autres valeurs** (typographie, rayons, espacements, opacités) : `readValue(élément, propriété)` sur l'élément d'échantillon.
+- **Relecture** : `afterRenderEffect` (phase `read`) qui lit `injectThemeKey()` (thème, mode et, en mode système, préférence du système via `matchMedia`). `ThemeService` pose les classes de `<html>` dans un effet racine : un `effect` ordinaire lirait l'ancien thème.
+- **Matrice** (page débranchée du registre, code conservé) : indépendante du thème courant. Huit sondes masquées portent la classe `theme-<famille>` et `style="color-scheme: light|dark"` ; elles redéfinissent `--md-sys-color-*` et `--app-color-*` (déclarés sur ces classes), lus **une seule fois** après le premier rendu. Les `--mat-sys-*` ne sont pas lus dans les sondes : ils sont résolus sur `<html>`.
+- **Contraste** : formule WCAG 2.x ; le rapport est **tronqué** (et non arrondi) à deux décimales à l'affichage, comme axe-core ; la conformité compare la valeur brute au seuil.
+- jsdom ne connaît pas `light-dark()` : seuls les calculs purs et les données sont testés unitairement ; la lecture se vérifie dans Chrome.
+
 ## Build et budgets (`angular.json`)
 
 | Budget | Avertissement | Erreur |
@@ -128,4 +147,4 @@ Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, fo
 | Bundle initial | **880 kB** | 1 MB |
 | Style d'un composant | **5 kB** | 8 kB |
 
-Le bundle initial pèse environ 867 kB (≈ 167 kB transférés). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse environ 871 kB (≈ 168 kB transférés ; 869,84 kB avant les pages Fondations). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.

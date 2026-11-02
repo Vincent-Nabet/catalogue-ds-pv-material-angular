@@ -1,6 +1,7 @@
 import { Type } from '@angular/core';
 
 export type CatalogCategory =
+  | 'fondations'
   | 'boutons-indicateurs'
   | 'formulaires'
   | 'navigation'
@@ -27,6 +28,7 @@ export interface CatalogGroup extends CatalogCategoryInfo {
 }
 
 export const CATALOG_CATEGORIES: readonly CatalogCategoryInfo[] = [
+  { id: 'fondations', label: 'Fondations', icon: 'palette' },
   { id: 'boutons-indicateurs', label: 'Boutons et indicateurs', icon: 'smart_button' },
   { id: 'formulaires', label: 'Formulaires', icon: 'edit_note' },
   { id: 'navigation', label: 'Navigation', icon: 'explore' },
@@ -36,6 +38,30 @@ export const CATALOG_CATEGORIES: readonly CatalogCategoryInfo[] = [
 ];
 
 export const CATALOG: readonly CatalogEntry[] = [
+  {
+    id: 'couleurs',
+    label: 'Couleurs',
+    category: 'fondations',
+    icon: 'palette',
+    loadComponent: () =>
+      import('../../pages/fondations/couleurs/couleurs.page').then((m) => m.CouleursPage),
+  },
+  {
+    id: 'typographie',
+    label: 'Typographie',
+    category: 'fondations',
+    icon: 'text_fields',
+    loadComponent: () =>
+      import('../../pages/fondations/typographie/typographie.page').then((m) => m.TypographiePage),
+  },
+  {
+    id: 'formes-espacements',
+    label: 'Formes et espacements',
+    category: 'fondations',
+    icon: 'rounded_corner',
+    loadComponent: () =>
+      import('../../pages/fondations/formes-espacements/formes-espacements.page').then((m) => m.FormesEspacementsPage),
+  },
   {
     id: 'bouton',
     label: 'Bouton',
@@ -321,6 +347,11 @@ export const CATALOG: readonly CatalogEntry[] = [
       import('../../pages/composants/pagination/pagination.page').then((m) => m.PaginationPage),
   },
 ];
+
+/** Les pages de composants Material, sans les pages Fondations. */
+export const COMPONENT_ENTRIES: readonly CatalogEntry[] = CATALOG.filter(
+  (entry) => entry.category !== 'fondations',
+);
 
 export const CATALOG_GROUPS: readonly CatalogGroup[] = CATALOG_CATEGORIES.map((category) => ({
   ...category,

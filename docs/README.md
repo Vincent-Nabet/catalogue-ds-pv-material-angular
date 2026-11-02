@@ -28,7 +28,7 @@ Analyses de référence à la racine du dépôt (lecture seule) : `TOKENS-MD3.md
 
 - Angular 22.2, Angular Material et CDK 22.2.5, application **zoneless**, SCSS, Vitest, ESLint (angular-eslint).
 - **Interface uniquement en français.**
-- 35 pages de composants, 6 catégories, lazy loading, générées depuis un registre unique (`src/app/core/catalog/catalog.registry.ts`).
+- 38 pages (3 pages Fondations + 35 pages de composants), 7 catégories, lazy loading, générées depuis un registre unique (`src/app/core/catalog/catalog.registry.ts`).
 - Chaque page présente des **specimens** (variantes et états) avec un bouton `</>` qui ouvre le code dans une boîte de dialogue avec bouton « Copier ».
 - 6 thèmes Material prédéfinis + 4 thèmes du design system (générés depuis `tokens/`) × 3 modes (clair, sombre, système) × 5 densités, modifiables en direct et mémorisés dans `localStorage`.
 - Police **Poppins**, icônes **Material Symbols Outlined** (les deux via Google Fonts).

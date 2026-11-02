@@ -3,7 +3,7 @@ import { MatCard } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
-import { CATALOG, CATALOG_GROUPS } from '../../core/catalog/catalog.registry';
+import { CATALOG_GROUPS, COMPONENT_ENTRIES } from '../../core/catalog/catalog.registry';
 import { THEMES } from '../../core/theme/themes';
 
 @Component({
@@ -30,7 +30,7 @@ import { THEMES } from '../../core/theme/themes';
             <span class="tuile"><mat-icon>{{ group.icon }}</mat-icon></span>
             <div>
               <h2>{{ group.label }}</h2>
-              <p>{{ group.entries.length }} composants</p>
+              <p>{{ group.entries.length }} {{ group.id === 'fondations' ? 'pages' : 'composants' }}</p>
             </div>
           </header>
           <mat-nav-list [attr.aria-label]="group.label">
@@ -153,7 +153,7 @@ import { THEMES } from '../../core/theme/themes';
 })
 export class Accueil {
   protected readonly groups = CATALOG_GROUPS;
-  protected readonly total = CATALOG.length;
+  protected readonly total = COMPONENT_ENTRIES.length;
   protected readonly categories = CATALOG_GROUPS.length;
   protected readonly themes = THEMES.length;
 }

@@ -17,7 +17,8 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 
 ### Essentiel
 
-- **35 pages** (6 catégories) générées depuis un registre unique : `src/app/core/catalog/catalog.registry.ts`. Ajouter un composant = 1 entrée de registre + 1 fichier `src/app/pages/composants/<id>/<id>.page.ts` (lazy, template inline, snippets écrits à la main dans `const SNIPPETS`).
+- **38 pages** (7 catégories : 3 pages Fondations + 35 composants) générées depuis un registre unique : `src/app/core/catalog/catalog.registry.ts`. Ajouter un composant = 1 entrée de registre + 1 fichier `src/app/pages/composants/<id>/<id>.page.ts` (lazy, template inline, snippets écrits à la main dans `const SNIPPETS`).
+- **Fondations** (couleurs, typographie, formes et espacements ; la page matrice de contraste est écrite mais **débranchée** du registre, voir `docs/decisions-et-limites.md`) : pages dans `src/app/pages/fondations/<id>/<id>.page.ts`, URL `/composants/<id>`, valeurs lues dans le CSS chargé par sondes DOM ; code partagé (contraste WCAG, rôles et paires de couleurs, matrice) dans `src/app/core/tokens/`. Ajouter une paire ou un rôle de couleur = une ligne dans `color-roles.ts`.
 - Une page = `<h1>` + `app-specimen-section` (`title`, `description`, `minWidth`) contenant des `app-specimen` (`label` FR, `api`, `snippet`). Le bouton `</>` ouvre `SnippetDialog` (copie + snackbar).
 - Thème : `ThemeService` (`@Service`, signaux `theme` / `scheme` / `density`, `localStorage` clé `catalogue-material-theme`) pose des classes `theme-*`, `scheme-*`, `density-*` sur `<html>` ; couleurs dans `src/styles.scss` (palettes Material prédéfinies, `mat.theme()` + `light-dark()`). Défaut : Design system contraste moyen (`app-contraste-moyen`), **clair**, densité 0.
 - Shell : `layout/shell` (toolbar primaire + sidenav `side`/`over` selon `(max-width: 959.98px)`), focus donné à `<main>` après chaque navigation ; `layout/theme-picker`.
@@ -29,7 +30,7 @@ Catalogue visuel des composants **Angular Material 22** (designers, intégrateur
 - Angular Material 22 n'a **pas d'API de taille** pour les boutons (sizes/formes = surcharge de jetons `--mat-button-*`) ; `color` est **M2 uniquement** (sans effet) : ne pas l'utiliser.
 - Booléens en binding (`[disabledInteractive]="true"`), `&#64;` pour une arobase dans un template, `hasBackdrop` sur `mat-sidenav-container`, drawers `over`/`push` laissés fermés (piège de focus).
 - Couleurs uniquement via `--mat-sys-*` ; typographie via `--mat-sys-*` (pas de tailles/couleurs en dur).
-- Bundle initial ≈ 867 kB (avertissement à 880 kB, erreur à 1 MB ; axe-core de l'inspecteur de contraste est un chunk différé, hors bundle initial) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
+- Bundle initial ≈ 871 kB (avertissement à 880 kB, erreur à 1 MB ; axe-core de l'inspecteur de contraste est un chunk différé, hors bundle initial) : le shell charge des modules Material entiers ; ne relever un budget qu'avec mesure et justification.
 - Thèmes du design system : générés par `npm run themes` dans `src/styles/themes-<nom>/` (défaut `themes-app`) : **ne pas éditer ces fichiers à la main**, relancer le script ; branchés au catalogue (4 entrées `app*` dans `themes.ts`, `angular.json`, `styles.scss`) ; tests : `node --test scripts/themes/`.
 - Hors périmètre : `tokens/` et `TOKENS-*.md` (design system distinct, **ne pas modifier**) ; ne pas committer `.mcp.json`, `.mcp.json.tmp`, `.claude/`, `.agents/`, `skills-lock.json` dans ce chantier.
 

@@ -41,6 +41,63 @@ Détail : [inspecteur-contraste.md](inspecteur-contraste.md).
 | Périmètre | `<main>` des pages de composants ; shell et accueil exclus, bouton absent ailleurs | Le shell est propre au catalogue (et donnait des résultats indéterminés) ; l'outil sert à juger les composants dans un thème |
 | Rôle | Mesure et affiche, ne corrige rien | Un contraste insuffisant venant des tokens du design system doit rester visible pour être remonté aux designers |
 
+## Pages Fondations
+
+Détail : [fonctionnel.md](fonctionnel.md) et [architecture.md](architecture.md).
+
+| Sujet | Décision | Pourquoi |
+|---|---|---|
+| Lecture des valeurs | Sondes DOM et `getComputedStyle`, dans le navigateur ; pas de fichier de données généré ; `npm run themes` inchangé | Les pages montrent ce qui est réellement rendu (y compris les écrasements de `styles.scss`), sans second jeu de données à tenir synchronisé |
+| Matrice | Limitée aux 4 familles × clair / sombre du design system | Les palettes Material prédéfinies ne servent pas à améliorer les tokens |
+| Matrice indépendante du thème | Huit sondes portant `theme-<famille>` et un `color-scheme` | Le résultat est le même quel que soit le thème choisi |
+| Snippets | Dérivés des données (paires, styles, jetons) | Il n'y a pas de composant Material à recopier, seulement l'usage des variables (exception à la règle des snippets écrits à la main) |
+| Ratios | Tronqués à 2 décimales à l'affichage, comparés bruts au seuil | Un échec à 4,4996 ne doit jamais s'afficher « 4,50 : 1 » ; même troncature qu'axe, donc mêmes chiffres que l'inspecteur |
+| Statut | Icône et texte, jamais la couleur seule ; pastille verte (succès du design system, dans tous les thèmes : Material n'a pas de rôle succès), rouge (`error-container`) ou neutre | WCAG 1.4.1 ; lisibilité |
+| Jetons personnalisés | Pastille « Jeton personnalisé » (paire `inverse-on-surface` / `inverse-surface`) sur chaque exemple en `--app-*`, rappel dans la description de la section | Le designer doit voir qu'un jeton qu'il crée génère une variable hors MD3 |
+| Fichiers | `pages/fondations/<id>/`, URL `/composants/<id>` | Routes, menu, accueil, inspecteur et scripts suivent sans modification |
+
+### Page Matrice de contraste : débranchée
+
+La page est conservée (`src/app/pages/fondations/matrice-contraste/matrice-contraste.page.ts`, avec `core/tokens/contrast-matrix.ts` et ses tests) mais son entrée a été retirée de `CATALOG` : plus de route, de lien de menu ni de carte d'accueil, et elle n'entre pas dans le bundle. Le fichier reste compilé et typé (`tsconfig.app.json` inclut `src/**/*.ts`). Pour la rebrancher, ajouter dans `CATALOG`, en deuxième position :
+
+```ts
+{
+  id: 'matrice-contraste',
+  label: 'Matrice de contraste',
+  category: 'fondations',
+  icon: 'grid_on',
+  loadComponent: () =>
+    import('../../pages/fondations/matrice-contraste/matrice-contraste.page').then(
+      (m) => m.MatriceContrastePage,
+    ),
+},
+```
+
+puis passer le test du registre à 4 pages Fondations et mettre à jour les compteurs de la documentation. Les mentions de la matrice ci-dessous décrivent la page telle qu'elle a été vérifiée avant son retrait.
+
+### Limites des pages Fondations
+
+- **WCAG 2.x seulement** (pas d'APCA) ; texte (4,5), éléments d'interface (3) et décoratif (sans seuil). Pas de contraste des états (survol, focus).
+- **Paires « observées dans les composants » à compléter à la main** (2 aujourd'hui : `on-surface` sur `secondary-container`, `primary` sur `surface-container-low`) : voir [ajouter-un-composant.md](ajouter-un-composant.md) §6.
+- **Régressions peu sélectives** : la règle « plus de 0,01 sous la famille précédente » signale aussi des écarts anodins (ex. `on-surface` sur `surface-container-low` : 16,00 en Standard, 15,63 en Contraste moyen, tous deux très conformes). En Contraste moyen clair, 15 paires sont ainsi marquées. Le filtre « Échecs et régressions seulement » les inclut ; seuls les **échecs** correspondent à une non-conformité.
+- **Opacités d'état** : sous un thème du design system, `--mat-sys-focus-state-layer-opacity` et `--mat-sys-pressed-state-layer-opacity` valent **0,12** alors que le script pose 0,10 (`--md-sys-state-*`). Cause mesurée : les blocs `html.density-N` de `styles.scss` rappellent `mat.theme(density)` après le thème du design system et réémettent les valeurs par défaut de Material. La page affiche la valeur du rendu ; le défaut n'est pas corrigé ici.
+- **Espacements** : 10 jetons (`none` à `full`) dans `app.css`.
+- **axe ne mesure que la zone visible** : le contenu défile dans `mat-sidenav-content`, donc ce qui est sous la ligne de flottaison n'est pas évalué par `npm run a11y` (viewport 1280 × 900). Pour auditer une page haute en entier, agrandir le viewport comme le fait `npm run captures`.
+
+### Violations axe admises sur la page Couleurs
+
+Thèmes du design system, **échantillons de la page Couleurs** uniquement (la couleur testée est celle du token : c'est le but de la page, rien n'est corrigé). Page entière, zone `main` ; elles reprennent exactement les échecs du résumé de la matrice.
+
+| Thème, mode | Échantillons en `color-contrast` |
+|---|---|
+| Standard, clair (5) | `primary` / `surface` 2,76 ; `primary` / `surface-container-low` 2,65 ; `tertiary` / `surface` 1,40 ; `success` / `surface` 2,09 ; `warning` / `surface` 2,04 |
+| Standard, sombre (1) | `inverse-primary` / `inverse-surface` 2,24 |
+| Contraste moyen, clair (2) | `primary` / `surface` 4,48 ; `primary` / `surface-container-low` 4,24 |
+| Contraste élevé, clair (1) et sombre (1) | `on-surface` / `secondary-container` 2,40 (clair), 2,31 (sombre) |
+| Contraste moyen sombre, Monochrome | aucune |
+
+Matrice, Typographie et Formes et espacements : 0 violation dans la zone `main`, pour les 10 thèmes en clair et en sombre. Thèmes Angular Material : 0 violation sur les quatre pages, y compris la page Couleurs entière. Hors des pages, le menu latéral du shell produit ses propres violations (sous-titres de catégorie en `primary` sur `surface-container-low`) en Standard clair et Contraste moyen clair, sur **toutes** les pages : voir « Limites connues ».
+
 ## Budget initial
 
 L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 850 → 880 kB) au fil de l'ajout de pages. Le dernier cran (850 → 880 kB) vient du branchement des thèmes du design system : le CSS passe de ≈ 44 à ≈ 79 kB (variables `--md-sys-*` des 4 familles de contraste + bloc de surcharges `--mat-sys-*`), le total initial de 823,55 à 857,68 kB. L'inspecteur de contraste ajoute ≈ 9 kB (→ 867 kB) sans relever le budget : axe-core est chargé à la demande. Cause mesurée : le shell importe des modules Material entiers (`list.mjs` ≈ 132 kB, `button.mjs` ≈ 67 kB, `forms`, overlay CDK) qui ne se découpent pas à la classe près, et que le bundler place dans le chunk initial. Déplacer le date adapter vers les pages n'économisait que ≈ 17 kB : abandonné pour garder `app.config.ts` fidèle au plan. Erreur à 1 MB inchangée. Une piste si le poids devient gênant : remplacer `mat-nav-list` du shell par une navigation maison (≈ −130 kB), au prix d'un rendu moins fidèle.
@@ -69,7 +126,8 @@ L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 
 - Pas de cartes avec image, pas de formulaires complets, pas de validation asynchrone.
 - Inspecteur de contraste : contenu des pages de composants seulement (ni shell, ni accueil, ni menus/dialogues ouverts depuis un specimen), texte seulement (pas les éléments d'interface à 3 : 1), pas les états survol/focus, résultats « à vérifier » (`?`) pour les fonds en dégradé, en image ou recouverts.
 - Les scripts `a11y` et `captures` nécessitent Chrome ou Chromium installé (`CHROME_PATH` sinon) ; ils ne tournent pas en CI par défaut.
-- Seuls les tests du shell, du registre, du service de thème et du specimen existent (plus ceux du script de génération, via `node --test scripts/themes/`).
+- Seuls les tests du shell, du registre, du service de thème, du specimen, de l'inspecteur et des calculs de `core/tokens/` existent (plus ceux du script de génération, via `node --test scripts/themes/`). Les pages Fondations sont vérifiées dans Chrome (jsdom ne connaît pas `light-dark()`).
+- **`npm run a11y -- --themes=tous` ne teste aucun thème** : `themesDisponibles()` (`scripts/lib.mjs`) lit le type `ThemeId` avec une expression régulière qui ne reconnaît plus sa forme sur plusieurs lignes, et renvoie une liste vide. Passer les thèmes un par un (`--themes=azur,violet,…`). Non corrigé ici.
 - **Thèmes du design system : violations axe `color-contrast` dues aux tokens**, volontairement **non corrigées** (le thème est reproduit tel que défini, à remonter aux designers). Audit `npm run a11y -- --themes=app,app-contraste-moyen,app-contraste-eleve,app-monochrome` : `app` et `app-contraste-moyen` en clair (primaire olive utilisé en texte pour les catégories du menu latéral, sous-titre de la barre à 85 % d'opacité) ; `app-contraste-eleve` en clair et en sombre (ligne sélectionnée du tableau : `on-surface` sur `secondary-container`) ; aucune en sombre pour `app` / `app-contraste-moyen`, aucune pour `app-monochrome`.
 
 ## Hors périmètre
