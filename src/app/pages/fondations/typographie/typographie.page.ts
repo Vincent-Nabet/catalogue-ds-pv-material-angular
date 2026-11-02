@@ -1,5 +1,5 @@
 import { Component, ElementRef, afterRenderEffect, computed, signal, viewChildren } from '@angular/core';
-import { readValue } from '../../../core/tokens/read-css';
+import { formatCssValue, readValue } from '../../../core/tokens/read-css';
 import { injectIsDesignSystem, injectThemeKey } from '../../../core/tokens/theme-key';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
@@ -37,16 +37,11 @@ interface TypeValues {
   tracking: string;
 }
 
-/** `57px` → `57 px`, `-0.25px` → `-0,25 px`. */
-function formatLength(value: string): string {
-  return value.replace('.', ',').replace(/px$/, ' px');
-}
-
 function describe(values: TypeValues | undefined): string {
   if (!values) {
     return '';
   }
-  return `${values.font} · ${formatLength(values.size)} / ${formatLength(values.lineHeight)} · graisse ${values.weight} · interlettrage ${formatLength(values.tracking)}`;
+  return `${values.font} · ${formatCssValue(values.size)} / ${formatCssValue(values.lineHeight)} · graisse ${values.weight} · interlettrage ${formatCssValue(values.tracking)}`;
 }
 
 @Component({

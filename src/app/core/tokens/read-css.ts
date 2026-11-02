@@ -19,3 +19,8 @@ export function readColor(probe: HTMLElement, cssVar: string): Rgba | null {
 export function readValue(element: HTMLElement, property: keyof CSSStyleDeclaration & string): string {
   return String(getComputedStyle(element)[property]);
 }
+
+/** `57px` → `57 px`, `-0.25px` → `-0,25 px`, `0.08` → `0,08` : valeur calculée, à la française. */
+export function formatCssValue(value: string): string {
+  return value.replace('.', ',').replace(/px$/, ' px');
+}
