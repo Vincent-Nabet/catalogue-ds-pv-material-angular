@@ -228,6 +228,7 @@ const KEY = {
       display: grid;
       place-items: center;
       width: 100%;
+      margin-block-start: 28px; /* sous le bouton </> de la card */
       height: 80px;
       border-radius: var(--mat-sys-corner-medium);
       background: var(--mat-sys-surface);
