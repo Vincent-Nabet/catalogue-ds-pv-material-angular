@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -6,10 +8,18 @@
 
 // Barre d'outils : couleur primaire du thème, qui suit le sélecteur
 .barre {
-  --mat-toolbar-container-background-color: var(--mat-sys-primary);
-  --mat-toolbar-container-text-color: var(--mat-sys-on-primary);
-  --mat-icon-button-icon-color: var(--mat-sys-on-primary);
-  --mat-icon-button-state-layer-color: var(--mat-sys-on-primary);
+  @include mat.toolbar-overrides(
+    (
+      container-background-color: var(--mat-sys-primary),
+      container-text-color: var(--mat-sys-on-primary),
+    )
+  );
+  @include mat.icon-button-overrides(
+    (
+      icon-color: var(--mat-sys-on-primary),
+      state-layer-color: var(--mat-sys-on-primary),
+    )
+  );
   position: relative;
   z-index: 2;
   box-shadow: var(--mat-sys-level2);
@@ -76,7 +86,11 @@ app-contrast-toggle {
 
 // Navigation latérale : surface teintée, angles arrondis, catégories colorées
 mat-sidenav {
-  --mat-sidenav-container-background-color: var(--mat-sys-surface-container-low);
+  @include mat.sidenav-overrides(
+    (
+      container-background-color: var(--mat-sys-surface-container-low),
+    )
+  );
   width: 288px;
   padding-block: 8px 24px;
   border-start-end-radius: var(--mat-sys-corner-large);
