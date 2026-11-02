@@ -2,6 +2,8 @@ import {
   COLOR_PAIRS,
   COLOR_ROLES,
   colorVar,
+  detectedRoles,
+  listedDesignSystemColorVars,
   pairGroup,
   pairLabel,
   pairsOfGroup,
@@ -66,6 +68,30 @@ describe('color roles', () => {
     expect(colorVar('on-primary', '--mat-sys-')).toBe('--mat-sys-on-primary');
     expect(colorVar('on-primary', '--md-sys-color-')).toBe('--md-sys-color-on-primary');
     expect(colorVar('success', '--mat-sys-')).toBe('--app-color-success');
+  });
+
+  it('should build the variable of a role missing from the list from its given origin', () => {
+    expect(colorVar('brand', '--mat-sys-')).toBe('--mat-sys-brand');
+    expect(colorVar('brand', '--mat-sys-', 'design-system')).toBe('--app-color-brand');
+  });
+
+  it('should list the expected design system variables', () => {
+    const vars = listedDesignSystemColorVars();
+    expect(vars).toHaveLength(15);
+    expect(vars).toContain('--app-color-section-background');
+    expect(vars.every((v) => v.startsWith('--app-color-'))).toBe(true);
+  });
+
+  it('should detect only the color roles that are not listed', () => {
+    const found = [
+      ...listedDesignSystemColorVars(),
+      '--app-color-brand',
+      '--app-color-primary',
+      '--app-spacing-small',
+      '--app-color-accent',
+    ];
+    expect(detectedRoles(found)).toEqual(['brand', 'accent']);
+    expect(detectedRoles(listedDesignSystemColorVars())).toEqual([]);
   });
 
   it('should label a pair from its roles', () => {
