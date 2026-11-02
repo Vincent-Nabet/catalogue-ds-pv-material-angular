@@ -1,7 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
-import { detectedColorFamilies } from '../../../core/tokens/color-roles';
-import { injectIsDesignSystem } from '../../../core/tokens/theme-key';
-import { TokenCatalog } from '../../../core/tokens/token-catalog';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Specimen } from '../../../shared/specimen/specimen';
@@ -310,7 +309,7 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-bouton-page',
-  imports: [MatButton, MatIconButton, MatFabButton, MatMiniFabButton, MatIcon, Specimen, SpecimenSection, MatProgressSpinner],
+  imports: [MatButton, MatIconButton, MatFabButton, MatMiniFabButton, MatIcon, Specimen, SpecimenSection, MatProgressSpinner, ColorFamilyScope],
   template: `
     <h1>Bouton</h1>
 
@@ -458,7 +457,7 @@ function customSnippet(id: string): string {
       >
         @for (family of families(); track family.id) {
           <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
-            <span class="famille" [style]="family.style">
+            <span [appColorFamily]="family.id">
               <button matButton="text" class="perso">Texte</button>
               <button matButton="filled" class="perso">Rempli</button>
               <button matButton="tonal" class="perso">Tonal</button>
@@ -577,10 +576,6 @@ function customSnippet(id: string): string {
       @include roles.button-tokens;
     }
 
-    .famille {
-      display: contents;
-    }
-
     .secondaire {
       @include roles.button(secondary);
     }
@@ -620,26 +615,10 @@ function customSnippet(id: string): string {
 export class BoutonPage {
   protected readonly snippets = SNIPPETS;
 
-  private readonly catalog = inject(TokenCatalog);
-  private readonly designSystem = injectIsDesignSystem();
+  private readonly detected = injectColorFamilies();
 
-  /** Une famille par jeu `--app-color-*` complet : seul le design system les porte, ils sont masqués avec un thème Angular Material. */
-  protected readonly families = computed(() => {
-    const names = this.catalog.names();
-    return this.designSystem() && names
-      ? detectedColorFamilies(names).map(({ id, label }) => ({
-          id,
-          label,
-          api: `--app-color-${id}`,
-          snippet: customSnippet(id),
-          // Mêmes variables intermédiaires que les rôles M3 (`roles.button`), lues par `.perso`.
-          style: {
-            '--r-f': `var(--app-color-${id})`,
-            '--r-sf': `var(--app-color-on-${id})`,
-            '--r-c': `var(--app-color-${id}-container)`,
-            '--r-sc': `var(--app-color-on-${id}-container)`,
-          },
-        }))
-      : [];
-  });
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: `--app-color-${id}`, snippet: customSnippet(id) })),
+  );
 }
