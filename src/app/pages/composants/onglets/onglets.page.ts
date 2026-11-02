@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { injectColorFamilies } from '../../../core/tokens/color-families';
+import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { MatIcon } from '@angular/material/icon';
 import {
   MatTab,
@@ -150,6 +152,26 @@ const SNIPPETS = {
 }`,
 };
 
+/** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
+function customSnippet(id: string): string {
+  const role = `--app-color-${id}`;
+  return `<mat-tab-group class="${id}">…</mat-tab-group>
+
+@use '@angular/material' as mat;
+
+.${id} {
+  @include mat.tabs-overrides((
+    active-indicator-color: var(${role}),
+    active-hover-indicator-color: var(${role}),
+    active-focus-indicator-color: var(${role}),
+    active-label-text-color: var(${role}),
+    active-hover-label-text-color: var(${role}),
+    active-focus-label-text-color: var(${role}),
+    active-ripple-color: var(${role}),
+  ));
+}`;
+}
+
 @Component({
   selector: 'app-onglets-page',
   imports: [
@@ -162,6 +184,7 @@ const SNIPPETS = {
     MatTabNavPanel,
     Specimen,
     SpecimenSection,
+    ColorFamilyScope,
   ],
   template: `
     <h1>Onglets</h1>
@@ -322,6 +345,25 @@ const SNIPPETS = {
         </mat-tab-group>
       </app-specimen>
     </app-specimen-section>
+
+    @if (families().length > 0) {
+      <app-specimen-section
+        minWidth="340px"
+        title="Couleurs personnalisées"
+        description="Familles de couleur propres au design system (--app-color-*), détectées dans le CSS chargé : même principe que les rôles M3, appliqué avec les jetons du design system (indicateur, libellé actif et ondulation sur la surface de la page)."
+      >
+        @for (family of families(); track family.id) {
+          <app-specimen [label]="family.label" [api]="family.api" [snippet]="family.snippet" [custom]="true">
+            <span [appColorFamily]="family.id">
+              <mat-tab-group class="onglets perso">
+                <mat-tab label="Général"><p>Contenu général, famille {{ family.label }}</p></mat-tab>
+                <mat-tab label="Détails"><p>Contenu des détails</p></mat-tab>
+              </mat-tab-group>
+            </span>
+          </app-specimen>
+        }
+      </app-specimen-section>
+    }
   `,
   styles: `
     @use '@angular/material' as mat;
@@ -341,6 +383,10 @@ const SNIPPETS = {
 
     .erreur {
       @include roles.tabs(var(--mat-sys-error));
+    }
+
+    .perso {
+      @include roles.tabs(var(--r-f));
     }
 
     .indicateur-epais {
@@ -366,4 +412,11 @@ const SNIPPETS = {
 export class OngletsPage {
   protected readonly snippets = SNIPPETS;
   protected readonly onglets = Array.from({ length: 12 }, (_, index) => `Onglet ${index + 1}`);
+
+  private readonly detected = injectColorFamilies();
+
+  /** Une famille par jeu `--app-color-*` complet (vide avec un thème Angular Material). */
+  protected readonly families = computed(() =>
+    this.detected().map(({ id, label }) => ({ id, label, api: 'mat.tabs-overrides : active-indicator-color', snippet: customSnippet(id) })),
+  );
 }
