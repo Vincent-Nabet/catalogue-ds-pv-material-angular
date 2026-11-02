@@ -81,11 +81,18 @@ La densité agit sur la hauteur des composants (champs, boutons, listes…). Ell
 
 | Où | Jetons |
 |---|---|
-| Barre d'outils du shell | `--mat-toolbar-container-background-color`, `--mat-toolbar-container-text-color`, `--mat-icon-button-icon-color`, `--mat-icon-button-state-layer-color` |
-| Sidenav du shell | `--mat-sidenav-container-background-color` |
-| Page Bouton (tailles) | `--mat-button-{filled,tonal,outlined,text,protected}-{container-height,horizontal-padding,label-text-size,container-shape}`, `--mat-icon-button-state-layer-size`, `--mat-icon-button-icon-size` |
+| Barre d'outils du shell | `mat.toolbar-overrides` (`container-background-color`, `container-text-color`), `mat.icon-button-overrides` (`icon-color`, `state-layer-color`) |
+| Sidenav du shell | `mat.sidenav-overrides` (`container-background-color`) |
+| Page Bouton (tailles) | `mat.button-overrides` (`{filled,tonal,outlined,text,protected}-{container-height,horizontal-padding,label-text-size}`), `mat.icon-button-overrides` (`state-layer-size`, `icon-size`) |
+| Page Icône (couleurs) | `mat.icon-overrides` (`color`) |
+
+Les surcharges de composants passent par les **mixins Sass `mat.<composant>-overrides`** (noms de jetons validés à la compilation), jamais par des variables `--mat-<composant>-*` écrites à la main. Les valeurs sont des jetons système (`--mat-sys-*`) dès qu'il en existe un ; voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
 
 Toutes les variables `--mat-sys-*` sont surchargeables (en CSS ou avec `mat.theme-overrides`).
+
+### Ce qui n'a pas de jeton système
+
+`mat.theme()` n'émet ni jeton d'espacement, de hauteur ou de taille d'icône, ni jetons de mouvement (`--mat-sys-motion-*`). Restent donc en dur, faute d'équivalent : espacements et marges du catalogue, hauteurs/marges des boutons de la page Bouton, tailles des icônes, `letter-spacing`, `line-height` et `opacity` du shell, durées de transition de l'accueil, aperçu des pastilles de thème (`themes.ts`, couleurs affichées avant d'appliquer le thème).
 
 ## Styles du shell
 

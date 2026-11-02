@@ -40,16 +40,17 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 - **Section** : titre, description facultative, grille CSS de colonnes (largeur minimale réglable, 300 px par défaut).
 - Les états non forçables (survol, appui) ne sont pas montrés.
 - Les popups (dialog, bottom-sheet, snackbar, menu, tooltip) sont présentés par un bouton déclencheur, sans aperçu statique.
+- **Section « Personnalisation (jetons) »** : 33 pages sur 35 (toutes sauf Bouton et Icône, dont les sections Tailles/Couleurs/Formes jouent ce rôle) se terminent par une section qui montre comment restyler le composant avec son mixin Sass `mat.<composant>-overrides` : rôles de couleur (secondaire, tertiaire, erreur), formes (`--mat-sys-corner-*`), tailles et hauteurs, élévation, typographie (`--mat-sys-*-size`). Le champ `api` du specimen nomme le mixin et le premier jeton ; le snippet donne le template et le SCSS. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
 
 ## Composants couverts (35 pages)
 
 ### Boutons et indicateurs (7)
 | Page | Id | Variantes principales |
 |---|---|---|
-| Bouton | `bouton` | 5 apparences × normal/désactivé/icône ; boutons icône ; FAB, mini FAB, FAB étendu ; **tailles** (petit, standard, grand, très grand) et **formes** et **couleurs** (primaire, secondaire, tertiaire, erreur × 5 apparences, boutons icône, FAB, mini FAB, FAB étendu) par surcharge de jetons CSS ; chargement (`showProgress`) ; icône à droite ; lien ; désactivé mais focalisable |
+| Bouton | `bouton` | 5 apparences × normal/désactivé/icône ; boutons icône ; FAB, mini FAB, FAB étendu ; **tailles** (petit, standard, grand, très grand) et **formes** et **couleurs** (primaire, secondaire, tertiaire, erreur × 5 apparences, boutons icône, FAB, mini FAB, FAB étendu) par les mixins `mat.*-overrides` ; chargement (`showProgress`) ; icône à droite ; lien ; désactivé mais focalisable |
 | Bouton bascule | `bouton-bascule` | choix unique/multiple, icônes, sans coche, vertical, désactivé, apparence standard/legacy, sans coche multiple, désactivé focalisable |
 | Badge | `badge` | tailles, pastille, positions, sur bouton, masqué, désactivé, description accessible, texte long |
-| Icône | `icone` | tailles, couleurs, remplie, accessibilité, dans le texte (`inline`), axes de la police (graisse, taille optique) |
+| Icône | `icone` | tailles, couleurs (`mat.icon-overrides`), couleur héritée d'un conteneur, remplie, accessibilité, dans le texte (`inline`), axes de la police (graisse, taille optique) |
 | Barre de progression | `barre-progression` | déterminé, indéterminé, tampon, requête, 0 %/100 % |
 | Indicateur circulaire | `indicateur-circulaire` | déterminé, indéterminé, diamètres, épaisseurs |
 | Ripple | `ripple` | défaut, centré, non borné, couleur, désactivé, rayon, animation lente, déclencheur externe |
@@ -71,7 +72,7 @@ Les préférences sont conservées dans `localStorage` (clé `catalogue-material
 ### Navigation (4)
 | Page | Id | Variantes principales |
 |---|---|---|
-| Barre d'outils | `barre-outils` | simple, primaire, avec actions, plusieurs lignes |
+| Barre d'outils | `barre-outils` | simple, avec actions, plusieurs lignes ; personnalisation (rôles de couleur, hauteur et titre, surface relevée). L'entrée `color` n'a aucun effet en M3 : l'ancien specimen « primaire » a été retiré |
 | Menu latéral | `menu-lateral` | position début/fin, fermé ; modes `over`, `push`, avec fond assombri (fermés, bouton « Basculer le menu ») |
 | Menu | `menu` | simple, icônes + séparateur, sous-menu, bouton icône, option désactivée, position ; contextuel (clic droit), désactivée focalisable, contenu différé, sans fond |
 | Onglets | `onglets` | simple, icônes, étirés, désactivé, barre de navigation ; centrés/à la fin/non étirés, en-tête en bas, barre ajustée, onglet initial, hauteur dynamique, sans animation, nombreux onglets avec/sans flèches |

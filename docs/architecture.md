@@ -87,7 +87,7 @@ Exports : `CATALOG_CATEGORIES` (ordre et libellés des catégories), `CATALOG` (
 - `mat-sidenav-container` : `mat-sidenav` en `side` ouvert sur ordinateur, `over` fermé sur mobile. Seuil : `BreakpointObserver` sur `(max-width: 959.98px)`, converti en signal (`toSignal`).
 - Navigation : `<nav aria-label="Composants">` contenant un `mat-nav-list`. Pour chaque catégorie, un sous-titre (`mat-subheader`) avec icône, puis les liens. Lien actif : `routerLinkActive` + `ariaCurrentWhenActive="page"` + `[activated]`. Sur mobile, un clic ferme le tiroir.
 - `<main #main tabindex="-1">` contient le `<router-outlet>`. **Après chaque navigation (hors première), le focus est donné à `<main>`** (effet sur un signal alimenté par `NavigationEnd` avec `skip(1)`).
-- Styles : barre d'outils colorée en primaire (`--mat-toolbar-container-*`), sidenav teintée (`surface-container-low`), `main` centré (max 1440 px).
+- Styles : barre d'outils colorée en primaire (`mat.toolbar-overrides`), sidenav teintée (`surface-container-low`), `main` centré (max 1440 px).
 
 ## ThemeService (`core/theme/theme.service.ts`)
 
