@@ -181,38 +181,18 @@ pourcentage = (valeur: number) => valeur + ' %';`,
   `,
   styles: `
     @use '@angular/material' as mat;
-
-    @mixin role($role) {
-      $couleur: var(--mat-sys-#{$role});
-      $sur-couleur: var(--mat-sys-on-#{$role});
-
-      @include mat.slider-overrides(
-        (
-          active-track-color: $couleur,
-          handle-color: $couleur,
-          hover-handle-color: $couleur,
-          focus-handle-color: $couleur,
-          ripple-color: $couleur,
-          hover-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-hover-state-layer-opacity) * 100%), transparent),
-          focus-state-layer-color: color-mix(in srgb, $couleur calc(var(--mat-sys-focus-state-layer-opacity) * 100%), transparent),
-          label-container-color: $couleur,
-          label-label-text-color: $sur-couleur,
-          with-overlap-handle-outline-color: $sur-couleur,
-          with-tick-marks-active-container-color: $sur-couleur,
-        )
-      );
-    }
+    @use 'roles';
 
     .secondaire {
-      @include role(secondary);
+      @include roles.slider(secondary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.slider(tertiary);
     }
 
     .erreur {
-      @include role(error);
+      @include roles.slider(error);
     }
 
     .rail-epais {

@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (56, Vitest)
+## Tests (59, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -21,6 +21,7 @@
 | `core/catalog/catalog.registry.spec.ts` | une route par entrée, `id` uniques, catégories connues, chaque entrée dans un groupe |
 | `core/theme/theme.service.spec.ts` | classes par défaut sur `<html>` (`theme-app-contraste-moyen`, `scheme-light`, `density-0`), changement de classes, persistance et restauration, valeurs invalides ignorées |
 | `shared/specimen/specimen.spec.ts` | bouton snippet présent seulement avec un snippet, ouverture du dialog |
+| `shared/specimen-section/specimen-section.spec.ts` | description affichée, aucun paragraphe sans description, message standard avec `designSystemOnly` |
 | `core/a11y/contrast-items.spec.ts` | conversion des résultats axe (statuts, tri, éléments ignorés), formatage et libellés de l'inspecteur de contraste |
 | `core/a11y/contrast-inspector.spec.ts` | service de l'inspecteur : activation, appel d'axe sur `main`, disponibilité limitée aux pages de composants, relance au changement de thème, fermeture pendant l'analyse, erreur |
 | `core/tokens/contrast.spec.ts` | noir/blanc = 21, olive `#86A315` sur `#FAFAF5` ≈ 2,76, analyse de `rgb()` / `rgba()`, alpha < 1 sans ratio, troncature (4,4999 → « 4,49 : 1 »), seuil à la frontière |

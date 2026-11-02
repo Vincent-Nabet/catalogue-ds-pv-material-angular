@@ -296,6 +296,7 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .pilule {
       @include mat.chips-overrides(
@@ -313,27 +314,16 @@ const SNIPPETS = {
       );
     }
 
-    @mixin role($role) {
-      @include mat.chips-overrides(
-        (
-          elevated-selected-container-color: var(--mat-sys-#{$role}-container),
-          selected-label-text-color: var(--mat-sys-on-#{$role}-container),
-          selected-hover-state-layer-color: var(--mat-sys-on-#{$role}-container),
-          selected-focus-state-layer-color: var(--mat-sys-on-#{$role}-container),
-        )
-      );
-    }
-
     .primaire {
-      @include role(primary);
+      @include roles.chips(primary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.chips(tertiary);
     }
 
     .erreur {
-      @include role(error);
+      @include roles.chips(error);
     }
 
     .remplis {

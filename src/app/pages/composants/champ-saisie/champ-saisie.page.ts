@@ -444,6 +444,7 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .contour-arrondi {
       @include mat.form-field-overrides(
@@ -455,26 +456,12 @@ const SNIPPETS = {
       );
     }
 
-    @mixin role($role) {
-      @include mat.form-field-overrides(
-        (
-          outlined-outline-color: var(--mat-sys-#{$role}),
-          outlined-hover-outline-color: var(--mat-sys-#{$role}),
-          outlined-focus-outline-color: var(--mat-sys-#{$role}),
-          outlined-label-text-color: var(--mat-sys-#{$role}),
-          outlined-hover-label-text-color: var(--mat-sys-#{$role}),
-          outlined-focus-label-text-color: var(--mat-sys-#{$role}),
-          outlined-caret-color: var(--mat-sys-#{$role}),
-        )
-      );
-    }
-
     .secondaire {
-      @include role(secondary);
+      @include roles.form-field(secondary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.form-field(tertiary);
     }
 
     .fond-teinte {

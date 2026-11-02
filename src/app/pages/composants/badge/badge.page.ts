@@ -131,26 +131,18 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
-
-    @mixin couleur($fond, $texte) {
-      @include mat.badge-overrides(
-        (
-          background-color: $fond,
-          text-color: $texte,
-        )
-      );
-    }
+    @use 'roles';
 
     .primaire {
-      @include couleur(var(--mat-sys-primary), var(--mat-sys-on-primary));
+      @include roles.badge(var(--mat-sys-primary), var(--mat-sys-on-primary));
     }
 
     .secondaire {
-      @include couleur(var(--mat-sys-secondary), var(--mat-sys-on-secondary));
+      @include roles.badge(var(--mat-sys-secondary), var(--mat-sys-on-secondary));
     }
 
     .tertiaire {
-      @include couleur(var(--mat-sys-tertiary), var(--mat-sys-on-tertiary));
+      @include roles.badge(var(--mat-sys-tertiary), var(--mat-sys-on-tertiary));
     }
 
     .angles-droits {

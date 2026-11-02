@@ -33,7 +33,11 @@ html.scheme-dark   { color-scheme: dark; }
 html.scheme-system { color-scheme: light dark; }
 ```
 
-Le `body` utilise `--mat-sys-surface`, `--mat-sys-on-surface` et `--mat-sys-body-medium`. Les `<h1>` de page (`main h1`) utilisent `--mat-sys-headline-medium`. Une animation `apparition-page` (fondu + léger glissement, 220 ms, désactivée avec `prefers-reduced-motion`) s'applique à tout composant routé : `main > router-outlet + *`.
+Le `body` utilise `--mat-sys-surface`, `--mat-sys-on-surface` et `--mat-sys-body-medium`. Les `<h1>` de page (`main h1`) utilisent `--mat-sys-headline-medium`. Deux classes utilitaires servent aux pages Fondations : `.page-intro` (introduction sous le `<h1>`) et `.specimen-contenu` (contenu d'un specimen ancré en haut), voir [architecture.md](architecture.md). Une animation `apparition-page` (fondu + léger glissement, 220 ms, désactivée avec `prefers-reduced-motion`) s'applique à tout composant routé : `main > router-outlet + *`.
+
+## Partial `src/styles/_roles.scss`
+
+Mixins Sass « rôle de couleur appliqué à un composant Material » (`roles.checkbox(secondary)`, `roles.button(error)`…), partagés par les pages de composants. Ce n'est pas une feuille globale : rien n'est émis tant qu'une page ne l'inclut pas. Il est résolu par `stylePreprocessorOptions.includePaths: ["src/styles"]` (`angular.json`), donc `@use 'roles';` suffit dans un `styles:` inline. Les classes `.secondaire`, `.tertiaire`, `.erreur` restent propres à chaque page. Voir [ajouter-un-composant.md](ajouter-un-composant.md) §5.
 
 ## Combinaisons
 

@@ -111,6 +111,23 @@ main h1 {
   font: var(--mat-sys-headline-medium);
 }
 
+// Introduction d'une page Fondations, sous le <h1>
+.page-intro {
+  max-width: 80ch;
+  margin: 0 0 24px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Contenu d'un specimen ancré en haut de la zone d'exemple (sinon centrée, donc décalée quand le pied de card fait 2 lignes), sous le bouton </> de la card (en position absolue).
+.specimen-contenu {
+  display: grid;
+  align-self: stretch;
+  align-content: start;
+  margin-block-start: 28px;
+  gap: 12px;
+  width: 100%;
+}
+
 // Sélecteur de thème : libellés longs sur une seule ligne (Material limite le panneau à 280px)
 .menu-theme.mat-mdc-menu-panel {
   max-width: min(360px, calc(100vw - 32px));

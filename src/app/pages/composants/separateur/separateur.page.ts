@@ -142,6 +142,7 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     .trait-epais {
       @include mat.divider-overrides(
@@ -151,25 +152,16 @@ const SNIPPETS = {
       );
     }
 
-    @mixin trait($couleur) {
-      @include mat.divider-overrides(
-        (
-          width: 2px,
-          color: $couleur,
-        )
-      );
-    }
-
     .trait-primaire {
-      @include trait(var(--mat-sys-primary));
+      @include roles.divider(var(--mat-sys-primary));
     }
 
     .trait-tertiaire {
-      @include trait(var(--mat-sys-tertiary));
+      @include roles.divider(var(--mat-sys-tertiary));
     }
 
     .trait-erreur {
-      @include trait(var(--mat-sys-error));
+      @include roles.divider(var(--mat-sys-error));
     }
 
     .bloc {

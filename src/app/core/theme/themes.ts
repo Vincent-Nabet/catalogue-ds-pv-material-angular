@@ -48,6 +48,10 @@ export const THEMES: readonly ThemeInfo[] = [
   { id: 'cyan', group: 'angular-material', label: 'Cyan', shortLabel: 'Cyan', color: '#006874' },
 ];
 
+export function themeInfo(id: ThemeId): ThemeInfo | undefined {
+  return THEMES.find((theme) => theme.id === id);
+}
+
 export const SCHEMES: readonly SchemeInfo[] = [
   { id: 'light', label: 'Clair', icon: 'light_mode' },
   { id: 'dark', label: 'Sombre', icon: 'dark_mode' },

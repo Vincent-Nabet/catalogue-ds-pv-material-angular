@@ -119,36 +119,18 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
-
-    @mixin role($role) {
-      @include mat.slide-toggle-overrides(
-        (
-          selected-track-color: var(--mat-sys-#{$role}),
-          selected-hover-track-color: var(--mat-sys-#{$role}),
-          selected-focus-track-color: var(--mat-sys-#{$role}),
-          selected-pressed-track-color: var(--mat-sys-#{$role}),
-          selected-handle-color: var(--mat-sys-on-#{$role}),
-          selected-hover-handle-color: var(--mat-sys-#{$role}-container),
-          selected-focus-handle-color: var(--mat-sys-#{$role}-container),
-          selected-pressed-handle-color: var(--mat-sys-#{$role}-container),
-          selected-icon-color: var(--mat-sys-on-#{$role}-container),
-          selected-hover-state-layer-color: var(--mat-sys-#{$role}),
-          selected-focus-state-layer-color: var(--mat-sys-#{$role}),
-          selected-pressed-state-layer-color: var(--mat-sys-#{$role}),
-        )
-      );
-    }
+    @use 'roles';
 
     .secondaire {
-      @include role(secondary);
+      @include roles.slide-toggle(secondary);
     }
 
     .tertiaire {
-      @include role(tertiary);
+      @include roles.slide-toggle(tertiary);
     }
 
     .erreur {
-      @include role(error);
+      @include roles.slide-toggle(error);
     }
 
     .carre {

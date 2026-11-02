@@ -41,7 +41,7 @@ const KEY = {
   imports: [Specimen, SpecimenSection, TokenBadge],
   template: `
     <h1>Formes et espacements</h1>
-    <p class="intro">
+    <p class="page-intro">
       Rayons, espacements, élévations et opacités d'état du thème courant, avec les valeurs lues
       dans le CSS chargé.
     </p>
@@ -53,7 +53,7 @@ const KEY = {
           [api]="'--mat-sys-corner-' + name"
           [snippet]="'border-radius: var(--mat-sys-corner-' + name + ');'"
         >
-          <div class="contenu">
+          <div class="specimen-contenu contenu">
             <div
               #lecture
               class="carre"
@@ -79,7 +79,7 @@ const KEY = {
             [api]="prefix + 'shape-corner-' + name"
             [snippet]="'border-radius: var(' + prefix + 'shape-corner-' + name + ');'"
           >
-            <div class="contenu">
+            <div class="specimen-contenu contenu">
               <app-token-badge />
               <div
                 #lecture
@@ -105,7 +105,7 @@ const KEY = {
             [api]="prefix + 'spacing-' + name"
             [snippet]="'padding: var(' + prefix + 'spacing-' + name + ');'"
           >
-            <div class="contenu">
+            <div class="specimen-contenu contenu">
               <app-token-badge />
               <div
                 #lecture
@@ -121,10 +121,7 @@ const KEY = {
         }
       </app-specimen-section>
     } @else {
-      <app-specimen-section
-        title="Rayons Expressive et espacements (design system)"
-        description="Jetons propres au design system : choisir un thème Design system pour les voir."
-      />
+      <app-specimen-section title="Rayons Expressive et espacements (design system)" designSystemOnly />
     }
 
     <app-specimen-section
@@ -186,12 +183,6 @@ const KEY = {
     </table>
   `,
   styles: `
-    .intro {
-      max-width: 80ch;
-      margin: 0 0 24px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
     h2 {
       margin: 0 0 4px;
       font: var(--mat-sys-title-large);
@@ -202,15 +193,9 @@ const KEY = {
       color: var(--mat-sys-on-surface-variant);
     }
 
-    /* Ancré en haut de la zone d'exemple (sinon centrée, donc décalée quand le pied de card fait 2 lignes), sous le bouton </> de la card. */
+    /* Complète .specimen-contenu (styles.scss) : exemples alignés à gauche. */
     .contenu {
-      display: grid;
-      align-self: stretch;
-      align-content: start;
-      margin-block-start: 28px;
       justify-items: start;
-      gap: 12px;
-      width: 100%;
     }
 
     .carre {

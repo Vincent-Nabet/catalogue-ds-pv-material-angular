@@ -39,7 +39,7 @@ function plural(count: number, word: string): string {
   imports: [MatCheckbox, MatIcon, MatTooltip],
   template: `
     <h1>Matrice de contraste</h1>
-    <p class="intro">
+    <p class="page-intro">
       Chaque paire de rôles, dans les 8 modes du design system (4 familles de contraste, clair et
       sombre), quel que soit le thème choisi. Rapports WCAG&nbsp;2.x lus dans le CSS chargé et
       tronqués à deux décimales, comme dans axe-core. Une régression est une paire dont le contraste
@@ -136,12 +136,6 @@ function plural(count: number, word: string): string {
     </div>
   `,
   styles: `
-    .intro {
-      max-width: 80ch;
-      margin: 0 0 24px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
     h2 {
       margin: 24px 0 12px;
       font: var(--mat-sys-title-large);

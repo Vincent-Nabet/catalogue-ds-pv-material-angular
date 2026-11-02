@@ -28,7 +28,7 @@ src/
     app.routes.ts            routes générées depuis le registre
     core/
       catalog/catalog.registry.ts   SOURCE UNIQUE des composants + catégories
-      theme/themes.ts               types et listes (thèmes, modes, densités)
+      theme/themes.ts               types et listes (thèmes, modes, densités), `themeInfo(id)` (recherche d'un thème)
       theme/theme.service.ts        @Service : état du thème + persistance
       i18n/intl-fr.ts               libellés français (paginator, datepicker, stepper)
       a11y/contrast-items.ts        résultats axe → éléments d'inspection (fonctions pures)
@@ -50,6 +50,7 @@ src/
       accueil/accueil.ts
       fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre
       composants/<id>/<id>.page.ts   une page par composant (35)
+  styles/_roles.scss         mixins « rôle de couleur » par composant (voir docs/themes-et-styles.md), résolu via `includePaths`
   styles/themes-<nom>/       GÉNÉRÉ par `npm run themes` (défaut : themes-app), ne pas éditer à la main :
                              index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
 scripts/
@@ -113,10 +114,15 @@ Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'UR
 Inputs : `label` (requis), `api` (texte affiché en `<code>`), `snippet` (code, active le bouton `</>`). Contenu projeté dans une zone `surface-container-low`. Ouvre `SnippetDialog` via `MatDialog` (largeur 640 px, `maxWidth: 95vw`). Le bouton a `aria-label="Voir le code : <label>"`.
 
 ### `SpecimenSection` (`app-specimen-section`)
-Inputs : `title` (requis), `description`, `minWidth` (défaut `300px`, exposé en `--specimen-min`). Grille `repeat(auto-fill, minmax(min(100%, var(--specimen-min)), 1fr))`. Le titre est un `<h2>`.
+Inputs : `title` (requis), `description`, `minWidth` (défaut `300px`, exposé en `--specimen-min`), `designSystemOnly` (booléen : remplace la description par le message standard `DESIGN_SYSTEM_ONLY_MESSAGE`, « Jetons propres au design system : choisir un thème Design system pour les voir. », utilisé par les pages Fondations quand un thème Angular Material est actif). Grille `repeat(auto-fill, minmax(min(100%, var(--specimen-min)), 1fr))`. Le titre est un `<h2>`.
 
 ### `SnippetDialog`
 Données : `{ label, code }`. Affiche `<pre tabindex="0"><code>` (défilable, focusable pour l'accessibilité), bouton « Copier » (CDK `Clipboard` + `MatSnackBar`), bouton « Fermer ». Pas de coloration syntaxique (pas de dépendance ajoutée).
+
+### Classes globales des pages Fondations (`src/styles.scss`)
+
+- `.page-intro` : paragraphe d'introduction sous le `<h1>` (largeur max 80 ch, couleur `on-surface-variant`).
+- `.specimen-contenu` : contenu d'un `app-specimen` ancré en haut de la zone d'exemple (grille, marge de 28 px sous le bouton `</>`, `gap` 12 px, pleine largeur). Une page qui a besoin d'un réglage de plus l'ajoute dans son propre `styles` (ex. `justify-items: start` dans Formes et espacements, via une classe locale posée à côté).
 
 ## Libellés français (`core/i18n/intl-fr.ts`)
 

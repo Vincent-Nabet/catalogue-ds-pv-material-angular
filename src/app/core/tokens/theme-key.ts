@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { DestroyRef, Signal, computed, inject, signal } from '@angular/core';
-import { THEMES } from '../theme/themes';
+import { themeInfo } from '../theme/themes';
 import { ThemeService } from '../theme/theme.service';
 
 /**
@@ -31,7 +31,5 @@ export function injectThemeKey(): Signal<string> {
 /** Vrai quand le thème courant est un thème du design system (les jetons `--app-*` y sont significatifs). */
 export function injectIsDesignSystem(): Signal<boolean> {
   const service = inject(ThemeService);
-  return computed(
-    () => THEMES.find((theme) => theme.id === service.theme())?.group === 'design-system',
-  );
+  return computed(() => themeInfo(service.theme())?.group === 'design-system');
 }

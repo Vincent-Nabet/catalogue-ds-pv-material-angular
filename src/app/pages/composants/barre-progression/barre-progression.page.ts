@@ -93,30 +93,22 @@ const SNIPPETS = {
   `,
   styles: `
     @use '@angular/material' as mat;
+    @use 'roles';
 
     mat-progress-bar {
       min-width: 160px;
     }
 
-    @mixin role($indicateur, $piste) {
-      @include mat.progress-bar-overrides(
-        (
-          active-indicator-color: $indicateur,
-          track-color: $piste,
-        )
-      );
-    }
-
     .secondaire {
-      @include role(var(--mat-sys-secondary), var(--mat-sys-secondary-container));
+      @include roles.progress-bar(var(--mat-sys-secondary), var(--mat-sys-secondary-container));
     }
 
     .tertiaire {
-      @include role(var(--mat-sys-tertiary), var(--mat-sys-tertiary-container));
+      @include roles.progress-bar(var(--mat-sys-tertiary), var(--mat-sys-tertiary-container));
     }
 
     .erreur {
-      @include role(var(--mat-sys-error), var(--mat-sys-error-container));
+      @include roles.progress-bar(var(--mat-sys-error), var(--mat-sys-error-container));
     }
 
     .epaisse {
