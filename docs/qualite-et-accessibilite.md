@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (76, Vitest)
+## Tests (151, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -31,10 +31,15 @@
 | `shared/missing-tokens/missing-tokens.spec.ts` | rien d'affiché sans jeton manquant, liste des jetons manquants |
 | `color-roles.spec.ts` (ajouts) | `colorVar` d'un rôle hors liste avec origine explicite, variables attendues du design system, rôles détectés (rôles déjà listés et jetons hors couleur ignorés) |
 | `catalog.registry.spec.ts` (ajouts) | `fondations` en première catégorie avec 3 pages, `COMPONENT_ENTRIES` = 35 |
+| `core/theme/imported-themes.spec.ts` (26) | stockage des thèmes importés : ajout puis relecture après rechargement, clés (CSS à part, index sans CSS), plusieurs thèmes, suppression, plafond de 20, doublon de nom non vérifié par le service, 20 avertissements au plus, `QuotaExceededError` simulée (aucune clé ne reste, y compris quand seul l'index échoue), stockage indisponible, lecture tolérante (JSON corrompu, version inconnue, métadonnée mal formée, identifiant ou couleur d'aperçu invalides, entrée sans clé CSS), `infos` (libellés, groupe, une entrée par famille, nom en texte brut) ; `parseImportedThemeId` (valides dont famille à tirets, invalides) |
+| `core/theme/theme.service.imported.spec.ts` (13) | thème importé actif (classes, `<style>` et son CSS), retour à un autre thème, passage d'un import à un autre, persistance, identifiant inconnu au chargement → défaut, `removeImportedTheme` (thème actif, autre thème, thème non importé), `themeCourant` pour les trois sources, `injectIsDesignSystem` |
+| `layout/theme-picker/theme-picker.spec.ts` (4) | section « Thèmes importés » : entrée désactivée et lien de gestion quand la liste est vide, import à une famille (élément direct), import à plusieurs familles (sous-menu), nom affiché en texte brut |
+| `pages/themes-importes/imported-themes-list.spec.ts` (11) | liste, état vide, famille active signalée par du texte, avertissements, nom en texte brut, confirmation en ligne (focus sur « Annuler »), annulation, suppression et focus de la ligne suivante, liste vidée, annonce du retour au thème par défaut |
+| `pages/themes-importes/import-form.spec.ts` (17) | générateur remplacé par un double (`THEME_GENERATOR`) : champ fichier, rapport, nom prérempli, échec du générateur, zip de plus de 5 Mo, validation du nom (requis, espaces seuls, 40 caractères, unicité sans casse), import (enregistrement, famille par défaut appliquée, formulaire vidé, enchaînement de deux imports), messages d'échec de `add` (quota, stockage, limite) ; l'analyse réelle d'un zip est couverte par `node --test` et par la vérification dans Chrome (jsdom n'est pas le bon outil) |
 
 ### Tests du script de génération des thèmes (`node:test`)
 
-`node --test scripts/themes/` (hors `ng test`, aucun navigateur) : lecture dossier/zip et résolution des alias (cycle, alias absent), classement de tous les tokens (0 inconnu), valeurs des 8 modes retrouvées dans les CSS générés (ex. primary clair `#86A315`), CSS valide (`sass.compileString`), compilation Sass d'une feuille témoin (aucune `--mat-sys-*` ne garde une valeur de la palette de repli hors les 7 variables documentées), sorties identiques depuis `tokens/` et depuis un zip, génération idempotente, CLI. Ils lisent `tokens/` en lecture seule. Voir [generation-themes.md](generation-themes.md).
+`node --test scripts/themes/*.test.mjs` (hors `ng test`, aucun navigateur ; 116 tests dont 64 pour l'import dans le navigateur : `lire-source-memoire`, `portee`, `valider-css`, `variables-requises`, `navigateur`) : lecture dossier/zip et résolution des alias (cycle, alias absent), classement de tous les tokens (0 inconnu), valeurs des 8 modes retrouvées dans les CSS générés (ex. primary clair `#86A315`), CSS valide (`sass.compileString`), compilation Sass d'une feuille témoin (aucune `--mat-sys-*` ne garde une valeur de la palette de repli hors les 7 variables documentées), sorties identiques depuis `tokens/` et depuis un zip, génération idempotente, CLI. Ils lisent `tokens/` en lecture seule. Voir [generation-themes.md](generation-themes.md). Les fichiers `.mjs` ne sont **pas couverts par ESLint** (`eslint.config.js` ne cible que `**/*.ts` et `**/*.html`) : les relire à la main (imports inutilisés, variables mortes).
 
 Les pages de composants ne sont pas testées unitairement (démonstration visuelle) : elles sont couvertes par la compilation stricte des templates et par le contrôle navigateur décrit ci-dessous.
 
@@ -50,6 +55,10 @@ Les pages de composants ne sont pas testées unitairement (démonstration visuel
 ## Accessibilité : exception connue
 
 **Sélecteur de date, calendrier intégré** : le bouton de période du `mat-calendar` natif a un `aria-label` fixe (« Choisir le mois et l'année ») qui ne contient pas le texte visible (« oct. 2026 ») → règle `label-content-name-mismatch`. Défaut du composant Material, non corrigeable proprement. Le champ de date avec popup n'est pas concerné au chargement.
+
+## Page « Thèmes importés » : contrôle hors `npm run a11y`
+
+`npm run a11y` ne parcourt que les routes du registre : la page `/themes-importes` et le menu du sélecteur ouvert se contrôlent à part, avec un script Puppeteer jetable (non versionné) qui injecte `axe-core` (mêmes balises que `scripts/a11y.mjs`). Cibler (consigne du projet : pas d'axe sur toutes les pages ni tous les thèmes) : la page vide, avec des imports, avec le rapport et le champ nom, avec une erreur de nom, pendant la confirmation de suppression, et le menu racine, avec « Thèmes importés » ouvert, avec les familles ouvertes ; en clair et en sombre, dans un thème Angular Material et dans un thème importé. Référence : 34 analyses, 0 violation de la page ; restent hors périmètre, identiques sans thème importé, les sous-titres de catégorie du menu latéral en Design system clair (voir [decisions-et-limites.md](decisions-et-limites.md)) et la règle `region` du conteneur d'overlay Material quand un menu est ouvert. Navigation 100 % clavier vérifiée (menu, familles, lien, import, suppression, focus conforme).
 
 ## Inspecteur de contraste (complément)
 

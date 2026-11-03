@@ -4,11 +4,23 @@
 
 Tout le thème est porté par des **classes sur `<html>`**, posées par `ThemeService`, et par le mixin Sass `mat.theme()` d'Angular Material, qui émet des variables CSS `--mat-sys-*`. Comme `mat.theme()` utilise `light-dark()`, **un seul bloc de couleur par thème** suffit pour le clair et le sombre : le mode ne fait que changer `color-scheme`.
 
-Le catalogue propose 6 palettes Material prédéfinies et 4 thèmes du design system (`tokens/`), ces derniers générés à part : voir la section suivante.
+Le catalogue propose 6 palettes Material prédéfinies et 4 thèmes du design system (`tokens/`), ces derniers générés à part : voir la section suivante. S'y ajoutent les **thèmes importés** par l'utilisateur (zip de tokens, dans le navigateur) : voir plus bas.
 
 ### Thèmes du design system : générés et branchés
 
 `npm run themes` produit dans `src/styles/themes-app/` des variables CSS MD3 + custom et un mixin Angular Material (`_themes-app.scss`) à partir des tokens. Le CSS est chargé par `angular.json`, le mixin est inclus par `styles.scss` pour les classes `theme-app`, `theme-app-contraste-moyen`, `theme-app-contraste-eleve` et `theme-app-monochrome` (entrées « Design system… » du sélecteur). Détails, options et intégration : [generation-themes.md](generation-themes.md).
+
+### Thèmes importés dans le navigateur
+
+Un thème importé (page « Thèmes importés », voir [fonctionnel.md](fonctionnel.md#thèmes-importés)) passe par le **même pont Material** que les thèmes du design system, sans Sass dans le navigateur :
+
+- classes sur `<html>` : `theme-imp-<id>-<famille>` (id technique `imp-` + 6 caractères ; famille = suffixe de classe, `standard` pour la famille sans suffixe) pour les variables, et **`theme-importe`**, marqueur du pont Material ;
+- `styles.scss` : `html.theme-importe` rejoint la liste de sélecteurs qui inclut `themes-app.theme()` (un seul bloc pour `theme-importe` et toutes les classes `theme-app*`). Le mixin n'émet que des `--mat-sys-*: var(--md-sys-*)` (valeurs figées, indépendantes des tokens) : il fonctionne tel quel pour n'importe quel jeu de tokens ;
+- un élément **`<style id="catalogue-theme-importe">`** dans `<head>`, créé ou mis à jour par `ThemeService`, contient le CSS **du seul thème actif** (toutes ses familles) ; il est retiré quand on revient à un autre thème ;
+- **spécificité** : les variables `--md-sys-*` et `--app-*` sont posées sous `html.theme-imp-<id>-<famille>` (0,1,1), pas sous `.theme-imp-…` seul : le `:root` du CSS statique (0,1,0) ne peut pas l'emporter par l'ordre des feuilles. Le CSS importé ne contient **aucun `:root`** (un seul `:root` laissé changerait les formes et la typographie de tous les thèmes tant que le `<style>` est présent) ;
+- le clair/sombre vient de `color-scheme` (classes `scheme-*`) et `light-dark()` : rien de spécifique à l'import.
+
+Vérifié dans Chrome : pour les 4 familles × clair/sombre, les 405 variables personnalisées (`--md-*`, `--mat-*`, `--app-*`) et leurs couleurs résolues sont identiques entre le thème intégré et le même zip importé (0 différence).
 
 ## `src/styles.scss`
 
@@ -43,7 +55,8 @@ Mixins Sass « rôle de couleur appliqué à un composant Material » (`roles.ch
 
 | Axe | Valeurs | Classe sur `<html>` |
 |---|---|---|
-| Thème | azur, violet, rose, vert, orange, cyan | `theme-<id>` |
+| Thème | azur, violet, rose, vert, orange, cyan ; thèmes du design system (`app`, `app-contraste-moyen`…) | `theme-<id>` |
+| Thème importé | un par famille de chaque import | `theme-imp-<id>-<famille>` + `theme-importe` |
 | Mode | light, dark, system | `scheme-<mode>` |
 | Densité | 0 à −4 (4 px par cran) | `density-<n>` (n = valeur absolue) |
 

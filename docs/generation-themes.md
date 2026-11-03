@@ -15,7 +15,7 @@ Analyses de référence (lecture seule, non modifiées) : `TOKENS-MD3.md` (corre
 npm run themes                                          # tokens/ → src/styles/themes-app/
 npm run themes -- --source design.zip --nom pv          # zip → src/styles/themes-pv/
 npm run themes -- --palettes --palette-repli azure
-node --test scripts/themes/                             # tests du script
+node --test scripts/themes/*.test.mjs                    # tests du script (le glob évite les différences entre versions de Node)
 ```
 
 | Option | Défaut | Rôle |
@@ -111,6 +111,34 @@ Les thèmes du design system du catalogue sont **dynamiques** : ils suivent les 
 - Vérifier le catalogue avec d'autres jeux de tokens : `node testing/run-variantes.mjs` puis `node testing/run-site.mjs` (génère, compile et contrôle le site pour chaque variante, puis restaure `src/styles/themes-app`).
 - Limites : les tests Angular (`ng test`) et la page débranchée *Matrice de contraste* décrivent le jeu actuel (4 familles) ; ils ne sont garantis qu'avec lui.
 
+## Import dans le navigateur
+
+La page « Thèmes importés » du catalogue ([fonctionnel.md](fonctionnel.md#thèmes-importés)) génère un thème depuis un zip **dans le navigateur, avec les mêmes modules que le script Node** : une seule logique de correspondance tokens → variables, pas de réécriture. `npm run themes` produit toujours des fichiers identiques à ceux d'avant (les tests existants le vérifient, sans modification).
+
+**Point d'entrée** : `scripts/themes/navigateur.mjs` (pur, sans import Node ; types dans `navigateur.d.mts`, écrit à la main).
+
+```js
+genererThemeImporte(octets: Uint8Array, { base: 'imp-k3f9a2', nomSource: 'tokens.zip' }) → {
+  css,        // tous les fichiers de genererVariables sauf index.css, concaténés
+  familles,   // [{ id, libelle, apercu, defaut, progression }] : id = suffixe || 'standard', apercu = hex
+  rapport,    // { modes, md3, custom, inconnus, ignores, modesIgnores, police, avertissements[] }
+}
+```
+
+Il enchaîne `lireZipOctets` → `assembler` → `genererVariables(…, { nom: 'app', portee: { base } })` → contrôle des variables indispensables → `validerCss`. Il ne lève que des `Error` au message français prêt à afficher (une erreur technique, par exemple un `TypeError` sur un token mal formé, est reformulée). Le préfixe est toujours `app` : les pages Fondations et le pont Material (`_themes-app.scss`) lisent `--app-*` et `--md-sys-*`.
+
+| Module | Rôle pour le navigateur |
+|---|---|
+| `lire-source-memoire.mjs` | `lireZipOctets(octets, origine)` (zip en mémoire, filtre `.json`, saut de `__MACOSX/` et des `._*`) et `assembler(fichiers, source)`, extraits de `lire-source.mjs` (qui les importe : même comportement et mêmes messages pour le script). **Garde-fous** : un fichier JSON de plus de 5 Mo décompressé (`originalSize`, vérifié avant décompression) ou plus de 40 fichiers JSON sont refusés ; un JSON qui n'est pas un objet aussi. |
+| `ecrire-variables.mjs` | paramètre `portee = { base }` de `genererVariables` (et de `selecteurFamille`) : chaque famille est écrite sous **`html.theme-<base>-<famille>`** (`standard` pour la famille sans suffixe), **jamais `:root`** ; les blocs communs (formes, typographie, opacités d'état, `--md-ref-*`, jetons `--app-*` hors couleur) prennent la liste des sélecteurs de toutes les familles. Sans `portee`, la sortie est inchangée. Un test vérifie que les déclarations sont identiques avec et sans `portee`. |
+| `valider-css.mjs` | **contrôle de sécurité** : le CSS est fabriqué à partir de valeurs fournies par l'utilisateur et le générateur ne les échappe pas (sauf `fontFamily`) ; un token `red; } body { display: none` sortirait de sa déclaration. `validerCss(css, { base })` contrôle la sortie **ligne à ligne** : commentaire sans `*/` interne, sélecteur exactement `html.theme-<base>-<id>` (ou liste), `}`, déclaration `  --[a-z0-9-]+: <valeur>;` où la valeur n'a aucun de `; { } < > @ \`, ni caractère de contrôle, ni `/*`, `url(`, `src(`, `image(`, `image-set(`, `expression(`, `@import`, et des parenthèses et guillemets équilibrés. Toute autre ligne : « CSS généré invalide ligne N » et l'import est refusé. |
+| `correspondance.mjs` | ensembles exportés (`ROLES_MD3`, `STYLES_TYPO`, `RAYONS_MD3`…) et deux listes dérivées : `variablesRequises()` (132 variables que le pont Material référence sans repli : 49 rôles `--md-sys-color-*`, 15 styles × 5 propriétés, 7 rayons, `--md-ref-typeface-plain` ; une absence est une **erreur bloquante** qui nomme la variable et le token attendu, par exemple `--md-sys-color-surface-dim absent : token Colors.Schemes.Surface Dim`) et `variablesCustomAttendues(nom)` (41 variables `--app-*` ; une absence est un **avertissement** : la valeur du thème intégré s'applique, voir les limites). |
+| `navigateur.mjs` | l'enchaînement ci-dessus ; `apercu` est ramené à `#808080` s'il n'est pas un hex. |
+
+`fflate` est une **dépendance d'exécution** (`dependencies`) : il est embarqué dans le chunk différé du générateur. Le plafond de 5 Mo pour le zip lui-même est contrôlé par la page.
+
+Tests (`node:test`, `lire-source-memoire`, `portee`, `valider-css`, `variables-requises`, `navigateur`) : zips construits en mémoire depuis `tokens/` (lecture seule, `fixtures-tokens.mjs`) ; sélecteurs avec 4 familles et avec une seule, déclarations identiques avec et sans `portee`, refus de chaque construction dangereuse, `tokens/` sans variable requise manquante, erreurs françaises (cycle d'alias, famille incomplète, variable absente, zip illisible, fichier trop gros, trop de fichiers).
+
 ## Utilisation hors Angular
 
 ```html
@@ -123,7 +151,7 @@ Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponib
 ## Décisions de mise en œuvre
 
 - `mat.theme()` reçoit les surcharges en **second argument** plutôt que `mat.theme-overrides()` : ce dernier ignore les clés hors des variables système (dont `neutral10`), le second argument les honore et évite un second bloc de déclarations.
-- `sass` est une devDependency explicite (le script et ses tests l'importent) ; `fflate` lit les zips.
+- `sass` est une devDependency explicite (le script et ses tests l'importent) ; `fflate` lit les zips et est une dépendance d'exécution (embarqué dans le chunk du générateur de la page « Thèmes importés »).
 - Découpage du plan complété par `ecrire-fichiers.mjs` (en-tête, écriture idempotente, suppression limitée aux fichiers générés).
 - Nombre et noms des modes libres (cf. « Clair/sombre et contraste ») ; seules les familles détectées sont générées. Le catalogue, lui, n'a que les 4 entrées `app*` de `themes.ts` : en changer les familles demande de les adapter (cf. « Intégration au catalogue »).
 - Banc d'essai de robustesse : `node testing/run-variantes.mjs` (copies de `tokens/` dans `testing/variantes/`, jamais modifié ; familles en moins, renommées, ajoutées, tokens manquants…).
@@ -135,12 +163,16 @@ Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponib
 ```
 scripts/themes/
   generer-themes.mjs     CLI : options, enchaînement, rapport
-  lire-source.mjs        dossier ou .zip → { primitives, semantiques }
+  lire-source.mjs        dossier ou .zip → { primitives, semantiques } (délègue à lire-source-memoire.mjs)
+  lire-source-memoire.mjs  zip en mémoire, assemblage, garde-fous (partagé avec le navigateur)
   familles.mjs           noms de fichiers sémantiques → familles clair/sombre
   resoudre-tokens.mjs    aplatissement DTCG, résolution récursive des alias (cycle / absent = erreur)
   correspondance.mjs     chemin de token → variable CSS (ou ignoré / inconnu) ; opacités d'état
   ecrire-variables.mjs   étape 1 : fichiers CSS
   ecrire-material.mjs    étape 2 : fichier SCSS + contrôle par compilation Sass
   ecrire-fichiers.mjs    en-tête, écriture idempotente, suppression des fichiers périmés
+  valider-css.mjs        contrôle ligne à ligne du CSS injecté dans la page (import dans le navigateur)
+  navigateur.mjs         point d'entrée du navigateur : zip (octets) → { css, familles, rapport } ; types : navigateur.d.mts
+  fixtures-tokens.mjs    fixtures des tests (zips en mémoire depuis tokens/)
   *.test.mjs             tests node:test
 ```
