@@ -38,7 +38,11 @@ export class ThemeService {
 
   /** Thème actif, quelle que soit sa source (design system, Angular Material ou thème importé). */
   readonly themeCourant = computed<ThemeInfo>(
-    () => themeInfo(this.theme()) ?? this.imported.info(this.theme()) ?? themeInfo(DEFAULT_THEME_ID) ?? THEMES[0],
+    () =>
+      themeInfo(this.theme()) ??
+      this.imported.info(this.theme()) ??
+      themeInfo(DEFAULT_THEME_ID) ??
+      THEMES[0],
   );
 
   constructor() {
@@ -97,7 +101,8 @@ export class ThemeService {
       const value: Partial<StoredPreferences> = raw ? JSON.parse(raw) : {};
       return {
         theme:
-          THEMES.some((t) => t.id === value.theme) || (value.theme && this.imported.has(value.theme))
+          THEMES.some((t) => t.id === value.theme) ||
+          (value.theme && this.imported.has(value.theme))
             ? value.theme
             : undefined,
         scheme: SCHEMES.some((s) => s.id === value.scheme) ? value.scheme : undefined,
