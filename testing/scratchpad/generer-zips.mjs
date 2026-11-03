@@ -45,6 +45,60 @@ ecrire(
   }),
 );
 
+// Jeu « pastel » : 3 familles (standard, contraste moyen, contraste élevé), sans le monochrome, dont toutes les couleurs
+// sont refaites autour d'un bleu doux. Chaque teinte de chaque palette primitive garde sa luminance WCAG (donc les
+// rapports de contraste du design system) mais prend la teinte et la saturation de sa palette pastel.
+const luminance = (r, g, b) => {
+  const lineaire = (c) => ((c /= 255) <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+  return 0.2126 * lineaire(r) + 0.7152 * lineaire(g) + 0.0722 * lineaire(b);
+};
+const hslVersRgb = (teinte, saturation, clarte) => {
+  const a = saturation * Math.min(clarte, 1 - clarte);
+  const canal = (n) => {
+    const k = (n + teinte / 30) % 12;
+    return Math.round((clarte - a * Math.max(-1, Math.min(k - 3, 9 - k, 1))) * 255);
+  };
+  return [canal(0), canal(8), canal(4)];
+};
+/** Même luminance que `hex`, avec la teinte et la saturation données (recherche de la clarté par dichotomie). */
+function versPastel(hex, { teinte, saturation }) {
+  const m = /^#([0-9A-F]{6})([0-9A-F]{2})?$/i.exec(hex);
+  if (!m) throw new Error(`Couleur inattendue : ${hex}`);
+  const cible = luminance(...[0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16)));
+  let [bas, haut] = [0, 1];
+  for (let i = 0; i < 30; i++) {
+    const milieu = (bas + haut) / 2;
+    if (luminance(...hslVersRgb(teinte, saturation, milieu)) < cible) bas = milieu;
+    else haut = milieu;
+  }
+  const rgb = hslVersRgb(teinte, saturation, (bas + haut) / 2);
+  return `#${rgb.map((c) => c.toString(16).padStart(2, '0')).join('').toUpperCase()}${m[2] ?? ''}`;
+}
+/** Palette primitive → teinte (degrés) et saturation du pastel. */
+const PASTEL = {
+  Olive: { teinte: 216, saturation: 0.6 }, // primaire : bleu ciel
+  Sage: { teinte: 232, saturation: 0.45 }, // secondaire : bleu pervenche
+  Mint: { teinte: 172, saturation: 0.45 }, // tertiaire : menthe bleutée
+  Neutral: { teinte: 215, saturation: 0.08 }, // gris bleuté
+  'Neutral Variant': { teinte: 215, saturation: 0.16 },
+  Red: { teinte: 352, saturation: 0.7 }, // erreur : corail rosé
+  Green: { teinte: 145, saturation: 0.45 }, // succès
+  Blue: { teinte: 204, saturation: 0.6 }, // info
+  Amber: { teinte: 40, saturation: 0.75 }, // alerte
+};
+const primitivesPastel = JSON.parse(base['primitives.tokens.json']);
+for (const [palette, teintes] of Object.entries(primitivesPastel.Colors)) {
+  if (!PASTEL[palette]) throw new Error(`Palette sans réglage pastel : ${palette}`);
+  for (const jeton of Object.values(teintes)) jeton.$value = versPastel(jeton.$value, PASTEL[palette]);
+}
+ecrire(
+  'pastel.zip',
+  zip({
+    ...Object.fromEntries(Object.entries(base).filter(([chemin]) => !chemin.includes('monochrome'))),
+    'primitives.tokens.json': JSON.stringify(primitivesPastel),
+  }),
+);
+
 // --- Refusés
 const { 'primitives.tokens.json': _, ...sansPrimitives } = base;
 ecrire('sans-primitives.zip', zip(sansPrimitives));
