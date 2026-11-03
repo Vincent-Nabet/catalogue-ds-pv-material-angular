@@ -74,30 +74,45 @@ function versPastel(hex, { teinte, saturation }) {
   const rgb = hslVersRgb(teinte, saturation, (bas + haut) / 2);
   return `#${rgb.map((c) => c.toString(16).padStart(2, '0')).join('').toUpperCase()}${m[2] ?? ''}`;
 }
-/** Palette primitive → teinte (degrés) et saturation du pastel. */
-const PASTEL = {
-  Olive: { teinte: 216, saturation: 0.6 }, // primaire : bleu ciel
-  Sage: { teinte: 232, saturation: 0.45 }, // secondaire : bleu pervenche
-  Mint: { teinte: 172, saturation: 0.45 }, // tertiaire : menthe bleutée
-  Neutral: { teinte: 215, saturation: 0.08 }, // gris bleuté
-  'Neutral Variant': { teinte: 215, saturation: 0.16 },
-  Red: { teinte: 352, saturation: 0.7 }, // erreur : corail rosé
-  Green: { teinte: 145, saturation: 0.45 }, // succès
-  Blue: { teinte: 204, saturation: 0.6 }, // info
-  Amber: { teinte: 40, saturation: 0.75 }, // alerte
+/** Jeux pastel : palette primitive → teinte (degrés) et saturation. */
+const PASTELS = {
+  'pastel-bleu.zip': {
+    Olive: { teinte: 216, saturation: 0.6 }, // primaire : bleu ciel
+    Sage: { teinte: 232, saturation: 0.45 }, // secondaire : bleu pervenche
+    Mint: { teinte: 172, saturation: 0.45 }, // tertiaire : menthe bleutée
+    Neutral: { teinte: 215, saturation: 0.08 }, // gris bleuté
+    'Neutral Variant': { teinte: 215, saturation: 0.16 },
+    Red: { teinte: 352, saturation: 0.7 }, // erreur : corail rosé
+    Green: { teinte: 145, saturation: 0.45 }, // succès
+    Blue: { teinte: 204, saturation: 0.6 }, // info
+    Amber: { teinte: 40, saturation: 0.75 }, // alerte
+  },
+  'pastel-rose.zip': {
+    Olive: { teinte: 338, saturation: 0.65 }, // primaire : rose bonbon
+    Sage: { teinte: 318, saturation: 0.4 }, // secondaire : orchidée
+    Mint: { teinte: 18, saturation: 0.6 }, // tertiaire : pêche
+    Neutral: { teinte: 340, saturation: 0.08 }, // gris rosé
+    'Neutral Variant': { teinte: 340, saturation: 0.16 },
+    Red: { teinte: 6, saturation: 0.8 }, // erreur : corail, distinct du rose primaire
+    Green: { teinte: 150, saturation: 0.4 }, // succès
+    Blue: { teinte: 200, saturation: 0.55 }, // info
+    Amber: { teinte: 42, saturation: 0.75 }, // alerte
+  },
 };
-const primitivesPastel = JSON.parse(base['primitives.tokens.json']);
-for (const [palette, teintes] of Object.entries(primitivesPastel.Colors)) {
-  if (!PASTEL[palette]) throw new Error(`Palette sans réglage pastel : ${palette}`);
-  for (const jeton of Object.values(teintes)) jeton.$value = versPastel(jeton.$value, PASTEL[palette]);
+for (const [fichier, reglages] of Object.entries(PASTELS)) {
+  const primitivesPastel = JSON.parse(base['primitives.tokens.json']);
+  for (const [palette, teintes] of Object.entries(primitivesPastel.Colors)) {
+    if (!reglages[palette]) throw new Error(`Palette sans réglage pastel : ${palette}`);
+    for (const jeton of Object.values(teintes)) jeton.$value = versPastel(jeton.$value, reglages[palette]);
+  }
+  ecrire(
+    fichier,
+    zip({
+      ...Object.fromEntries(Object.entries(base).filter(([chemin]) => !chemin.includes('monochrome'))),
+      'primitives.tokens.json': JSON.stringify(primitivesPastel),
+    }),
+  );
 }
-ecrire(
-  'pastel.zip',
-  zip({
-    ...Object.fromEntries(Object.entries(base).filter(([chemin]) => !chemin.includes('monochrome'))),
-    'primitives.tokens.json': JSON.stringify(primitivesPastel),
-  }),
-);
 
 // --- Refusés
 const { 'primitives.tokens.json': _, ...sansPrimitives } = base;
