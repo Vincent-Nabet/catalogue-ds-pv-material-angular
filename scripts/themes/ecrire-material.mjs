@@ -84,7 +84,7 @@ function sourceDe(nomMat, variables, nom) {
  * Génère `_themes-<nom>.scss`.
  * Retourne `{ fichiers, surcharges: Map nom Material → valeur, rapport: { surcharges, repliAttendu, repliInattendu } }`.
  */
-export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_DEFAUT }) {
+export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_DEFAUT, classes = [`theme-${nom}`] }) {
   validerPaletteRepli(paletteRepli);
   const surcharges = new Map();
   const repliAttendu = [];
@@ -103,6 +103,10 @@ export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_D
   }
 
   const scss = `@use '@angular/material' as mat;
+
+/// Classes \`theme-${nom}[-<famille>]\` des familles de contraste générées (une par paire clair/sombre).
+/// Usage : \`@each $classe in themes-${nom}.$classes { html.#{$classe} { @include themes-${nom}.theme(); } }\`
+$classes: (${classes.map((c) => `'${c}'`).join(', ')}${classes.length === 1 ? ',' : ''});
 
 /// Thème Angular Material branché sur les variables CSS de \`index.css\` (--md-sys-*, --md-ref-*).
 /// Les valeurs de la palette de repli (${paletteRepli}) ne subsistent que pour les variables sans source dans les tokens.

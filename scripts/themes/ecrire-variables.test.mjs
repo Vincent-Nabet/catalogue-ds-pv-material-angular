@@ -7,12 +7,14 @@ import { fileURLToPath } from 'node:url';
 import * as sass from 'sass';
 import { classer } from './correspondance.mjs';
 import { ecrireFichiers } from './ecrire-fichiers.mjs';
-import { FAMILLES, formater, genererVariables, selecteurFamille } from './ecrire-variables.mjs';
+import { detecterFamilles } from './familles.mjs';
+import { formater, genererVariables, selecteurFamille } from './ecrire-variables.mjs';
 import { lireSource } from './lire-source.mjs';
 import { resoudreMode } from './resoudre-tokens.mjs';
 
 const source = lireSource(fileURLToPath(new URL('../../tokens', import.meta.url)));
 const { fichiers, variables, rapport } = genererVariables(source, { nom: 'app' });
+const FAMILLES = rapport.familles;
 const temp = mkdtempSync(join(tmpdir(), 'themes-variables-'));
 after(() => rmSync(temp, { recursive: true, force: true }));
 
@@ -98,13 +100,35 @@ test('--palettes absent : pas de primitives de palette', () => {
 test('tokens non couleur différents selon le mode = erreur explicite', () => {
   const copie = structuredClone(source);
   copie.semantiques.dark.Typescale.Static['Body Large'].Size.$value = '17px';
-  assert.throws(() => genererVariables(copie, { nom: 'app' }), /identiques dans les 8 modes[^]*dark : --md-sys-typescale-body-large-size = 17px/);
+  assert.throws(() => genererVariables(copie, { nom: 'app' }), /valeurs non couleur[^]*identiques[^]*dark : --md-sys-typescale-body-large-size = 17px/);
 });
 
-test('mode manquant = erreur explicite', () => {
+test('famille incomplète (clair sans sombre) = erreur explicite', () => {
   const copie = structuredClone(source);
   delete copie.semantiques['monochrome-dt'];
-  assert.throws(() => genererVariables(copie, { nom: 'app' }), /Mode\(s\) absent\(s\) de la source : monochrome-dt/);
+  assert.throws(() => genererVariables(copie, { nom: 'app' }), /Famille incomplète : « monochrome-lt » n'a pas de mode sombre/);
+});
+
+test('familles détectées : jeu complet, familles en moins, noms différents', () => {
+  const resume = (noms) => detecterFamilles(noms).familles.map((f) => `${f.suffixe || 'standard'}${f.defaut ? '*' : ''}`).join(' ');
+  assert.equal(resume(Object.keys(source.semantiques)), 'standard* contraste-moyen contraste-eleve monochrome');
+  assert.equal(resume(['light', 'dark']), 'standard*');
+  assert.equal(resume(['dark', 'light', 'light-high-contrast', 'dark-high-contrast']), 'standard* contraste-eleve');
+  assert.equal(resume(['theme-light', 'theme-dark', 'theme-light-mc', 'theme-dark-mc', 'theme-clair-sepia', 'theme-sombre-sepia']), 'standard* contraste-moyen sepia');
+  assert.equal(resume(['marque-clair', 'marque-sombre']), 'standard*');
+  assert.equal(resume(['a-light', 'a-dark', 'b-light', 'b-dark']), 'a* b');
+  assert.deepEqual(detecterFamilles(['light', 'dark', 'brand-extra']).ignores, ['brand-extra']);
+  assert.throws(() => detecterFamilles(['brand', 'extra']), /Aucune paire clair\/sombre reconnue/);
+  assert.throws(() => detecterFamilles(['light', 'Light', 'dark']), /ambigus/);
+});
+
+test('une seule paire clair/sombre : sortie valide, sans bloc de contraste', () => {
+  const copie = structuredClone(source);
+  for (const mode of Object.keys(copie.semantiques)) if (mode !== 'light' && mode !== 'dark') delete copie.semantiques[mode];
+  const { fichiers: f, rapport: r } = genererVariables(copie, { nom: 'app' });
+  assert.equal(r.familles.length, 1);
+  assert.doesNotMatch(f.get('md3/couleurs.css'), /contraste|monochrome/);
+  assert.match(f.get('md3/couleurs.css'), /:root, \.theme-app \{/);
 });
 
 test('formater : dimensions, familles, graisses', () => {
@@ -150,4 +174,17 @@ test('ecrireFichiers : idempotent, supprime les fichiers périmés, refuse un do
   writeFileSync(join(autre, 'perso.txt'), 'important');
   assert.throws(() => ecrireFichiers(autre, jeu, 'tokens'), /aucun fichier généré/);
   assert.equal(readFileSync(join(autre, 'perso.txt'), 'utf8'), 'important');
+});
+
+test('manifeste familles.ts et classes SCSS suivent les familles générées', async () => {
+  const { genererManifeste } = await import('./ecrire-manifeste.mjs');
+  const manifeste = genererManifeste({ nom: 'app', familles: rapport.familles });
+  assert.match(manifeste, /\{ id: 'app', libelle: 'Standard', apercu: '#86a315', defaut: true, progression: true \}/);
+  assert.match(manifeste, /\{ id: 'app-contraste-moyen', libelle: 'Contraste moyen', apercu: '#657c08', defaut: false, progression: true \}/);
+  assert.match(manifeste, /\{ id: 'app-monochrome', libelle: 'Monochrome', apercu: '#1a1a1a', defaut: false, progression: false \}/);
+  const copie = structuredClone(source);
+  for (const mode of Object.keys(copie.semantiques)) if (mode !== 'light' && mode !== 'dark') delete copie.semantiques[mode];
+  const seule = genererManifeste({ nom: 'pv', familles: genererVariables(copie, { nom: 'pv' }).rapport.familles });
+  assert.equal(seule.match(/id: '/g).length, 1);
+  assert.match(seule, /id: 'pv'/);
 });

@@ -36,7 +36,7 @@ Code de sortie 0 avec un rapport (comptes, avertissements) ; 1 avec un message `
 src/styles/themes-app/
   index.css          point d'entrée : @import des fichiers CSS ci-dessous
   md3/ref.css        --md-ref-typeface-* (+ palettes avec --palettes)
-  md3/sys.css        formes, typographie, opacités d'état (identiques dans les 8 modes)
+  md3/sys.css        formes, typographie, opacités d'état (identiques dans tous les modes)
   md3/couleurs.css   --md-sys-color-* : 4 blocs, un par famille de contraste
   app.css            --app-* : formes et graisses hors MD3, espacements, couleurs custom (par famille)
   _themes-app.scss   mixin Angular Material
@@ -46,7 +46,7 @@ Chaque fichier commence par un en-tête « Fichier généré par `npm run themes
 
 ## Clair/sombre et contraste
 
-Les 8 fichiers `semantics/` forment 4 paires clair/sombre. Chaque couleur est écrite `light-dark(<clair>, <sombre>)` (une valeur simple quand les deux modes sont identiques) :
+Les fichiers `semantics/` forment des paires clair/sombre (« familles ») **détectées d'après leurs noms** (`scripts/themes/familles.mjs`) : 4 paires pour le jeu actuel (8 fichiers), mais une seule suffit et on peut en ajouter. Chaque couleur est écrite `light-dark(<clair>, <sombre>)` (une valeur simple quand les deux modes sont identiques) :
 
 ```css
 :root, .theme-app            { --md-sys-color-primary: light-dark(#86A315, #BCD078); … }  /* light / dark */
@@ -57,7 +57,8 @@ Les 8 fichiers `semantics/` forment 4 paires clair/sombre. Chaque couleur est é
 
 - Clair/sombre = `color-scheme` (comme `mat.theme()` et comme les classes `scheme-*` du catalogue). **Les fichiers générés ne posent pas `color-scheme`** : c'est à l'hôte de le faire (sans rien, le rendu est clair). Avec `color-scheme: light dark`, le mode « système » fonctionne sans JavaScript.
 - Le contraste = une classe `theme-*` sur `<html>`, même convention que le sélecteur actuel. La famille standard s'applique aussi par défaut sur `:root`.
-- Les tokens non couleur (typographie, formes, espacements) sont **identiques dans les 8 modes** : le script le vérifie et échoue en listant les écarts sinon.
+- **Détection des familles** : le nom du fichier est découpé en mots ; le mot `light`/`lt`/`clair` ou `dark`/`dt`/`sombre` donne le schéma, les autres mots la famille (`light-medium-contrast` + `dark-medium-contrast` → famille `medium-contrast`). Les mots communs à toutes les familles (ex. `theme-` en préfixe) sont retirés. La famille sans mot restant est la **standard** (`.theme-<nom>` + `:root`) ; à défaut, la première par ordre alphabétique. `medium-contrast`/`mc` → `contraste-moyen`, `high-contrast`/`hc` → `contraste-eleve` ; toute autre clé donne la classe `theme-<nom>-<clé>` et le libellé correspondant (`sepia-light`/`sepia-dark` → `.theme-<nom>-sepia`). Un mode sans mot clair/sombre est ignoré (avertissement) ; une famille avec un seul des deux modes est une erreur explicite.
+- Les tokens non couleur (typographie, formes, espacements) sont **identiques dans tous les modes** : le script le vérifie et échoue en listant les écarts sinon.
 
 ## Correspondance (résumé)
 
@@ -98,12 +99,17 @@ avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <su
 
 ## Intégration au catalogue
 
+Les thèmes du design system du catalogue sont **dynamiques** : ils suivent les familles réellement générées.
+
+- `familles.ts` (généré avec les CSS) liste les familles : `id` (`app`, `app-contraste-moyen`…), libellé, couleur d'aperçu (primary clair), famille par défaut, appartenance à la progression du contraste. `core/theme/themes.ts` en tire les entrées du groupe « Design system » (sélecteur, compteur de l'accueil, `ThemeService`, matrice de contraste).
+- `_themes-app.scss` exporte `$classes` (les classes `theme-app[-<famille>]`) ; `src/styles.scss` boucle dessus (`@each`) pour inclure le mixin : plus de liste de classes écrite à la main.
 - `angular.json` : `src/styles/themes-app/index.css` ajouté à `styles` (variables `--md-sys-*`, `--app-*`).
-- `src/styles.scss` : `@use './styles/themes-app/themes-app'` et un bloc `html.theme-app, html.theme-app-contraste-moyen, html.theme-app-contraste-eleve, html.theme-app-monochrome { @include themes-app.theme(); }` (un seul bloc : le mixin ne référence que des variables, qui changent déjà selon la classe).
-- `core/theme/themes.ts` : 4 entrées `app*` dans `ThemeId` et `THEMES` ; `ThemeService` pose `theme-<id>` sans autre changement, le sélecteur et le compteur de l'accueil suivent.
-- Si `--nom` change, adapter ces trois endroits.
+- Thème par défaut : `app-contraste-moyen` s'il existe, sinon la famille par défaut (`DEFAULT_THEME_ID`).
+- Le nom reste `app` pour le catalogue (les pages lisent des variables `--app-*`) ; si `--nom` change, adapter `styles.scss`, `angular.json` et l'import de `themes.ts`.
 - Coût : +34 kB au bundle initial (budget d'avertissement relevé à 880 kB).
 - Contrôle des contrastes obtenus : l'[inspecteur de contraste](inspecteur-contraste.md) du catalogue les affiche écran par écran.
+- Vérifier le catalogue avec d'autres jeux de tokens : `node testing/run-variantes.mjs` puis `node testing/run-site.mjs` (génère, compile et contrôle le site pour chaque variante, puis restaure `src/styles/themes-app`).
+- Limites : les tests Angular (`ng test`) et la page débranchée *Matrice de contraste* décrivent le jeu actuel (4 familles) ; ils ne sont garantis qu'avec lui.
 
 ## Utilisation hors Angular
 
@@ -119,7 +125,8 @@ Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponib
 - `mat.theme()` reçoit les surcharges en **second argument** plutôt que `mat.theme-overrides()` : ce dernier ignore les clés hors des variables système (dont `neutral10`), le second argument les honore et évite un second bloc de déclarations.
 - `sass` est une devDependency explicite (le script et ses tests l'importent) ; `fflate` lit les zips.
 - Découpage du plan complété par `ecrire-fichiers.mjs` (en-tête, écriture idempotente, suppression limitée aux fichiers générés).
-- Les 8 modes sont requis ; un mode supplémentaire dans la source est ignoré avec un avertissement.
+- Nombre et noms des modes libres (cf. « Clair/sombre et contraste ») ; seules les familles détectées sont générées. Le catalogue, lui, n'a que les 4 entrées `app*` de `themes.ts` : en changer les familles demande de les adapter (cf. « Intégration au catalogue »).
+- Banc d'essai de robustesse : `node testing/run-variantes.mjs` (copies de `tokens/` dans `testing/variantes/`, jamais modifié ; familles en moins, renommées, ajoutées, tokens manquants…).
 - En-tête : nom du dossier ou du zip source (pas de chemin machine) ; le rapport affiche en revanche le chemin complet.
 - Les tests (`node:test`) lisent `tokens/` et construisent leurs zips en mémoire ; ils ne font pas partie de `ng test`.
 
@@ -129,6 +136,7 @@ Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponib
 scripts/themes/
   generer-themes.mjs     CLI : options, enchaînement, rapport
   lire-source.mjs        dossier ou .zip → { primitives, semantiques }
+  familles.mjs           noms de fichiers sémantiques → familles clair/sombre
   resoudre-tokens.mjs    aplatissement DTCG, résolution récursive des alias (cycle / absent = erreur)
   correspondance.mjs     chemin de token → variable CSS (ou ignoré / inconnu) ; opacités d'état
   ecrire-variables.mjs   étape 1 : fichiers CSS

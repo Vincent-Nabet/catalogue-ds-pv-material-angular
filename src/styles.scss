@@ -62,13 +62,12 @@ html {
 
 // Thèmes du design system, générés depuis les tokens (npm run themes) : les variables
 // --md-sys-* viennent de styles/themes-app/index.css (chargé par angular.json) et changent selon
-// la famille de contraste. Le mixin ne référence que ces variables : un seul bloc suffit pour
-// les quatre classes posées par ThemeService.
-html.theme-app,
-html.theme-app-contraste-moyen,
-html.theme-app-contraste-eleve,
-html.theme-app-monochrome {
-  @include themes-app.theme();
+// la famille de contraste. Le mixin ne référence que ces variables : un seul bloc par classe posée
+// par ThemeService ; la liste des classes ($classes) suit les familles générées.
+@each $classe in themes-app.$classes {
+  html.#{$classe} {
+    @include themes-app.theme();
+  }
 }
 
 @for $i from 0 through 4 {

@@ -33,14 +33,14 @@ function zipDeTokens() {
 
 test('dossier et zip donnent des sorties identiques ; seconde exécution : aucun fichier modifié', () => {
   const depuisDossier = generer({ source: tokens, sortie: join(temp, 'dossier') });
-  assert.deepEqual(depuisDossier.ecriture.ecrits.sort(), ['_themes-app.scss', 'app.css', 'index.css', 'md3/couleurs.css', 'md3/ref.css', 'md3/sys.css']);
+  assert.deepEqual(depuisDossier.ecriture.ecrits.sort(), ['_themes-app.scss', 'app.css', 'familles.ts', 'index.css', 'md3/couleurs.css', 'md3/ref.css', 'md3/sys.css']);
   const depuisZip = generer({ source: zipDeTokens(), sortie: join(temp, 'zip') });
   assert.deepEqual(corps(join(temp, 'zip')), corps(join(temp, 'dossier')));
   assert.deepEqual(depuisZip.variables.inconnus, []);
 
   const seconde = generer({ source: tokens, sortie: join(temp, 'dossier') });
   assert.deepEqual(seconde.ecriture.ecrits, []);
-  assert.equal(seconde.ecriture.inchanges.length, 6);
+  assert.equal(seconde.ecriture.inchanges.length, 7);
 });
 
 test('--nom pv : dossier, fichiers et contenu sans « app »', () => {
@@ -84,7 +84,7 @@ test('un token non reconnu est signalé dans le rapport, jamais ignoré en silen
 
 test('CLI : code de sortie 0 avec rapport, 1 avec message d\'erreur', () => {
   const sortie = execFileSync(process.execPath, [script, '--sortie', join(temp, 'cli')], { encoding: 'utf8' });
-  assert.match(sortie, /Fichiers : 6 écrit\(s\)/);
+  assert.match(sortie, /Fichiers : 7 écrit\(s\)/);
   assert.throws(
     () => execFileSync(process.execPath, [script, '--nom', 'MD'], { encoding: 'utf8', stdio: 'pipe' }),
     (erreur) => erreur.status === 1 && /Erreur : Nom « MD » invalide/.test(erreur.stderr),

@@ -2,22 +2,15 @@
 //
 // Le clair/sombre passe par `light-dark()` (donc par `color-scheme`, posé par l'hôte) ; la famille
 // de contraste est une classe `theme-<nom>[-<famille>]`. Les tokens non couleur sont identiques dans
-// les 8 modes : le script le vérifie et ne les écrit qu'une fois.
+// les modes : le script le vérifie et ne les écrit qu'une fois.
 import { classer, OPACITES_ETAT, variableOpacite } from './correspondance.mjs';
+import { detecterFamilles } from './familles.mjs';
 import { resoudreMode } from './resoudre-tokens.mjs';
 
-/** Familles de contraste : une paire clair/sombre chacune, une classe `theme-<nom>[-<suffixe>]`. */
-export const FAMILLES = [
-  { id: 'standard', suffixe: '', libelle: 'Standard', clair: 'light', sombre: 'dark' },
-  { id: 'contraste-moyen', suffixe: 'contraste-moyen', libelle: 'Contraste moyen', clair: 'light-medium-contrast', sombre: 'dark-medium-contrast' },
-  { id: 'contraste-eleve', suffixe: 'contraste-eleve', libelle: 'Contraste élevé', clair: 'light-high-contrast', sombre: 'dark-high-contrast' },
-  { id: 'monochrome', suffixe: 'monochrome', libelle: 'Monochrome', clair: 'monochrome-lt', sombre: 'monochrome-dt' },
-];
-
-/** Sélecteur CSS d'une famille : la famille standard est aussi appliquée par défaut sur `:root`. */
+/** Sélecteur CSS d'une famille (cf. `detecterFamilles`) : la famille par défaut est aussi appliquée sur `:root`. */
 export function selecteurFamille(famille, nom) {
   const classe = famille.suffixe ? `.theme-${nom}-${famille.suffixe}` : `.theme-${nom}`;
-  return famille.suffixe ? classe : `:root, ${classe}`;
+  return famille.defaut ? `:root, ${classe}` : classe;
 }
 
 /** Valeur CSS d'un token résolu ; seul nettoyage : le bruit flottant des dimensions (4 décimales). */
@@ -62,12 +55,8 @@ const section = (titre, ...blocs) => `/* ${titre} */\n${blocs.join('\n')}`;
  * Retourne `{ fichiers: Map chemin → corps, variables: Set, rapport }`.
  */
 export function genererVariables(source, { nom, palettes = false }) {
-  const manquants = FAMILLES.flatMap((f) => [f.clair, f.sombre]).filter((mode) => !(mode in source.semantiques));
-  if (manquants.length > 0) {
-    throw new Error(`Mode(s) absent(s) de la source : ${manquants.join(', ')}.`);
-  }
-  const attendus = new Set(FAMILLES.flatMap((f) => [f.clair, f.sombre]));
-  const modesIgnores = Object.keys(source.semantiques).filter((mode) => !attendus.has(mode));
+  const { familles, ignores: modesIgnores } = detecterFamilles(Object.keys(source.semantiques));
+  const attendus = new Set(familles.flatMap((f) => [f.clair, f.sombre]));
 
   const parMode = new Map();
   for (const mode of attendus) {
@@ -75,8 +64,9 @@ export function genererVariables(source, { nom, palettes = false }) {
     parMode.set(mode, jetonsDuMode(resolus, nom, palettes));
   }
 
-  const reference = parMode.get('light');
-  verifierCoherence(parMode, reference);
+  const modeReference = familles[0].clair;
+  const reference = parMode.get(modeReference);
+  verifierCoherence(parMode, reference, modeReference);
 
   const nonCouleurs = reference.jetons.filter((j) => j.type !== 'color');
   const couleurs = (famille, fichier) => {
@@ -90,7 +80,7 @@ export function genererVariables(source, { nom, palettes = false }) {
       });
   };
   const blocsCouleurs = (fichier) =>
-    FAMILLES.map((famille) =>
+    familles.map((famille) =>
       section(`${famille.libelle} (${famille.clair} / ${famille.sombre})`, bloc(selecteurFamille(famille, nom), couleurs(famille, fichier))),
     ).join('\n');
   const declarations = (fichier, filtre = () => true) =>
@@ -116,6 +106,9 @@ export function genererVariables(source, { nom, palettes = false }) {
     ].join('\n')],
   ]);
 
+  // Couleur d'aperçu d'une famille (pastille du sélecteur de thème du catalogue) : primary clair.
+  const apercu = (famille) => parMode.get(famille.clair).jetons.find((j) => j.variable === '--md-sys-color-primary')?.valeur.toLowerCase() ?? '#808080';
+
   const variables = new Set([...reference.jetons.map((j) => j.variable), ...etats.map(([v]) => v)]);
   const rapport = {
     md3: reference.jetons.filter((j) => j.cible === 'md3').length + etats.length,
@@ -123,27 +116,28 @@ export function genererVariables(source, { nom, palettes = false }) {
     ignores: reference.ignores,
     inconnus: reference.inconnus,
     modesIgnores,
+    familles: familles.map((f) => ({ ...f, apercu: apercu(f) })),
   };
   return { fichiers, variables, rapport };
 }
 
 /** Mêmes tokens écrits dans tous les modes, et valeurs non couleur identiques. */
-function verifierCoherence(parMode, reference) {
+function verifierCoherence(parMode, reference, modeReference) {
   const attendu = reference.jetons.map((j) => j.variable);
   const problemes = [];
   for (const [mode, { jetons, inconnus }] of parMode) {
     const variables = jetons.map((j) => j.variable);
     const differences = [...attendu.filter((v) => !variables.includes(v)), ...variables.filter((v) => !attendu.includes(v))];
-    if (differences.length > 0) problemes.push(`${mode} : jeu de tokens différent de « light » (${differences.slice(0, 5).join(', ')}…)`);
-    if (inconnus.join() !== reference.inconnus.join()) problemes.push(`${mode} : tokens non reconnus différents de « light »`);
+    if (differences.length > 0) problemes.push(`${mode} : jeu de tokens différent de « ${modeReference} » (${differences.slice(0, 5).join(', ')}…)`);
+    if (inconnus.join() !== reference.inconnus.join()) problemes.push(`${mode} : tokens non reconnus différents de « ${modeReference} »`);
     const valeurs = new Map(jetons.map((j) => [j.variable, j.valeur]));
     for (const j of reference.jetons.filter((x) => x.type !== 'color')) {
       if (valeurs.get(j.variable) !== j.valeur) {
-        problemes.push(`${mode} : ${j.variable} = ${valeurs.get(j.variable)} (« light » : ${j.valeur})`);
+        problemes.push(`${mode} : ${j.variable} = ${valeurs.get(j.variable)} (« ${modeReference} » : ${j.valeur})`);
       }
     }
   }
   if (problemes.length > 0) {
-    throw new Error(`Les tokens non couleur doivent être identiques dans les 8 modes :\n  ${problemes.join('\n  ')}`);
+    throw new Error(`Tous les modes doivent définir les mêmes tokens, avec des valeurs non couleur (typographie, formes, espacements) identiques :\n  ${problemes.join('\n  ')}`);
   }
 }
