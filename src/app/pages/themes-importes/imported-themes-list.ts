@@ -46,7 +46,7 @@ import { DEFAULT_THEME_ID, parseImportedThemeId, themeInfo } from '../../core/th
                     </button>
                     <button
                       #annuler
-                      matButton="outlined"
+                      matButton="tonal"
                       type="button"
                       (click)="annulerSuppression(ligne.id)"
                     >
@@ -88,7 +88,7 @@ import { DEFAULT_THEME_ID, parseImportedThemeId, themeInfo } from '../../core/th
                   }
                 </div>
                 <button
-                  matButton="outlined"
+                  matButton="tonal"
                   type="button"
                   [id]="'supprimer-' + ligne.id"
                   [attr.aria-label]="'Supprimer le thème ' + ligne.name"
@@ -141,7 +141,7 @@ import { DEFAULT_THEME_ID, parseImportedThemeId, themeInfo } from '../../core/th
       padding: 16px;
       border: 1px solid var(--mat-sys-outline-variant);
       border-radius: var(--mat-sys-corner-medium);
-      background: var(--mat-sys-surface-container-low);
+      background: var(--mat-sys-surface);
     }
 
     .corps {

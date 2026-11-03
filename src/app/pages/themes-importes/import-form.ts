@@ -188,7 +188,7 @@ function nomPropose(nomSource: string): string {
       padding: 12px 16px;
       border: 1px solid var(--mat-sys-outline-variant);
       border-radius: var(--mat-sys-corner-medium);
-      background: var(--mat-sys-surface-container-low);
+      background: var(--mat-sys-surface);
     }
 
     .rapport p {
