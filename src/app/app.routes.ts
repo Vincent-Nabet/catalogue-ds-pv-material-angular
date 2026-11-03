@@ -15,5 +15,11 @@ export const routes: Routes = [
     title: `${entry.label} — ${TITRE}`,
     loadComponent: entry.loadComponent,
   })),
+  {
+    path: 'themes-importes',
+    title: `Thèmes importés — ${TITRE}`,
+    loadComponent: () =>
+      import('./pages/themes-importes/themes-importes').then((m) => m.ThemesImportes),
+  },
   { path: '**', redirectTo: '' },
 ];
