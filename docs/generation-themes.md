@@ -154,6 +154,7 @@ Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponib
 - `sass` est une devDependency explicite (le script et ses tests l'importent) ; `fflate` lit les zips et est une dépendance d'exécution (embarqué dans le chunk du générateur de la page « Thèmes importés »).
 - Découpage du plan complété par `ecrire-fichiers.mjs` (en-tête, écriture idempotente, suppression limitée aux fichiers générés).
 - Nombre et noms des modes libres (cf. « Clair/sombre et contraste ») ; seules les familles détectées sont générées. Le catalogue, lui, n'a que les 4 entrées `app*` de `themes.ts` : en changer les familles demande de les adapter (cf. « Intégration au catalogue »).
+- Zips d'essai de l'import dans le navigateur : `node testing/scratchpad/generer-zips.mjs` (jeux acceptés, dont deux jeux pastel, et fichiers à refuser ; voir [qualite-et-accessibilite.md](qualite-et-accessibilite.md#zips-dessai-de-limport-de-thèmes)).
 - Banc d'essai de robustesse : `node testing/run-variantes.mjs` (copies de `tokens/` dans `testing/variantes/`, jamais modifié ; familles en moins, renommées, ajoutées, tokens manquants…).
 - En-tête : nom du dossier ou du zip source (pas de chemin machine) ; le rapport affiche en revanche le chemin complet.
 - Les tests (`node:test`) lisent `tokens/` et construisent leurs zips en mémoire ; ils ne font pas partie de `ng test`.

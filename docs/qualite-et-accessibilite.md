@@ -43,6 +43,10 @@
 
 Les pages de composants ne sont pas testées unitairement (démonstration visuelle) : elles sont couvertes par la compilation stricte des templates et par le contrôle navigateur décrit ci-dessous.
 
+### Zips d'essai de l'import de thèmes
+
+`node testing/scratchpad/generer-zips.mjs` produit dans `testing/scratchpad/zips/` (dossier non versionné) les zips à envoyer à la page `/themes-importes` : des jeux acceptés (`tokens-test.zip` = copie de `tokens/`, `tokens-primary.zip`, `une-famille.zip`, `pastel-bleu.zip` et `pastel-rose.zip` : 3 familles sans Monochrome, couleurs refaites en conservant les luminances, donc les contrastes) et des fichiers à refuser (non zip, sans primitives, famille incomplète, alias en cycle, JSON invalide, fichier ou archive trop gros, injection CSS). `testing/scratchpad/README.md` donne le résultat attendu de chacun. `tokens/` n'est lu qu'en lecture seule.
+
 ## Accessibilité : acquis
 
 - Landmarks : `<header>`, `<nav aria-label="Composants">`, `<main>` (focus programmatique après navigation).
