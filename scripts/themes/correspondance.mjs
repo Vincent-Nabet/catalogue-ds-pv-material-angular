@@ -24,7 +24,7 @@ export function validerNom(nom) {
 const kebab = (texte) => texte.trim().toLowerCase().replace(/\s+/g, '-');
 
 /** Les 49 rôles de couleur MD3 que `mat.theme()` consomme. */
-const ROLES_MD3 = new Set([
+export const ROLES_MD3 = new Set([
   'primary', 'surface-tint', 'on-primary', 'primary-container', 'on-primary-container',
   'secondary', 'on-secondary', 'secondary-container', 'on-secondary-container',
   'tertiary', 'on-tertiary', 'tertiary-container', 'on-tertiary-container',
@@ -41,22 +41,22 @@ const ROLES_MD3 = new Set([
 ]);
 
 /** Couleurs hors MD3 : Success / Info / Warning et leurs variantes. */
-const ROLES_CUSTOM = new Set(
+export const ROLES_CUSTOM = new Set(
   ['success', 'info', 'warning'].flatMap((f) => [f, `on-${f}`, `${f}-container`, `on-${f}-container`]),
 );
 
-const STYLES_TYPO = new Set(
+export const STYLES_TYPO = new Set(
   ['display', 'headline', 'title', 'body', 'label'].flatMap((famille) =>
     ['large', 'medium', 'small'].map((taille) => `${famille}-${taille}`),
   ),
 );
-const PROPRIETES_TYPO = { Font: 'font', Weight: 'weight', Size: 'size', Tracking: 'tracking', 'Line Height': 'line-height' };
+export const PROPRIETES_TYPO = { Font: 'font', Weight: 'weight', Size: 'size', Tracking: 'tracking', 'Line Height': 'line-height' };
 /** Styles dont `Weight-emphasized` correspond à la graisse `prominent` de MD3 de base. */
-const STYLES_PROMINENT = new Set(['label-large', 'label-medium']);
+export const STYLES_PROMINENT = new Set(['label-large', 'label-medium']);
 
-const RAYONS_MD3 = new Set(['none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full']);
-const RAYONS_CUSTOM = new Set(['large-increased', 'extra-large-increased', 'extra-extra-large']);
-const ESPACEMENTS = new Set([
+export const RAYONS_MD3 = new Set(['none', 'extra-small', 'small', 'medium', 'large', 'extra-large', 'full']);
+export const RAYONS_CUSTOM = new Set(['large-increased', 'extra-large-increased', 'extra-extra-large']);
+export const ESPACEMENTS = new Set([
   'none', 'extra-small', 'small', 'medium', 'large', 'large-increased',
   'extra-large', 'extra-large-increased', 'extra-extra-large', 'full',
 ]);
@@ -168,4 +168,44 @@ export function classerTous(chemins, nom, options) {
     if (classement.cible === 'inconnu') inconnus.push(chemin);
   }
   return { entrees, inconnus };
+}
+
+const capitaliser = (texte) => texte.charAt(0).toUpperCase() + texte.slice(1);
+/** Inverse de `kebab` : `surface-dim` → `Surface Dim`. */
+const titre = (cle) => cle.split('-').map(capitaliser).join(' ');
+
+/**
+ * Variables que le pont Material (`_themes-<nom>.scss`) référence sans repli : une variable absente
+ * laisserait un `var()` invalide, donc un thème cassé en silence.
+ * Retourne `[{ variable, token }]` (`token` : chemin DTCG attendu).
+ */
+export function variablesRequises() {
+  return [
+    ...[...ROLES_MD3].map((role) => ({ variable: `--md-sys-color-${role}`, token: `Colors.Schemes.${titre(role)}` })),
+    ...[...STYLES_TYPO].flatMap((style) =>
+      Object.entries(PROPRIETES_TYPO).map(([propriete, cle]) => ({
+        variable: `--md-sys-typescale-${style}-${cle}`,
+        token: `Typescale.Static.${titre(style)}.${propriete}`,
+      })),
+    ),
+    ...[...RAYONS_MD3].map((rayon) => ({ variable: `--md-sys-shape-corner-${rayon}`, token: `Radius.${titre(rayon)}` })),
+    { variable: '--md-ref-typeface-plain', token: 'Font theme.Static.Font.Plain' },
+  ];
+}
+
+/**
+ * Variables custom (`--<nom>-*`) que les pages du catalogue lisent : leur absence n'est pas bloquante
+ * (avertissement). Retourne `[{ variable, token }]`.
+ */
+export function variablesCustomAttendues(nom) {
+  return [
+    ...[...RAYONS_CUSTOM].map((rayon) => ({ variable: `--${nom}-shape-corner-${rayon}`, token: `Radius.${titre(rayon)}` })),
+    ...[...ESPACEMENTS].map((cle) => ({ variable: `--${nom}-spacing-${cle}`, token: `Spacing.${titre(cle)}` })),
+    ...[...ROLES_CUSTOM].map((role) => ({ variable: `--${nom}-color-${role}`, token: `Colors.Schemes.${titre(role)}` })),
+    ...['0', '900'].map((n) => ({ variable: `--${nom}-color-neutral-${n}`, token: `Colors.Schemes.Neutral.${n}` })),
+    { variable: `--${nom}-color-section-background`, token: 'Colors.Add-ons.Section background' },
+    ...[...STYLES_TYPO]
+      .filter((style) => !STYLES_PROMINENT.has(style))
+      .map((style) => ({ variable: `--${nom}-typescale-emphasized-${style}-weight`, token: `Typescale.Static.${titre(style)}.Weight-emphasized` })),
+  ];
 }

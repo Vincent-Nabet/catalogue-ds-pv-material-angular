@@ -28,7 +28,8 @@ src/
     app.routes.ts            routes générées depuis le registre
     core/
       catalog/catalog.registry.ts   SOURCE UNIQUE des composants + catégories
-      theme/themes.ts               types et listes (thèmes, modes, densités), `themeInfo(id)` (recherche d'un thème)
+      theme/themes.ts               types et listes (thèmes, modes, densités), `themeInfo(id)` (recherche d'un thème), `parseImportedThemeId()`
+      theme/imported-themes.ts      @Service : thèmes importés depuis un zip (métadonnées + CSS dans localStorage)
       theme/theme.service.ts        @Service : état du thème + persistance
       i18n/intl-fr.ts               libellés français (paginator, datepicker, stepper)
       a11y/contrast-items.ts        résultats axe → éléments d'inspection (fonctions pures)
@@ -43,7 +44,7 @@ src/
                                     Design system ; familyVariables(id) : variables --r-*), utilisé aussi par les pages de composants (lazy)
     layout/
       shell/                 barre d'outils + sidenav + <router-outlet>
-      theme-picker/          bouton + menu thème / mode / densité
+      theme-picker/          bouton + menu thème (dont la section « Thèmes importés ») / mode / densité
       contrast-inspector/    bouton « Contraste », panneau collant et calque de badges (inspecteur de contraste)
     shared/
       specimen/              cadre d'une variante + bouton snippet
@@ -55,6 +56,7 @@ src/
                              et @Service OverlayFamily (même chose sur le conteneur de la surcouche CDK)
     pages/
       accueil/accueil.ts
+      themes-importes/               page /themes-importes (hors registre) : import d'un zip de tokens, liste et suppression
       fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre
       composants/<id>/<id>.page.ts   une page par composant (35)
   styles/_roles.scss         mixins « rôle de couleur » par composant (voir docs/themes-et-styles.md), résolu via `includePaths`
@@ -62,7 +64,8 @@ src/
                              index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
 scripts/
   a11y.mjs, captures.mjs, lib.mjs   vérification du site (axe-core, captures)
-  themes/                    génération des thèmes depuis les tokens (voir docs/generation-themes.md)
+  themes/                    génération des thèmes depuis les tokens (voir docs/generation-themes.md) ; navigateur.mjs
+                             (+ .d.mts) est aussi importé par la page « Thèmes importés » (import() dynamique)
 docs/                        cette documentation
 tokens/, TOKENS-*.md         design system distinct : lus (lecture seule) par scripts/themes, jamais modifiés
 ```
@@ -94,6 +97,7 @@ Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'UR
 
 - `''` (exact) → `Accueil`, titre « Accueil — Catalogue Material ».
 - Une route par entrée : `composants/<id>`, `loadComponent` de l'entrée, titre `« <label> — Catalogue Material »`.
+- `themes-importes` → `ThemesImportes` (lazy, **hors registre**), titre « Thèmes importés — Catalogue Material ».
 - `'**'` → redirection vers `''`.
 - Tout est en lazy loading. Aucune garde, aucun résolveur.
 
@@ -111,9 +115,40 @@ Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'UR
 
 - Signaux publics et modifiables : `theme` (`ThemeId`), `scheme` (`'light' | 'dark' | 'system'`), `density` (`0..4`).
 - Lecture initiale depuis `localStorage` (clé `catalogue-material-theme`, JSON, valeurs validées, `try/catch`), valeurs par défaut : `app-contraste-moyen`, `light`, `0`.
-- Un `effect()` retire puis repose les classes `theme-<id>`, `scheme-<mode>`, `density-<n>` sur `<html>` et sauvegarde.
+- Un `effect()` retire puis repose les classes `theme-<id>`, `scheme-<mode>`, `density-<n>` sur `<html>` et sauvegarde ; pour un thème importé, il pose aussi `theme-importe` et injecte son CSS (voir « Thèmes importés » plus bas).
 - Les couleurs viennent entièrement du SCSS (voir [themes-et-styles.md](themes-et-styles.md)) : le service ne manipule que des classes.
 - `index.html` pose `class="scheme-light"` en dur pour éviter un flash selon le thème du système avant l'initialisation.
+
+## Thèmes importés (`core/theme/imported-themes.ts`, `pages/themes-importes/`)
+
+Fonction : importer un zip de tokens dans le navigateur et l'utiliser comme thème (parcours : [fonctionnel.md](fonctionnel.md#thèmes-importés)).
+
+```
+ Page /themes-importes (chunk différé du routeur)
+    │  au choix du 1er fichier : import() dynamique → fflate + générateur (chunk à part)
+    ▼
+ scripts/themes/navigateur.mjs   genererThemeImporte(octets, { base, nomSource }) → { css, familles, rapport }
+    ▼
+ ImportedThemes (@Service, localStorage)  ──►  ThemeService : classes sur <html> + <style> du thème actif
+                                                      ▲
+                          ThemePicker : section « Thèmes importés » + lien vers la page
+```
+
+- **`ImportedThemes`** (bundle initial, volontairement minimal : ni génération ni `fflate`) : `themes` (signal en lecture seule), `infos` (un `ThemeInfo` par thème **et** par famille, groupe `imported`, identifiant `<id de l'import>-<famille>`), `info()`, `has()`, `css(importId)` (lu une fois par session), `add(meta, css)`, `remove(importId)`, `MAX_IMPORTED_THEMES = 20`. `add` retourne `{ ok: true }` ou `{ ok: false, reason: 'limite' | 'quota' | 'stockage' }` ; le message français est fourni par l'appelant (le formulaire).
+- **Identité** : identifiant technique généré `imp-` + 6 caractères `a-z0-9` (`crypto.getRandomValues`, hors collision). Le **nom saisi n'est qu'un libellé** : jamais une classe, une clé ni du CSS, affiché par interpolation Angular (échappée). `parseImportedThemeId(id)` (dans `themes.ts`) décompose `imp-<6>-<famille>` en `{ importId, family }`.
+- **Stockage** (`localStorage`, lecture synchrone : le CSS du thème actif doit être posé avant le premier rendu) :
+
+  | Clé | Contenu |
+  |---|---|
+  | `catalogue-material-themes-importes` | `{ "version": 1, "themes": ImportedThemeMeta[] }` : métadonnées seulement (nom, date, nom du zip, familles avec couleur d'aperçu, ≤ 20 avertissements) |
+  | `catalogue-material-theme-importe-css:<id>` | le CSS généré du thème (toutes ses familles) ; lu seulement quand le thème devient actif |
+  | `catalogue-material-theme` | inchangée ; `theme` peut valoir un identifiant importé |
+
+  `add` est **atomique** (CSS d'abord, puis index ; si l'index échoue, la clé CSS est retirée ; `QuotaExceededError` → `quota`) ; `remove` écrit l'index d'abord. La lecture est tolérante (JSON invalide, version inconnue, métadonnée mal formée → liste vide ; entrée sans clé CSS écartée) et ne lève jamais.
+- **`ThemeService`** : injecte `ImportedThemes` **avant** `read()` (un identifiant importé stocké est valide s'il est dans `THEMES` ou si `imported.has(id)`) ; `themeCourant` (computed : `ThemeInfo` du thème actif, quelle que soit sa source) ; l'`effect` retire aussi `theme-importe` et les classes `theme-imp-*`, puis, pour un thème importé, ajoute `theme-importe` et crée ou met à jour `<style id="catalogue-theme-importe">` (CSS du **seul** thème actif, retiré au retour à un autre thème) ; `removeImportedTheme(importId)` repasse d'abord à `DEFAULT_THEME_ID` si le thème actif en est un, puis supprime (la bascule est ici et non dans `ImportedThemes`, pour éviter une dépendance circulaire).
+- **Page `/themes-importes`** (lazy, **hors registre** : route dans `app.routes.ts`, pas d'entrée de menu ; le bouton « Contraste » y est absent comme sur l'accueil) : `themes-importes.ts` (titre et introduction, relie les deux sections), `import-form.ts` (`ImportForm` : zone de glisser-déposer (libellé du champ fichier natif, masqué visuellement), analyse, rapport, nom en **Signal Form**, enregistrement ; le jeton `THEME_GENERATOR` charge le générateur par `import()` et sert aussi de point de substitution en test), `imported-themes-list.ts` (`ImportedThemesList` : liste, confirmation en ligne, suppression). Le sélecteur n'importe statiquement ni `@angular/forms`, ni `fflate`, ni le générateur.
+- **`injectIsDesignSystem()`** (`core/tokens/theme-key.ts`) est vrai aussi pour un thème importé (les jetons `--app-*` y existent) : les pages Fondations montrent alors leurs sections réservées au design system.
+- **Lecture de `scripts/themes/` depuis `src/`** : `import('../../../../scripts/themes/navigateur.mjs')` fonctionne dans `ng build` et `ng test` sans `allowJs`, grâce au fichier de types `navigateur.d.mts` voisin (écrit à la main). Le générateur et `fflate` forment un chunk différé distinct, ni dans le bundle initial ni dans le chunk de la page.
 
 ## Composants partagés (`shared/`)
 
@@ -161,4 +196,4 @@ Les quatre pages montrent des valeurs de jetons **lues dans le CSS réellement c
 | Bundle initial | **880 kB** | 1 MB |
 | Style d'un composant | **5 kB** | 8 kB |
 
-Le bundle initial pèse environ 871 kB (≈ 168 kB transférés ; 869,84 kB avant les pages Fondations). `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse environ 879 kB (878,83 kB, ≈ 170 kB transférés ; 871,95 kB avant les thèmes importés, 869,84 kB avant les pages Fondations) : **marge d'environ 1 kB** sous l'avertissement. `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.

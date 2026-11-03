@@ -20,7 +20,7 @@ Catalogue visuel des composants **Angular Material 22**, destiné aux designers 
 
 | Fichier | Contenu | À lire quand… |
 |---|---|---|
-| [generation-themes.md](generation-themes.md) | Script `npm run themes` : tokens (dossier ou zip) → variables CSS MD3 + custom et thème Angular Material ; options, fichiers produits, correspondance, choix | on régénère les thèmes, on change de source de tokens ou on branche les fichiers générés |
+| [generation-themes.md](generation-themes.md) | Script `npm run themes` : tokens (dossier ou zip) → variables CSS MD3 + custom et thème Angular Material ; options, fichiers produits, correspondance, choix ; import d'un zip dans le navigateur (mêmes modules) | on régénère les thèmes, on change de source de tokens, on branche les fichiers générés ou on touche à l'import dans le navigateur |
 
 Analyses de référence à la racine du dépôt (lecture seule) : `TOKENS-MD3.md` et `TOKENS-NON-APPLICABLES-MD3.md`.
 
@@ -34,6 +34,7 @@ Analyses de référence à la racine du dépôt (lecture seule) : `TOKENS-MD3.md
 - Police **Poppins**, icônes **Material Symbols Outlined** (les deux via Google Fonts).
 - Un **inspecteur de contraste** (bouton de la barre d'outils) affiche le rapport de contraste de chaque texte et signale ceux qui sont sous WCAG AA.
 - Les thèmes du design system sont **générés** par `npm run themes` dans `src/styles/themes-app/`  et branchés au sélecteur de thème du catalogue.
+- Un designer peut **importer un zip de tokens dans le navigateur** (page `/themes-importes`, stockage local) et voir ses propres tokens dans tout le catalogue : voir [fonctionnel.md](fonctionnel.md#thèmes-importés).
 
 ## Commandes
 
@@ -45,7 +46,7 @@ npm test             # ng test (Vitest) ; ajouter -- --watch=false pour un seul 
 npm run a11y -- --console   # erreurs console sur toutes les pages (rapide) ; sans --console : + audit axe-core, long, ciblé ou à la demande
 npm run captures     # captures pleine page par thème et mode (dossier captures/)
 npm run themes       # génère les thèmes depuis tokens/ (ou --source design.zip --nom <nom>)
-node --test scripts/themes/   # tests du script de génération
+node --test scripts/themes/*.test.mjs   # tests du script de génération
 ```
 
 Avant tout commit : `ng build`, `ng lint` et `ng test --watch=false` doivent passer.

@@ -62,12 +62,16 @@ html {
 
 // Thèmes du design system, générés depuis les tokens (npm run themes) : les variables
 // --md-sys-* viennent de styles/themes-app/index.css (chargé par angular.json) et changent selon
-// la famille de contraste. Le mixin ne référence que ces variables : un seul bloc par classe posée
-// par ThemeService ; la liste des classes ($classes) suit les familles générées.
+// la famille de contraste. Le mixin ne référence que ces variables : un seul bloc pour toutes les
+// classes posées par ThemeService ; la liste des classes ($classes) suit les familles générées.
+// `theme-importe` : marqueur des thèmes importés dans le navigateur (page « Thèmes importés ») ; leurs
+// variables --md-sys-* viennent d'un <style> injecté (jeu de tokens quelconque), le pont est le même.
+$selecteurs-themes-app: 'html.theme-importe';
 @each $classe in themes-app.$classes {
-  html.#{$classe} {
-    @include themes-app.theme();
-  }
+  $selecteurs-themes-app: '#{$selecteurs-themes-app}, html.#{$classe}';
+}
+#{$selecteurs-themes-app} {
+  @include themes-app.theme();
 }
 
 @for $i from 0 through 4 {

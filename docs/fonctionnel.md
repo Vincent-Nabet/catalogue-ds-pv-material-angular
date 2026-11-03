@@ -11,7 +11,7 @@ Public : designers, intégrateurs, développeurs front. Langue de l'interface : 
 1. **Accueil** (`/`) : bandeau de présentation (compteurs : 35 composants, 7 catégories, thèmes) puis une carte par catégorie listant ses pages (« 3 pages » pour Fondations, « N composants » ailleurs).
 2. **Navigation latérale** : toujours visible sur ordinateur (`side`), tiroir sur mobile (`over`, ouvert par le bouton menu). Composants groupés par catégorie, lien actif mis en évidence (`aria-current="page"`).
 3. **Page de composant** (`/composants/<id>`) : un `<h1>` puis des sections de specimens.
-4. **Sélecteur de thème** (bouton « Thème : Azur » en haut à droite) : thème, mode, densité.
+4. **Sélecteur de thème** (bouton « Thème : Azur » en haut à droite) : thème, mode, densité. Il mène aussi à la page « Thèmes importés » (`/themes-importes`) pour importer ses propres tokens.
 5. **Inspecteur de contraste** (bouton « Contraste » à gauche du sélecteur de thème, présent sur les pages de composants et de Fondations) : affiche sur chaque texte du contenu de la page son rapport de contraste et signale ceux qui sont sous WCAG AA. Voir [inspecteur-contraste.md](inspecteur-contraste.md).
 6. **Code** : sur chaque specimen, un bouton icône `</>` (discret, opacité 0,4, plein au survol et au focus) ouvre une boîte de dialogue avec le code, un bouton « Copier » (suivi d'une snackbar « Code copié ») et « Fermer ».
 
@@ -19,11 +19,37 @@ Public : designers, intégrateurs, développeurs front. Langue de l'interface : 
 
 | Réglage | Valeurs | Défaut |
 |---|---|---|
-| Thème | Deux sous-menus : **Design system** (Standard, Contraste moyen, Contraste élevé, Monochrome) et **Thèmes Angular Material** (Azur, Violet, Rose, Vert, Orange, Cyan) ; pastille de couleur + coche sur l'actif | Design system, contraste moyen |
+| Thème | Trois sous-menus : **Design system** (Standard, Contraste moyen, Contraste élevé, Monochrome), **Thèmes Angular Material** (Azur, Violet, Rose, Vert, Orange, Cyan) et **Thèmes importés** (voir plus bas) ; pastille de couleur + coche sur l'actif | Design system, contraste moyen |
 | Mode | Clair, Sombre, Système | **Clair** |
 | Densité | 0 (par défaut), −1, −2, −3, −4 | 0 |
 
 Les préférences sont conservées dans `localStorage` (clé `catalogue-material-theme`). Le bouton affiche le thème courant (« Thème : Violet », « Thème : Design system, contraste moyen »). Sous 600 px, seul l'icône et la pastille restent visibles (le libellé reste lu par les lecteurs d'écran).
+
+## Thèmes importés
+
+Un designer peut voir **ses propres tokens** dans tout le catalogue, sans développeur : il importe un zip de tokens dans le navigateur, lui donne un nom, puis l'utilise comme n'importe quel thème (composants, pages Fondations, inspecteur de contraste). Page dédiée : `/themes-importes` (titre « Thèmes importés — Catalogue Material »), atteinte par **« Importer et gérer les thèmes… »** en bas de la section « Thèmes importés » du sélecteur ; pas d'entrée dans le menu latéral.
+
+Vocabulaire : un **thème importé** = un zip = un nom choisi par l'utilisateur ; une **famille** = une famille de contraste à l'intérieur d'un thème importé (« Standard », « Contraste moyen »…), déduite des noms des fichiers `semantics/*.tokens.json` comme pour `npm run themes` (leur nombre dépend du zip, une suffit).
+
+### Dans le sélecteur
+
+Troisième entrée du groupe « Thème », après « Design system » et « Thèmes Angular Material » :
+
+- un élément par thème importé : sous-menu des familles (une entrée `menuitemradio` par famille, pastille + coche) s'il en a plusieurs, élément direct sinon ;
+- « Aucun thème importé » (désactivé) quand la liste est vide ;
+- « Importer et gérer les thèmes… » (toujours actif) vers `/themes-importes`.
+
+Le bouton principal affiche « Thème : <nom> » (« <nom>, contraste moyen » pour une famille autre que la défaut) ; le nom est tronqué par des points de suspension si besoin. Un thème importé actif est mémorisé comme les autres préférences ; s'il a été supprimé entre-temps, on retombe sur le thème par défaut.
+
+### Parcours sur la page
+
+1. **Choisir le zip** : le glisser-déposer sur la zone en pointillés, ou un clic sur cette zone (ouvre le sélecteur de fichiers ; un seul fichier à la fois, 5 Mo au plus). Le contrôle reste un vrai champ fichier natif, masqué visuellement : au clavier, `Tab` le focalise (contour visible sur la zone) et les lecteurs d'écran l'annoncent par le libellé de la zone. Archive contenant `primitives.tokens.json` et `semantics/*.tokens.json`, au moins une paire clair/sombre, comme pour `npm run themes`. L'analyse démarre au choix du fichier (« Analyse en cours… »).
+2. **Lire le rapport** : « 8 modes lus · 4 familles : Standard, Contraste moyen, Contraste élevé, Monochrome · 142 variables MD3 · 41 variables du design system », pastilles des familles, avertissements (tokens non reconnus, modes ignorés, jetons `--app-*` absents) et police des tokens (« Le catalogue ne charge que Poppins : une autre police ne s'affichera que si elle est installée sur la machine »). En cas d'échec, un message français (`role="alert"`) explique pourquoi ; rien n'est enregistré.
+3. **Nommer** : champ prérempli avec le nom du zip, requis, 40 caractères au plus, unique parmi les thèmes importés (sans tenir compte de la casse ni des espaces de bord).
+4. **Importer** : le thème est enregistré (20 thèmes au plus), **sa famille par défaut est appliquée** (la « Standard » s'il y en a une), le formulaire se vide pour enchaîner un autre zip, « Thème « X » importé et appliqué. » est annoncé et le focus va sur le titre du thème dans la liste. Si le stockage refuse (plein, indisponible, limite atteinte), un message l'explique et le formulaire reste tel quel.
+5. **Gérer** : la liste « Thèmes importés (N) » montre pour chaque thème son nom, sa date d'import et le nom du zip, ses familles (la famille active est signalée par du texte) et ses avertissements (`<details>`). « Supprimer » demande une **confirmation en ligne** (« Supprimer « X » ? », focus sur « Annuler ») ; supprimer le thème actif ramène au thème par défaut (annoncé). Pas de renommage, d'export ni de mise à jour : réimporter un zip.
+
+Aucune boîte de dialogue ni snackbar : confirmations et annonces sont en ligne, dans des régions `aria-live`. Détail technique : [architecture.md](architecture.md) et [generation-themes.md](generation-themes.md#import-dans-le-navigateur) ; limites : [decisions-et-limites.md](decisions-et-limites.md#thèmes-importés-dans-le-navigateur).
 
 ## Anatomie d'une page de composant
 

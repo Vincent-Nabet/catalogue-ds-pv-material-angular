@@ -2,7 +2,7 @@ import { FAMILLES_DESIGN_SYSTEM } from '../../../styles/themes-app/familles';
 
 /** Identifiant de thème : familles du design system (générées, cf. `npm run themes`) ou thème Angular Material. */
 export type ThemeId = string;
-export type ThemeGroupId = 'design-system' | 'angular-material';
+export type ThemeGroupId = 'design-system' | 'angular-material' | 'imported';
 export type Scheme = 'light' | 'dark' | 'system';
 export type Density = 0 | 1 | 2 | 3 | 4;
 
@@ -29,6 +29,17 @@ export const THEME_GROUPS: readonly { id: ThemeGroupId; label: string }[] = [
   { id: 'design-system', label: 'Design system' },
   { id: 'angular-material', label: 'Thèmes Angular Material' },
 ];
+
+const IMPORTED_THEME_ID = /^imp-([a-z0-9]{6})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
+
+/**
+ * Décompose l'identifiant d'un thème importé (`imp-<6 caractères>-<famille>`, cf. `ImportedThemes`) en
+ * identifiant d'import (`imp-<6 caractères>`) et identifiant de famille ; `null` pour tout autre identifiant.
+ */
+export function parseImportedThemeId(id: ThemeId): { importId: string; family: string } | null {
+  const match = IMPORTED_THEME_ID.exec(id);
+  return match ? { importId: `imp-${match[1]}`, family: match[2] } : null;
+}
 
 /** Thèmes du design system : une entrée par famille générée (la famille par défaut d'abord). */
 const DESIGN_SYSTEM_THEMES: readonly ThemeInfo[] = FAMILLES_DESIGN_SYSTEM.map((famille) => ({
