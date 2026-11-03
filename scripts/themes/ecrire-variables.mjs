@@ -7,8 +7,14 @@ import { classer, OPACITES_ETAT, variableOpacite } from './correspondance.mjs';
 import { detecterFamilles } from './familles.mjs';
 import { resoudreMode } from './resoudre-tokens.mjs';
 
-/** Sélecteur CSS d'une famille (cf. `detecterFamilles`) : la famille par défaut est aussi appliquée sur `:root`. */
-export function selecteurFamille(famille, nom) {
+/**
+ * Sélecteur CSS d'une famille (cf. `detecterFamilles`) : la famille par défaut est aussi appliquée sur `:root`.
+ * Avec `portee = { base }` (thème injecté dans la page, cf. `navigateur.mjs`) : `html.theme-<base>-<famille>`
+ * (`standard` pour la famille sans suffixe), jamais `:root` ; `html` donne la spécificité 0,1,1 qui l'emporte
+ * sur le `:root` des feuilles statiques.
+ */
+export function selecteurFamille(famille, nom, portee) {
+  if (portee) return `html.theme-${portee.base}-${famille.suffixe || 'standard'}`;
   const classe = famille.suffixe ? `.theme-${nom}-${famille.suffixe}` : `.theme-${nom}`;
   return famille.defaut ? `:root, ${classe}` : classe;
 }
@@ -52,10 +58,14 @@ const section = (titre, ...blocs) => `/* ${titre} */\n${blocs.join('\n')}`;
 /**
  * Génère les fichiers CSS de l'étape 1.
  * `source` : `{ primitives, semantiques }` (cf. `lireSource`).
+ * `portee` (optionnel) : `{ base }` ; chaque famille est alors écrite sous son propre sélecteur `html.theme-<base>-<famille>`,
+ * et les blocs communs à tous les modes (formes, typographie, `--md-ref-*`, jetons hors couleur) sous la liste de ces
+ * sélecteurs, à la place de `:root`. Sans `portee`, la sortie est inchangée.
  * Retourne `{ fichiers: Map chemin → corps, variables: Set, rapport }`.
  */
-export function genererVariables(source, { nom, palettes = false }) {
+export function genererVariables(source, { nom, palettes = false, portee }) {
   const { familles, ignores: modesIgnores } = detecterFamilles(Object.keys(source.semantiques));
+  const racine = portee ? familles.map((f) => selecteurFamille(f, nom, portee)).join(', ') : ':root';
   const attendus = new Set(familles.flatMap((f) => [f.clair, f.sombre]));
 
   const parMode = new Map();
@@ -81,7 +91,7 @@ export function genererVariables(source, { nom, palettes = false }) {
   };
   const blocsCouleurs = (fichier) =>
     familles.map((famille) =>
-      section(`${famille.libelle} (${famille.clair} / ${famille.sombre})`, bloc(selecteurFamille(famille, nom), couleurs(famille, fichier))),
+      section(`${famille.libelle} (${famille.clair} / ${famille.sombre})`, bloc(selecteurFamille(famille, nom, portee), couleurs(famille, fichier))),
     ).join('\n');
   const declarations = (fichier, filtre = () => true) =>
     nonCouleurs.filter((j) => j.fichier === fichier && filtre(j)).map((j) => [j.variable, j.valeur]);
@@ -93,15 +103,15 @@ export function genererVariables(source, { nom, palettes = false }) {
 
   const fichiers = new Map([
     ['index.css', ['md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', `${nom}.css`].map((f) => `@import '${f}';\n`).join('')],
-    ['md3/ref.css', bloc(':root', reference.jetons.filter((j) => j.fichier === 'md3/ref').map((j) => [j.variable, j.valeur]))],
+    ['md3/ref.css', bloc(racine, reference.jetons.filter((j) => j.fichier === 'md3/ref').map((j) => [j.variable, j.valeur]))],
     ['md3/sys.css', [
-      section('Formes', bloc(':root', formes)),
-      section('Typographie', bloc(':root', typescale)),
-      section("Opacités d'état (valeurs MD3 : les tokens n'en fournissent pas)", bloc(':root', etats)),
+      section('Formes', bloc(racine, formes)),
+      section('Typographie', bloc(racine, typescale)),
+      section("Opacités d'état (valeurs MD3 : les tokens n'en fournissent pas)", bloc(racine, etats)),
     ].join('\n')],
     ['md3/couleurs.css', blocsCouleurs('md3/couleurs')],
     [`${nom}.css`, [
-      section('Variables hors MD3 identiques dans tous les modes', bloc(':root', declarations('app'))),
+      section('Variables hors MD3 identiques dans tous les modes', bloc(racine, declarations('app'))),
       blocsCouleurs('app'),
     ].join('\n')],
   ]);
