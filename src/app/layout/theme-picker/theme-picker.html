@@ -1,7 +1,9 @@
 <button matButton="tonal" [matMenuTriggerFor]="menu">
   <mat-icon>palette</mat-icon>
   <span class="apercu" [style.background-color]="courant().color"></span>
-  <span class="libelle">Thème : {{ courant().label }}</span>
+  <span class="libelle"
+    >Thème : <span class="nom">{{ courant().label }}</span></span
+  >
 </button>
 
 <mat-menu #menu="matMenu" class="menu-theme">
@@ -37,6 +39,69 @@
         </div>
       </mat-menu>
     }
+    <button mat-menu-item [matMenuTriggerFor]="menuImportes">
+      <span class="ligne">
+        <span>Thèmes importés</span>
+        @if (courant().group === 'imported') {
+          <span class="pastille" [style.background-color]="courant().color"></span>
+        }
+      </span>
+    </button>
+    <mat-menu #menuImportes="matMenu" class="menu-theme">
+      <div role="group" aria-label="Thèmes importés">
+        @for (theme of importes(); track theme.id) {
+          @if (theme.families.length === 1) {
+            <button
+              mat-menu-item
+              role="menuitemradio"
+              [attr.aria-checked]="service.theme() === theme.families[0].themeId"
+              (click)="service.theme.set(theme.families[0].themeId)"
+            >
+              <span class="ligne">
+                <span class="pastille" [style.background-color]="theme.families[0].apercu"></span>
+                <span class="nom-theme">{{ theme.name }}</span>
+                @if (service.theme() === theme.families[0].themeId) {
+                  <mat-icon class="coche">check</mat-icon>
+                }
+              </span>
+            </button>
+          } @else {
+            <button mat-menu-item [matMenuTriggerFor]="menuFamilles">
+              <span class="ligne">
+                <span class="nom-theme">{{ theme.name }}</span>
+                @if (courant().id.startsWith(theme.id + '-')) {
+                  <span class="pastille" [style.background-color]="courant().color"></span>
+                }
+              </span>
+            </button>
+            <mat-menu #menuFamilles="matMenu" class="menu-theme">
+              <div role="group" [attr.aria-label]="theme.name">
+                @for (famille of theme.families; track famille.id) {
+                  <button
+                    mat-menu-item
+                    role="menuitemradio"
+                    [attr.aria-checked]="service.theme() === famille.themeId"
+                    (click)="service.theme.set(famille.themeId)"
+                  >
+                    <span class="ligne">
+                      <span class="pastille" [style.background-color]="famille.apercu"></span>
+                      <span>{{ famille.libelle }}</span>
+                      @if (service.theme() === famille.themeId) {
+                        <mat-icon class="coche">check</mat-icon>
+                      }
+                    </span>
+                  </button>
+                }
+              </div>
+            </mat-menu>
+          }
+        } @empty {
+          <button mat-menu-item disabled>Aucun thème importé</button>
+        }
+      </div>
+      <mat-divider />
+      <a mat-menu-item routerLink="/themes-importes">Importer et gérer les thèmes…</a>
+    </mat-menu>
   </div>
   <mat-divider />
   <div role="group" aria-labelledby="picker-mode">

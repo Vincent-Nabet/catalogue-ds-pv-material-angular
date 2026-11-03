@@ -29,6 +29,21 @@
   margin-inline-start: auto;
 }
 
+.nom {
+  display: inline-block;
+  max-width: 32ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.nom-theme {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .apercu {
   vertical-align: middle;
   display: inline-block;
