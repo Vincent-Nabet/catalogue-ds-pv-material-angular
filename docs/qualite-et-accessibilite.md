@@ -13,7 +13,7 @@
 - Les templates inline sont linted (`processInlineTemplates`).
 - Commande : `ng lint` (fichiers `src/**/*.ts` et `src/**/*.html`).
 
-## Tests (151, Vitest)
+## Tests (158, Vitest)
 
 | Fichier | Vérifie |
 |---|---|
@@ -35,7 +35,7 @@
 | `core/theme/theme.service.imported.spec.ts` (13) | thème importé actif (classes, `<style>` et son CSS), retour à un autre thème, passage d'un import à un autre, persistance, identifiant inconnu au chargement → défaut, `removeImportedTheme` (thème actif, autre thème, thème non importé), `themeCourant` pour les trois sources, `injectIsDesignSystem` |
 | `layout/theme-picker/theme-picker.spec.ts` (4) | section « Thèmes importés » : entrée désactivée et lien de gestion quand la liste est vide, import à une famille (élément direct), import à plusieurs familles (sous-menu), nom affiché en texte brut |
 | `pages/themes-importes/imported-themes-list.spec.ts` (11) | liste, état vide, famille active signalée par du texte, avertissements, nom en texte brut, confirmation en ligne (focus sur « Annuler »), annulation, suppression et focus de la ligne suivante, liste vidée, annonce du retour au thème par défaut |
-| `pages/themes-importes/import-form.spec.ts` (17) | générateur remplacé par un double (`THEME_GENERATOR`) : champ fichier, rapport, nom prérempli, échec du générateur, zip de plus de 5 Mo, validation du nom (requis, espaces seuls, 40 caractères, unicité sans casse), import (enregistrement, famille par défaut appliquée, formulaire vidé, enchaînement de deux imports), messages d'échec de `add` (quota, stockage, limite) ; l'analyse réelle d'un zip est couverte par `node --test` et par la vérification dans Chrome (jsdom n'est pas le bon outil) |
+| `pages/themes-importes/import-form.spec.ts` (24) | zone de glisser-déposer (libellé du champ natif, survol, dépôt d'un zip analysé comme un choix, plusieurs fichiers refusés, fichier non zip, nom du fichier choisi) ; générateur remplacé par un double (`THEME_GENERATOR`) : champ fichier, rapport, nom prérempli, échec du générateur, zip de plus de 5 Mo, validation du nom (requis, espaces seuls, 40 caractères, unicité sans casse), import (enregistrement, famille par défaut appliquée, formulaire vidé, enchaînement de deux imports), messages d'échec de `add` (quota, stockage, limite) ; l'analyse réelle d'un zip est couverte par `node --test` et par la vérification dans Chrome (jsdom n'est pas le bon outil) |
 
 ### Tests du script de génération des thèmes (`node:test`)
 

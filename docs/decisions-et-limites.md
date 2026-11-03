@@ -144,6 +144,7 @@ Détail : [fonctionnel.md](fonctionnel.md#thèmes-importés), [architecture.md](
 | Pont vers Material | Le mixin déjà compilé `themes-app.theme()`, déclenché par la classe `theme-importe` | Il ne référence que des `var(--md-sys-*)` : pas de Sass dans le navigateur |
 | Identité | Identifiant technique généré (`imp-xxxxxx`) ; **le nom saisi est un libellé** | Pas d'injection par le nom, pas de collision |
 | Sécurité du CSS | `validerCss` : contrôle ligne à ligne avant toute injection | Les valeurs viennent de l'utilisateur et ne sont pas échappées par le générateur |
+| Choix du fichier | Zone de glisser-déposer **dont le `<label>` est celle du champ `<input type="file">` natif** (masqué visuellement, pas `display: none`) ; un seul fichier déposé à la fois | Zone plus lisible que le bouton natif, sans perdre le clavier ni les lecteurs d'écran (le plan initial écartait le glisser-déposer pour cette raison) ; le dépôt et le choix passent par la même analyse |
 | Gestion | Import et suppression seulement (20 thèmes au plus) | Demande exprimée ; renommer, exporter ou mettre à jour sont des ajouts triviaux plus tard |
 | Famille appliquée après import | La famille par défaut du zip (la « Standard » s'il y en a une) | Simple et prévisible |
 | Identifiant de l'import | Tiré **à la sélection du fichier** (et non au clic sur « Importer ») | Il entre dans les sélecteurs du CSS, produit à l'analyse ; il est vérifié contre la liste à ce moment |

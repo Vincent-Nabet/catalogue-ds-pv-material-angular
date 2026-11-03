@@ -11,6 +11,7 @@ import {
 import { form, FormField, maxLength, required, validate } from '@angular/forms/signals';
 import { MatButton } from '@angular/material/button';
 import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import type { ThemeGenere } from '../../../../scripts/themes/navigateur.mjs';
 import {
@@ -62,21 +63,39 @@ function nomPropose(nomSource: string): string {
 /** Section « Importer un thème » : choix du zip, analyse, rapport, nom, enregistrement. */
 @Component({
   selector: 'app-import-form',
-  imports: [FormField, MatButton, MatError, MatFormField, MatHint, MatInput, MatLabel],
+  imports: [FormField, MatButton, MatError, MatFormField, MatHint, MatIcon, MatInput, MatLabel],
   template: `
     <section aria-labelledby="import-titre">
       <h2 id="import-titre">Importer un thème</h2>
 
       <div class="fichier">
-        <label for="import-fichier">Archive de tokens (.zip)</label>
+        <!-- Le champ natif reste le contrôle (clavier, lecteurs d'écran) : masqué visuellement, la zone en est le libellé. -->
         <input
           #fichier
           id="import-fichier"
+          class="champ"
           type="file"
           accept=".zip"
           aria-describedby="import-aide"
           (change)="choisir($event)"
         />
+        <label
+          for="import-fichier"
+          class="zone"
+          [class.survol]="survol()"
+          (dragenter)="survoler($event)"
+          (dragover)="survoler($event)"
+          (dragleave)="quitter($event)"
+          (drop)="deposer($event)"
+        >
+          <mat-icon aria-hidden="true">upload_file</mat-icon>
+          <span class="consigne">
+            Glissez-déposez l'archive de tokens (.zip) ici, ou cliquez pour la choisir
+          </span>
+          @if (nomFichier()) {
+            <span class="choisi">Fichier choisi : {{ nomFichier() }}</span>
+          }
+        </label>
         <p id="import-aide" class="aide">
           Archive contenant <code>primitives.tokens.json</code> et
           <code>semantics/*.tokens.json</code> (au moins un mode clair et un mode sombre), comme
@@ -157,8 +176,49 @@ function nomPropose(nomSource: string): string {
       max-width: 80ch;
     }
 
-    label {
+    .champ {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .zone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 24px 16px;
+      border: 2px dashed var(--mat-sys-outline);
+      border-radius: var(--mat-sys-corner-medium);
+      background: var(--mat-sys-surface);
+      color: var(--mat-sys-on-surface);
       font: var(--mat-sys-label-large);
+      text-align: center;
+      cursor: pointer;
+      overflow-wrap: anywhere;
+    }
+
+    .zone mat-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 40px;
+    }
+
+    .zone.survol {
+      border-style: solid;
+      background: var(--mat-sys-secondary-container);
+      color: var(--mat-sys-on-secondary-container);
+    }
+
+    .champ:focus-visible + .zone {
+      outline: 3px solid var(--mat-sys-primary);
+      outline-offset: 2px;
+    }
+
+    .choisi {
+      font: var(--mat-sys-body-medium);
     }
 
     .aide,
@@ -246,6 +306,9 @@ export class ImportForm {
   protected readonly erreurAjout = signal('');
   protected readonly analyse = signal<Analyse | null>(null);
   protected readonly enCours = signal(false);
+  /** Un fichier est survolé au-dessus de la zone de dépôt. */
+  protected readonly survol = signal(false);
+  protected readonly nomFichier = signal('');
   /** Numéro de la dernière analyse demandée : écarte les résultats devenus périmés. */
   private derniere = 0;
 
@@ -288,11 +351,43 @@ export class ImportForm {
     this.champFichier().nativeElement.focus();
   }
 
-  protected async choisir(evenement: Event): Promise<void> {
-    const fichier = (evenement.target as HTMLInputElement).files?.[0];
+  protected choisir(evenement: Event): Promise<void> {
+    return this.analyser((evenement.target as HTMLInputElement).files?.[0]);
+  }
+
+  protected survoler(evenement: DragEvent): void {
+    evenement.preventDefault();
+    if (evenement.dataTransfer) evenement.dataTransfer.dropEffect = 'copy';
+    this.survol.set(true);
+  }
+
+  protected quitter(evenement: DragEvent): void {
+    if (!(evenement.currentTarget as Node).contains(evenement.relatedTarget as Node | null)) {
+      this.survol.set(false);
+    }
+  }
+
+  /** Dépôt d'un fichier sur la zone : même analyse que le choix par le champ natif. */
+  protected async deposer(evenement: DragEvent): Promise<void> {
+    evenement.preventDefault();
+    this.survol.set(false);
+    const fichiers = evenement.dataTransfer?.files;
+    if (!fichiers?.length) return;
+    this.champFichier().nativeElement.value = '';
+    if (fichiers.length > 1) {
+      this.derniere++;
+      this.reinitialiser();
+      this.erreur.set('Déposez un seul fichier à la fois.');
+      return;
+    }
+    await this.analyser(fichiers[0]);
+  }
+
+  private async analyser(fichier: File | undefined): Promise<void> {
     const numero = ++this.derniere;
     this.reinitialiser();
     if (!fichier) return;
+    this.nomFichier.set(fichier.name);
     if (fichier.size > TAILLE_MAX_ZIP) {
       this.erreur.set(`« ${fichier.name} » dépasse 5 Mo : archive refusée.`);
       return;
@@ -352,6 +447,7 @@ export class ImportForm {
     this.erreur.set('');
     this.erreurAjout.set('');
     this.annonce.set('');
+    this.nomFichier.set('');
     this.modele.set({ nom: '' });
     this.formulaire().reset();
   }

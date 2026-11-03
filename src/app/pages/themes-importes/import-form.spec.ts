@@ -294,6 +294,93 @@ describe('ImportForm', () => {
     });
   });
 
+  describe('drop zone', () => {
+    const zone = () => q<HTMLElement>('label.zone')!;
+    /** Événement de glisser-déposer (jsdom n'a pas `DragEvent`) portant les fichiers donnés. */
+    const dragEvent = (
+      type: string,
+      files: File[] = [],
+      relatedTarget: EventTarget | null = null,
+    ) => {
+      const event = new Event(type, { bubbles: true, cancelable: true });
+      Object.defineProperty(event, 'dataTransfer', { value: { files, dropEffect: 'none' } });
+      Object.defineProperty(event, 'relatedTarget', { value: relatedTarget });
+      zone().dispatchEvent(event);
+      return event;
+    };
+
+    it('should be the label of the native file field, which stays in the DOM', async () => {
+      await settle();
+      expect(zone().getAttribute('for')).toBe('import-fichier');
+      expect(q('#import-fichier')?.getAttribute('type')).toBe('file');
+      expect(zone().textContent).toContain('Glissez-déposez');
+    });
+
+    it('should highlight while a file is dragged over it and accept the drop', async () => {
+      await settle();
+      const over = dragEvent('dragover');
+      fixture.detectChanges();
+      expect(over.defaultPrevented).toBe(true);
+      expect(zone().classList).toContain('survol');
+
+      dragEvent('dragleave');
+      fixture.detectChanges();
+      expect(zone().classList).not.toContain('survol');
+    });
+
+    it('should stay highlighted when the pointer moves onto a child of the zone', async () => {
+      await settle();
+      dragEvent('dragenter');
+      dragEvent('dragleave', [], zone().querySelector('span'));
+      fixture.detectChanges();
+      expect(zone().classList).toContain('survol');
+    });
+
+    it('should analyse a dropped zip like a chosen one', async () => {
+      await settle();
+      dragEvent('drop', [new File([new Uint8Array([1, 2, 3])], 'depose.zip')]);
+      await new Promise((resolve) => setTimeout(resolve));
+      await settle();
+
+      expect(generer).toHaveBeenCalledOnce();
+      expect(generer.mock.calls[0][1]).toMatchObject({ nomSource: 'depose.zip' });
+      expect(nameInput()?.value).toBe('depose');
+      expect(zone().textContent).toContain('Fichier choisi : depose.zip');
+      expect(zone().classList).not.toContain('survol');
+    });
+
+    it('should refuse several dropped files', async () => {
+      await settle();
+      dragEvent('drop', [new File([], 'a.zip'), new File([], 'b.zip')]);
+      await settle();
+
+      expect(alerts()).toEqual(['Déposez un seul fichier à la fois.']);
+      expect(generer).not.toHaveBeenCalled();
+      expect(importButton().disabled).toBe(true);
+    });
+
+    it('should show the generator error for a dropped file that is not a zip', async () => {
+      generer.mockImplementation(() => {
+        throw new Error('Archive illisible : « notes.txt » (invalid zip data).');
+      });
+      await settle();
+      dragEvent('drop', [new File(['texte'], 'notes.txt')]);
+      await new Promise((resolve) => setTimeout(resolve));
+      await settle();
+
+      expect(alerts()).toEqual(['Archive illisible : « notes.txt » (invalid zip data).']);
+    });
+
+    it('should forget the chosen file name once the theme is imported', async () => {
+      await choose('un.zip');
+      expect(zone().textContent).toContain('Fichier choisi : un.zip');
+      await type('Premier');
+      importButton().click();
+      await settle();
+      expect(zone().textContent).not.toContain('Fichier choisi');
+    });
+  });
+
   it('should give the focus to the file field on request', async () => {
     await settle();
     fixture.componentInstance.focusFichier();
