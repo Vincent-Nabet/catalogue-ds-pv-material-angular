@@ -5,6 +5,7 @@ import { MatRipple } from '@angular/material/core';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatButton } from '@angular/material/button';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   defaut: `<div matRipple class="zone">Cliquer ici</div>`,
@@ -56,9 +57,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-ripple-page',
-  imports: [MatRipple, Specimen, SpecimenSection, MatButton, ColorFamilyScope],
+  imports: [ComposantRef, MatRipple, Specimen, SpecimenSection, MatButton, ColorFamilyScope],
   template: `
     <h1>Ripple</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Effet d’ondulation" description="Cliquer dans les zones pour déclencher l’effet.">
       <app-specimen label="Par défaut" api="matRipple" [snippet]="snippets.defaut">

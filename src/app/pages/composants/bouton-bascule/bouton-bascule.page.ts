@@ -5,6 +5,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-button-toggle-group aria-label="Alignement" value="gauche">
@@ -131,9 +132,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-bouton-bascule-page',
-  imports: [MatButtonToggleGroup, MatButtonToggle, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatButtonToggleGroup, MatButtonToggle, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Bouton bascule</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="300px" title="Sélection">
       <app-specimen label="Choix unique" api="mat-button-toggle-group" [snippet]="snippets.simple">

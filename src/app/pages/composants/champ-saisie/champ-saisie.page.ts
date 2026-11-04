@@ -9,6 +9,7 @@ import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatIconButton } from '@angular/material/button';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 /** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
 function customSnippet(id: string): string {
@@ -236,6 +237,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-champ-saisie-page',
   imports: [
+    ComposantRef,
     ReactiveFormsModule,
     MatFormField,
     MatLabel,
@@ -253,6 +255,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Champ de saisie</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="340px" title="Apparences">
       <app-specimen label="Rempli" api='appearance="fill"' [snippet]="snippets.rempli">

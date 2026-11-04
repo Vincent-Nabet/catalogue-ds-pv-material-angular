@@ -3,6 +3,7 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpan
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatButton } from '@angular/material/button';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-expansion-panel>
@@ -143,6 +144,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-panneau-extensible-page',
   imports: [
+    ComposantRef,
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelDescription,
@@ -156,6 +158,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Panneau extensible</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="420px" title="Panneaux">
       <app-specimen label="Simple" api="mat-expansion-panel" [snippet]="snippets.simple">

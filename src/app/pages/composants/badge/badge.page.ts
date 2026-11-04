@@ -6,6 +6,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   tailles: `<mat-icon matBadge="4" matBadgeSize="small" aria-hidden="false" aria-label="4 notifications">mail</mat-icon>
@@ -83,9 +84,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-badge-page',
-  imports: [MatBadge, MatButton, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatBadge, MatButton, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Badge</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Tailles et formes">
       <app-specimen label="Tailles" api="matBadgeSize" [snippet]="snippets.tailles">

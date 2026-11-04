@@ -17,6 +17,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 /** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
 function customSnippet(id: string): string {
@@ -169,6 +170,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-chips-page',
   imports: [
+    ComposantRef,
     MatChip,
     MatChipAvatar,
     MatChipGrid,
@@ -188,6 +190,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Chips</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Informatifs">
       <app-specimen label="Ensemble" api="mat-chip-set" [snippet]="snippets.ensemble">

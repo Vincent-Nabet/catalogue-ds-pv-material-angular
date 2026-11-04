@@ -16,7 +16,8 @@
 },
 ```
 
-3. Vérifier : `ng build`, `ng lint`, `ng test --watch=false`. Le test du registre vérifie que chaque entrée a une route, que les `id` sont uniques et que les catégories existent.
+3. Ajouter la référence Angular Material de la page dans `src/app/core/catalog/component-refs.ts` (même `id`) : nom original (`vo`, ex. `Slide toggle`) et balise, directive ou service (`api`, ex. `<mat-slide-toggle>`). Affichés sous le `<h1>` par `<app-composant-ref />` (fichier séparé du registre pour rester hors du bundle initial).
+4. Vérifier : `ng build`, `ng lint`, `ng test --watch=false`. Le test du registre vérifie que chaque entrée a une route, que les `id` sont uniques, que les catégories existent et que chaque page de composant a sa référence.
 
 La route, l'entrée de navigation, la carte d'accueil et le titre d'onglet sont dérivés du registre : rien d'autre à modifier.
 
@@ -25,6 +26,7 @@ La route, l'entrée de navigation, la carte d'accueil et le titre d'onglet sont 
 ```ts
 import { Component } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 
@@ -35,9 +37,10 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-case-a-cocher-page',
-  imports: [MatCheckbox, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatCheckbox, Specimen, SpecimenSection],
   template: `
     <h1>Case à cocher</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="États">
       <app-specimen label="Décochée" api="mat-checkbox" [snippet]="snippets.decochee">
@@ -58,7 +61,7 @@ Règles de la maison :
 
 - Template **inline** (pages légères), pas de `standalone: true`, pas d'`OnPush` explicite.
 - Les snippets sont **écrits à la main** dans une constante `SNIPPETS` en tête de fichier (aucune génération automatique). Le snippet doit correspondre à ce qui est rendu.
-- `<h1>` = nom du composant ; sections en `<h2>` via `app-specimen-section`.
+- `<h1>` = nom du composant, suivi de `<app-composant-ref />` (nom VO + balise, lus dans `component-refs.ts` via l'URL) ; sections en `<h2>` via `app-specimen-section`. Pages Fondations : pas de référence.
 - `label` du specimen en français, `api` = l'attribut, l'input ou le jeton réellement utilisé.
 - Un specimen par variante ; regrouper les états voisins dans un même specimen (ex. tous les boutons désactivés).
 - Importer uniquement les directives/composants utilisés (pas de module global, pas de `CommonModule`).

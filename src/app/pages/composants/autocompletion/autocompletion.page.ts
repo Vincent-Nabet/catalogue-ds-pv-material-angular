@@ -5,6 +5,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-form-field>
@@ -130,6 +131,7 @@ afficher = (ville: { nom: string } | null) => ville?.nom ?? '';`,
 @Component({
   selector: 'app-autocompletion-page',
   imports: [
+    ComposantRef,
     MatAutocomplete,
     MatAutocompleteTrigger,
     MatOption,
@@ -142,6 +144,7 @@ afficher = (ville: { nom: string } | null) => ville?.nom ?? '';`,
   ],
   template: `
     <h1>Autocomplétion</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="340px" title="Suggestions" description="Cliquer dans le champ pour afficher la liste.">
       <app-specimen label="Simple" api="matAutocomplete" [snippet]="snippets.simple">

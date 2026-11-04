@@ -7,6 +7,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatIcon } from '@angular/material/icon';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 /** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
 function customSnippet(id: string): string {
@@ -146,6 +147,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-etapes-page',
   imports: [
+    ComposantRef,
     MatButton,
     MatStep,
     MatStepper,
@@ -160,6 +162,7 @@ const SNIPPETS = {
   providers: [{ provide: MatStepperIntl, useClass: StepperIntlFr }],
   template: `
     <h1>Étapes</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="420px" title="Orientations">
       <app-specimen label="Horizontal" api="mat-stepper" [snippet]="snippets.horizontal">

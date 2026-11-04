@@ -6,6 +6,7 @@ import { MatIcon } from '@angular/material/icon';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   texte: `<button matButton="text">Texte</button>`,
@@ -309,9 +310,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-bouton-page',
-  imports: [MatButton, MatIconButton, MatFabButton, MatMiniFabButton, MatIcon, Specimen, SpecimenSection, MatProgressSpinner, ColorFamilyScope],
+  imports: [ComposantRef, MatButton, MatIconButton, MatFabButton, MatMiniFabButton, MatIcon, Specimen, SpecimenSection, MatProgressSpinner, ColorFamilyScope],
   template: `
     <h1>Bouton</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Boutons" description="Cinq styles, en état normal, désactivé et avec icône.">
       <app-specimen label="Texte" api='matButton="text"' [snippet]="snippets.texte">

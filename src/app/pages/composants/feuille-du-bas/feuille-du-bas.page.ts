@@ -5,6 +5,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatListItemIcon, MatListItemTitle, MatNavList } from '@angular/material/list';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 @Component({
   selector: 'app-actions-feuille',
@@ -99,9 +100,10 @@ ouvrir() {
 
 @Component({
   selector: 'app-feuille-du-bas-page',
-  imports: [MatButton, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatButton, Specimen, SpecimenSection],
   template: `
     <h1>Feuille du bas</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Feuilles" description="Utiliser les boutons pour ouvrir chaque feuille.">
       <app-specimen label="Liste d’actions" api="MatBottomSheet.open()" [snippet]="snippets.actions">

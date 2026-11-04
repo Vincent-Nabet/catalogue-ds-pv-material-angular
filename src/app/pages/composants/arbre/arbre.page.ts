@@ -4,6 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTree, MatTreeNode, MatTreeNodeDef, MatTreeNodePadding, MatTreeNodeToggle, MatNestedTreeNode, MatTreeNodeOutlet } from '@angular/material/tree';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 interface Noeud {
   nom: string;
@@ -88,6 +89,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-arbre-page',
   imports: [
+    ComposantRef,
     MatIcon,
     MatIconButton,
     MatTree,
@@ -102,6 +104,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Arbre</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="360px" title="Hiérarchie">
       <app-specimen label="Arbre à plusieurs niveaux" api="mat-tree" [snippet]="snippets.arbre">

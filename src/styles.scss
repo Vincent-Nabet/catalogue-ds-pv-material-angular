@@ -114,6 +114,11 @@ main h1 {
   font: var(--mat-sys-headline-medium);
 }
 
+// Page de composant : la référence Material (app-composant-ref) se colle sous le <h1>
+main h1:has(+ app-composant-ref) {
+  margin-block-end: 4px;
+}
+
 // Introduction d'une page Fondations, sous le <h1>
 .page-intro {
   max-width: 80ch;

@@ -7,6 +7,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatCell, MatCellDef, MatColumnDef, MatFooterCell, MatFooterCellDef, MatFooterRow, MatFooterRowDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatTable, MatNoDataRow, MatTextColumn } from '@angular/material/table';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 interface Produit {
   reference: string;
@@ -156,6 +157,7 @@ function customSnippet(id: string): string {
 @Component({
   selector: 'app-tableau-page',
   imports: [
+    ComposantRef,
     CurrencyPipe,
     MatCell,
     MatCellDef,
@@ -180,6 +182,7 @@ function customSnippet(id: string): string {
   ],
   template: `
     <h1>Tableau</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="360px" title="Tableaux">
       <app-specimen label="Simple" api="mat-table" [snippet]="snippets.simple">

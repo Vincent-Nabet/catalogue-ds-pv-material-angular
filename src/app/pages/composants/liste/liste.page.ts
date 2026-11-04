@@ -17,6 +17,7 @@ import {
 } from '@angular/material/list';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-list>
@@ -211,6 +212,7 @@ function customSnippet(id: string): string {
 @Component({
   selector: 'app-liste-page',
   imports: [
+    ComposantRef,
     MatActionList,
     MatIcon,
     MatList,
@@ -229,6 +231,7 @@ function customSnippet(id: string): string {
   ],
   template: `
     <h1>Liste</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="360px" title="Listes simples">
       <app-specimen label="Simple" api="mat-list" [snippet]="snippets.simple">

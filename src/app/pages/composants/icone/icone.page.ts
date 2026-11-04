@@ -4,6 +4,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { MatIcon } from '@angular/material/icon';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   defaut: `<mat-icon>home</mat-icon>`,
@@ -72,9 +73,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-icone-page',
-  imports: [MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Icône</h1>
+    <app-composant-ref />
 
     <app-specimen-section
       title="Icônes"

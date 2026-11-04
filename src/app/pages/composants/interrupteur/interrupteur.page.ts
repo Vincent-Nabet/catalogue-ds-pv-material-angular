@@ -4,6 +4,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   desactive: `<mat-slide-toggle>Désactivé</mat-slide-toggle>`,
@@ -81,9 +82,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-interrupteur-page',
-  imports: [MatSlideToggle, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatSlideToggle, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Interrupteur</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="États">
       <app-specimen label="Éteint" api="mat-slide-toggle" [snippet]="snippets.desactive">

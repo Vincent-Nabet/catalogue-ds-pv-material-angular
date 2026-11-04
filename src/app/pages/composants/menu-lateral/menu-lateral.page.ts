@@ -3,6 +3,7 @@ import { MatButton } from '@angular/material/button';
 import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   debut: `<mat-sidenav-container style="height: 200px">
@@ -84,9 +85,10 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-menu-lateral-page',
-  imports: [MatButton, MatSidenavContainer, MatSidenav, MatSidenavContent, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatButton, MatSidenavContainer, MatSidenav, MatSidenavContent, Specimen, SpecimenSection],
   template: `
     <h1>Menu latéral</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="400px"
       title="Positions"

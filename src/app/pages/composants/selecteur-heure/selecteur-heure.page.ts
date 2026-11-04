@@ -7,6 +7,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-form-field>
@@ -125,6 +126,7 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
 @Component({
   selector: 'app-selecteur-heure-page',
   imports: [
+    ComposantRef,
     MatFormField,
     MatLabel,
     MatHint,
@@ -139,6 +141,7 @@ heureChoisie = new Date(2026, 9, 15, 9, 30);
   ],
   template: `
     <h1>Sélecteur d’heure</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Champs">
       <app-specimen label="Heure" api="matTimepicker" [snippet]="snippets.simple">
