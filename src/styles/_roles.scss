@@ -219,10 +219,11 @@
 // Bouton : les rôles posent des variables intermédiaires (--r-*), lues une seule fois par `button-tokens`
 // sur le groupe de classes de rôle (évite de répéter la quinzaine de jetons pour chaque rôle).
 @mixin button($role) {
-  --r-f: fg($role);
-  --r-sf: on-fg($role);
-  --r-c: container($role);
-  --r-sc: on-container($role);
+  // Interpolation obligatoire : Sass n'évalue pas la valeur d'une propriété personnalisée sans `#{}`.
+  --r-f: #{fg($role)};
+  --r-sf: #{on-fg($role)};
+  --r-c: #{container($role)};
+  --r-sc: #{on-container($role)};
 }
 
 @mixin button-tokens {
