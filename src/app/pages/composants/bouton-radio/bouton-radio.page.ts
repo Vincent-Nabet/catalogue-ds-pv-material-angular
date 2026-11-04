@@ -4,6 +4,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   groupe: `<mat-radio-group aria-label="Taille" value="m">
@@ -88,9 +89,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-bouton-radio-page',
-  imports: [MatRadioGroup, MatRadioButton, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatRadioGroup, MatRadioButton, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Bouton radio</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Groupes">
       <app-specimen label="Vertical" api="mat-radio-group" [snippet]="snippets.groupe">

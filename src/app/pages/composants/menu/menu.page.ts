@@ -7,6 +7,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<button matButton="outlined" [matMenuTriggerFor]="menu">Ouvrir</button>
@@ -149,9 +150,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-menu-page',
-  imports: [MatButton, MatIconButton, MatDivider, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, Specimen, SpecimenSection, MatContextMenuTrigger, MatMenuContent],
+  imports: [ComposantRef, MatButton, MatIconButton, MatDivider, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, Specimen, SpecimenSection, MatContextMenuTrigger, MatMenuContent],
   template: `
     <h1>Menu</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Contenu" description="Cliquer sur le bouton pour ouvrir le menu.">
       <app-specimen label="Simple" api="mat-menu" [snippet]="snippets.simple">

@@ -4,6 +4,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   determine: `<mat-progress-spinner mode="determinate" value="65" aria-label="Chargement" />`,
@@ -54,9 +55,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-indicateur-circulaire-page',
-  imports: [MatProgressSpinner, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatProgressSpinner, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Indicateur circulaire</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Modes">
       <app-specimen label="Déterminé" api='mode="determinate"' [snippet]="snippets.determine">

@@ -5,6 +5,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorIntlFr } from '../../../core/i18n/intl-fr';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" aria-label="Pagination" />`,
@@ -71,10 +72,11 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-pagination-page',
-  imports: [MatPaginator, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatPaginator, Specimen, SpecimenSection, ColorFamilyScope],
   providers: [{ provide: MatPaginatorIntl, useClass: PaginatorIntlFr }],
   template: `
     <h1>Pagination</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="440px" title="Paginateurs">
       <app-specimen label="Simple" api="mat-paginator" [snippet]="snippets.simple">

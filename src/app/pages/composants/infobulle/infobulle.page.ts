@@ -4,6 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<button matButton="outlined" matTooltip="Enregistrer le document">Enregistrer</button>`,
@@ -50,9 +51,10 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-infobulle-page',
-  imports: [MatButton, MatIconButton, MatIcon, MatTooltip, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatButton, MatIconButton, MatIcon, MatTooltip, Specimen, SpecimenSection],
   template: `
     <h1>Infobulle</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Déclenchement" description="Survoler ou donner le focus clavier à l’élément pour afficher l’infobulle.">
       <app-specimen label="Simple" api="matTooltip" [snippet]="snippets.simple">

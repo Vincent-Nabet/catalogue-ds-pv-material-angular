@@ -6,6 +6,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-toolbar>Titre de la page</mat-toolbar>`,
@@ -84,9 +85,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-barre-outils-page',
-  imports: [MatToolbar, MatToolbarRow, MatIconButton, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatToolbar, MatToolbarRow, MatIconButton, MatIcon, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Barre d’outils</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="320px" title="Variantes">
       <app-specimen label="Simple" api="mat-toolbar" [snippet]="snippets.simple">

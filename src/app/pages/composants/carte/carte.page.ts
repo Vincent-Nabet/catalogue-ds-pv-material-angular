@@ -16,6 +16,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 /** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
 function customSnippet(id: string): string {
@@ -187,6 +188,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-carte-page',
   imports: [
+    ComposantRef,
     MatButton,
     MatCard,
     MatCardActions,
@@ -204,6 +206,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Carte</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="360px" title="Apparences">
       <app-specimen label="Relevée" api='appearance="raised"' [snippet]="snippets.releve">

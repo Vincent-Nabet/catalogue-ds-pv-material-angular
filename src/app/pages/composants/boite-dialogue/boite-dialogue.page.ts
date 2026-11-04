@@ -11,6 +11,7 @@ import {
 } from '@angular/material/dialog';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 interface ContenuDialogData {
   titre: string;
@@ -155,9 +156,10 @@ protected readonly data = inject(MAT_DIALOG_DATA);`,
 
 @Component({
   selector: 'app-boite-dialogue-page',
-  imports: [MatButton, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatButton, Specimen, SpecimenSection],
   template: `
     <h1>Boîte de dialogue</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Dialogues" description="Utiliser les boutons pour ouvrir chaque boîte de dialogue.">
       <app-specimen label="Simple" api="MatDialog.open()" [snippet]="snippets.simple">

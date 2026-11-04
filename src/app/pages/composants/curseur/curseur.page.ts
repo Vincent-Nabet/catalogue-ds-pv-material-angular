@@ -4,6 +4,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 /** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
 function customSnippet(id: string): string {
@@ -127,9 +128,10 @@ pourcentage = (valeur: number) => valeur + ' %';`,
 
 @Component({
   selector: 'app-curseur-page',
-  imports: [MatSlider, MatSliderThumb, MatSliderRangeThumb, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatSlider, MatSliderThumb, MatSliderRangeThumb, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Curseur</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Valeur unique">
       <app-specimen label="Continu" api="mat-slider" [snippet]="snippets.simple">

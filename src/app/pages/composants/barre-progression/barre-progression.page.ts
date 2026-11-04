@@ -4,6 +4,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   determine: `<mat-progress-bar mode="determinate" value="60" aria-label="Chargement" />`,
@@ -65,9 +66,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-barre-progression-page',
-  imports: [MatProgressBar, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatProgressBar, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Barre de progression</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Modes">
       <app-specimen label="Déterminé" api='mode="determinate"' [snippet]="snippets.determine">

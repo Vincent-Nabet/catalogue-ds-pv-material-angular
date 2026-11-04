@@ -14,6 +14,7 @@ import {
 } from '@angular/material/table';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 interface Produit {
   nom: string;
@@ -88,6 +89,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-tri-page',
   imports: [
+    ComposantRef,
     MatCell,
     MatCellDef,
     MatColumnDef,
@@ -105,6 +107,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Tri</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="320px" title="En-têtes triables" description="Cliquer sur un en-tête pour trier la colonne.">
       <app-specimen label="Tri par colonne" api="matSort / mat-sort-header" [snippet]="snippets.simple">

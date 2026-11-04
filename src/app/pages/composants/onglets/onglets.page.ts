@@ -12,6 +12,7 @@ import {
 } from '@angular/material/tabs';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-tab-group>
@@ -175,6 +176,7 @@ function customSnippet(id: string): string {
 @Component({
   selector: 'app-onglets-page',
   imports: [
+    ComposantRef,
     MatIcon,
     MatTab,
     MatTabGroup,
@@ -188,6 +190,7 @@ function customSnippet(id: string): string {
   ],
   template: `
     <h1>Onglets</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="340px" title="Groupes d’onglets">
       <app-specimen label="Simple" api="mat-tab-group" [snippet]="snippets.simple">

@@ -5,6 +5,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatListItem, MatListSubheaderCssMatStyler, MatList } from '@angular/material/list';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   horizontal: `<p>Au-dessus</p>
@@ -90,9 +91,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-separateur-page',
-  imports: [MatDivider, MatList, MatListItem, MatListSubheaderCssMatStyler, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatDivider, MatList, MatListItem, MatListSubheaderCssMatStyler, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Séparateur</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="340px" title="Orientations">
       <app-specimen label="Horizontal" api="mat-divider" [snippet]="snippets.horizontal">

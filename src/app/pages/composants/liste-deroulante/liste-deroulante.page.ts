@@ -6,6 +6,7 @@ import { MatSelect, MatSelectTrigger } from '@angular/material/select';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
 import { MatIcon } from '@angular/material/icon';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-form-field>
@@ -186,6 +187,7 @@ const SNIPPETS = {
 @Component({
   selector: 'app-liste-deroulante-page',
   imports: [
+    ComposantRef,
     ReactiveFormsModule,
     MatSelect,
     MatOption,
@@ -201,6 +203,7 @@ const SNIPPETS = {
   ],
   template: `
     <h1>Liste déroulante</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="340px" title="Sélection" description="Cliquer sur le champ pour ouvrir la liste.">
       <app-specimen label="Simple" api="mat-select" [snippet]="snippets.simple">

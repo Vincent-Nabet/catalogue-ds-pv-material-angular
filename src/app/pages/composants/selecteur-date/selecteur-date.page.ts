@@ -18,6 +18,7 @@ import { ColorFamilyScope } from '../../../shared/color-family-scope/color-famil
 import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-form-field>
@@ -156,6 +157,7 @@ function customSnippet(id: string): string {
 @Component({
   selector: 'app-selecteur-date-page',
   imports: [
+    ComposantRef,
     MatCalendar,
     MatDatepicker,
     MatDatepickerInput,
@@ -176,6 +178,7 @@ function customSnippet(id: string): string {
   providers: [{ provide: MatDatepickerIntl, useClass: DatepickerIntlFr }],
   template: `
     <h1>Sélecteur de date</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="360px" title="Champs" description="Locale française (fr-FR), via l’adaptateur de date natif.">
       <app-specimen label="Date" api="matDatepicker" [snippet]="snippets.simple">

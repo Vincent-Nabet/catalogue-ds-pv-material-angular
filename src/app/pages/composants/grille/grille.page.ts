@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatGridList, MatGridTile, MatGridTileFooterCssMatStyler, MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 const SNIPPETS = {
   simple: `<mat-grid-list cols="3" rowHeight="64px" gutterSize="8px">
@@ -70,9 +71,10 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-grille-page',
-  imports: [MatGridList, MatGridTile, MatGridTileFooterCssMatStyler, MatGridTileHeaderCssMatStyler, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatGridList, MatGridTile, MatGridTileFooterCssMatStyler, MatGridTileHeaderCssMatStyler, Specimen, SpecimenSection],
   template: `
     <h1>Grille</h1>
+    <app-composant-ref />
 
     <app-specimen-section minWidth="360px" title="Dispositions">
       <app-specimen label="Simple" api="mat-grid-list" [snippet]="snippets.simple">

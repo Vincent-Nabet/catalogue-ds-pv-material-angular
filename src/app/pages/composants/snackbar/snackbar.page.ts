@@ -12,6 +12,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { OverlayFamily } from '../../../shared/color-family-scope/overlay-family';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 @Component({
   selector: 'app-message-snack',
@@ -128,9 +129,10 @@ function customSnippet(id: string): string {
 
 @Component({
   selector: 'app-snackbar-page',
-  imports: [MatButton, Specimen, SpecimenSection],
+  imports: [ComposantRef, MatButton, Specimen, SpecimenSection],
   template: `
     <h1>Snackbar</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="Messages" description="Utiliser les boutons pour afficher chaque snackbar.">
       <app-specimen label="Simple" api="MatSnackBar.open()" [snippet]="snippets.simple">

@@ -4,6 +4,7 @@ import { injectColorFamilies } from '../../../core/tokens/color-families';
 import { ColorFamilyScope } from '../../../shared/color-family-scope/color-family-scope';
 import { Specimen } from '../../../shared/specimen/specimen';
 import { SpecimenSection } from '../../../shared/specimen-section/specimen-section';
+import { ComposantRef } from '../../../shared/composant-ref/composant-ref';
 
 /** Snippet d'une famille personnalisée, dérivé de son nom (la liste des familles est détectée, pas écrite à la main). */
 function customSnippet(id: string): string {
@@ -80,9 +81,10 @@ const SNIPPETS = {
 
 @Component({
   selector: 'app-case-a-cocher-page',
-  imports: [MatCheckbox, Specimen, SpecimenSection, ColorFamilyScope],
+  imports: [ComposantRef, MatCheckbox, Specimen, SpecimenSection, ColorFamilyScope],
   template: `
     <h1>Case à cocher</h1>
+    <app-composant-ref />
 
     <app-specimen-section title="États">
       <app-specimen label="Décochée" api="mat-checkbox" [snippet]="snippets.decochee">
