@@ -68,7 +68,10 @@ export function assembler(fichiers, source) {
   for (const chemin of chemins.filter((c) => c.startsWith(`${racine}semantics/`))) {
     const nom = chemin.slice(`${racine}semantics/`.length);
     if (nom.includes('/') || !nom.endsWith(SUFFIXE_SEMANTIQUE)) continue;
-    semantiques[nom.slice(0, -SUFFIXE_SEMANTIQUE.length)] = lireJson(fichiers.get(chemin)(), chemin);
+    const mode = nom.slice(0, -SUFFIXE_SEMANTIQUE.length);
+    // `semantiques['__proto__'] = …` changerait le prototype de l'objet au lieu de créer un mode (le mode disparaîtrait sans erreur).
+    if (mode === '__proto__') throw new Error(`Nom de mode réservé : « ${chemin} » (« __proto__ » ne peut pas nommer un mode).`);
+    semantiques[mode] = lireJson(fichiers.get(chemin)(), chemin);
   }
   if (Object.keys(semantiques).length === 0) {
     throw new Error(`Aucun fichier « semantics/*${SUFFIXE_SEMANTIQUE} » dans « ${source} ».`);

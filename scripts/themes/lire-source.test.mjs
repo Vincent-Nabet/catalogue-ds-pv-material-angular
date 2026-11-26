@@ -76,6 +76,11 @@ test('aucune sémantique', () => {
   assert.throws(() => lireSource(ecrireDossier('sans-semantiques', fichiers)), /Aucun fichier « semantics/);
 });
 
+test('un mode nommé __proto__ est refusé au lieu de disparaître', () => {
+  const fichiers = { ...contenus, 'semantics/__proto__.tokens.json': JSON.stringify(clair) };
+  assert.throws(() => lireSource(ecrireDossier('mode-proto', fichiers)), /Nom de mode réservé : « semantics\/__proto__\.tokens\.json »/);
+});
+
 test('JSON invalide : le fichier fautif est nommé', () => {
   const fichiers = { ...contenus, 'semantics/dark.tokens.json': '{ pas du json' };
   assert.throws(() => lireSource(ecrireDossier('json-invalide', fichiers)), /JSON invalide dans « semantics\/dark\.tokens\.json »/);
