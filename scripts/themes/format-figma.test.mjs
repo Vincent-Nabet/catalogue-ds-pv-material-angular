@@ -113,6 +113,16 @@ test('noms réservés (__proto__, constructor, prototype) → erreur, le prototy
   assert.equal(({}).polluee, undefined);
 });
 
+test('groupe nommé comme une méthode d\'Object (toString, valueOf, hasOwnProperty) → nœud propre, prototype intact', () => {
+  const jeton = { $type: 'color', $value: { colorSpace: 'srgb', components: [1, 0, 0] } };
+  for (const nom of ['toString', 'valueOf', 'hasOwnProperty']) {
+    const { arbre } = adapte({ Colors: { [nom]: { Role: jeton } } });
+    assert.ok(Object.hasOwn(arbre.Colors, nom), `${nom} : nœud propre`);
+    assert.ok(arbre.Colors[nom].Role, `${nom} : jeton posé`);
+    assert.equal(Object.prototype[nom].Role, undefined, `${nom} : prototype intact`);
+  }
+});
+
 test('tri : ordre de ROLES_MD3 puis ROLES_CUSTOM, rôles inconnus ensuite, Neutral en dernier', () => {
   const { arbre } = adapte({
     Colors: {

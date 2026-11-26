@@ -169,7 +169,11 @@ function convertirJeton(jeton, segments, nom, incoherence) {
 /** Pose `jeton` dans l'arbre le long de `segments`. */
 function poser(arbre, segments, jeton) {
   let noeud = arbre;
-  for (const segment of segments.slice(0, -1)) noeud = noeud[segment] ??= {};
+  for (const segment of segments.slice(0, -1)) {
+    // `Object.hasOwn` : un groupe nommé `toString` ou `valueOf` ne doit pas résoudre vers la fonction héritée du prototype.
+    if (!Object.hasOwn(noeud, segment)) noeud[segment] = {};
+    noeud = noeud[segment];
+  }
   noeud[segments.at(-1)] = jeton;
 }
 
@@ -250,7 +254,7 @@ export function assemblerFigma(entrees, origine) {
   if (primitives.length === 0) {
     throw new Error(
       'Export Figma incomplet : aucun fichier de primitives (collection « Primitives ») parmi les sources. ' +
-        'Ajoutez --source Primitives.zip (page : sélectionnez les deux archives ensemble).',
+        'Ajoutez l\'archive Primitives.zip (page : sélectionnez les deux archives ensemble ; ligne de commande : --source Primitives.zip).',
     );
   }
   if (primitives.length > 1) {
