@@ -7,10 +7,12 @@ const normaliser = (texte) => texte.replaceAll('\r\n', '\n').replace(ENTETE, '')
 
 /**
  * CSS → blocs `{ cle, commentaire, selecteur, declarations: Map variable → valeur }`, dans l'ordre du texte.
- * Le commentaire de section (`/* … *\/` seul sur sa ligne) s'applique aux blocs qui le suivent.
+ * Le commentaire de section (`/* … *\/` seul sur sa ligne) s'applique aux blocs qui le suivent. `cle` identifie un bloc ;
+ * dans un CSS concaténé, des blocs de même commentaire et de même sélecteur se distinguent par leur rang (« (bloc 2) »).
  */
 function blocsDe(texte) {
   const blocs = [];
+  const occurrences = new Map();
   let commentaire = '';
   let courant = null;
   for (const ligne of texte.split('\n')) {
@@ -21,7 +23,10 @@ function blocsDe(texte) {
     else if (!courant && ouverture) courant = { commentaire, selecteur: ouverture[1], declarations: new Map() };
     else if (courant && declaration) courant.declarations.set(declaration[1], declaration[2]);
     else if (courant && ligne === '}') {
-      blocs.push({ ...courant, cle: `${courant.commentaire} | ${courant.selecteur}` });
+      const identifiant = `${courant.commentaire} | ${courant.selecteur}`;
+      const rang = (occurrences.get(identifiant) ?? 0) + 1;
+      occurrences.set(identifiant, rang);
+      blocs.push({ ...courant, cle: rang === 1 ? identifiant : `${identifiant} (bloc ${rang})` });
       courant = null;
     }
   }

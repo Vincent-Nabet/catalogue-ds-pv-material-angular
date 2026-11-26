@@ -48,6 +48,18 @@ test('CSS concaténé de plusieurs fichiers : blocs comparés un à un', () => {
   assert.deepEqual(un(a, b).ecarts, ['Standard (light / dark) | html.theme-imp-x-standard : --c : 3 → 4']);
 });
 
+test('CSS concaténé : des blocs de même commentaire et même sélecteur sont comparés rang par rang', () => {
+  const selecteur = 'html.theme-imp-x-standard';
+  const a = `${css([['--a', '1']], selecteur)}\n${css([['--b', '2']], selecteur)}`;
+  assert.deepEqual(un(a, `${css([['--a', '1']], selecteur)}\n${css([['--b', '2']], selecteur)}`), { statut: 'identique', ecarts: [] });
+  assert.deepEqual(un(a, `${css([['--a', '1']], selecteur)}\n${css([['--b', '3']], selecteur)}`).ecarts, [
+    `Standard (light / dark) | ${selecteur} (bloc 2) : --b : 2 → 3`,
+  ]);
+  assert.deepEqual(un(a, `${css([['--a', '1']], selecteur)}\n${css([['--b', '2'], ['--a', '1']], selecteur)}`).ecarts, [
+    `Standard (light / dark) | ${selecteur} (bloc 2) : --a : (absente) → 1`,
+  ]);
+});
+
 test('ordre des blocs différent : signalé', () => {
   const a = `${css([['--a', '1']])}\n${css([['--c', '3']], '.theme-b')}`;
   const b = `${css([['--c', '3']], '.theme-b')}\n${css([['--a', '1']])}`;
