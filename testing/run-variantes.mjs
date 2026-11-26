@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { zipSync } from 'fflate';
+import { fichiersNatifs } from '../scripts/themes/fixtures-natif.mjs';
 import { fileURLToPath } from 'node:url';
 
 const racine = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
@@ -98,6 +99,22 @@ const zipCorrompu = join(zips, 'corrompu.zip');
 writeFileSync(zipCorrompu, 'ceci n\'est pas une archive');
 const zipSansPrimitives = ecrireZip('sans-primitives', Object.fromEntries(Object.entries(jsons()).filter(([c]) => c.startsWith('semantics/'))));
 
+// Export natif de Figma (Primitives + Semantics), reconstitué depuis tokens/ par l'inverse de l'adaptateur (fixtures-natif.mjs).
+const natif = fichiersNatifs();
+const zipNatif = (nom, fichiers) => ecrireZip(nom, Object.fromEntries(Object.entries(fichiers).map(([c, t]) => [c, octets(t)])));
+const natifPrimitives = zipNatif('natif-primitives', natif.primitives);
+const natifSemantiques = zipNatif('natif-semantiques', natif.semantiques);
+const { 'Dark.tokens.json': _sombreNatif, ...semantiquesSansSombre } = natif.semantiques;
+const natifSansSombre = zipNatif('natif-sans-sombre', semantiquesSansSombre);
+const natifGroupeInconnu = zipNatif('natif-groupe-inconnu', Object.fromEntries(Object.entries(natif.semantiques).map(([c, t]) => {
+  const json = JSON.parse(t);
+  json.Colors.Schemes.Brand = { Accent: structuredClone(json.Colors.Schemes.Standard.Primary) };
+  return [c, JSON.stringify(json)];
+})));
+const primitivesGraisse = JSON.parse(natif.primitives['Baseline.tokens.json']);
+primitivesGraisse['Font theme'].Static.Weight.Bold.$value = 'Gras';
+const natifGraisseInconnue = zipNatif('natif-graisse-inconnue', { 'Baseline.tokens.json': JSON.stringify(primitivesGraisse) });
+
 // Dossiers avec fichiers parasites ou noms en majuscules.
 const parasites = join(variantes, 'fichiers-parasites');
 cpSync(base, parasites, { recursive: true });
@@ -122,6 +139,14 @@ const lancerCas = [
   ['zip-sous-dossier', ['--source', zipSousDossier, '--nom', 'essai', '--sortie', sortieDe('zip-sous-dossier')], 'OK'],
   ['zip-deux-niveaux', ['--source', zipDeuxNiveaux, '--sortie', sortieDe('zip-deux-niveaux')], /trop profonde/],
   ['zip-macosx-et-._', ['--source', zipMacosx, '--nom', 'essai', '--sortie', sortieDe('zip-macosx')], 'OK'],
+  ['natif-ref', ['--source', natifPrimitives, '--source', natifSemantiques, '--nom', 'essai', '--sortie', sortieDe('natif-ref')], 'OK'],
+  ['natif-zips-inverses', ['--source', natifSemantiques, '--source', natifPrimitives, '--nom', 'essai', '--sortie', sortieDe('natif-inverse')], 'OK'],
+  ['natif-sans-mode-sombre', ['--source', natifPrimitives, '--source', natifSansSombre, '--nom', 'essai', '--sortie', sortieDe('natif-sans-sombre')], /Famille incomplète/],
+  ['natif-groupe-inconnu', ['--source', natifPrimitives, '--source', natifGroupeInconnu, '--nom', 'essai', '--sortie', sortieDe('natif-groupe')], 'OK'],
+  ['natif-graisse-inconnue', ['--source', natifGraisseInconnue, '--source', natifSemantiques, '--sortie', sortieDe('natif-graisse')], /graisse « Gras » inconnue/],
+  ['natif-primitives-seules', ['--source', natifPrimitives, '--sortie', sortieDe('natif-p')], /aucun mode sémantique/],
+  ['natif-semantiques-seules', ['--source', natifSemantiques, '--sortie', sortieDe('natif-s')], /aucun fichier de primitives/],
+  ['natif-melange', ['--source', natifPrimitives, '--source', zipRacine, '--sortie', sortieDe('natif-melange')], /Formats mélangés/],
   ['zip-bom-crlf', ['--source', zipBomCrlf, '--nom', 'essai', '--sortie', sortieDe('zip-bom')], 'OK'],
   ['zip-corrompu', ['--source', zipCorrompu, '--sortie', sortieDe('zip-corrompu')], /Archive illisible/],
   ['zip-sans-primitives', ['--source', zipSansPrimitives, '--sortie', sortieDe('zip-sp')], /introuvable/],
@@ -157,6 +182,14 @@ lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
 for (const [nom, d] of [['zip-racine', 'zip-racine'], ['zip-sous-dossier', 'zip-sous-dossier'], ['zip-macosx', 'zip-macosx'], ['zip-bom-crlf', 'zip-bom']]) {
   verdict(`sortie ${nom} = dossier`, fichiersDe.every((f) => sansEntete(lire(sortieDe(d), f)) === sansEntete(lire(dossierRef, f))), 'contenu identique hors en-tête');
 }
+// Export natif : mêmes fichiers que tokens/ (essai.css : ordre des 12 rôles success/info/warning seul), quel que soit l'ordre des archives.
+const memeFichiers = (a, b, tri = false) => fichiersDe.every((f) => (f === 'essai.css' && tri
+  ? sansEntete(lire(a, f)).split('\n').sort().join('\n') === sansEntete(lire(b, f)).split('\n').sort().join('\n')
+  : sansEntete(lire(a, f)) === sansEntete(lire(b, f))));
+verdict('sortie natif = dossier', memeFichiers(sortieDe('natif-ref'), dossierRef, true), '6 fichiers identiques, essai.css équivalent');
+verdict('sortie natif zips inversés = natif', memeFichiers(sortieDe('natif-inverse'), sortieDe('natif-ref')), 'contenu identique hors en-tête');
+const groupe = lancer(['--source', natifPrimitives, '--source', natifGroupeInconnu, '--nom', 'essai', '--sortie', sortieDe('natif-groupe')]);
+verdict('natif groupe inconnu signalé', /Groupe de rôles inconnu aplati.*Brand/.test(groupe.stdout) && /non reconnus : 1/.test(groupe.stdout), 'avertissement + token non reconnu');
 verdict('fichiers parasites ignorés', lire(sortieDe('parasites'), 'essai.css') === lire(dossierRef, 'essai.css') || sansEntete(lire(sortieDe('parasites'), 'essai.css')) === sansEntete(lire(dossierRef, 'essai.css')), 'même sortie que la référence');
 verdict('majuscules → 1 famille', !/theme-essai-/.test(lire(sortieDe('majuscules'), 'md3/couleurs.css')), 'classe .theme-essai seule');
 verdict('dossier étranger intact', readFileSync(join(etranger, 'perso.txt'), 'utf8') === 'important' && readdirSync(etranger).length === 1, 'perso.txt seul, inchangé');
