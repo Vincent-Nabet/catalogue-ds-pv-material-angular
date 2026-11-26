@@ -11,7 +11,7 @@ import { ROLES_CUSTOM, ROLES_MD3 } from './correspondance.mjs';
 import { aplatir } from './resoudre-tokens.mjs';
 
 const ALIAS = /^\{([^{}]+)\}$/;
-const HEX_COULEUR = /^#[0-9a-f]{6}$/i;
+const HEX_FIGMA = /^(#[0-9a-f]{6})([0-9a-f]{2})?$/i; // #RRGGBB, avec ou sans alpha
 const HEX_ANCIEN = /^#[0-9a-f]{3,8}$/i;
 const EXTENSION_MODE = 'com.figma.modeName';
 const EXTENSION_LIEN = 'com.figma.aliasData';
@@ -95,8 +95,11 @@ function convertirCouleur(valeur, nom, incoherence) {
   if (octetAlpha === null) throw new Error(`Jeton « ${nom} » : opacité invalide (${JSON.stringify(valeur.alpha)}).`);
   const suffixe = alpha < 1 ? octetAlpha : '';
 
-  if (valeur.components === undefined && typeof valeur.hex === 'string' && HEX_COULEUR.test(valeur.hex.slice(0, 7))) {
-    return `${valeur.hex.slice(0, 7).toUpperCase()}${suffixe}`;
+  // Sans components, le hex est utilisé ; son alpha (#RRGGBBAA) vaut tant que le champ « alpha » est absent.
+  const sansComposantes = valeur.components === undefined && typeof valeur.hex === 'string' ? HEX_FIGMA.exec(valeur.hex) : null;
+  if (sansComposantes) {
+    const [, rgb, alphaHex] = sansComposantes;
+    return `${rgb.toUpperCase()}${valeur.alpha === undefined ? (alphaHex ?? '').toUpperCase() : suffixe}`;
   }
   const octets = Array.isArray(valeur.components) && valeur.components.length === 3 ? valeur.components.map(octet) : null;
   if (!octets || octets.includes(null)) {

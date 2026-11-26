@@ -44,6 +44,13 @@ test('couleur : components absent mais hex valide → hex ; hex incohérent → 
   const sansComposantes = { Colors: { X: { $type: 'color', $value: { colorSpace: 'srgb', alpha: 1, hex: '#abcdef' } } } };
   assert.equal(valeur(sansComposantes, 'Colors.X.$value'), '#ABCDEF');
   assert.throws(() => adapte({ Colors: { X: { $type: 'color', $value: { colorSpace: 'srgb', hex: 'rouge' } } } }), /composantes/);
+  // Sans components, l'alpha du hex à 8 chiffres est conservé tant que le champ « alpha » est absent ; sinon « alpha » fait foi.
+  const hexSeul = (extra) => valeur({ Colors: { X: { $type: 'color', $value: { colorSpace: 'srgb', ...extra } } } }, 'Colors.X.$value');
+  assert.equal(hexSeul({ hex: '#12345678' }), '#12345678');
+  assert.equal(hexSeul({ hex: '#abcdef' }), '#ABCDEF');
+  assert.equal(hexSeul({ hex: '#12345678', alpha: 1 }), '#123456');
+  assert.equal(hexSeul({ hex: '#12345678', alpha: 0 }), '#12345600');
+  assert.throws(() => hexSeul({ hex: '#1234567' }), /composantes/);
 
   const incoherent = adapte({ Colors: { X: couleur([1, 0, 0], 1, { hex: '#00FF00' }) } });
   assert.equal(incoherent.arbre.Colors.X.$value, '#FF0000');
