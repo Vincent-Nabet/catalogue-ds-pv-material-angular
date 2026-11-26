@@ -156,6 +156,14 @@ test('ancien format : un JSON parasite illisible reste ignoré', () => {
   assert.deepEqual(Object.keys(lireSource(ecrireDossier('ancien-parasite', fichiers)).semantiques).sort(), ['dark', 'light']);
 });
 
+test('ancien format : un JSON parasite au format natif est ignoré (seuls primitives et semantics/ sont lus)', () => {
+  const fichiers = { ...contenus, 'Figma/Light.tokens.json': natif.semantiques['Light.tokens.json'], 'notes.json': natif.primitives['Baseline.tokens.json'] };
+  const dossier = lireSource(ecrireDossier('ancien-parasite-natif', fichiers));
+  assert.deepEqual(Object.keys(dossier).sort(), ['origine', 'primitives', 'semantiques']);
+  assert.deepEqual(Object.keys(dossier.semantiques).sort(), ['dark', 'light']);
+  assert.deepEqual(Object.keys(lireSource(ecrireZip('ancien-parasite-natif.zip', fichiers, 'tokens/')).semantiques).sort(), ['dark', 'light']);
+});
+
 test('ancien format réel (tokens/) : mêmes primitives et modes qu\'avant', () => {
   const source = lireSource(ecrireDossier('tokens-reels', fichiersTokens()));
   assert.equal(Object.keys(source.semantiques).length, 8);

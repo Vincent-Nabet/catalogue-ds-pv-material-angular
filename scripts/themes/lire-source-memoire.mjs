@@ -105,6 +105,20 @@ const aStructureAncienne = (fichiers) =>
   );
 
 /**
+ * Chemins que l'ancien chemin (`assembler`) lirait, ou `null` sans `primitives.tokens.json` unique (aucune structure de
+ * l'ancien format à protéger). Pour une source seule, la détection du format s'y limite : un autre `.json` (parasite,
+ * y compris au format natif) reste ignoré, comme avant l'ajout du format natif.
+ */
+function lusParAncien(fichiers) {
+  const chemins = [...fichiers.keys()];
+  const primitives = chemins.filter((c) => c === FICHIER_PRIMITIVES || c.endsWith(`/${FICHIER_PRIMITIVES}`));
+  if (primitives.length !== 1) return null;
+  const dossier = `${primitives[0].slice(0, -FICHIER_PRIMITIVES.length)}semantics/`;
+  const semantiques = chemins.filter((c) => c.startsWith(dossier) && c.endsWith(SUFFIXE_SEMANTIQUE) && !c.slice(dossier.length).includes('/'));
+  return new Set([primitives[0], ...semantiques]);
+}
+
+/**
  * Point d'entrée commun : assemble une ou plusieurs sources (`listes` : Map chemin → lecteur de texte, une par source ;
  * `noms` : leurs noms, pour les messages) quel que soit le format, reconnu d'après le CONTENU des fichiers JSON :
  *   - ancien format (`primitives.tokens.json` + `semantics/*.tokens.json`, couleurs en `#hex`) : une seule source, déléguée
@@ -121,9 +135,10 @@ export function assemblerSources(listes, noms) {
   const sources = listes.map((liste) => new Map([...liste].map(([chemin, lecteur]) => [chemin, memoriser(lecteur)])));
 
   const formats = [];
+  const lus = sources.length === 1 ? lusParAncien(sources[0]) : null;
   for (const fichiers of sources) {
     for (const [chemin, lecteur] of fichiers) {
-      if (ignore(chemin)) continue;
+      if (ignore(chemin) || (lus && !lus.has(chemin))) continue;
       let format = null;
       try {
         format = detecterFormat(JSON.parse(lecteur().replace(/^﻿/, '')));
