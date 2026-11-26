@@ -48,8 +48,17 @@ test('couleur : components absent mais hex valide → hex ; hex incohérent → 
   const incoherent = adapte({ Colors: { X: couleur([1, 0, 0], 1, { hex: '#00FF00' }) } });
   assert.equal(incoherent.arbre.Colors.X.$value, '#FF0000');
   assert.equal(incoherent.avertissements.length, 1);
-  assert.match(incoherent.avertissements[0], /Colors\.X.*#00FF00.*#FF0000.*components.*essai/);
+  assert.match(incoherent.avertissements[0], /pour 1 couleur\(s\) de « essai ».*components.*retenu.*Colors\.X : #00FF00 ≠ #FF0000/);
   assert.deepEqual(adapte({ Colors: { X: couleur([1, 0, 0], 1, { hex: '#ff0000' }) } }).avertissements, []);
+});
+
+test('couleur : hex incohérents en nombre → un seul avertissement, au plus 10 exemples', () => {
+  const couleurs = Object.fromEntries(Array.from({ length: 25 }, (_, i) => [`C${i}`, couleur([1, 0, 0], 1, { hex: '#00FF00' })]));
+  const { avertissements } = adapte({ Colors: couleurs });
+  assert.equal(avertissements.length, 1);
+  assert.match(avertissements[0], /pour 25 couleur\(s\)/);
+  assert.match(avertissements[0], /… et 15 autre\(s\)/);
+  assert.equal(avertissements[0].split(' ≠ ').length - 1, 10);
 });
 
 test('aplatissement : tout groupe de Colors.Schemes est aplati, Neutral White/Black → 0/900', () => {

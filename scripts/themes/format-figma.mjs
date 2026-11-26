@@ -32,6 +32,9 @@ const SEGMENTS_INTERDITS = new Set(['__proto__', 'constructor', 'prototype']);
 
 const kebab = (texte) => texte.trim().toLowerCase().replace(/\s+/g, '-');
 const estObjet = (valeur) => valeur !== null && typeof valeur === 'object' && !Array.isArray(valeur);
+/** Les `EXEMPLES_MAX` premiers éléments, puis « … et N autre(s) » : borne la longueur d'un avertissement. */
+const exemplesDe = (liste) =>
+  liste.slice(0, EXEMPLES_MAX).join(' ; ') + (liste.length > EXEMPLES_MAX ? `, … et ${liste.length - EXEMPLES_MAX} autre(s)` : '');
 
 /** Parcourt les jetons d'un arbre DTCG : `visiter(jeton, segments)` pour chaque nœud portant `$value`. */
 function parcourirJetons(arbre, visiter, segments = []) {
@@ -83,7 +86,7 @@ function octet(composante) {
 }
 
 /** Objet couleur de Figma → `#RRGGBB` (ou `#RRGGBBAA` si `alpha` < 1) ; `components` fait foi, `hex` n'est que comparé. */
-function convertirCouleur(valeur, nom, avertir) {
+function convertirCouleur(valeur, nom, incoherence) {
   if (valeur.colorSpace !== undefined && valeur.colorSpace !== 'srgb') {
     throw new Error(`Jeton « ${nom} » : espace colorimétrique « ${String(valeur.colorSpace)} » non géré (seul srgb l'est).`);
   }
@@ -101,7 +104,7 @@ function convertirCouleur(valeur, nom, avertir) {
   }
   const hex = `#${octets.join('')}`;
   if (typeof valeur.hex === 'string' && valeur.hex.slice(0, 7).toUpperCase() !== hex) {
-    avertir(`Couleur « ${nom} » : « hex » (${valeur.hex}) ne correspond pas à « components » (${hex}) ; « components » est retenu`);
+    incoherence(`${nom} : ${valeur.hex} ≠ ${hex}`);
   }
   return `${hex}${suffixe}`;
 }
@@ -136,7 +139,7 @@ const reecrireAlias = (cible) => `{${reecrireChemin(cible.split('.')).join('.')}
  * Convertit un jeton natif en `{ type, valeur }` du dialecte interne. Un type inconnu est transmis tel quel
  * (`classer()` le signalera). Une valeur `{chemin}` reste un alias, réécrit comme les chemins.
  */
-function convertirJeton(jeton, segments, nom, avertir) {
+function convertirJeton(jeton, segments, nom, incoherence) {
   const valeur = jeton.$value;
   let typeInterne;
   if (jeton.$type === 'color') typeInterne = 'color';
@@ -147,7 +150,7 @@ function convertirJeton(jeton, segments, nom, avertir) {
   if (typeof valeur === 'string' && ALIAS.test(valeur)) return { type: typeInterne, valeur: reecrireAlias(ALIAS.exec(valeur)[1]) };
   if (typeInterne === 'color') {
     if (!estObjet(valeur)) throw new Error(`Jeton « ${nom} » : valeur de couleur illisible (${JSON.stringify(valeur)}).`);
-    return { type: 'color', valeur: convertirCouleur(valeur, nom, avertir) };
+    return { type: 'color', valeur: convertirCouleur(valeur, nom, incoherence) };
   }
   if (typeInterne === 'fontWeight') return { type: 'fontWeight', valeur: convertirGraisse(valeur, nom) };
   if (typeInterne === 'dimension') {
@@ -181,6 +184,7 @@ function trierRoles(arbre) {
  */
 export function adapter(json, { fichier = 'fichier' } = {}) {
   const avertissements = [];
+  const hexIncoherents = []; // « nom : hex ≠ components », regroupés en un seul avertissement
   const liens = [];
   const sources = new Map(); // chemin final → chemin source (collisions)
   const groupes = new Map(); // groupe de rôles → vrai s'il contient un rôle connu
@@ -202,7 +206,7 @@ export function adapter(json, { fichier = 'fichier' } = {}) {
     }
     sources.set(final, nom);
 
-    const { type, valeur } = convertirJeton(jeton, segments, nom, (message) => avertissements.push(`${message} (dans « ${fichier} »)`));
+    const { type, valeur } = convertirJeton(jeton, segments, nom, (detail) => hexIncoherents.push(detail));
     poser(arbre, chemin, { $type: type, $value: valeur });
     const lien = jeton.$extensions?.[EXTENSION_LIEN];
     if (typeof lien?.targetVariableName === 'string' && !(typeof valeur === 'string' && ALIAS.test(valeur))) {
@@ -210,6 +214,11 @@ export function adapter(json, { fichier = 'fichier' } = {}) {
     }
   });
 
+  if (hexIncoherents.length > 0) {
+    avertissements.push(
+      `« hex » ne correspond pas à « components » pour ${hexIncoherents.length} couleur(s) de « ${fichier} » ; « components » est retenu (${exemplesDe(hexIncoherents)}).`,
+    );
+  }
   for (const [groupe, connu] of groupes) {
     if (!connu) avertissements.push(`Groupe de rôles inconnu aplati dans « ${fichier} » : « ${groupe} » (aucun de ses rôles n'est reconnu).`);
   }
@@ -267,10 +276,8 @@ export function assemblerFigma(entrees, origine) {
     }
   }
   if (ecarts.length > 0) {
-    const exemples = ecarts.slice(0, EXEMPLES_MAX).join(' ; ');
-    const suite = ecarts.length > EXEMPLES_MAX ? `, … et ${ecarts.length - EXEMPLES_MAX} autre(s)` : '';
     avertissements.push(
-      `Les primitives et les sémantiques ne semblent pas issues du même export : ${ecarts.length} valeur(s) diffèrent de leur primitive (${exemples}${suite}).`,
+      `Les primitives et les sémantiques ne semblent pas issues du même export : ${ecarts.length} valeur(s) diffèrent de leur primitive (${exemplesDe(ecarts)}).`,
     );
   }
 

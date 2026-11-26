@@ -169,7 +169,7 @@ test('natif : les avertissements de l\'adaptateur sont ajoutés au rapport', () 
   });
   const { rapport } = depuisNatif(sources);
   assert.equal(rapport.avertissements.length, 1);
-  assert.match(rapport.avertissements[0], /Colors\.Schemes\.Standard\.Primary.*#00FF00.*#86A315.*Light\.tokens\.json/);
+  assert.match(rapport.avertissements[0], /Light\.tokens\.json.*Colors\.Schemes\.Standard\.Primary : #00FF00 ≠ #86A315/);
 });
 
 test('natif : garde-fous (trop de JSON au total, JSON trop gros)', () => {
