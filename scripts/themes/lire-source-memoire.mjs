@@ -1,6 +1,7 @@
 // Lecture des tokens DTCG depuis des fichiers déjà en mémoire (zip ou liste de fichiers) : sans `node:fs`,
 // donc utilisable dans le navigateur comme dans Node (cf. `lire-source.mjs` et `navigateur.mjs`).
 import { unzipSync } from 'fflate';
+import { assemblerFigma, detecterFormat } from './format-figma.mjs';
 
 export const FICHIER_PRIMITIVES = 'primitives.tokens.json';
 export const SUFFIXE_SEMANTIQUE = '.tokens.json';
@@ -86,4 +87,81 @@ function lireJson(texte, chemin) {
     throw new Error(`« ${chemin} » doit contenir un objet JSON de tokens.`);
   }
   return json;
+}
+
+/** Mémorise le texte d'un lecteur : la détection du format et l'assemblage lisent chacun les mêmes fichiers. */
+const memoriser = (lecteur) => {
+  let texte;
+  return () => (texte ??= lecteur());
+};
+
+const ignore = (chemin) => chemin.startsWith('__MACOSX/') || nomDe(chemin).startsWith('._');
+const nomDeSource = (source) => nomDe(source.replaceAll('\\', '/'));
+const nommer = (noms) => noms.map((nom) => `« ${nom} »`).join(', ');
+
+const aStructureAncienne = (fichiers) =>
+  [...fichiers.keys()].some(
+    (c) => c === FICHIER_PRIMITIVES || c.endsWith(`/${FICHIER_PRIMITIVES}`) || c.startsWith('semantics/') || c.includes('/semantics/'),
+  );
+
+/**
+ * Point d'entrée commun : assemble une ou plusieurs sources (`listes` : Map chemin → lecteur de texte, une par source ;
+ * `noms` : leurs noms, pour les messages) quel que soit le format, reconnu d'après le CONTENU des fichiers JSON :
+ *   - ancien format (`primitives.tokens.json` + `semantics/*.tokens.json`, couleurs en `#hex`) : une seule source, déléguée
+ *     telle quelle à `assembler` (mêmes résultat et messages qu'avant) ;
+ *   - export natif de Figma (un fichier par mode, couleurs en objets) : une ou plusieurs sources dont l'ensemble contient
+ *     un fichier de primitives et au moins un mode sémantique (cf. `format-figma.mjs`) ; résultat `{ …, format: 'natif', avertissements }`.
+ * Un JSON illisible ne fait pas échouer la détection (il est neutre) : seul le chemin choisi signale son erreur.
+ */
+export function assemblerSources(listes, noms) {
+  const total = listes.reduce((n, liste) => n + liste.size, 0);
+  if (listes.length > 1 && total > NOMBRE_MAX_JSON) {
+    throw new Error(`Trop de fichiers JSON dans ${nommer(noms)} : ${NOMBRE_MAX_JSON} au plus au total (${total}).`);
+  }
+  const sources = listes.map((liste) => new Map([...liste].map(([chemin, lecteur]) => [chemin, memoriser(lecteur)])));
+
+  const formats = [];
+  for (const fichiers of sources) {
+    for (const [chemin, lecteur] of fichiers) {
+      if (ignore(chemin)) continue;
+      let format = null;
+      try {
+        format = detecterFormat(JSON.parse(lecteur().replace(/^﻿/, '')));
+      } catch {
+        // JSON illisible : fichier neutre pour la détection.
+      }
+      formats.push({ chemin, format });
+    }
+  }
+  const natif = formats.find((f) => f.format === 'natif');
+  const ancien = formats.find((f) => f.format === 'ancien');
+  if (natif && ancien) {
+    throw new Error(
+      `Formats mélangés : « ${natif.chemin} » est au format natif de Figma, « ${ancien.chemin} » à l'ancien format. Fournissez l'un ou l'autre.`,
+    );
+  }
+
+  if (natif) {
+    const entrees = [];
+    const ignores = [];
+    for (const [i, fichiers] of sources.entries()) {
+      for (const [chemin, lecteur] of fichiers) {
+        if (ignore(chemin)) continue;
+        if (chemin.endsWith(SUFFIXE_SEMANTIQUE)) entrees.push({ chemin, json: lireJson(lecteur(), chemin) });
+        else ignores.push(`Fichier JSON ignoré (hors « *${SUFFIXE_SEMANTIQUE} ») : ${chemin} (dans « ${noms[i]} »)`);
+      }
+    }
+    const resultat = assemblerFigma(entrees, noms.map(nomDeSource).join(' + '));
+    resultat.avertissements.unshift(...ignores);
+    return resultat;
+  }
+
+  if (listes.length > 1 && (ancien || sources.some(aStructureAncienne))) {
+    throw new Error(`Une seule source est acceptée pour l'ancien format de tokens (reçu : ${nommer(noms)}).`);
+  }
+  if (ancien || aStructureAncienne(sources[0] ?? new Map())) return assembler(sources[0], noms[0]);
+  throw new Error(
+    `Format de tokens non reconnu dans ${nommer(noms)} : ni l'ancien format (primitives.tokens.json + semantics/*.tokens.json, couleurs en texte #RRGGBB) ` +
+      `ni l'export natif de Figma (un fichier par mode, couleurs en objet { colorSpace, components, hex }). Voir docs/generation-themes.md, « Exporter depuis Figma ».`,
+  );
 }
