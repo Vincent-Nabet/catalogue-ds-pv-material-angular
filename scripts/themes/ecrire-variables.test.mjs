@@ -111,10 +111,10 @@ test('famille incomplète (clair sans sombre) = erreur explicite', () => {
 
 test('familles détectées : jeu complet, familles en moins, noms différents', () => {
   const resume = (noms) => detecterFamilles(noms).familles.map((f) => `${f.suffixe || 'standard'}${f.defaut ? '*' : ''}`).join(' ');
-  assert.equal(resume(Object.keys(source.semantiques)), 'standard* contraste-moyen contraste-eleve monochrome');
+  assert.equal(resume(Object.keys(source.semantiques)), 'standard* medium-contrast high-contrast monochrome');
   assert.equal(resume(['light', 'dark']), 'standard*');
-  assert.equal(resume(['dark', 'light', 'light-high-contrast', 'dark-high-contrast']), 'standard* contraste-eleve');
-  assert.equal(resume(['theme-light', 'theme-dark', 'theme-light-mc', 'theme-dark-mc', 'theme-clair-sepia', 'theme-sombre-sepia']), 'standard* contraste-moyen sepia');
+  assert.equal(resume(['dark', 'light', 'light-high-contrast', 'dark-high-contrast']), 'standard* high-contrast');
+  assert.equal(resume(['theme-light', 'theme-dark', 'theme-light-mc', 'theme-dark-mc', 'theme-clair-sepia', 'theme-sombre-sepia']), 'standard* medium-contrast sepia');
   assert.equal(resume(['marque-clair', 'marque-sombre']), 'standard*');
   assert.equal(resume(['a-light', 'a-dark', 'b-light', 'b-dark']), 'a* b');
   assert.deepEqual(detecterFamilles(['light', 'dark', 'brand-extra']).ignores, ['brand-extra']);
@@ -176,12 +176,12 @@ test('ecrireFichiers : idempotent, supprime les fichiers périmés, refuse un do
   assert.equal(readFileSync(join(autre, 'perso.txt'), 'utf8'), 'important');
 });
 
-test('manifeste familles.ts et classes SCSS suivent les familles générées', async () => {
+test('manifeste families.ts et classes SCSS suivent les familles générées', async () => {
   const { genererManifeste } = await import('./ecrire-manifeste.mjs');
   const manifeste = genererManifeste({ nom: 'app', familles: rapport.familles });
-  assert.match(manifeste, /\{ id: 'app', libelle: 'Standard', apercu: '#86a315', defaut: true, progression: true \}/);
-  assert.match(manifeste, /\{ id: 'app-contraste-moyen', libelle: 'Contraste moyen', apercu: '#657c08', defaut: false, progression: true \}/);
-  assert.match(manifeste, /\{ id: 'app-monochrome', libelle: 'Monochrome', apercu: '#1a1a1a', defaut: false, progression: false \}/);
+  assert.match(manifeste, /\{ id: 'app', label: 'Standard', preview: '#86a315', isDefault: true, progression: true \}/);
+  assert.match(manifeste, /\{ id: 'app-medium-contrast', label: 'Contraste moyen', preview: '#657c08', isDefault: false, progression: true \}/);
+  assert.match(manifeste, /\{ id: 'app-monochrome', label: 'Monochrome', preview: '#1a1a1a', isDefault: false, progression: false \}/);
   const copie = structuredClone(source);
   for (const mode of Object.keys(copie.semantiques)) if (mode !== 'light' && mode !== 'dark') delete copie.semantiques[mode];
   const seule = genererManifeste({ nom: 'pv', familles: genererVariables(copie, { nom: 'pv' }).rapport.familles });

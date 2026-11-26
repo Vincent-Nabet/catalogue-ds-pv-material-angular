@@ -1,9 +1,11 @@
 // Régénère les zips d'essai de l'import de thèmes (page /themes-importes) dans ./zips/, depuis `tokens/`
 // (lu en lecture seule). Usage : node testing/scratchpad/generer-zips.mjs
-// Les fichiers générés sont versionnés, sauf `gros-zip.zip` (6 Mo, régénérable, ignoré par git).
+// Aucun zip n'est versionné (dossier `zips/` ignoré par git) : ils sont déterministes et régénérables, et les zips
+// natifs (≈ 1,8 Mo pour les sémantiques) comme `gros-zip.zip` (6 Mo) dépassent de toute façon les 200 Ko.
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { strToU8, zipSync } from 'fflate';
+import { versNatif } from '../../scripts/themes/fixtures-natif.mjs';
 
 const racine = fileURLToPath(new URL('../../', import.meta.url));
 const sortie = fileURLToPath(new URL('./zips/', import.meta.url));
@@ -112,6 +114,61 @@ for (const [fichier, reglages] of Object.entries(PASTELS)) {
       'primitives.tokens.json': JSON.stringify(primitivesPastel),
     }),
   );
+}
+
+// --- Export natif de Figma (Primitives.zip + Semantics.zip), reconstitué depuis `tokens/` par l'inverse de l'adaptateur
+// (`versNatif`). À envoyer à la page ensemble : voir le README pour les paires.
+const natif = versNatif({
+  primitives: JSON.parse(base['primitives.tokens.json']),
+  semantiques: Object.fromEntries(
+    Object.entries(base)
+      .filter(([chemin]) => chemin.startsWith('semantics/'))
+      .map(([chemin, texte]) => [chemin.slice('semantics/'.length, -'.tokens.json'.length), JSON.parse(texte)]),
+  ),
+});
+const fichiersNatifs = (primitives = natif.primitives, semantiques = natif.semantiques) => ({
+  primitives: { 'Baseline.tokens.json': JSON.stringify(primitives, null, 2) },
+  semantiques: Object.fromEntries(Object.entries(semantiques).map(([nom, json]) => [`${nom}.tokens.json`, JSON.stringify(json, null, 2)])),
+});
+/** Écrit `<nom>-primitives.zip` et `<nom>-semantiques.zip` (et, pour la référence, `natif-combine.zip`). */
+const ecrireNatif = (nom, { primitives, semantiques }) => {
+  ecrire(`${nom}-primitives.zip`, zip(primitives));
+  ecrire(`${nom}-semantiques.zip`, zip(semantiques));
+};
+const copie = (objet) => structuredClone(objet);
+
+ecrireNatif('natif', fichiersNatifs());
+ecrire('natif-combine.zip', zip({ ...fichiersNatifs().primitives, ...fichiersNatifs().semantiques }));
+
+// Variantes (la moitié modifiée est suffixée ; l'autre moitié est celle de `natif-*.zip`).
+{
+  const { 'Dark.tokens.json': _sombre, ...sansSombre } = fichiersNatifs().semantiques;
+  ecrire('natif-sans-mode-sombre-semantiques.zip', zip(sansSombre));
+
+  const groupe = copie(natif.semantiques);
+  for (const json of Object.values(groupe)) json.Colors.Schemes.Brand = { Accent: copie(json.Colors.Schemes.Standard.Primary) };
+  ecrire('natif-groupe-inconnu-semantiques.zip', zip(fichiersNatifs(natif.primitives, groupe).semantiques));
+
+  const graisse = copie(natif.primitives);
+  graisse['Font theme'].Static.Weight.Bold.$value = 'Gras';
+  ecrire('natif-graisse-inconnue-primitives.zip', zip(fichiersNatifs(graisse).primitives));
+
+  const p3 = copie(natif.semantiques);
+  p3.Light.Colors.Schemes.Standard.Primary.$value.colorSpace = 'display-p3';
+  ecrire('natif-display-p3-semantiques.zip', zip(fichiersNatifs(natif.primitives, p3).semantiques));
+
+  const hex = copie(natif.semantiques);
+  hex.Light.Colors.Schemes.Standard.Primary.$value.hex = '#00FF00';
+  ecrire('natif-hex-incoherent-semantiques.zip', zip(fichiersNatifs(natif.primitives, hex).semantiques));
+
+  const autreExport = copie(natif.primitives);
+  autreExport.Colors.Olive['Shade-012'].$value = { colorSpace: 'srgb', components: [0, 0, 0], alpha: 1, hex: '#000000' };
+  ecrire('natif-autre-export-primitives.zip', zip(fichiersNatifs(autreExport).primitives));
+
+  const { 'Baseline.tokens.json': baseline } = fichiersNatifs().primitives;
+  ecrire('natif-primitives-dupliquees-primitives.zip', zip({ 'Baseline.tokens.json': baseline, 'Baseline (1).tokens.json': baseline }));
+
+  ecrire('natif-mode-duplique-semantiques.zip', zip({ ...fichiersNatifs().semantiques, 'light.tokens.json': fichiersNatifs().semantiques['Light.tokens.json'] }));
 }
 
 // --- Refusés

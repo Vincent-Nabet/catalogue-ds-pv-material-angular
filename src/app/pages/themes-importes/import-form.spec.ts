@@ -9,7 +9,7 @@ const RESULTAT: ThemeGenere = {
   familles: [
     { id: 'standard', libelle: 'Standard', apercu: '#86a315', defaut: true, progression: true },
     {
-      id: 'contraste-moyen',
+      id: 'medium-contrast',
       libelle: 'Contraste moyen',
       apercu: '#657c08',
       defaut: false,
@@ -349,12 +349,12 @@ describe('ImportForm', () => {
       expect(zone().classList).not.toContain('survol');
     });
 
-    it('should refuse several dropped files', async () => {
+    it('should refuse more than two dropped files', async () => {
       await settle();
-      dragEvent('drop', [new File([], 'a.zip'), new File([], 'b.zip')]);
+      dragEvent('drop', [new File([], 'a.zip'), new File([], 'b.zip'), new File([], 'c.zip')]);
       await settle();
 
-      expect(alerts()).toEqual(['Déposez un seul fichier à la fois.']);
+      expect(alerts()).toEqual(['Déposez au plus 2 archives à la fois (Primitives et Semantics).']);
       expect(generer).not.toHaveBeenCalled();
       expect(importButton().disabled).toBe(true);
     });
@@ -378,6 +378,150 @@ describe('ImportForm', () => {
       importButton().click();
       await settle();
       expect(zone().textContent).not.toContain('Fichier choisi');
+    });
+  });
+
+  describe('export natif de Figma (deux archives)', () => {
+    const RESULTAT_NATIF: ThemeGenere = {
+      ...RESULTAT,
+      rapport: { ...RESULTAT.rapport, format: 'natif', ignores: 355 },
+    };
+    const zip = (name: string, size?: number) => {
+      const file = new File([new Uint8Array([1, 2, 3])], name);
+      if (size !== undefined) Object.defineProperty(file, 'size', { value: size });
+      return file;
+    };
+    async function chooseFiles(files: File[]) {
+      const input = q<HTMLInputElement>('input[type="file"]')!;
+      Object.defineProperty(input, 'files', { value: files, configurable: true });
+      input.dispatchEvent(new Event('change'));
+      await new Promise((resolve) => setTimeout(resolve));
+      await settle();
+    }
+    const dropFiles = async (files: File[]) => {
+      const event = new Event('drop', { bubbles: true, cancelable: true });
+      Object.defineProperty(event, 'dataTransfer', { value: { files, dropEffect: 'none' } });
+      q('label.zone')!.dispatchEvent(event);
+      await new Promise((resolve) => setTimeout(resolve));
+      await settle();
+    };
+
+    beforeEach(() => {
+      generer.mockImplementation((_sources: unknown, options: { base: string }) => ({
+        ...RESULTAT_NATIF,
+        css: `html.theme-${options.base}-standard { --app-x: 1; }`,
+      }));
+    });
+
+    it('should let the native field select several files', async () => {
+      await settle();
+      expect(q('input[type="file"]')?.hasAttribute('multiple')).toBe(true);
+      expect(q('#import-aide')?.textContent).toContain('Primitives.zip');
+      expect(q('#import-aide')?.textContent).toContain('ensemble');
+    });
+
+    it('should analyse two selected files together, with the sources and the base only', async () => {
+      await chooseFiles([zip('Primitives.zip'), zip('Semantics.zip')]);
+      expect(generer).toHaveBeenCalledOnce();
+      const [sources, options] = generer.mock.calls[0] as [
+        { nom: string; octets: Uint8Array }[],
+        { base: string; nomSource?: string },
+      ];
+      expect(sources.map((source) => source.nom)).toEqual(['Primitives.zip', 'Semantics.zip']);
+      expect(sources[0].octets).toBeInstanceOf(Uint8Array);
+      expect(options.base).toMatch(/^imp-[a-z0-9]{6}$/);
+      expect(options.nomSource).toBeUndefined();
+
+      expect(q('label.zone')?.textContent).toContain(
+        'Fichiers choisis : Primitives.zip, Semantics.zip',
+      );
+      expect(root().textContent).toContain(
+        '41 variables du design system · Format : export natif Figma',
+      );
+      expect(q('[role="status"]')?.textContent).toBe(
+        'Analyse terminée : 2 familles (export natif Figma).',
+      );
+    });
+
+    it('should propose "Export Figma jj/mm/aaaa" as the name for two files, and keep it editable', async () => {
+      await chooseFiles([zip('Primitives.zip'), zip('Semantics.zip')]);
+      expect(nameInput()?.value).toMatch(/^Export Figma \d{2}\/\d{2}\/\d{4}$/);
+      await type('Mon export');
+      expect(importButton().disabled).toBe(false);
+    });
+
+    it('should analyse two dropped files like two selected ones', async () => {
+      await settle();
+      await dropFiles([zip('Semantics.zip'), zip('Primitives.zip')]);
+      const [sources] = generer.mock.calls[0] as [{ nom: string }[]];
+      expect(sources.map((source) => source.nom)).toEqual(['Semantics.zip', 'Primitives.zip']);
+      expect(q('label.zone')?.textContent).toContain(
+        'Fichiers choisis : Semantics.zip, Primitives.zip',
+      );
+      expect(nameInput()).not.toBeNull();
+    });
+
+    it('should call the generator with the original signature for a single file', async () => {
+      await chooseFiles([zip('tout.zip')]);
+      const [octets, options] = generer.mock.calls[0] as [Uint8Array, { nomSource: string }];
+      expect(octets).toBeInstanceOf(Uint8Array);
+      expect(options.nomSource).toBe('tout.zip');
+      expect(nameInput()?.value).toBe('tout');
+      expect(q('label.zone')?.textContent).toContain('Fichier choisi : tout.zip');
+    });
+
+    it('should refuse three files selected in the native field', async () => {
+      await chooseFiles([zip('a.zip'), zip('b.zip'), zip('c.zip')]);
+      expect(alerts()).toEqual(['Déposez au plus 2 archives à la fois (Primitives et Semantics).']);
+      expect(generer).not.toHaveBeenCalled();
+    });
+
+    it('should name the archive over 5 MB and not analyse anything', async () => {
+      await chooseFiles([zip('Primitives.zip'), zip('Semantics.zip', 6 * 1024 * 1024)]);
+      expect(alerts()[0]).toContain('« Semantics.zip » dépasse 5 Mo');
+      expect(generer).not.toHaveBeenCalled();
+    });
+
+    it('should show the "export incomplet" error in an alert when one archive is missing', async () => {
+      generer.mockImplementation(() => {
+        throw new Error(
+          'Export Figma incomplet : aucun fichier de primitives (collection « Primitives ») parmi les sources.',
+        );
+      });
+      await chooseFiles([zip('Semantics.zip')]);
+      expect(alerts()[0]).toContain('Export Figma incomplet');
+      expect(importButton().disabled).toBe(true);
+    });
+
+    it('should replace the previous selection when another one is made', async () => {
+      await chooseFiles([zip('Primitives.zip')]);
+      await chooseFiles([zip('Primitives.zip'), zip('Semantics.zip')]);
+      expect(generer).toHaveBeenCalledTimes(2);
+      expect(q('label.zone')?.textContent).toContain(
+        'Fichiers choisis : Primitives.zip, Semantics.zip',
+      );
+    });
+
+    it('should store the joined source names and the generator warnings', async () => {
+      generer.mockImplementation((_sources: unknown, options: { base: string }) => ({
+        ...RESULTAT_NATIF,
+        css: `html.theme-${options.base}-standard { --app-x: 1; }`,
+        rapport: {
+          ...RESULTAT_NATIF.rapport,
+          avertissements: [
+            'Les primitives et les sémantiques ne semblent pas issues du même export',
+          ],
+        },
+      }));
+      await chooseFiles([zip('Primitives.zip'), zip('Semantics.zip')]);
+      expect(root().textContent).toContain('ne semblent pas issues du même export');
+      importButton().click();
+      await settle();
+      expect(TestBed.inject(ImportedThemes).themes()[0]).toMatchObject({
+        sourceName: 'Primitives.zip + Semantics.zip',
+        warnings: ['Les primitives et les sémantiques ne semblent pas issues du même export'],
+      });
+      expect(q('[role="status"]')?.textContent).toContain('importé et appliqué');
     });
   });
 

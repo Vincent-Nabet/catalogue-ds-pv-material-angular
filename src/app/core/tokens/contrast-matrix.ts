@@ -5,7 +5,7 @@ import { Rgba, contrastRatio, meetsMinimum } from './contrast';
 export type ModeScheme = 'light' | 'dark';
 
 export interface Mode {
-  /** `app-contraste-moyen:dark`. */
+  /** `app-medium-contrast:dark`. */
   id: string;
   family: ThemeId;
   scheme: ModeScheme;

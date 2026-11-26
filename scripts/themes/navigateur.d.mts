@@ -9,6 +9,8 @@ export interface FamilleImportee {
 }
 
 export interface RapportImport {
+  /** Format reconnu d'après le contenu : l'ancien zip unique, ou l'export natif de Figma (`Primitives` + `Semantics`). Toujours renseigné ; optionnel dans le type pour les doublures de test. */
+  format?: 'ancien' | 'natif';
   /** Nombre de fichiers `semantics/*.tokens.json` lus. */
   modes: number;
   /** Variables MD3 écrites. */
@@ -35,8 +37,15 @@ export interface ThemeGenere {
   rapport: RapportImport;
 }
 
-/** Lève une `Error` dont le message français est prêt à afficher. */
-export function genererThemeImporte(
-  octets: Uint8Array,
-  options: { base: string; nomSource: string },
-): ThemeGenere;
+/** Une archive à analyser : son nom (pour les messages) et son contenu. */
+export interface SourceImportee {
+  nom: string;
+  octets: Uint8Array;
+}
+
+/**
+ * Lève une `Error` dont le message français est prêt à afficher.
+ * Un zip (ancien format ou export natif complet), ou plusieurs zips dont l'ensemble forme l'export natif de Figma.
+ */
+export function genererThemeImporte(octets: Uint8Array, options: { base: string; nomSource: string }): ThemeGenere;
+export function genererThemeImporte(sources: SourceImportee[], options: { base: string }): ThemeGenere;

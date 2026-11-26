@@ -32,6 +32,8 @@ export const THEME_GENERATOR = new InjectionToken<
 >('THEME_GENERATOR', { factory: () => () => import('../../../../scripts/themes/navigateur.mjs') });
 
 const TAILLE_MAX_ZIP = 5 * 1024 * 1024;
+/** Une archive (ancien format ou export natif complet), ou les deux de l'export natif de Figma (Primitives et Semantics). */
+const ARCHIVES_MAX = 2;
 const NOM_MAX = 40;
 const AVERTISSEMENTS_MAX = 20;
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -60,7 +62,10 @@ function nomPropose(nomSource: string): string {
   return sansControle.replace(/\s+/g, ' ').trim().slice(0, NOM_MAX);
 }
 
-/** Section « Importer un thème » : choix du zip, analyse, rapport, nom, enregistrement. */
+/** Nom proposé pour l'import de l'export natif de Figma (deux archives) : « Export Figma jj/mm/aaaa ». */
+const nomExportFigma = () => `Export Figma ${new Date().toLocaleDateString('fr-FR')}`;
+
+/** Section « Importer un thème » : choix de 1 ou 2 zips, analyse, rapport, nom, enregistrement. */
 @Component({
   selector: 'app-import-form',
   imports: [FormField, MatButton, MatError, MatFormField, MatHint, MatIcon, MatInput, MatLabel],
@@ -76,6 +81,7 @@ function nomPropose(nomSource: string): string {
           class="champ"
           type="file"
           accept=".zip"
+          multiple
           aria-describedby="import-aide"
           (change)="choisir($event)"
         />
@@ -90,16 +96,19 @@ function nomPropose(nomSource: string): string {
         >
           <mat-icon aria-hidden="true">upload_file</mat-icon>
           <span class="consigne">
-            Glissez-déposez l'archive de tokens (.zip) ici, ou cliquez pour la choisir
+            Glissez-déposez ici l'archive de tokens (.zip) ou les deux archives de l'export Figma
+            (Primitives et Semantics), ou cliquez pour les choisir
           </span>
-          @if (nomFichier()) {
-            <span class="choisi">Fichier choisi : {{ nomFichier() }}</span>
+          @if (nomsFichiers().length > 0) {
+            <span class="choisi">{{ fichiersChoisis() }}</span>
           }
         </label>
         <p id="import-aide" class="aide">
-          Archive contenant <code>primitives.tokens.json</code> et
-          <code>semantics/*.tokens.json</code> (au moins un mode clair et un mode sombre), comme
-          pour <code>npm run themes</code>. 5 Mo au plus.
+          Deux formats acceptés : l'export natif de Figma (<code>Primitives.zip</code> et
+          <code>Semantics.zip</code>, à sélectionner <strong>ensemble</strong>) ou l'ancienne
+          archive unique (<code>primitives.tokens.json</code> et
+          <code>semantics/*.tokens.json</code>), comme pour <code>npm run themes</code>. Au moins un
+          mode clair et un mode sombre. 5 Mo au plus par archive.
         </p>
       </div>
 
@@ -308,7 +317,7 @@ export class ImportForm {
   protected readonly enCours = signal(false);
   /** Un fichier est survolé au-dessus de la zone de dépôt. */
   protected readonly survol = signal(false);
-  protected readonly nomFichier = signal('');
+  protected readonly nomsFichiers = signal<string[]>([]);
   /** Numéro de la dernière analyse demandée : écarte les résultats devenus périmés. */
   private derniere = 0;
 
@@ -328,6 +337,10 @@ export class ImportForm {
     });
   });
 
+  protected readonly fichiersChoisis = computed(() => {
+    const noms = this.nomsFichiers();
+    return `${noms.length > 1 ? 'Fichiers choisis' : 'Fichier choisi'} : ${noms.join(', ')}`;
+  });
   protected readonly pret = computed(
     () => !!this.analyse() && !this.enCours() && this.formulaire().valid(),
   );
@@ -340,6 +353,7 @@ export class ImportForm {
       `${pluriel(familles.length, 'famille')} : ${familles.map((f) => f.libelle).join(', ')}`,
       pluriel(rapport.md3, 'variable MD3', 'variables MD3'),
       pluriel(rapport.custom, 'variable du design system', 'variables du design system'),
+      ...(rapport.format === 'natif' ? ['Format : export natif Figma'] : []),
     ].join(' · ');
   });
   protected readonly autrePolice = computed(
@@ -352,7 +366,7 @@ export class ImportForm {
   }
 
   protected choisir(evenement: Event): Promise<void> {
-    return this.analyser((evenement.target as HTMLInputElement).files?.[0]);
+    return this.analyser(Array.from((evenement.target as HTMLInputElement).files ?? []));
   }
 
   protected survoler(evenement: DragEvent): void {
@@ -367,43 +381,59 @@ export class ImportForm {
     }
   }
 
-  /** Dépôt d'un fichier sur la zone : même analyse que le choix par le champ natif. */
+  /** Dépôt de 1 ou 2 fichiers sur la zone : même analyse que le choix par le champ natif. */
   protected async deposer(evenement: DragEvent): Promise<void> {
     evenement.preventDefault();
     this.survol.set(false);
-    const fichiers = evenement.dataTransfer?.files;
-    if (!fichiers?.length) return;
+    const fichiers = Array.from(evenement.dataTransfer?.files ?? []);
+    if (fichiers.length === 0) return;
     this.champFichier().nativeElement.value = '';
-    if (fichiers.length > 1) {
-      this.derniere++;
-      this.reinitialiser();
-      this.erreur.set('Déposez un seul fichier à la fois.');
-      return;
-    }
-    await this.analyser(fichiers[0]);
+    await this.analyser(fichiers);
   }
 
-  private async analyser(fichier: File | undefined): Promise<void> {
+  /** Une sélection ou un dépôt remplace le précédent : les deux archives se choisissent ensemble. */
+  private async analyser(fichiers: File[]): Promise<void> {
     const numero = ++this.derniere;
     this.reinitialiser();
-    if (!fichier) return;
-    this.nomFichier.set(fichier.name);
-    if (fichier.size > TAILLE_MAX_ZIP) {
-      this.erreur.set(`« ${fichier.name} » dépasse 5 Mo : archive refusée.`);
+    if (fichiers.length === 0) return;
+    if (fichiers.length > ARCHIVES_MAX) {
+      this.champFichier().nativeElement.value = '';
+      this.erreur.set(
+        `Déposez au plus ${ARCHIVES_MAX} archives à la fois (Primitives et Semantics).`,
+      );
+      return;
+    }
+    this.nomsFichiers.set(fichiers.map((fichier) => fichier.name));
+    const trop = fichiers.find((fichier) => fichier.size > TAILLE_MAX_ZIP);
+    if (trop) {
+      this.erreur.set(`« ${trop.name} » dépasse 5 Mo : archive refusée.`);
       return;
     }
 
     this.enCours.set(true);
     this.annonce.set('Analyse en cours…');
     try {
-      const octets = new Uint8Array(await fichier.arrayBuffer());
+      const sources = await Promise.all(
+        fichiers.map(async (fichier) => ({
+          nom: fichier.name,
+          octets: new Uint8Array(await fichier.arrayBuffer()),
+        })),
+      );
       const { genererThemeImporte } = await this.chargerGenerateur();
       if (numero !== this.derniere) return;
       const id = this.genererId();
-      const resultat = genererThemeImporte(octets, { base: id, nomSource: fichier.name });
-      this.analyse.set({ ...resultat, id, nomSource: fichier.name });
-      this.modele.set({ nom: nomPropose(fichier.name) });
-      this.annonce.set(`Analyse terminée : ${pluriel(resultat.familles.length, 'famille')}.`);
+      // Un fichier : signature d'origine ; deux fichiers : export natif de Figma (rôle déduit du contenu).
+      const resultat =
+        sources.length === 1
+          ? genererThemeImporte(sources[0].octets, { base: id, nomSource: sources[0].nom })
+          : genererThemeImporte(sources, { base: id });
+      const nomSource = sources.map((source) => source.nom).join(' + ');
+      this.analyse.set({ ...resultat, id, nomSource });
+      this.modele.set({ nom: sources.length === 1 ? nomPropose(nomSource) : nomExportFigma() });
+      const natif = resultat.rapport.format === 'natif' ? ' (export natif Figma)' : '';
+      this.annonce.set(
+        `Analyse terminée : ${pluriel(resultat.familles.length, 'famille')}${natif}.`,
+      );
     } catch (erreur) {
       if (numero !== this.derniere) return;
       this.annonce.set('');
@@ -447,7 +477,7 @@ export class ImportForm {
     this.erreur.set('');
     this.erreurAjout.set('');
     this.annonce.set('');
-    this.nomFichier.set('');
+    this.nomsFichiers.set([]);
     this.modele.set({ nom: '' });
     this.formulaire().reset();
   }

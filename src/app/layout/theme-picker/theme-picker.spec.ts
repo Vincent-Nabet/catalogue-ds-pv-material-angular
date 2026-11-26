@@ -15,7 +15,7 @@ const STANDARD: ImportedFamily = {
   progression: true,
 };
 const MOYEN: ImportedFamily = {
-  id: 'contraste-moyen',
+  id: 'medium-contrast',
   libelle: 'Contraste moyen',
   apercu: '#657c08',
   defaut: false,
@@ -98,7 +98,7 @@ describe('ThemePicker: imported themes', () => {
     ]);
 
     await items[1].click();
-    expect(TestBed.inject(ThemeService).theme()).toBe('imp-aaaaaa-contraste-moyen');
+    expect(TestBed.inject(ThemeService).theme()).toBe('imp-aaaaaa-medium-contrast');
   });
 
   it('should show the imported theme in the button, as plain text', () => {

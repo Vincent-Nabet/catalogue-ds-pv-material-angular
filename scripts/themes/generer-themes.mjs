@@ -2,9 +2,11 @@
 //
 //   npm run themes
 //   npm run themes -- --source design.zip --nom pv
+//   npm run themes -- --source Primitives.zip --source Semantics.zip     (export natif de Figma)
 //   npm run themes -- --palettes --palette-repli azure
 //
 // Voir docs/generation-themes.md.
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -15,26 +17,30 @@ import { controlerMaterial, genererMaterial, PALETTE_REPLI_DEFAUT, validerPalett
 import { genererVariables } from './ecrire-variables.mjs';
 import { lireSource } from './lire-source.mjs';
 
+/** Mode d'emploi statique copié tel quel dans le dossier généré (`ressources/README.md`). */
+const README = readFileSync(new URL('./ressources/README.md', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
+
 const racine = resolve(fileURLToPath(new URL('.', import.meta.url)), '../..');
 
 const AIDE = `Génère les variables CSS MD3 + custom et le thème Angular Material depuis les tokens du design system.
 
 Options :
-  --source <dossier|zip>   tokens à lire : primitives.tokens.json + semantics/*.tokens.json (défaut : tokens)
+  --source <dossier|zip>   tokens à lire (défaut : tokens) : primitives.tokens.json + semantics/*.tokens.json, ou l'export natif
+                           de Figma (répéter l'option : --source Primitives.zip --source Semantics.zip)
   --nom <nom>              préfixe des variables custom, des classes et du mixin (défaut : app)
   --sortie <dossier>       dossier généré (défaut : src/styles/themes-<nom>)
   --palette-repli <nom>    palette Material prédéfinie utilisée en repli (défaut : ${PALETTE_REPLI_DEFAUT})
   --palettes               expose aussi les primitives Shade-NNN en --<nom>-ref-<palette>-<NNN>
   --help                   affiche cette aide`;
 
-/** Enchaîne lecture, génération et écriture ; retourne le rapport (cf. `formaterRapport`). */
+/** Enchaîne lecture, génération et écriture ; retourne le rapport (cf. `formaterRapport`). `source` : un chemin ou une liste. */
 export function generer({ source = resolve(racine, 'tokens'), nom = 'app', sortie, paletteRepli = PALETTE_REPLI_DEFAUT, palettes = false }) {
   validerNom(nom);
   validerPaletteRepli(paletteRepli);
   const dossierSortie = resolve(sortie ?? resolve(racine, 'src/styles', `themes-${nom}`));
-  const chemin = resolve(source);
+  const chemins = [source].flat().map((s) => resolve(s));
 
-  const tokens = lireSource(chemin);
+  const tokens = lireSource(chemins);
   const variables = genererVariables(tokens, { nom, palettes });
   const classes = variables.rapport.familles.map((f) => classeFamille(f, nom));
   const material = genererMaterial({ nom, variables: variables.variables, paletteRepli, classes });
@@ -43,11 +49,12 @@ export function generer({ source = resolve(racine, 'tokens'), nom = 'app', sorti
     throw new Error(`Le thème Material généré ne se compile pas comme prévu :\n  ${controle.ecarts.join('\n  ')}`);
   }
 
-  const manifeste = new Map([['familles.ts', genererManifeste({ nom, familles: variables.rapport.familles })]]);
-  const fichiers = new Map([...variables.fichiers, ...material.fichiers, ...manifeste]);
-  const ecriture = ecrireFichiers(dossierSortie, fichiers, chemin);
+  const manifeste = new Map([['families.ts', genererManifeste({ nom, familles: variables.rapport.familles })]]);
+  const fichiers = new Map([...variables.fichiers, ...material.fichiers, ...manifeste, ['README.md', README]]);
+  const ecriture = ecrireFichiers(dossierSortie, fichiers, tokens.origine);
   return {
-    source: chemin,
+    source: chemins.join(' + '),
+    ...(tokens.format ? { format: tokens.format, sources: chemins.length, avertissementsSource: tokens.avertissements } : {}),
     nom,
     sortie: dossierSortie,
     modes: Object.keys(tokens.semantiques).sort(),
@@ -64,6 +71,7 @@ export function formaterRapport(r) {
   const { ecrits, inchanges, supprimes } = r.ecriture;
   const lignes = [
     `Source : ${r.source} (${r.modes.length} modes, ${r.variables.familles.length} famille(s))`,
+    ...(r.format === 'natif' ? [`Format : export natif Figma (${r.sources} source${r.sources > 1 ? 's' : ''})`] : []),
     ...r.variables.familles.map((f) => `    ${f.defaut ? '*' : '-'} ${f.libelle} : ${f.clair} / ${f.sombre} → .theme-${r.nom}${f.suffixe ? `-${f.suffixe}` : ''}`),
     `Sortie : ${r.sortie}`,
     `Fichiers : ${ecrits.length} écrit(s), ${inchanges.length} inchangé(s), ${supprimes.length} supprimé(s)`,
@@ -80,6 +88,7 @@ export function formaterRapport(r) {
     `  variables en repli (palette Material) : ${r.material.repliAttendu.length + r.material.repliInattendu.length}`,
   ];
   const avertissements = [
+    ...(r.avertissementsSource ?? []),
     ...r.variables.inconnus.map((c) => `token non reconnu, non écrit : ${c}`),
     ...r.material.repliInattendu.map((v) => `variable Material sans source dans les tokens (nouvelle version de Material ?) : ${v}`),
     ...r.variables.modesIgnores.map((m) => `mode non utilisé (ni clair ni sombre reconnu dans son nom) : ${m}`),
@@ -93,7 +102,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   try {
     const { values } = parseArgs({
       options: {
-        source: { type: 'string' },
+        source: { type: 'string', multiple: true },
         nom: { type: 'string' },
         sortie: { type: 'string' },
         'palette-repli': { type: 'string' },

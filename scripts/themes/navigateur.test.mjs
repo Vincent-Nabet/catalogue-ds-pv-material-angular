@@ -9,7 +9,7 @@ const generer = (fichiers, prefixe) => genererThemeImporte(zipDe(fichiers, prefi
 
 test('tokens/ : 4 familles, aucun avertissement, CSS sans :root', () => {
   const { css, familles, rapport } = generer(fichiersTokens());
-  assert.deepEqual(familles.map((f) => f.id), ['standard', 'contraste-moyen', 'contraste-eleve', 'monochrome']);
+  assert.deepEqual(familles.map((f) => f.id), ['standard', 'medium-contrast', 'high-contrast', 'monochrome']);
   assert.deepEqual(familles.map((f) => f.libelle), ['Standard', 'Contraste moyen', 'Contraste élevé', 'Monochrome']);
   assert.ok(familles.every((f) => /^#[0-9a-f]{6}$/.test(f.apercu)));
   assert.equal(familles.filter((f) => f.defaut).length, 1);
@@ -24,7 +24,7 @@ test('tokens/ : 4 familles, aucun avertissement, CSS sans :root', () => {
   assert.equal(rapport.police, 'Poppins');
   assert.doesNotMatch(css, /:root/);
   assert.doesNotMatch(css, /@import/);
-  assert.ok(css.includes(`html.theme-${BASE}-contraste-eleve {`));
+  assert.ok(css.includes(`html.theme-${BASE}-high-contrast {`));
 });
 
 test('zip avec un sous-dossier racine', () => {
@@ -106,4 +106,107 @@ test('un token mal formé donne un message français, pas une erreur technique',
 
 test('identifiant de thème invalide', () => {
   assert.throws(() => genererThemeImporte(zipDe(fichiersTokens()), { base: 'Imp X', nomSource: 'a.zip' }), /Identifiant de thème/);
+});
+
+// --- Export natif de Figma (un ou deux zips) -----------------------------------------------------------------
+import { comparerSorties } from './comparer-sorties.mjs';
+import { fichiersNatifs, zipsNatifs } from './fixtures-natif.mjs';
+
+const natif = fichiersNatifs();
+const sourcesNatives = () => {
+  const { primitives, semantiques } = zipsNatifs();
+  return [
+    { nom: 'Primitives.zip', octets: primitives },
+    { nom: 'Semantics.zip', octets: semantiques },
+  ];
+};
+const depuisNatif = (sources) => genererThemeImporte(sources, { base: BASE });
+/** Zips des fichiers natifs (texte), après transformation des JSON par `modifier(json, nomFichier)`. */
+const zipsModifies = (modifier) => {
+  const transformer = (fichiers) => Object.fromEntries(Object.entries(fichiers).map(([nom, texte]) => {
+    const json = JSON.parse(texte);
+    return [nom, JSON.stringify(modifier(json, nom) ?? json)];
+  }));
+  return [
+    { nom: 'Primitives.zip', octets: zipDe(transformer(natif.primitives)) },
+    { nom: 'Semantics.zip', octets: zipDe(transformer(natif.semantiques)) },
+  ];
+};
+
+test('natif, deux zips : mêmes familles et même rapport que tokens/, CSS équivalent (ordre des rôles seul)', () => {
+  const ancien = generer(fichiersTokens());
+  const resultat = depuisNatif(sourcesNatives());
+  assert.deepEqual(resultat.familles, ancien.familles);
+  assert.deepEqual(resultat.rapport, { ...ancien.rapport, format: 'natif', ignores: ancien.rapport.ignores - 2 });
+  assert.deepEqual([resultat.rapport.modes, resultat.rapport.md3, resultat.rapport.custom], [8, 142, 41]);
+  assert.deepEqual(resultat.rapport.avertissements, []);
+  assert.equal(ancien.rapport.format, 'ancien');
+  const comparaison = comparerSorties(ancien.css, resultat.css).get('css');
+  assert.deepEqual(comparaison, { statut: 'equivalent', ecarts: [] });
+  assert.doesNotMatch(resultat.css, /:root/);
+});
+
+test('natif : zips inversés et zip combiné, avec l\'ancienne signature ou la nouvelle', () => {
+  const [p, s] = sourcesNatives();
+  const reference = depuisNatif([p, s]);
+  assert.deepEqual(depuisNatif([s, p]), reference);
+  const combine = zipsNatifs().combine;
+  assert.deepEqual(depuisNatif([{ nom: 'tout.zip', octets: combine }]), reference);
+  assert.deepEqual(genererThemeImporte(combine, { base: BASE, nomSource: 'tout.zip' }), reference);
+});
+
+test('natif : un seul zip incomplet → export incomplet ; trois fichiers mélangés avec l\'ancien format → erreur', () => {
+  const [p, s] = sourcesNatives();
+  assert.throws(() => depuisNatif([p]), /Export Figma incomplet : aucun mode sémantique/);
+  assert.throws(() => depuisNatif([s]), /Export Figma incomplet : aucun fichier de primitives/);
+  assert.throws(() => genererThemeImporte(p.octets, { base: BASE, nomSource: 'Primitives.zip' }), /Export Figma incomplet/);
+  assert.throws(() => depuisNatif([p, { nom: 'ancien.zip', octets: zipDe(fichiersTokens()) }]), /Formats mélangés/);
+});
+
+test('natif : les avertissements de l\'adaptateur sont ajoutés au rapport', () => {
+  const sources = zipsModifies((json, nom) => {
+    if (nom === 'Light.tokens.json') json.Colors.Schemes.Standard.Primary.$value.hex = '#00FF00';
+  });
+  const { rapport } = depuisNatif(sources);
+  assert.equal(rapport.avertissements.length, 1);
+  assert.match(rapport.avertissements[0], /Light\.tokens\.json.*Colors\.Schemes\.Standard\.Primary : #00FF00 ≠ #86A315/);
+});
+
+test('natif : garde-fous (trop de JSON au total, JSON trop gros)', () => {
+  const beaucoup = (prefixe) => zipDe(Object.fromEntries(Array.from({ length: 25 }, (_, i) => [`${prefixe}${i}.tokens.json`, '{}'])));
+  assert.throws(() => depuisNatif([{ nom: 'a.zip', octets: beaucoup('a') }, { nom: 'b.zip', octets: beaucoup('b') }]), /Trop de fichiers JSON.*40 au plus au total/);
+  const [p] = sourcesNatives();
+  const gros = zipDe({ 'Light.tokens.json': `{"Colors":{"Schemes":{}},"x":"${'a'.repeat(5 * 1024 * 1024)}"}` });
+  assert.throws(() => depuisNatif([p, { nom: 'gros.zip', octets: gros }]), /dépasse 5 Mo/);
+});
+
+test('natif : une valeur dangereuse est refusée (couleur par construction, nom de police par validerCss)', () => {
+  const couleur = zipsModifies((json, nom) => {
+    if (nom === 'Light.tokens.json') json.Colors.Schemes.Standard.Primary.$value.components = ['red; } body { display: none', 0, 0];
+  });
+  assert.throws(() => depuisNatif(couleur), /composantes de couleur invalides/);
+  const hex = zipsModifies((json, nom) => {
+    if (nom === 'Light.tokens.json') json.Colors.Schemes.Standard.Primary.$value = { colorSpace: 'srgb', hex: 'red; } body { display: none' };
+  });
+  assert.throws(() => depuisNatif(hex), /composantes de couleur invalides/);
+  const police = zipsModifies((json, nom) => {
+    if (nom === 'Baseline.tokens.json') json['Font theme'].Static.Font.Plain.$value = 'Poppins; } body { display: none';
+  });
+  assert.throws(() => depuisNatif(police), /CSS généré invalide ligne \d+/);
+});
+
+test('natif : graisse ou espace colorimétrique inconnus → erreur française', () => {
+  const graisse = zipsModifies((json, nom) => {
+    if (nom === 'Baseline.tokens.json') json['Font theme'].Static.Weight.Bold.$value = 'Gras';
+  });
+  assert.throws(() => depuisNatif(graisse), /Font theme\.Static\.Weight\.Bold.*« Gras » inconnue/);
+  const espace = zipsModifies((json, nom) => {
+    if (nom === 'Dark.tokens.json') json.Colors.Schemes.Standard.Primary.$value.colorSpace = 'display-p3';
+  });
+  assert.throws(() => depuisNatif(espace), /display-p3.*srgb/);
+});
+
+test('l\'ancien zip seul passe toujours par l\'ancienne signature et garde son format', () => {
+  const { rapport } = genererThemeImporte(zipDe(fichiersTokens()), { base: BASE, nomSource: 'tokens.zip' });
+  assert.equal(rapport.format, 'ancien');
 });

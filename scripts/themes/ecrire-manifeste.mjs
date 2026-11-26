@@ -1,4 +1,4 @@
-// Manifeste des familles pour le catalogue : `familles.ts` (importé par `core/theme/themes.ts`), pour que
+// Manifeste des familles pour le catalogue : `families.ts` (importé par `core/theme/themes.ts`), pour que
 // le sélecteur de thème suive les familles réellement générées.
 import { selecteurFamille } from './ecrire-variables.mjs';
 
@@ -10,27 +10,27 @@ export const classeFamille = (famille, nom) => (famille.suffixe ? `theme-${nom}-
 /** Identifiant de thème du catalogue : `<nom>` pour la standard, `<nom>-<suffixe>` sinon (classe `theme-<id>`). */
 export const idFamille = (famille, nom) => (famille.suffixe ? `${nom}-${famille.suffixe}` : nom);
 
-/** Retourne le corps de `familles.ts` (sans en-tête). */
+/** Retourne le corps de `families.ts` (sans en-tête). */
 export function genererManifeste({ nom, familles }) {
   const lignes = familles.map(
     (f) =>
-      `  { id: ${texte(idFamille(f, nom))}, libelle: ${texte(f.libelle)}, apercu: ${texte(f.apercu)}, defaut: ${f.defaut}, progression: ${f.progression} },\n`,
+      `  { id: ${texte(idFamille(f, nom))}, label: ${texte(f.libelle)}, preview: ${texte(f.apercu)}, isDefault: ${f.defaut}, progression: ${f.progression} },\n`,
   );
-  return `export interface FamilleDesignSystem {
-  /** Identifiant de thème (classe \`theme-<id>\` sur <html>). */
+  return `export interface DesignSystemFamily {
+  /** Theme identifier (class \`theme-<id>\` on <html>). */
   readonly id: string;
-  /** Libellé de la famille (« Standard », « Contraste moyen »…). */
-  readonly libelle: string;
-  /** Couleur primaire claire, pour la pastille d'aperçu. */
-  readonly apercu: string;
-  /** Famille standard : appliquée aussi sur \`:root\`. */
-  readonly defaut: boolean;
-  /** Fait partie de la progression du contraste (standard, moyen, élevé). */
+  /** Family label, in French (« Standard », « Contraste moyen »…). */
+  readonly label: string;
+  /** Light primary color, for the preview swatch. */
+  readonly preview: string;
+  /** Default family: also applied on \`:root\`. */
+  readonly isDefault: boolean;
+  /** Part of the contrast progression (standard, medium, high). */
   readonly progression: boolean;
 }
 
-/** Familles de contraste générées depuis les tokens (la défaut d'abord). Sélecteur : ${familles.map((f) => selecteurFamille(f, nom)).join(' ; ')}. */
-export const FAMILLES_DESIGN_SYSTEM: readonly FamilleDesignSystem[] = [
+/** Contrast families generated from the tokens (default first). Selectors: ${familles.map((f) => selecteurFamille(f, nom)).join(' ; ')}. */
+export const DESIGN_SYSTEM_FAMILIES: readonly DesignSystemFamily[] = [
 ${lignes.join('')}];
 `;
 }

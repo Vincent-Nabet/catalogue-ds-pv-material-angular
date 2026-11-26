@@ -12,16 +12,16 @@
 const MOTS_CLAIR = new Set(['light', 'lt', 'clair', 'claire']);
 const MOTS_SOMBRE = new Set(['dark', 'dt', 'sombre']);
 
-/** Clés connues → suffixe de classe (français), libellé et rang d'affichage. Les autres clés sont déduites du nom. */
+/** Clés connues → suffixe de classe (anglais), libellé (français) et rang d'affichage. Les autres clés sont déduites du nom. */
 const CONNUES = new Map([
-  ['medium-contrast', { suffixe: 'contraste-moyen', libelle: 'Contraste moyen', rang: 1 }],
-  ['medium', { suffixe: 'contraste-moyen', libelle: 'Contraste moyen', rang: 1 }],
-  ['mc', { suffixe: 'contraste-moyen', libelle: 'Contraste moyen', rang: 1 }],
-  ['contraste-moyen', { suffixe: 'contraste-moyen', libelle: 'Contraste moyen', rang: 1 }],
-  ['high-contrast', { suffixe: 'contraste-eleve', libelle: 'Contraste élevé', rang: 2 }],
-  ['high', { suffixe: 'contraste-eleve', libelle: 'Contraste élevé', rang: 2 }],
-  ['hc', { suffixe: 'contraste-eleve', libelle: 'Contraste élevé', rang: 2 }],
-  ['contraste-eleve', { suffixe: 'contraste-eleve', libelle: 'Contraste élevé', rang: 2 }],
+  ['medium-contrast', { suffixe: 'medium-contrast', libelle: 'Contraste moyen', rang: 1 }],
+  ['medium', { suffixe: 'medium-contrast', libelle: 'Contraste moyen', rang: 1 }],
+  ['mc', { suffixe: 'medium-contrast', libelle: 'Contraste moyen', rang: 1 }],
+  ['contraste-moyen', { suffixe: 'medium-contrast', libelle: 'Contraste moyen', rang: 1 }],
+  ['high-contrast', { suffixe: 'high-contrast', libelle: 'Contraste élevé', rang: 2 }],
+  ['high', { suffixe: 'high-contrast', libelle: 'Contraste élevé', rang: 2 }],
+  ['hc', { suffixe: 'high-contrast', libelle: 'Contraste élevé', rang: 2 }],
+  ['contraste-eleve', { suffixe: 'high-contrast', libelle: 'Contraste élevé', rang: 2 }],
 ]);
 
 const mots = (nomMode) => nomMode.toLowerCase().split(/[-_.\s]+/).filter(Boolean);

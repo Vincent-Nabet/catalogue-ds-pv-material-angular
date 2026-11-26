@@ -5,13 +5,17 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmdirSync, rmSync, st
 import { basename, dirname, join } from 'node:path';
 
 const MARQUEUR = 'Fichier généré par `npm run themes` — ne pas modifier.';
-const ENTETE = /^\/\* Fichier généré par `npm run themes`[^]*?\*\/\n\n/;
+const ENTETE = /^(?:\/\* Fichier généré par `npm run themes`[^]*?\*\/|<!-- Fichier généré par `npm run themes`[^]*?-->)\n\n/;
 
-export const entete = (origine, date) => `/* ${MARQUEUR}\n * Source : ${basename(origine)} — ${date} */\n\n`;
+/** En-tête d'un fichier généré : commentaire CSS, ou commentaire HTML pour un fichier Markdown. */
+export const entete = (origine, date, chemin = '') =>
+  chemin.endsWith('.md')
+    ? `<!-- ${MARQUEUR}\n     Source : ${basename(origine)} — ${date} -->\n\n`
+    : `/* ${MARQUEUR}\n * Source : ${basename(origine)} — ${date} */\n\n`;
 
 // Les fins de ligne CRLF (checkout Windows avec autocrlf) ne comptent pas comme une modification.
 const corpsDe = (texte) => texte.replaceAll('\r\n', '\n').replace(ENTETE, '');
-const estGenere = (texte) => texte.startsWith(`/* ${MARQUEUR}`);
+const estGenere = (texte) => texte.startsWith(`/* ${MARQUEUR}`) || texte.startsWith(`<!-- ${MARQUEUR}`);
 
 function listerFichiers(dossier, prefixe = '') {
   return readdirSync(dossier, { withFileTypes: true }).flatMap((entree) =>
@@ -44,7 +48,7 @@ export function ecrireFichiers(sortie, fichiers, origine, date = new Date().toIS
       continue;
     }
     mkdirSync(dirname(cible), { recursive: true });
-    writeFileSync(cible, entete(origine, date) + corps);
+    writeFileSync(cible, entete(origine, date, chemin) + corps);
     resultat.ecrits.push(chemin);
   }
 

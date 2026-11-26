@@ -13,7 +13,7 @@ const STANDARD: ImportedFamily = {
   progression: true,
 };
 const MOYEN: ImportedFamily = {
-  id: 'contraste-moyen',
+  id: 'medium-contrast',
   libelle: 'Contraste moyen',
   apercu: '#657c08',
   defaut: false,
@@ -64,7 +64,7 @@ describe('ThemeService with imported themes', () => {
   it('should remove classes and <style> when going back to another theme', () => {
     seed();
     const service = TestBed.inject(ThemeService);
-    service.theme.set('imp-aaaaaa-contraste-moyen');
+    service.theme.set('imp-aaaaaa-medium-contrast');
     TestBed.tick();
     service.theme.set('azur');
     TestBed.tick();
@@ -133,7 +133,7 @@ describe('ThemeService with imported themes', () => {
     it('should switch to the default theme first when the active theme is removed', () => {
       const imported = seed();
       const service = TestBed.inject(ThemeService);
-      service.theme.set('imp-aaaaaa-contraste-moyen');
+      service.theme.set('imp-aaaaaa-medium-contrast');
       TestBed.tick();
 
       service.removeImportedTheme('imp-aaaaaa');
@@ -193,9 +193,9 @@ describe('ThemeService with imported themes', () => {
     it('should describe an imported theme', () => {
       seed();
       const service = TestBed.inject(ThemeService);
-      service.theme.set('imp-aaaaaa-contraste-moyen');
+      service.theme.set('imp-aaaaaa-medium-contrast');
       expect(service.themeCourant()).toMatchObject({
-        id: 'imp-aaaaaa-contraste-moyen',
+        id: 'imp-aaaaaa-medium-contrast',
         group: 'imported',
         label: 'Premier, contraste moyen',
         color: '#657c08',

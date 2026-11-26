@@ -13,6 +13,26 @@ Ils ne sont **pas versionnés** (dossier `zips/` ignoré) : `node testing/scratc
 | `zips/pastel-rose.zip` | même principe en rose : primaire rose bonbon, secondaire orchidée, tertiaire pêche, neutres gris rosés, erreur corail (distinct du primaire), succès, info, alerte pastel | idem ; écart de contraste ≤ 1,6 % |
 | `zips/une-famille.zip` | seulement `light` et `dark` | 1 famille ; élément direct dans le sélecteur, sans sous-menu |
 
+## Export natif de Figma (à envoyer **ensemble**, deux fichiers sélectionnés ou déposés à la fois)
+
+Reconstitué depuis `tokens/` par l'inverse de l'adaptateur (`scripts/themes/fixtures-natif.mjs`, `$extensions` minimales : ces zips pèsent ≈ 50 Ko, le vrai `Semantics.zip` de Figma 1,8 Mo). Une moitié « normale » (`natif-primitives.zip` ou `natif-semantiques.zip`) se combine avec une moitié modifiée.
+
+| Fichiers | Résultat attendu |
+|---|---|
+| `natif-primitives.zip` + `natif-semantiques.zip` (dans un ordre ou dans l'autre) | 4 familles, 8 modes, 142 variables MD3, 41 du design system, « Format : export natif Figma », aucun avertissement ; nom proposé « Export Figma jj/mm/aaaa » |
+| `natif-combine.zip` (un seul fichier : les 9 fichiers) | idem (un seul fichier suffit s'il contient tout) |
+| `natif-primitives.zip` ou `natif-semantiques.zip` **seul** | Erreur « Export Figma incomplet » (aucun mode sémantique / aucun fichier de primitives) |
+| `natif-primitives.zip` + `natif-sans-mode-sombre-semantiques.zip` | Erreur « Famille incomplète : `light` n'a pas de mode sombre » |
+| `natif-primitives.zip` + `natif-groupe-inconnu-semantiques.zip` | Thème importé, avertissements : groupe de rôles inconnu aplati (`Brand`), token non reconnu `Colors.Schemes.Accent` |
+| `natif-graisse-inconnue-primitives.zip` + `natif-semantiques.zip` | Erreur : graisse « Gras » inconnue (jeton `Font theme.Static.Weight.Bold`) |
+| `natif-primitives.zip` + `natif-display-p3-semantiques.zip` | Erreur : espace colorimétrique « display-p3 » non géré |
+| `natif-primitives.zip` + `natif-hex-incoherent-semantiques.zip` | Thème importé, 1 avertissement : « hex » incohérent avec « components » (`components` retenu) |
+| `natif-autre-export-primitives.zip` + `natif-semantiques.zip` | Thème importé, 1 avertissement : les primitives et les sémantiques ne semblent pas issues du même export |
+| `natif-primitives-dupliquees-primitives.zip` + `natif-semantiques.zip` | Erreur : plusieurs fichiers de primitives |
+| `natif-primitives.zip` + `natif-mode-duplique-semantiques.zip` | Erreur : mode « light » défini deux fois |
+| `natif-primitives.zip` + `tokens-test.zip` | Erreur : formats mélangés |
+| trois fichiers quelconques | « Déposez au plus 2 archives à la fois (Primitives et Semantics). » |
+
 ## Refusés (message français, rien n'est enregistré, « Importer » reste désactivé)
 
 | Fichier | Message attendu |

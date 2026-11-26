@@ -1,0 +1,48 @@
+{
+  "Colors": {
+    "Schemes": {
+      "Standard": {
+        "Primary": {
+          "$type": "color",
+          "$value": "{Colors.Schemes.Neutral.Black}",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:60969:25602",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "Surface": {
+        "Surface": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.9803921580314636,
+              0.9803921580314636,
+              0.9803921580314636
+            ],
+            "alpha": 1,
+            "hex": "#FAFAFA"
+          },
+          "$extensions": {
+            "com.figma.variableId": "VariableID:60969:25621",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ],
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:642a2c2a41d17dc00c1526420ddd8d24c6239512/-1:-1",
+              "targetVariableName": "Colors/Neutral/Shade-034",
+              "targetVariableSetId": "VariableCollectionId:9821f49019cf8cc3d358d14f0dc3ca33f0634d1e/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Monochrome LT"
+  }
+}
