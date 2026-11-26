@@ -86,6 +86,17 @@ test('aplatissement : groupe inconnu aplati avec avertissement ; rôle défini d
   assert.ok(plat.arbre.Colors.Schemes.Sous.Role);
 });
 
+test('noms réservés (__proto__, constructor, prototype) → erreur, le prototype des objets reste intact', () => {
+  const brut = (chemin) => JSON.parse(`{"Colors":{"Schemes":{"Standard":{${chemin}}}}}`);
+  const jeton = '{"$type":"color","$value":{"colorSpace":"srgb","components":[1,0,0]}}';
+  for (const nom of ['__proto__', 'constructor', 'prototype']) {
+    assert.throws(() => adapte(brut(`"${nom}":{"toString":${jeton}}`)), new RegExp(`Jeton « Colors\\.Schemes\\.Standard\\.${nom}\\.toString ».*« ${nom} » est réservé`));
+  }
+  assert.throws(() => adapte(brut(`"Primary":${jeton},"Primary2":{"constructor":{"prototype":{"polluee":${jeton}}}}`)), /est réservé/);
+  assert.equal(({}).toString, Object.prototype.toString);
+  assert.equal(({}).polluee, undefined);
+});
+
 test('tri : ordre de ROLES_MD3 puis ROLES_CUSTOM, rôles inconnus ensuite, Neutral en dernier', () => {
   const { arbre } = adapte({
     Colors: {

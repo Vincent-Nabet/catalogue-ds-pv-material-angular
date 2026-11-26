@@ -27,6 +27,8 @@ const GRAISSES = new Map([
 /** Rôles connus du générateur (clés en kebab, comme `correspondance.mjs`), dans l'ordre canonique. */
 const ORDRE_ROLES = new Map([...ROLES_MD3, ...ROLES_CUSTOM].map((role, i) => [role, i]));
 const NEUTRE = new Map([['White', '0'], ['Black', '900']]);
+/** Noms qui, utilisés comme clé de l'arbre (`poser`), atteindraient le prototype des objets au lieu d'un nœud du thème. */
+const SEGMENTS_INTERDITS = new Set(['__proto__', 'constructor', 'prototype']);
 
 const kebab = (texte) => texte.trim().toLowerCase().replace(/\s+/g, '-');
 const estObjet = (valeur) => valeur !== null && typeof valeur === 'object' && !Array.isArray(valeur);
@@ -186,6 +188,10 @@ export function adapter(json, { fichier = 'fichier' } = {}) {
 
   parcourirJetons(json, (jeton, segments) => {
     const nom = segments.join('.');
+    const interdit = segments.find((segment) => SEGMENTS_INTERDITS.has(segment));
+    if (interdit !== undefined) {
+      throw new Error(`Jeton « ${nom} » dans « ${fichier} » : le nom « ${interdit} » est réservé et ne peut pas servir de nom de groupe ou de jeton.`);
+    }
     const chemin = reecrireChemin(segments);
     if (segments[0] === 'Colors' && segments[1] === 'Schemes' && segments.length === 4 && segments[2] !== 'Neutral') {
       groupes.set(segments[2], groupes.get(segments[2]) || ORDRE_ROLES.has(kebab(segments[3])));
