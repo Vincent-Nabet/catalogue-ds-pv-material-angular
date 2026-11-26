@@ -56,7 +56,7 @@ src/
                              et @Service OverlayFamily (même chose sur le conteneur de la surcouche CDK)
     pages/
       accueil/accueil.ts
-      themes-importes/               page /themes-importes (hors registre) : import d'un zip de tokens, liste et suppression
+      themes-importes/               page /themes-importes (hors registre) : import d'un zip de tokens ou des deux zips de l'export Figma, liste et suppression
       fondations/<id>/<id>.page.ts   3 pages Fondations (couleurs, typographie, formes-espacements) + matrice-contraste, non branchée au registre
       composants/<id>/<id>.page.ts   une page par composant (35)
   styles/_roles.scss         mixins « rôle de couleur » par composant (voir docs/themes-et-styles.md), résolu via `includePaths`
@@ -64,8 +64,9 @@ src/
                              index.css, md3/*.css, <nom>.css, _themes-<nom>.scss  ; chargé par `angular.json` (CSS) et `styles.scss` (mixin)
 scripts/
   a11y.mjs, captures.mjs, lib.mjs   vérification du site (axe-core, captures)
-  themes/                    génération des thèmes depuis les tokens (voir docs/generation-themes.md) ; navigateur.mjs
-                             (+ .d.mts) est aussi importé par la page « Thèmes importés » (import() dynamique)
+  themes/                    génération des thèmes depuis les tokens, ancien format ou export natif de Figma (voir
+                             docs/generation-themes.md) ; navigateur.mjs (+ .d.mts) est aussi importé par la page
+                             « Thèmes importés » (import() dynamique) ; format-figma.mjs : adaptateur de l'export natif
 docs/                        cette documentation
 tokens/, TOKENS-*.md         design system distinct : lus (lecture seule) par scripts/themes, jamais modifiés
 ```
@@ -121,13 +122,17 @@ Les pages Fondations ont leur fichier dans `pages/fondations/` mais gardent l'UR
 
 ## Thèmes importés (`core/theme/imported-themes.ts`, `pages/themes-importes/`)
 
-Fonction : importer un zip de tokens dans le navigateur et l'utiliser comme thème (parcours : [fonctionnel.md](fonctionnel.md#thèmes-importés)).
+Fonction : importer un zip de tokens (ou les deux zips de l'export natif de Figma) dans le navigateur et l'utiliser comme thème (parcours : [fonctionnel.md](fonctionnel.md#thèmes-importés)).
 
 ```
  Page /themes-importes (chunk différé du routeur)
     │  au choix du 1er fichier : import() dynamique → fflate + générateur (chunk à part)
     ▼
- scripts/themes/navigateur.mjs   genererThemeImporte(octets, { base, nomSource }) → { css, familles, rapport }
+ scripts/themes/navigateur.mjs   genererThemeImporte(octets, { base, nomSource })            un zip
+                                 genererThemeImporte([{ nom, octets }, …], { base })           un ou plusieurs zips
+                                   → { css, familles, rapport }
+    │  lire-source-memoire.mjs : assemblerSources (format reconnu d'après le contenu)
+    │     ancien format → assembler()      export natif → format-figma.mjs : assemblerFigma() → forme interne
     ▼
  ImportedThemes (@Service, localStorage)  ──►  ThemeService : classes sur <html> + <style> du thème actif
                                                       ▲
@@ -146,9 +151,9 @@ Fonction : importer un zip de tokens dans le navigateur et l'utiliser comme thè
 
   `add` est **atomique** (CSS d'abord, puis index ; si l'index échoue, la clé CSS est retirée ; `QuotaExceededError` → `quota`) ; `remove` écrit l'index d'abord. La lecture est tolérante (JSON invalide, version inconnue, métadonnée mal formée → liste vide ; entrée sans clé CSS écartée) et ne lève jamais.
 - **`ThemeService`** : injecte `ImportedThemes` **avant** `read()` (un identifiant importé stocké est valide s'il est dans `THEMES` ou si `imported.has(id)`) ; `themeCourant` (computed : `ThemeInfo` du thème actif, quelle que soit sa source) ; l'`effect` retire aussi `theme-importe` et les classes `theme-imp-*`, puis, pour un thème importé, ajoute `theme-importe` et crée ou met à jour `<style id="catalogue-theme-importe">` (CSS du **seul** thème actif, retiré au retour à un autre thème) ; `removeImportedTheme(importId)` repasse d'abord à `DEFAULT_THEME_ID` si le thème actif en est un, puis supprime (la bascule est ici et non dans `ImportedThemes`, pour éviter une dépendance circulaire).
-- **Page `/themes-importes`** (lazy, **hors registre** : route dans `app.routes.ts`, pas d'entrée de menu ; le bouton « Contraste » y est absent comme sur l'accueil) : `themes-importes.ts` (titre et introduction, relie les deux sections), `import-form.ts` (`ImportForm` : zone de glisser-déposer (libellé du champ fichier natif, masqué visuellement), analyse, rapport, nom en **Signal Form**, enregistrement ; le jeton `THEME_GENERATOR` charge le générateur par `import()` et sert aussi de point de substitution en test), `imported-themes-list.ts` (`ImportedThemesList` : liste, confirmation en ligne, suppression). Le sélecteur n'importe statiquement ni `@angular/forms`, ni `fflate`, ni le générateur.
+- **Page `/themes-importes`** (lazy, **hors registre** : route dans `app.routes.ts`, pas d'entrée de menu ; le bouton « Contraste » y est absent comme sur l'accueil) : `themes-importes.ts` (titre et introduction, relie les deux sections), `import-form.ts` (`ImportForm` : zone de glisser-déposer (libellé du champ fichier natif `multiple`, masqué visuellement), 1 ou 2 archives (un fichier : signature d'origine de `genererThemeImporte` ; deux : tableau de sources), analyse, rapport, nom en **Signal Form**, enregistrement ; le jeton `THEME_GENERATOR` charge le générateur par `import()` et sert aussi de point de substitution en test), `imported-themes-list.ts` (`ImportedThemesList` : liste, confirmation en ligne, suppression). Le sélecteur n'importe statiquement ni `@angular/forms`, ni `fflate`, ni le générateur.
 - **`injectIsDesignSystem()`** (`core/tokens/theme-key.ts`) est vrai aussi pour un thème importé (les jetons `--app-*` y existent) : les pages Fondations montrent alors leurs sections réservées au design system.
-- **Lecture de `scripts/themes/` depuis `src/`** : `import('../../../../scripts/themes/navigateur.mjs')` fonctionne dans `ng build` et `ng test` sans `allowJs`, grâce au fichier de types `navigateur.d.mts` voisin (écrit à la main). Le générateur et `fflate` forment un chunk différé distinct, ni dans le bundle initial ni dans le chunk de la page.
+- **Lecture de `scripts/themes/` depuis `src/`** : `import('../../../../scripts/themes/navigateur.mjs')` fonctionne dans `ng build` et `ng test` sans `allowJs`, grâce au fichier de types `navigateur.d.mts` voisin (écrit à la main : deux surcharges de `genererThemeImporte`, `rapport.format` optionnel dans le type pour les doublures de test). Le générateur (adaptateur de l'export natif compris) et `fflate` forment un chunk différé distinct (≈ 32 kB), ni dans le bundle initial ni dans le chunk de la page.
 
 ## Composants partagés (`shared/`)
 
@@ -196,4 +201,4 @@ Les quatre pages montrent des valeurs de jetons **lues dans le CSS réellement c
 | Bundle initial | **880 kB** | 1 MB |
 | Style d'un composant | **5 kB** | 8 kB |
 
-Le bundle initial pèse environ 879 kB (878,83 kB, ≈ 170 kB transférés ; 871,95 kB avant les thèmes importés, 869,84 kB avant les pages Fondations) : **marge d'environ 1 kB** sous l'avertissement. `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.
+Le bundle initial pèse **884,46 kB** (≈ 166 kB transférés, mesuré après la mise à jour des dépendances d'Angular et de Material ; 878,83 kB avant, 871,95 kB avant les thèmes importés, 869,84 kB avant les pages Fondations) : il **dépasse de 4,46 kB** l'avertissement à 880 kB (sans erreur, la limite étant 1 MB), indépendamment de l'import de l'export natif de Figma qui n'y ajoute rien. `axe-core` (≈ 675 kB) est un chunk différé, chargé à la première activation de l'inspecteur de contraste : il n'est pas dans le bundle initial (module CommonJS, déclaré dans `allowedCommonJsDependencies`). Il est dominé par le shell : les modules Material (`list`, `button`, `sidenav`, `menu`, `forms`, overlay CDK) sont chargés d'emblée et ne se découpent pas à la classe près. L'avertissement a été relevé en plusieurs étapes avec justification (voir [decisions-et-limites.md](decisions-et-limites.md)). L'avertissement de style de composant est passé de 4 à 5 kB pour la page Bouton (4,22 kB mesurés) : ses rôles de couleur (secondaire, tertiaire, erreur) surchargent une quinzaine de jetons chacun pour boutons, boutons icône et FAB (via `mat.button-overrides`, `mat.icon-button-overrides`, `mat.fab-overrides`, avec des variables intermédiaires `--r-*` pour ne pas répéter les valeurs). Les pages sont toutes en lazy loading ; garder les styles de page légers.

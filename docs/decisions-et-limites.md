@@ -29,6 +29,27 @@ Détail : [generation-themes.md](generation-themes.md).
 | Clair/sombre et contraste | `light-dark()` + une classe `theme-<nom>[-<contraste>]` par famille | Même mécanisme que Material et que le catalogue ; 4 blocs au lieu de 8 |
 | Intégration au catalogue | 4 entrées dans le sélecteur (`app`, `app-contraste-moyen`, `app-contraste-eleve`, `app-monochrome`) | Une classe `theme-*` par famille de contraste ; un seul bloc `mat.theme()` pour les quatre (le mixin ne référence que des variables) |
 
+### Export natif de Figma (décisions)
+
+Détail : [generation-themes.md](generation-themes.md#formats-dentrée). L'export natif (panneau Variables → « Export modes » : `Primitives.zip` + `Semantics.zip`) est le **format final** ; l'ancien format reste lu à l'identique.
+
+| Sujet | Décision | Pourquoi |
+|---|---|---|
+| CLI | `--source` **répétable** ; chaque source est un zip ou un dossier ; le rôle (primitives ou sémantique) est déduit du **contenu**, l'ordre n'importe pas | Pas d'options `--primitives` / `--semantics` à documenter ; un zip inversé est accepté au lieu d'être refusé |
+| Page | **Une seule zone**, 1 ou 2 archives à la fois (glisser-déposer ou sélection multiple) ; une nouvelle sélection remplace la précédente | Pas d'état « en attente du second zip » ; le message d'erreur dit de sélectionner les deux archives ensemble |
+| Ordre des rôles | L'adaptateur **trie** les rôles dans l'ordre de `ROLES_MD3` puis `ROLES_CUSTOM` | Sortie stable si Figma regroupe autrement ; `app.css` ne diffère de l'ancien format que par l'ordre de 12 lignes (rôles `success`, `info`, `warning`) |
+| Entrée | Une source de l'ancien format, ou une ou plusieurs sources natives avec **un** fichier de primitives et au moins un mode ; pas de `.json` isolés | La classification se fait par contenu, donc un zip combiné ou un dossier marchent gratuitement ; 9 `--source` à répéter ne se justifient pas |
+| Détection | Par **contenu**, fichier par fichier (`modeName` ou couleur en objet = natif ; couleur `#hex` = ancien) ; formats mélangés = erreur | Les noms de zip ou de fichier sont renommables ; `variableId` seul ne suffit pas (un export retouché peut le perdre) |
+| Où vit la conversion | `format-figma.mjs`, **pur** (sans `node:fs`), partagé par Node et le navigateur ; `correspondance`, `resoudre-tokens`, `ecrire-*` ne changent pas | Un seul endroit sait lire Figma ; alternatives écartées : apprendre le dialecte natif à `classer()` (touche 4 modules testés), reconstituer les alias |
+| Alias | **Non reconstitués** : valeurs résolues ; `aliasData` sert de contrôle de cohérence (un avertissement, jamais une erreur) | Zéro risque de cycle ou de cible absente ; `--palettes` fonctionne (primitives littérales) |
+| Familles de contraste | Noms de mode **normalisés** (minuscules, séparateurs → `-`) avant `detecterFamilles` ; ils viennent du **nom de fichier**, pas de `modeName` | Indispensable pour l'égalité octet pour octet (commentaires de bloc) ; même règle que l'ancien format |
+| Graisses | Converties par la **valeur** ; graisse inconnue = erreur | `Weight.Bold` porte `"SemiBold"` ; un défaut silencieux à 400 fausserait les thèmes |
+| Sécurité | Chaînes fabriquées seulement ; type ou chemin inconnu transmis tel quel (signalé « non reconnu ») ; `validerCss` reste le contrôle final ; le nom saisi reste un libellé | L'adaptateur lit des données utilisateur |
+| Avertissements | Aucun jeton ignoré en silence : `.json` hors `*.tokens.json` ignoré, groupe de rôles inconnu, `hex` incohérent, cohérence `aliasData` | Pour l'ancien format, aucune ligne ajoutée au rapport ni clé au résultat |
+| Qui exporte | Le développeur qui maintient le catalogue, sur annonce des UX designers ; la page « Thèmes importés » reste un **aperçu** pour quiconque a les deux zips (décision à confirmer) | L'export ne demande ni plugin ni IA ; voir [generation-themes.md](generation-themes.md) |
+
+Limites : alias natifs non reconstitués (le lien est perdu, la cohérence est contrôlée) ; « même export » non prouvable (contrôle de valeurs seulement) ; pas de `.json` isolés en entrée ; noms de famille et de mode pris sur les **noms de fichiers** (un fichier renommé par le système, `Light (1).tokens.json`, devient un mode inconnu) ; **première régénération de `themes-app/` depuis le natif** : elle changerait `app.css` (`--app-color-success` et `--app-color-warning` en clair, ordre de 12 lignes), ce qui est un chantier à part (`tokens/` ne bouge pas et reste la source par défaut). L'**ancien format** n'accepte que des graisses numériques (comme `tokens/`) : le zip d'origine du design system, qui porte des graisses nommées (`"Regular"`, `"SemiBold"`), donne des déclarations CSS invalides (`--md-ref-typeface-weight-regular: Regular`) avec l'ancien chemin, inchangé ; l'export natif, lui, les convertit.
+
 ## Inspecteur de contraste
 
 Détail : [inspecteur-contraste.md](inspecteur-contraste.md).
@@ -144,7 +165,7 @@ Détail : [fonctionnel.md](fonctionnel.md#thèmes-importés), [architecture.md](
 | Pont vers Material | Le mixin déjà compilé `themes-app.theme()`, déclenché par la classe `theme-importe` | Il ne référence que des `var(--md-sys-*)` : pas de Sass dans le navigateur |
 | Identité | Identifiant technique généré (`imp-xxxxxx`) ; **le nom saisi est un libellé** | Pas d'injection par le nom, pas de collision |
 | Sécurité du CSS | `validerCss` : contrôle ligne à ligne avant toute injection | Les valeurs viennent de l'utilisateur et ne sont pas échappées par le générateur |
-| Choix du fichier | Zone de glisser-déposer **dont le `<label>` est celle du champ `<input type="file">` natif** (masqué visuellement, pas `display: none`) ; un seul fichier déposé à la fois | Zone plus lisible que le bouton natif, sans perdre le clavier ni les lecteurs d'écran (le plan initial écartait le glisser-déposer pour cette raison) ; le dépôt et le choix passent par la même analyse |
+| Choix du fichier | Zone de glisser-déposer **dont le `<label>` est celle du champ `<input type="file">` natif** (masqué visuellement, pas `display: none`) ; **un ou deux** fichiers à la fois (l'export natif de Figma, `Primitives.zip` + `Semantics.zip`), plus de deux refusés | Zone plus lisible que le bouton natif, sans perdre le clavier ni les lecteurs d'écran (le plan initial écartait le glisser-déposer pour cette raison) ; le dépôt et le choix passent par la même analyse |
 | Gestion | Import et suppression seulement (20 thèmes au plus) | Demande exprimée ; renommer, exporter ou mettre à jour sont des ajouts triviaux plus tard |
 | Famille appliquée après import | La famille par défaut du zip (la « Standard » s'il y en a une) | Simple et prévisible |
 | Identifiant de l'import | Tiré **à la sélection du fichier** (et non au clic sur « Importer ») | Il entre dans les sélecteurs du CSS, produit à l'analyse ; il est vérifié contre la liste à ce moment |
@@ -152,7 +173,7 @@ Détail : [fonctionnel.md](fonctionnel.md#thèmes-importés), [architecture.md](
 
 ### Limites des thèmes importés
 
-- **Familles** : celles que `detecterFamilles` reconnaît dans les noms de fichiers (mots clair/sombre) ; une famille doit avoir ses deux modes. Un nom inconnu donne une famille « libre » nommée d'après le fichier. Plafonds : 20 thèmes, 5 Mo par zip, 5 Mo par fichier JSON décompressé, 40 fichiers JSON.
+- **Familles** : celles que `detecterFamilles` reconnaît dans les noms de fichiers (mots clair/sombre) ; une famille doit avoir ses deux modes. Un nom inconnu donne une famille « libre » nommée d'après le fichier. Plafonds : 20 thèmes, 2 archives de 5 Mo chacune, 5 Mo par fichier JSON décompressé, 40 fichiers JSON (par zip, et au total sur plusieurs).
 - **Polices** : seule Poppins est chargée. La police des tokens n'est pas téléchargée ; elle n'apparaît que si elle est installée sur la machine (le rapport d'import le dit).
 - **Jetons `--app-*` absents de l'import** : le CSS statique pose les variables de la famille par défaut du design system sur `:root`, donc une variable `--app-*` que l'import ne définit pas **reste visible avec la valeur du thème intégré** (les variables MD3 indispensables, elles, sont contrôlées : une absence refuse l'import). Le rapport avertit des variables du design system attendues et absentes du zip.
 - **Le zip source n'est pas conservé** : pour corriger un thème, réimporter un zip. Si le générateur évolue, les thèmes déjà importés gardent l'ancien CSS ; l'index porte `version: 1` pour permettre une migration future.
@@ -191,7 +212,7 @@ L'avertissement a été relevé successivement (500 → 600 → 650 → 700 → 
 - Pas de cartes avec image, pas de formulaires complets, pas de validation asynchrone.
 - Inspecteur de contraste : contenu des pages de composants seulement (ni shell, ni accueil, ni menus/dialogues ouverts depuis un specimen), texte seulement (pas les éléments d'interface à 3 : 1), pas les états survol/focus, résultats « à vérifier » (`?`) pour les fonds en dégradé, en image ou recouverts.
 - Les scripts `a11y` et `captures` nécessitent Chrome ou Chromium installé (`CHROME_PATH` sinon) ; ils ne tournent pas en CI par défaut.
-- Seuls les tests du shell, du registre, du service de thème, des thèmes importés (service, sélecteur, page), du specimen, de l'inspecteur et des calculs de `core/tokens/` existent (plus ceux du script de génération, via `node --test scripts/themes/*.test.mjs`). Les pages Fondations sont vérifiées dans Chrome (jsdom ne connaît pas `light-dark()`).
+- Seuls les tests du shell, du registre, du service de thème, des thèmes importés (service, sélecteur, page), du specimen, de l'inspecteur et des calculs de `core/tokens/` existent (plus ceux du script de génération, via `node --test "scripts/themes/*.test.mjs"`). Les pages Fondations sont vérifiées dans Chrome (jsdom ne connaît pas `light-dark()`).
 - **`npm run a11y -- --themes=tous` ne teste aucun thème** : `themesDisponibles()` (`scripts/lib.mjs`) lit le type `ThemeId` avec une expression régulière qui ne reconnaît plus sa forme sur plusieurs lignes, et renvoie une liste vide. Passer les thèmes un par un (`--themes=azur,violet,…`). Non corrigé ici.
 - **Sections « Couleurs personnalisées »** : voir [ci-dessus](#couleurs-personnalisées-sur-les-pages-de-composants) (contraste des familles utilisées seules sur la surface, calendrier en champ).
 - **Thèmes du design system : violations axe `color-contrast` dues aux tokens**, volontairement **non corrigées** (le thème est reproduit tel que défini, à remonter aux designers). Audit `npm run a11y -- --themes=app,app-contraste-moyen,app-contraste-eleve,app-monochrome` : `app` et `app-contraste-moyen` en clair (primaire olive utilisé en texte pour les catégories du menu latéral, sous-titre de la barre à 85 % d'opacité) ; `app-contraste-eleve` en clair et en sombre (ligne sélectionnée du tableau : `on-surface` sur `secondary-container`) ; aucune en sombre pour `app` / `app-contraste-moyen`, aucune pour `app-monochrome`.
