@@ -6,6 +6,7 @@
 //   npm run themes -- --palettes --palette-repli azure
 //
 // Voir docs/generation-themes.md.
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
@@ -15,6 +16,9 @@ import { classeFamille, genererManifeste } from './ecrire-manifeste.mjs';
 import { controlerMaterial, genererMaterial, PALETTE_REPLI_DEFAUT, validerPaletteRepli } from './ecrire-material.mjs';
 import { genererVariables } from './ecrire-variables.mjs';
 import { lireSource } from './lire-source.mjs';
+
+/** Mode d'emploi statique copié tel quel dans le dossier généré (`ressources/README.md`). */
+const README = readFileSync(new URL('./ressources/README.md', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
 
 const racine = resolve(fileURLToPath(new URL('.', import.meta.url)), '../..');
 
@@ -46,7 +50,7 @@ export function generer({ source = resolve(racine, 'tokens'), nom = 'app', sorti
   }
 
   const manifeste = new Map([['familles.ts', genererManifeste({ nom, familles: variables.rapport.familles })]]);
-  const fichiers = new Map([...variables.fichiers, ...material.fichiers, ...manifeste]);
+  const fichiers = new Map([...variables.fichiers, ...material.fichiers, ...manifeste, ['README.md', README]]);
   const ecriture = ecrireFichiers(dossierSortie, fichiers, tokens.origine);
   return {
     source: chemins.join(' + '),

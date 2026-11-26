@@ -21,7 +21,7 @@ const lister = (dossier, prefixe = '') =>
   );
 /** Contenu sans l'en-tête (qui porte le nom de la source et la date). */
 const corps = (dossier) =>
-  Object.fromEntries(lister(dossier).map((f) => [f, readFileSync(join(dossier, f), 'utf8').replace(/^\/\*[^]*?\*\/\n\n/, '')]));
+  Object.fromEntries(lister(dossier).map((f) => [f, readFileSync(join(dossier, f), 'utf8').replace(/^(?:\/\*[^]*?\*\/|<!--[^]*?-->)\n\n/, '')]));
 
 function zipDeTokens() {
   const fichiers = { 'primitives.tokens.json': readFileSync(join(tokens, 'primitives.tokens.json')) };
@@ -35,21 +35,22 @@ function zipDeTokens() {
 
 test('dossier et zip donnent des sorties identiques ; seconde exécution : aucun fichier modifié', () => {
   const depuisDossier = generer({ source: tokens, sortie: join(temp, 'dossier') });
-  assert.deepEqual(depuisDossier.ecriture.ecrits.sort(), ['_themes-app.scss', 'app.css', 'familles.ts', 'index.css', 'index.scss', 'md3/couleurs.css', 'md3/ref.css', 'md3/sys.css']);
+  assert.deepEqual(depuisDossier.ecriture.ecrits.sort(), ['README.md', '_themes-app.scss', 'app.css', 'familles.ts', 'index.css', 'index.scss', 'md3/couleurs.css', 'md3/ref.css', 'md3/sys.css']);
   const depuisZip = generer({ source: zipDeTokens(), sortie: join(temp, 'zip') });
   assert.deepEqual(corps(join(temp, 'zip')), corps(join(temp, 'dossier')));
   assert.deepEqual(depuisZip.variables.inconnus, []);
 
   const seconde = generer({ source: tokens, sortie: join(temp, 'dossier') });
   assert.deepEqual(seconde.ecriture.ecrits, []);
-  assert.equal(seconde.ecriture.inchanges.length, 8);
+  assert.equal(seconde.ecriture.inchanges.length, 9);
 });
 
 test('--nom pv : dossier, fichiers et contenu sans « app »', () => {
   generer({ source: tokens, nom: 'pv', sortie: join(temp, 'pv'), palettes: true, paletteRepli: 'azure' });
   const fichiers = corps(join(temp, 'pv'));
   assert.ok('pv.css' in fichiers && '_themes-pv.scss' in fichiers && !('app.css' in fichiers));
-  for (const [f, c] of Object.entries(fichiers)) assert.doesNotMatch(c, /\bapp\b|-app-/, f);
+  // README.md est une ressource statique : elle cite « app » (valeur par défaut de --nom) et ne dépend pas du nom.
+  for (const [f, c] of Object.entries(fichiers).filter(([f]) => f !== 'README.md')) assert.doesNotMatch(c, /\bapp\b|-app-/, f);
   assert.match(fichiers['_themes-pv.scss'], /mat\.\$azure-palette/);
 });
 
@@ -86,7 +87,7 @@ test('un token non reconnu est signalé dans le rapport, jamais ignoré en silen
 
 test('CLI : code de sortie 0 avec rapport, 1 avec message d\'erreur', () => {
   const sortie = execFileSync(process.execPath, [script, '--sortie', join(temp, 'cli')], { encoding: 'utf8' });
-  assert.match(sortie, /Fichiers : 8 écrit\(s\)/);
+  assert.match(sortie, /Fichiers : 9 écrit\(s\)/);
   assert.throws(
     () => execFileSync(process.execPath, [script, '--nom', 'MD'], { encoding: 'utf8', stdio: 'pipe' }),
     (erreur) => erreur.status === 1 && /Erreur : Nom « MD » invalide/.test(erreur.stderr),
@@ -153,7 +154,7 @@ test('CLI : --source répétable', () => {
   const [p, s] = ecrireZipsNatifs();
   const sortie = execFileSync(process.execPath, [script, '--source', p, '--source', s, '--sortie', join(temp, 'cli-natif')], { encoding: 'utf8' });
   assert.match(sortie, /Format : export natif Figma \(2 sources\)/);
-  assert.match(sortie, /Fichiers : 8 écrit\(s\)/);
+  assert.match(sortie, /Fichiers : 9 écrit\(s\)/);
   assert.throws(
     () => execFileSync(process.execPath, [script, '--source', p, '--sortie', join(temp, 'cli-incomplet')], { encoding: 'utf8', stdio: 'pipe' }),
     (erreur) => erreur.status === 1 && /Erreur : Export Figma incomplet/.test(erreur.stderr),
@@ -171,4 +172,17 @@ test('index.scss : un @use du dossier suffit (index.css voisin ignoré), la dens
 
   const dense = compiler(`@use 'point-entree' with ($densite: -2);`);
   assert.notEqual(dense, css);
+});
+
+test('README.md : ressource statique copiée telle quelle sous un en-tête HTML, jamais signalée comme fichier étranger', () => {
+  const ressource = readFileSync(join(racine, 'scripts/themes/ressources/README.md'), 'utf8').replaceAll('\r\n', '\n');
+  const sortie = join(temp, 'readme');
+  generer({ source: tokens, sortie });
+  const copie = readFileSync(join(sortie, 'README.md'), 'utf8');
+  assert.match(copie, /^<!-- Fichier généré par `npm run themes` — ne pas modifier\.\n {5}Source : tokens — \d{4}-\d{2}-\d{2} -->\n\n# /);
+  assert.equal(copie.replace(/^<!--[^]*?-->\n\n/, ''), ressource);
+
+  const seconde = generer({ source: tokens, sortie });
+  assert.deepEqual(seconde.ecriture.etrangers, []);
+  assert.deepEqual(seconde.ecriture.ecrits, []);
 });

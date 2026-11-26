@@ -2,7 +2,7 @@
 // en-tête « Fichier généré… »), « equivalent » (mêmes blocs, mêmes commentaires, mêmes déclarations, ordre des
 // déclarations différent) ou « different » (liste des écarts nommés). Pur, sans `node:fs` : sert aux tests et au banc.
 
-const ENTETE = /^\/\* Fichier généré par `npm run themes`[^]*?\*\/\n\n/;
+const ENTETE = /^(?:\/\* Fichier généré par `npm run themes`[^]*?\*\/|<!-- Fichier généré par `npm run themes`[^]*?-->)\n\n/;
 const normaliser = (texte) => texte.replaceAll('\r\n', '\n').replace(ENTETE, '');
 
 /**
