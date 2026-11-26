@@ -171,10 +171,11 @@ export function assemblerSources(listes, noms) {
     return resultat;
   }
 
-  if (listes.length > 1 && (ancien || sources.some(aStructureAncienne))) {
+  // Une seule source sans signal natif : ancien chemin, avec ses résultat et messages d'origine (même sans primitives.tokens.json).
+  if (listes.length <= 1) return assembler(sources[0] ?? new Map(), noms[0]);
+  if (ancien || sources.some(aStructureAncienne)) {
     throw new Error(`Une seule source est acceptée pour l'ancien format de tokens (reçu : ${nommer(noms)}).`);
   }
-  if (ancien || aStructureAncienne(sources[0] ?? new Map())) return assembler(sources[0], noms[0]);
   throw new Error(
     `Format de tokens non reconnu dans ${nommer(noms)} : ni l'ancien format (primitives.tokens.json + semantics/*.tokens.json, couleurs en texte #RRGGBB) ` +
       `ni l'export natif de Figma (un fichier par mode, couleurs en objet { colorSpace, components, hex }). Voir docs/generation-themes.md, « Exporter depuis Figma ».`,

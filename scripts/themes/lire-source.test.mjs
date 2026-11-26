@@ -141,7 +141,9 @@ test('formats mélangés, plusieurs sources de l\'ancien format, format non reco
   assert.throws(() => lireSource([ancien, ecrireZip('ancien2.zip', contenus)]), /Une seule source est acceptée pour l'ancien format/);
   assert.throws(() => lireSource([ecrireDossier('ancien-d', contenus), ecrireZip('rien.zip', { 'notes.json': '{}' })]), /Une seule source est acceptée/);
   assert.throws(() => lireSource([ecrireZip('inconnu.zip', { 'a.json': '{"x":1}' }), ecrireZip('inconnu2.zip', { 'b.json': '{}' })]), /Format de tokens non reconnu dans « .*inconnu\.zip », « .*inconnu2\.zip »/);
-  assert.throws(() => lireSource(ecrireZip('inconnu3.zip', { 'a.json': '{"x":1}' })), /Format de tokens non reconnu.*Exporter depuis Figma/);
+  // Une seule source sans signal natif : l'ancien chemin répond, avec ses messages d'origine.
+  assert.throws(() => lireSource(ecrireZip('inconnu3.zip', { 'a.json': '{"x":1}' })), /« primitives\.tokens\.json » introuvable dans « .*inconnu3\.zip »/);
+  assert.throws(() => lireSource(ecrireDossier('inconnu-d', { 'notes.json': '{}' })), /« primitives\.tokens\.json » introuvable/);
 });
 
 test('natif : un JSON parasite est ignoré avec avertissement ; un JSON invalide dans un .tokens.json est une erreur', () => {
