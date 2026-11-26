@@ -4,7 +4,7 @@ import { ThemeId, ThemeInfo } from './themes';
 
 /** Famille de contraste d'un thème importé (cf. `scripts/themes/familles.mjs`). */
 export interface ImportedFamily {
-  /** Suffixe de classe : `standard`, `contraste-moyen`… */
+  /** Suffixe de classe : `standard`, `medium-contrast`… */
   id: string;
   libelle: string;
   /** Couleur primaire claire (hex), pour la pastille d'aperçu. */

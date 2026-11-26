@@ -9,7 +9,7 @@ const RESULTAT: ThemeGenere = {
   familles: [
     { id: 'standard', libelle: 'Standard', apercu: '#86a315', defaut: true, progression: true },
     {
-      id: 'contraste-moyen',
+      id: 'medium-contrast',
       libelle: 'Contraste moyen',
       apercu: '#657c08',
       defaut: false,

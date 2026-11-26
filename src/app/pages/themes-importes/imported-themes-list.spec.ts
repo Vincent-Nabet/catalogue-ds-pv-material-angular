@@ -12,7 +12,7 @@ const STANDARD: ImportedFamily = {
   progression: true,
 };
 const MOYEN: ImportedFamily = {
-  id: 'contraste-moyen',
+  id: 'medium-contrast',
   libelle: 'Contraste moyen',
   apercu: '#657c08',
   defaut: false,
@@ -85,7 +85,7 @@ describe('ImportedThemesList', () => {
 
   it('should flag the active family with text', async () => {
     add('imp-aaaaaa', 'Premier');
-    TestBed.inject(ThemeService).theme.set('imp-aaaaaa-contraste-moyen');
+    TestBed.inject(ThemeService).theme.set('imp-aaaaaa-medium-contrast');
     await render();
     const families = root().querySelectorAll('.familles li');
     expect(families[0].textContent).not.toContain('thème actif');

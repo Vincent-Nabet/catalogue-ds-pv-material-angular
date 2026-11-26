@@ -56,7 +56,7 @@ const cas = {
 // Contrôles de la sortie générée, pour les cas qui doivent réussir.
 const controles = {
   'noms-francais-une-paire': (css) => (/:root, \.theme-essai \{/.test(css) && !/theme-essai-/.test(css) ? 'une seule famille, classe .theme-essai' : 'sortie inattendue'),
-  'abreviations-mc-hc': (css) => (/\.theme-essai-contraste-moyen \{/.test(css) && /\.theme-essai-contraste-eleve \{/.test(css) ? 'classes contraste-moyen / contraste-eleve' : 'sortie inattendue'),
+  'abreviations-mc-hc': (css) => (/\.theme-essai-medium-contrast \{/.test(css) && /\.theme-essai-high-contrast \{/.test(css) ? 'classes medium-contrast / high-contrast' : 'sortie inattendue'),
   'famille-sepia-ajoutee': (css) => (/\.theme-essai-sepia \{/.test(css) ? 'classe .theme-essai-sepia générée' : 'famille sepia NON générée'),
   'nouvelle-famille-info': (css) => (/--essai-color-info:/.test(css) && /--essai-color-on-info-container:/.test(css) ? 'famille --essai-color-info générée' : 'famille Info NON générée'),
 };
@@ -176,7 +176,7 @@ for (const [nom, args, attendu] of lancerCas) {
 // Contrôles sur les sorties produites.
 const lire = (dossier, f) => readFileSync(join(dossier, f), 'utf8');
 const sansEntete = (t) => t.split('\n').slice(3).join('\n');
-const fichiersDe = ['index.css', 'md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', 'essai.css', '_themes-essai.scss', 'familles.ts'];
+const fichiersDe = ['index.css', 'md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', 'essai.css', '_themes-essai.scss', 'families.ts'];
 const dossierRef = sortieDe('ref-dossier');
 lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
 for (const [nom, d] of [['zip-racine', 'zip-racine'], ['zip-sous-dossier', 'zip-sous-dossier'], ['zip-macosx', 'zip-macosx'], ['zip-bom-crlf', 'zip-bom']]) {
@@ -198,7 +198,7 @@ verdict('palette-repli azure dans le scss', /mat\.\$azure-palette/.test(lire(sor
 const passe2 = lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
 verdict('2e passe idempotente', /0 écrit\(s\), 7 inchangé\(s\)/.test(passe2.stdout), '0 écrit, 7 inchangés');
 const tout = (n) => fichiersDe.concat([]).map((f) => f.replace('essai', n)).map((f) => lire(sortieDe(n), f)).join('\n');
-verdict('thèmes a et b sans collision', !/-b-|theme-b|--b-/.test(tout('a')) && !/theme-a\b|--a-/.test(tout('b')) && /\.theme-a-contraste-moyen/.test(tout('a')) && /\.theme-b-contraste-moyen/.test(tout('b')), 'préfixes disjoints');
+verdict('thèmes a et b sans collision', !/-b-|theme-b|--b-/.test(tout('a')) && !/theme-a\b|--a-/.test(tout('b')) && /\.theme-a-medium-contrast/.test(tout('a')) && /\.theme-b-medium-contrast/.test(tout('b')), 'préfixes disjoints');
 console.log(echecs === 0 ? '\nTout est conforme.' : `\n${echecs} écart(s) par rapport à l'attendu.`);
 process.exitCode = echecs === 0 ? 0 : 1;
 

@@ -22,14 +22,14 @@ const declarations = (fichiers) =>
 
 test('selecteurFamille avec portée : html.theme-<base>-<famille>, jamais :root', () => {
   assert.equal(selecteurFamille({ suffixe: '', defaut: true }, 'app', portee), `html.theme-${BASE}-standard`);
-  assert.equal(selecteurFamille({ suffixe: 'contraste-eleve', defaut: false }, 'app', portee), `html.theme-${BASE}-contraste-eleve`);
+  assert.equal(selecteurFamille({ suffixe: 'high-contrast', defaut: false }, 'app', portee), `html.theme-${BASE}-high-contrast`);
   assert.equal(selecteurFamille({ suffixe: '', defaut: true }, 'app'), ':root, .theme-app');
 });
 
 test('portée : tous les sélecteurs sont html.theme-<base>-<famille> (4 familles de tokens/)', () => {
   const { fichiers, rapport } = genererVariables(source, { nom: 'app', portee });
   const ids = rapport.familles.map((f) => f.id);
-  assert.deepEqual(ids, ['standard', 'contraste-moyen', 'contraste-eleve', 'monochrome']);
+  assert.deepEqual(ids, ['standard', 'medium-contrast', 'high-contrast', 'monochrome']);
   const un = `html\\.theme-${BASE}-(?:${ids.join('|')})`;
   const attendu = new RegExp(`^${un}(?:, ${un})* \\{$`);
   let total = 0;
@@ -46,7 +46,7 @@ test('portée : tous les sélecteurs sont html.theme-<base>-<famille> (4 famille
 
 test('portée : les blocs communs prennent la liste des sélecteurs de toutes les familles', () => {
   const { fichiers } = genererVariables(source, { nom: 'app', portee });
-  const liste = ['standard', 'contraste-moyen', 'contraste-eleve', 'monochrome'].map((id) => `html.theme-${BASE}-${id}`).join(', ');
+  const liste = ['standard', 'medium-contrast', 'high-contrast', 'monochrome'].map((id) => `html.theme-${BASE}-${id}`).join(', ');
   for (const chemin of ['md3/ref.css', 'md3/sys.css']) {
     assert.ok(selecteurs(fichiers.get(chemin)).every((s) => s === `${liste} {`), chemin);
   }

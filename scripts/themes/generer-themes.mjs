@@ -49,7 +49,7 @@ export function generer({ source = resolve(racine, 'tokens'), nom = 'app', sorti
     throw new Error(`Le thème Material généré ne se compile pas comme prévu :\n  ${controle.ecarts.join('\n  ')}`);
   }
 
-  const manifeste = new Map([['familles.ts', genererManifeste({ nom, familles: variables.rapport.familles })]]);
+  const manifeste = new Map([['families.ts', genererManifeste({ nom, familles: variables.rapport.familles })]]);
   const fichiers = new Map([...variables.fichiers, ...material.fichiers, ...manifeste, ['README.md', README]]);
   const ecriture = ecrireFichiers(dossierSortie, fichiers, tokens.origine);
   return {

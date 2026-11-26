@@ -28,7 +28,7 @@ node testing/comparer-formats.mjs                        # banc : ancien format 
 | `--palette-repli <nom>` | `chartreuse` | Palette Material prédéfinie passée à `mat.theme()` (validée contre les palettes installées). |
 | `--palettes` | désactivé | Expose aussi les primitives `Shade-NNN` en `--<nom>-ref-<palette>-<NNN>` (dans `md3/ref.css`). |
 
-Le paramètre `--nom` (ex. `pv`) donne : `--pv-color-success`, `src/styles/themes-pv/`, classes `theme-pv`, `theme-pv-contraste-moyen`…, mixin `themes-pv.theme()` (fichier `_themes-pv.scss`).
+Le paramètre `--nom` (ex. `pv`) donne : `--pv-color-success`, `src/styles/themes-pv/`, classes `theme-pv`, `theme-pv-medium-contrast`…, mixin `themes-pv.theme()` (fichier `_themes-pv.scss`).
 
 Code de sortie 0 avec un rapport (comptes, avertissements) ; 1 avec un message `Erreur : …` (source invalide, alias absent ou en cycle, nom invalide, tokens non couleur différents selon le mode…).
 
@@ -58,7 +58,7 @@ L'ancien format est délégué **tel quel** à son code d'origine (mêmes résul
 
 ### Équivalence avec l'ancien format
 
-Généré depuis l'export natif réel de Figma, le thème est **identique octet pour octet** à celui de `tokens/` pour `index.css`, `md3/ref.css`, `md3/sys.css`, `md3/couleurs.css`, `_themes-app.scss` et `familles.ts` (hors la ligne d'en-tête « Source »). `app.css` a les mêmes blocs, sélecteurs, commentaires et déclarations, **dans un autre ordre** pour les 12 rôles `success`, `info`, `warning` (l'ordre arbitraire de l'ancien format est perdu), avec pour **seuls écarts de valeur** `--app-color-success` (`#73C322` → `#477A14`) et `--app-color-warning` (`#FF9900` → `#A85F00`) dans la famille standard claire : ce sont des **évolutions du design system** (les UX designers ont retravaillé ces rôles depuis l'ancien zip), pas un défaut de conversion. Le rapport compte 2 jetons ignorés de moins (355 au lieu de 357 : `Number` et `Number 2` n'existent plus dans l'export natif). `node testing/comparer-formats.mjs` le vérifie sur `temp/Primitives.zip` + `temp/Semantics.zip` et échoue pour tout autre écart ; il contrôle aussi que `tokens/` régénéré est identique à `src/styles/themes-app/`.
+Généré depuis l'export natif réel de Figma, le thème est **identique octet pour octet** à celui de `tokens/` pour `index.css`, `md3/ref.css`, `md3/sys.css`, `md3/couleurs.css`, `_themes-app.scss` et `families.ts` (hors la ligne d'en-tête « Source »). `app.css` a les mêmes blocs, sélecteurs, commentaires et déclarations, **dans un autre ordre** pour les 12 rôles `success`, `info`, `warning` (l'ordre arbitraire de l'ancien format est perdu), avec pour **seuls écarts de valeur** `--app-color-success` (`#73C322` → `#477A14`) et `--app-color-warning` (`#FF9900` → `#A85F00`) dans la famille standard claire : ce sont des **évolutions du design system** (les UX designers ont retravaillé ces rôles depuis l'ancien zip), pas un défaut de conversion. Le rapport compte 2 jetons ignorés de moins (355 au lieu de 357 : `Number` et `Number 2` n'existent plus dans l'export natif). `node testing/comparer-formats.mjs` le vérifie sur `temp/Primitives.zip` + `temp/Semantics.zip` et échoue pour tout autre écart ; il contrôle aussi que `tokens/` régénéré est identique à `src/styles/themes-app/`.
 
 Régénérer `src/styles/themes-app/` depuis l'export natif changerait donc `app.css` (ces deux valeurs et l'ordre de 12 lignes) : `tokens/` reste la source par défaut de `npm run themes`, et cette bascule est un chantier à part, avec son propre commit.
 
@@ -108,6 +108,7 @@ src/styles/themes-app/
   app.css            --app-* : formes et graisses hors MD3, espacements, couleurs custom (par famille)
   _themes-app.scss   mixin Angular Material
   index.scss         point d'entrée Sass : `html { @include theme($densite) }` (pour un autre projet, voir ci-dessous)
+  families.ts        liste des familles (interface `DesignSystemFamily`, constante `DESIGN_SYSTEM_FAMILIES`), lue par `core/theme/themes.ts`
   README.md          mode d'emploi statique de l'intégration dans un projet Angular
 ```
 
@@ -123,14 +124,14 @@ Les fichiers `semantics/` forment des paires clair/sombre (« familles ») **dé
 
 ```css
 :root, .theme-app            { --md-sys-color-primary: light-dark(#86A315, #BCD078); … }  /* light / dark */
-.theme-app-contraste-moyen   { … }  /* light-medium-contrast / dark-medium-contrast */
-.theme-app-contraste-eleve   { … }  /* light-high-contrast  / dark-high-contrast  */
+.theme-app-medium-contrast   { … }  /* light-medium-contrast / dark-medium-contrast */
+.theme-app-high-contrast   { … }  /* light-high-contrast  / dark-high-contrast  */
 .theme-app-monochrome        { … }  /* monochrome-lt        / monochrome-dt       */
 ```
 
 - Clair/sombre = `color-scheme` (comme `mat.theme()` et comme les classes `scheme-*` du catalogue). **Les fichiers générés ne posent pas `color-scheme`** : c'est à l'hôte de le faire (sans rien, le rendu est clair). Avec `color-scheme: light dark`, le mode « système » fonctionne sans JavaScript.
 - Le contraste = une classe `theme-*` sur `<html>`, même convention que le sélecteur actuel. La famille standard s'applique aussi par défaut sur `:root`.
-- **Détection des familles** : le nom du fichier est découpé en mots ; le mot `light`/`lt`/`clair` ou `dark`/`dt`/`sombre` donne le schéma, les autres mots la famille (`light-medium-contrast` + `dark-medium-contrast` → famille `medium-contrast`). Les mots communs à toutes les familles (ex. `theme-` en préfixe) sont retirés. La famille sans mot restant est la **standard** (`.theme-<nom>` + `:root`) ; à défaut, la première par ordre alphabétique. `medium-contrast`/`mc` → `contraste-moyen`, `high-contrast`/`hc` → `contraste-eleve` ; toute autre clé donne la classe `theme-<nom>-<clé>` et le libellé correspondant (`sepia-light`/`sepia-dark` → `.theme-<nom>-sepia`). Un mode sans mot clair/sombre est ignoré (avertissement) ; une famille avec un seul des deux modes est une erreur explicite.
+- **Détection des familles** : le nom du fichier est découpé en mots ; le mot `light`/`lt`/`clair` ou `dark`/`dt`/`sombre` donne le schéma, les autres mots la famille (`light-medium-contrast` + `dark-medium-contrast` → famille `medium-contrast`). Les mots communs à toutes les familles (ex. `theme-` en préfixe) sont retirés. La famille sans mot restant est la **standard** (`.theme-<nom>` + `:root`) ; à défaut, la première par ordre alphabétique. `medium-contrast`/`medium`/`mc` (ou `contraste-moyen`) → classe `medium-contrast`, libellé « Contraste moyen » ; `high-contrast`/`high`/`hc` (ou `contraste-eleve`) → classe `high-contrast`, libellé « Contraste élevé » (classes en anglais, libellés en français) ; toute autre clé donne la classe `theme-<nom>-<clé>` et le libellé correspondant (`sepia-light`/`sepia-dark` → `.theme-<nom>-sepia`). Un mode sans mot clair/sombre est ignoré (avertissement) ; une famille avec un seul des deux modes est une erreur explicite.
 - Les tokens non couleur (typographie, formes, espacements) sont **identiques dans tous les modes** : le script le vérifie et échoue en listant les écarts sinon.
 
 ## Correspondance (résumé)
@@ -174,10 +175,10 @@ avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <su
 
 Les thèmes du design system du catalogue sont **dynamiques** : ils suivent les familles réellement générées.
 
-- `familles.ts` (généré avec les CSS) liste les familles : `id` (`app`, `app-contraste-moyen`…), libellé, couleur d'aperçu (primary clair), famille par défaut, appartenance à la progression du contraste. `core/theme/themes.ts` en tire les entrées du groupe « Design system » (sélecteur, compteur de l'accueil, `ThemeService`, matrice de contraste).
+- `families.ts` (généré avec les CSS, code en anglais : interface `DesignSystemFamily`, constante `DESIGN_SYSTEM_FAMILIES`) liste les familles : `id` (`app`, `app-medium-contrast`…), `label` (français), `preview` (couleur d'aperçu, primary clair), `isDefault` (famille par défaut), `progression` (appartenance à la progression du contraste). `core/theme/themes.ts` en tire les entrées du groupe « Design system » (sélecteur, compteur de l'accueil, `ThemeService`, matrice de contraste).
 - `_themes-app.scss` exporte `$classes` (les classes `theme-app[-<famille>]`) ; `src/styles.scss` boucle dessus (`@each`) pour inclure le mixin : plus de liste de classes écrite à la main.
 - `angular.json` : `src/styles/themes-app/index.css` ajouté à `styles` (variables `--md-sys-*`, `--app-*`).
-- Thème par défaut : `app-contraste-moyen` s'il existe, sinon la famille par défaut (`DEFAULT_THEME_ID`).
+- Thème par défaut : `app-medium-contrast` s'il existe, sinon la famille par défaut (`DEFAULT_THEME_ID`).
 - Le nom reste `app` pour le catalogue (les pages lisent des variables `--app-*`) ; si `--nom` change, adapter `styles.scss`, `angular.json` et l'import de `themes.ts`.
 - Coût : +34 kB au bundle initial (budget d'avertissement relevé à 880 kB).
 - Contrôle des contrastes obtenus : l'[inspecteur de contraste](inspecteur-contraste.md) du catalogue les affiche écran par écran.
@@ -221,7 +222,7 @@ Tests (`node:test`, `lire-source-memoire`, `portee`, `valider-css`, `variables-r
 
 ```html
 <link rel="stylesheet" href="themes-app/index.css">
-<html class="theme-app-contraste-moyen" style="color-scheme: dark">
+<html class="theme-app-medium-contrast" style="color-scheme: dark">
 ```
 
 Toutes les variables `--md-sys-*`, `--md-ref-*` et `--app-*` sont alors disponibles ; il n'y a ni dépendance ni JavaScript.

@@ -37,8 +37,8 @@ try {
   for (const cas of CAS) {
     console.log(`\n■ ${cas}`);
     sh('node', ['scripts/themes/generer-themes.mjs', '--source', `testing/variantes/${cas}`, '--nom', 'app']);
-    const manifeste = readFileSync(join(racine, 'src/styles/themes-app/familles.ts'), 'utf8');
-    const familles = [...manifeste.matchAll(/id: '([^']+)', libelle: '([^']+)', apercu: '([^']+)', defaut: (true|false)/g)].map((m) => ({ id: m[1], libelle: m[2], apercu: m[3], defaut: m[4] === 'true' }));
+    const manifeste = readFileSync(join(racine, 'src/styles/themes-app/families.ts'), 'utf8');
+    const familles = [...manifeste.matchAll(/id: '([^']+)', label: '([^']+)', preview: '([^']+)', isDefault: (true|false)/g)].map((m) => ({ id: m[1], libelle: m[2], apercu: m[3], defaut: m[4] === 'true' }));
     sh('npx', ['ng', 'build']);
 
     const erreurs = [];

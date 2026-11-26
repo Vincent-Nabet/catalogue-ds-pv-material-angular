@@ -1,4 +1,4 @@
-import { FAMILLES_DESIGN_SYSTEM } from '../../../styles/themes-app/familles';
+import { DESIGN_SYSTEM_FAMILIES } from '../../../styles/themes-app/families';
 
 /** Identifiant de thème : familles du design system (générées, cf. `npm run themes`) ou thème Angular Material. */
 export type ThemeId = string;
@@ -42,13 +42,13 @@ export function parseImportedThemeId(id: ThemeId): { importId: string; family: s
 }
 
 /** Thèmes du design system : une entrée par famille générée (la famille par défaut d'abord). */
-const DESIGN_SYSTEM_THEMES: readonly ThemeInfo[] = FAMILLES_DESIGN_SYSTEM.map((famille) => ({
-  id: famille.id,
+const DESIGN_SYSTEM_THEMES: readonly ThemeInfo[] = DESIGN_SYSTEM_FAMILIES.map((family) => ({
+  id: family.id,
   group: 'design-system',
-  label: famille.defaut ? 'Design system' : `Design system, ${famille.libelle.toLowerCase()}`,
-  shortLabel: famille.libelle,
-  color: famille.apercu,
-  progression: famille.progression,
+  label: family.isDefault ? 'Design system' : `Design system, ${family.label.toLowerCase()}`,
+  shortLabel: family.label,
+  color: family.preview,
+  progression: family.progression,
 }));
 
 const ANGULAR_MATERIAL_THEMES: readonly ThemeInfo[] = [
@@ -63,7 +63,7 @@ const ANGULAR_MATERIAL_THEMES: readonly ThemeInfo[] = [
 export const THEMES: readonly ThemeInfo[] = [...DESIGN_SYSTEM_THEMES, ...ANGULAR_MATERIAL_THEMES];
 
 /** Thème par défaut : « contraste moyen » du design system s'il existe, sinon sa première famille. */
-export const DEFAULT_THEME_ID: ThemeId = (DESIGN_SYSTEM_THEMES.find((t) => t.id === 'app-contraste-moyen') ?? DESIGN_SYSTEM_THEMES[0]).id;
+export const DEFAULT_THEME_ID: ThemeId = (DESIGN_SYSTEM_THEMES.find((t) => t.id === 'app-medium-contrast') ?? DESIGN_SYSTEM_THEMES[0]).id;
 
 export function themeInfo(id: ThemeId): ThemeInfo | undefined {
   return THEMES.find((theme) => theme.id === id);

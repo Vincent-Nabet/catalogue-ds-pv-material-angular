@@ -21,7 +21,7 @@ const STANDARD: ImportedFamily = {
   progression: true,
 };
 const MOYEN: ImportedFamily = {
-  id: 'contraste-moyen',
+  id: 'medium-contrast',
   libelle: 'Contraste moyen',
   apercu: '#657c08',
   defaut: false,
@@ -247,7 +247,7 @@ describe('ImportedThemes', () => {
           progression: true,
         },
         {
-          id: 'imp-aaaaaa-contraste-moyen',
+          id: 'imp-aaaaaa-medium-contrast',
           group: 'imported',
           label: 'Mon thème, contraste moyen',
           shortLabel: 'Contraste moyen',
@@ -268,8 +268,8 @@ describe('ImportedThemes', () => {
     it('should look themes up by identifier', () => {
       const service = TestBed.inject(ImportedThemes);
       service.add(meta('imp-aaaaaa', 'Mon thème'), 'a');
-      expect(service.has('imp-aaaaaa-contraste-moyen')).toBe(true);
-      expect(service.info('imp-aaaaaa-contraste-moyen')?.shortLabel).toBe('Contraste moyen');
+      expect(service.has('imp-aaaaaa-medium-contrast')).toBe(true);
+      expect(service.info('imp-aaaaaa-medium-contrast')?.shortLabel).toBe('Contraste moyen');
       expect(service.has('imp-aaaaaa-inconnue')).toBe(false);
       expect(service.has('azur')).toBe(false);
       service.remove('imp-aaaaaa');
@@ -294,9 +294,9 @@ describe('parseImportedThemeId', () => {
   });
 
   it('should keep dashes inside the family', () => {
-    expect(parseImportedThemeId('imp-k3f9a2-contraste-moyen')).toEqual({
+    expect(parseImportedThemeId('imp-k3f9a2-medium-contrast')).toEqual({
       importId: 'imp-k3f9a2',
-      family: 'contraste-moyen',
+      family: 'medium-contrast',
     });
   });
 
@@ -310,7 +310,7 @@ describe('parseImportedThemeId', () => {
       'imp-k3f9a2-Standard',
       'imp-k3f9a2--x',
       'azur',
-      'app-contraste-moyen',
+      'app-medium-contrast',
       '',
     ]) {
       expect(parseImportedThemeId(id), id).toBeNull();

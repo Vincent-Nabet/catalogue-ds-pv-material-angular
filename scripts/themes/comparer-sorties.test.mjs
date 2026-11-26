@@ -67,12 +67,12 @@ test('ordre des blocs différent : signalé', () => {
 });
 
 test('Map de fichiers : statut par fichier, fichier manquant, SCSS et TS comparés texte à texte', () => {
-  const a = new Map([['app.css', css([['--a', '1']])], ['_themes-app.scss', 'a\nb\n'], ['familles.ts', 'x\n'], ['seul-a.css', '']]);
-  const b = new Map([['app.css', ENTETE + css([['--a', '1']])], ['_themes-app.scss', 'a\nc\n'], ['familles.ts', `${ENTETE}x\n`], ['seul-b.css', '']]);
+  const a = new Map([['app.css', css([['--a', '1']])], ['_themes-app.scss', 'a\nb\n'], ['families.ts', 'x\n'], ['seul-a.css', '']]);
+  const b = new Map([['app.css', ENTETE + css([['--a', '1']])], ['_themes-app.scss', 'a\nc\n'], ['families.ts', `${ENTETE}x\n`], ['seul-b.css', '']]);
   const resultat = comparerSorties(a, b);
   assert.equal(resultat.get('app.css').statut, 'identique');
   assert.deepEqual(resultat.get('_themes-app.scss'), { statut: 'different', ecarts: ['ligne 2 : « b » → « c »'] });
-  assert.equal(resultat.get('familles.ts').statut, 'identique');
+  assert.equal(resultat.get('families.ts').statut, 'identique');
   assert.deepEqual(resultat.get('seul-a.css').ecarts, ['fichier absent de la seconde sortie']);
   assert.deepEqual(resultat.get('seul-b.css').ecarts, ['fichier absent de la première sortie']);
 });

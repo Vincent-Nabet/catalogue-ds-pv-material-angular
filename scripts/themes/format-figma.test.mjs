@@ -338,7 +338,7 @@ function sortiesDe(source, options = {}) {
   const variables = genererVariables(source, { nom: 'app', ...options });
   const classes = variables.rapport.familles.map((f) => classeFamille(f, 'app'));
   const material = genererMaterial({ nom: 'app', variables: variables.variables, paletteRepli: 'chartreuse', classes });
-  const manifeste = new Map([['familles.ts', genererManifeste({ nom: 'app', familles: variables.rapport.familles })]]);
+  const manifeste = new Map([['families.ts', genererManifeste({ nom: 'app', familles: variables.rapport.familles })]]);
   return { fichiers: new Map([...variables.fichiers, ...material.fichiers, ...manifeste]), rapport: variables.rapport };
 }
 

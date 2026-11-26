@@ -1,5 +1,5 @@
 /* Fichier généré par `npm run themes` — ne pas modifier.
- * Source : tokens — 2026-10-30 */
+ * Source : tokens — 2026-11-26 */
 
 /* Variables hors MD3 identiques dans tous les modes */
 :root {
@@ -51,7 +51,7 @@
 }
 
 /* Contraste moyen (light-medium-contrast / dark-medium-contrast) */
-.theme-app-contraste-moyen {
+.theme-app-medium-contrast {
   --app-color-success: light-dark(#467F0C, #B7E77E);
   --app-color-info: light-dark(#0054D1, #BDD0FF);
   --app-color-warning: light-dark(#A85F00, #FFCB85);
@@ -70,7 +70,7 @@
 }
 
 /* Contraste élevé (light-high-contrast / dark-high-contrast) */
-.theme-app-contraste-eleve {
+.theme-app-high-contrast {
   --app-color-success: light-dark(#315F05, #DDF3C4);
   --app-color-info: light-dark(#003F9E, #D9E2FF);
   --app-color-warning: light-dark(#784200, #FFE0B2);

@@ -35,7 +35,7 @@ function zipDeTokens() {
 
 test('dossier et zip donnent des sorties identiques ; seconde exécution : aucun fichier modifié', () => {
   const depuisDossier = generer({ source: tokens, sortie: join(temp, 'dossier') });
-  assert.deepEqual(depuisDossier.ecriture.ecrits.sort(), ['README.md', '_themes-app.scss', 'app.css', 'familles.ts', 'index.css', 'index.scss', 'md3/couleurs.css', 'md3/ref.css', 'md3/sys.css']);
+  assert.deepEqual(depuisDossier.ecriture.ecrits.sort(), ['README.md', '_themes-app.scss', 'app.css', 'families.ts', 'index.css', 'index.scss', 'md3/couleurs.css', 'md3/ref.css', 'md3/sys.css']);
   const depuisZip = generer({ source: zipDeTokens(), sortie: join(temp, 'zip') });
   assert.deepEqual(corps(join(temp, 'zip')), corps(join(temp, 'dossier')));
   assert.deepEqual(depuisZip.variables.inconnus, []);

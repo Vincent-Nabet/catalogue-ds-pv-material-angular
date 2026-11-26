@@ -9,7 +9,7 @@ const generer = (fichiers, prefixe) => genererThemeImporte(zipDe(fichiers, prefi
 
 test('tokens/ : 4 familles, aucun avertissement, CSS sans :root', () => {
   const { css, familles, rapport } = generer(fichiersTokens());
-  assert.deepEqual(familles.map((f) => f.id), ['standard', 'contraste-moyen', 'contraste-eleve', 'monochrome']);
+  assert.deepEqual(familles.map((f) => f.id), ['standard', 'medium-contrast', 'high-contrast', 'monochrome']);
   assert.deepEqual(familles.map((f) => f.libelle), ['Standard', 'Contraste moyen', 'Contraste élevé', 'Monochrome']);
   assert.ok(familles.every((f) => /^#[0-9a-f]{6}$/.test(f.apercu)));
   assert.equal(familles.filter((f) => f.defaut).length, 1);
@@ -24,7 +24,7 @@ test('tokens/ : 4 familles, aucun avertissement, CSS sans :root', () => {
   assert.equal(rapport.police, 'Poppins');
   assert.doesNotMatch(css, /:root/);
   assert.doesNotMatch(css, /@import/);
-  assert.ok(css.includes(`html.theme-${BASE}-contraste-eleve {`));
+  assert.ok(css.includes(`html.theme-${BASE}-high-contrast {`));
 });
 
 test('zip avec un sous-dossier racine', () => {

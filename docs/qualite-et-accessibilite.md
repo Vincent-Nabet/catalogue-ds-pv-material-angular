@@ -19,7 +19,7 @@
 |---|---|
 | `app/app.spec.ts` | création de l'application ; le `<header>` contient « Catalogue Material » |
 | `core/catalog/catalog.registry.spec.ts` | une route par entrée, `id` uniques, catégories connues, chaque entrée dans un groupe |
-| `core/theme/theme.service.spec.ts` | classes par défaut sur `<html>` (`theme-app-contraste-moyen`, `scheme-light`, `density-0`), changement de classes, persistance et restauration, valeurs invalides ignorées |
+| `core/theme/theme.service.spec.ts` | classes par défaut sur `<html>` (`theme-app-medium-contrast`, `scheme-light`, `density-0`), changement de classes, persistance et restauration, valeurs invalides ignorées |
 | `shared/specimen/specimen.spec.ts` | bouton snippet présent seulement avec un snippet, ouverture du dialog |
 | `shared/specimen-section/specimen-section.spec.ts` | description affichée, aucun paragraphe sans description, message standard avec `designSystemOnly` |
 | `core/a11y/contrast-items.spec.ts` | conversion des résultats axe (statuts, tri, éléments ignorés), formatage et libellés de l'inspecteur de contraste |

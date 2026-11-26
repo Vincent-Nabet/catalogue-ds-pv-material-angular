@@ -7,7 +7,7 @@
 //   node testing/comparer-formats.mjs --primitives-zip chemin/Primitives.zip --semantiques-zip chemin/Semantics.zip
 //
 // Attendu (cf. docs/generation-themes.md) : `index.css`, `md3/ref.css`, `md3/sys.css`, `md3/couleurs.css`,
-// `_themes-app.scss` et `familles.ts` identiques ; `app.css` équivalent à l'ordre des déclarations près, avec pour seuls
+// `_themes-app.scss` et `families.ts` identiques ; `app.css` équivalent à l'ordre des déclarations près, avec pour seuls
 // écarts de valeur ceux de ECARTS_ATTENDUS (évolutions du design system depuis l'ancien zip, confirmées par les UX designers).
 import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';

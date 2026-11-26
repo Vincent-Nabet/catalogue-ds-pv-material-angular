@@ -46,37 +46,37 @@ describe('contrast matrix', () => {
 
   it('should detect a regression when high contrast is below medium contrast', () => {
     const rows = buildMatrix(
-      values({ 'app-contraste-moyen:light': BLACK, 'app-contraste-eleve:light': GRAY }),
+      values({ 'app-medium-contrast:light': BLACK, 'app-high-contrast:light': GRAY }),
       [pair('texte', 4.5)],
     );
-    const high = cell(rows, 'app-contraste-eleve:light');
+    const high = cell(rows, 'app-high-contrast:light');
     expect(high.regression).toBe(true);
     expect(high.previousRatio).toBeCloseTo(21, 5);
-    expect(cell(rows, 'app-contraste-moyen:light').regression).toBe(false);
-    expect(cell(rows, 'app-contraste-eleve:dark').regression).toBe(false);
+    expect(cell(rows, 'app-medium-contrast:light').regression).toBe(false);
+    expect(cell(rows, 'app-high-contrast:dark').regression).toBe(false);
   });
 
   it('should compare medium to standard, in the same scheme only', () => {
     const rows = buildMatrix(
-      values({ 'app:dark': BLACK, 'app-contraste-moyen:dark': GRAY }),
+      values({ 'app:dark': BLACK, 'app-medium-contrast:dark': GRAY }),
       [pair('texte', 4.5)],
     );
-    expect(cell(rows, 'app-contraste-moyen:dark').regression).toBe(true);
-    expect(cell(rows, 'app-contraste-moyen:light').regression).toBe(false);
+    expect(cell(rows, 'app-medium-contrast:dark').regression).toBe(true);
+    expect(cell(rows, 'app-medium-contrast:light').regression).toBe(false);
   });
 
   it('should not flag a difference within the tolerance', () => {
     const nearBlack: Rgba = { r: 0, g: 0, b: 1, a: 1 };
     const rows = buildMatrix(
-      values({ 'app:light': BLACK, 'app-contraste-moyen:light': nearBlack }),
+      values({ 'app:light': BLACK, 'app-medium-contrast:light': nearBlack }),
       [pair('texte', 4.5)],
     );
-    expect(cell(rows, 'app-contraste-moyen:light').regression).toBe(false);
+    expect(cell(rows, 'app-medium-contrast:light').regression).toBe(false);
   });
 
   it('should never flag Monochrome as a regression', () => {
     const rows = buildMatrix(
-      values({ 'app-contraste-eleve:light': BLACK, 'app-monochrome:light': GRAY }),
+      values({ 'app-high-contrast:light': BLACK, 'app-monochrome:light': GRAY }),
       [pair('texte', 4.5)],
     );
     expect(cell(rows, 'app-monochrome:light').regression).toBe(false);
@@ -84,18 +84,18 @@ describe('contrast matrix', () => {
 
   it('should summarise failures per mode and kind, and regressions', () => {
     const rows = buildMatrix(
-      values({ 'app:light': BLACK, 'app-contraste-moyen:light': GRAY }),
+      values({ 'app:light': BLACK, 'app-medium-contrast:light': GRAY }),
       [pair('texte', 4.5), pair('interface', 3)],
     );
     const result = summary(rows);
     // Gris 150 sur blanc : 2,95, sous 4,5 comme sous 3.
-    expect(result['app-contraste-moyen:light'].echecs).toEqual({
+    expect(result['app-medium-contrast:light'].echecs).toEqual({
       texte: 1,
       interface: 1,
       decoratif: 0,
     });
-    expect(result['app-contraste-moyen:light'].total).toBe(2);
-    expect(result['app-contraste-moyen:light'].regressions).toBe(2);
+    expect(result['app-medium-contrast:light'].total).toBe(2);
+    expect(result['app-medium-contrast:light'].regressions).toBe(2);
     expect(result['app:light'].total).toBe(0);
   });
 });

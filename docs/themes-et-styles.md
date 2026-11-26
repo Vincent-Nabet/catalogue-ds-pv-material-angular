@@ -8,7 +8,7 @@ Le catalogue propose 6 palettes Material prédéfinies et 4 thèmes du design sy
 
 ### Thèmes du design system : générés et branchés
 
-`npm run themes` produit dans `src/styles/themes-app/` des variables CSS MD3 + custom et un mixin Angular Material (`_themes-app.scss`) à partir des tokens. Le CSS est chargé par `angular.json`, le mixin est inclus par `styles.scss` pour les classes `theme-app`, `theme-app-contraste-moyen`, `theme-app-contraste-eleve` et `theme-app-monochrome` (entrées « Design system… » du sélecteur). Détails, options et intégration : [generation-themes.md](generation-themes.md).
+`npm run themes` produit dans `src/styles/themes-app/` des variables CSS MD3 + custom et un mixin Angular Material (`_themes-app.scss`) à partir des tokens. Le CSS est chargé par `angular.json`, le mixin est inclus par `styles.scss` pour les classes `theme-app`, `theme-app-medium-contrast`, `theme-app-high-contrast` et `theme-app-monochrome` (entrées « Design system… » du sélecteur). Détails, options et intégration : [generation-themes.md](generation-themes.md).
 
 ### Thèmes importés dans le navigateur
 
@@ -55,7 +55,7 @@ Mixins Sass « rôle de couleur appliqué à un composant Material » (`roles.ch
 
 | Axe | Valeurs | Classe sur `<html>` |
 |---|---|---|
-| Thème | azur, violet, rose, vert, orange, cyan ; thèmes du design system (`app`, `app-contraste-moyen`…) | `theme-<id>` |
+| Thème | azur, violet, rose, vert, orange, cyan ; thèmes du design system (`app`, `app-medium-contrast`…) | `theme-<id>` |
 | Thème importé | un par famille de chaque import | `theme-imp-<id>-<famille>` + `theme-importe` |
 | Mode | light, dark, system | `scheme-<mode>` |
 | Densité | 0 à −4 (4 px par cran) | `density-<n>` (n = valeur absolue) |
