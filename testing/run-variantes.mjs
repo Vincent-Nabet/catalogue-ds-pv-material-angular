@@ -196,7 +196,7 @@ verdict('dossier étranger intact', readFileSync(join(etranger, 'perso.txt'), 'u
 verdict('--palettes expose les primitives', /--essai-ref-olive-012:/.test(lire(sortieDe('palettes'), 'md3/ref.css')), '--essai-ref-olive-012');
 verdict('palette-repli azure dans le scss', /mat\.\$azure-palette/.test(lire(sortieDe('p2'), '_themes-essai.scss')), 'mat.$azure-palette');
 const passe2 = lancer(['--source', base, '--nom', 'essai', '--sortie', dossierRef]);
-verdict('2e passe idempotente', /0 écrit\(s\), 7 inchangé\(s\)/.test(passe2.stdout), '0 écrit, 7 inchangés');
+verdict('2e passe idempotente', /0 écrit\(s\), 9 inchangé\(s\)/.test(passe2.stdout), '0 écrit, 9 inchangés');
 const tout = (n) => fichiersDe.concat([]).map((f) => f.replace('essai', n)).map((f) => lire(sortieDe(n), f)).join('\n');
 verdict('thèmes a et b sans collision', !/-b-|theme-b|--b-/.test(tout('a')) && !/theme-a\b|--a-/.test(tout('b')) && /\.theme-a-medium-contrast/.test(tout('a')) && /\.theme-b-medium-contrast/.test(tout('b')), 'préfixes disjoints');
 console.log(echecs === 0 ? '\nTout est conforme.' : `\n${echecs} écart(s) par rapport à l'attendu.`);
