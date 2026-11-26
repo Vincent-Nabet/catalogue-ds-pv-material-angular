@@ -363,7 +363,7 @@ for (const palettes of [false, true]) {
     for (const [fichier, { statut, ecarts }] of comparaison) {
       assert.equal(statut, fichier === 'app.css' ? 'equivalent' : 'identique', `${fichier} : ${ecarts.join(' ; ')}`);
     }
-    assert.equal(comparaison.size, 7);
+    assert.equal(comparaison.size, 8);
 
     const { ignores: ignoresAttendus, ...rapportAttendu } = attendu.rapport;
     const { ignores: ignoresObtenus, ...rapportObtenu } = obtenu.rapport;

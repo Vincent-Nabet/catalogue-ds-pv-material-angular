@@ -11,7 +11,7 @@ const material = genererMaterial({ nom: 'app', variables });
 const scss = material.fichiers.get('_themes-app.scss');
 
 test('fichier produit et mixin documenté', () => {
-  assert.deepEqual([...material.fichiers.keys()], ['_themes-app.scss']);
+  assert.deepEqual([...material.fichiers.keys()], ['_themes-app.scss', 'index.scss']);
   assert.match(scss, /@mixin theme\(\$densite: 0\)/);
   assert.match(scss, /primary: mat\.\$chartreuse-palette/);
   assert.match(scss, /plain-family: var\(--md-ref-typeface-plain\)/);

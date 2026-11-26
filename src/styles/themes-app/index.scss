@@ -1,0 +1,18 @@
+/* Fichier généré par `npm run themes` — ne pas modifier.
+ * Source : tokens — 2026-11-26 */
+
+@use 'themes-app';
+
+/// Point d'entrée Sass du thème : applique le thème Angular Material sur `html`.
+/// Le mixin ne référence que des variables CSS (--md-sys-*, --md-ref-*) : un seul bloc sert toutes les familles
+/// (classes `theme-app[-<famille>]` posées sur `<html>`) et les deux modes (`color-scheme`).
+/// `index.css` doit être chargé en plus (liste `styles` d'angular.json).
+///
+/// Usage : `@use './styles/<dossier>';`, ou `@use './styles/<dossier>' with ($densite: -2);`
+///
+/// @param {Number} $densite [0] Échelle de densité Material (0 à -5).
+$densite: 0 !default;
+
+html {
+  @include themes-app.theme($densite);
+}

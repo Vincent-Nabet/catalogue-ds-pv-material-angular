@@ -107,7 +107,10 @@ src/styles/themes-app/
   md3/couleurs.css   --md-sys-color-* : 4 blocs, un par famille de contraste
   app.css            --app-* : formes et graisses hors MD3, espacements, couleurs custom (par famille)
   _themes-app.scss   mixin Angular Material
+  index.scss         point d'entrée Sass : `html { @include theme($densite) }` (pour un autre projet, voir ci-dessous)
 ```
+
+**Réutiliser le dossier dans un autre projet Angular** : copier le dossier, ajouter `index.css` à la liste `styles` d'`angular.json` (les variables), puis une ligne dans le `styles.scss` du projet : `@use './styles/<dossier>';` (ou `@use './styles/<dossier>' with ($densite: -2);`). Le mixin ne référence que des variables CSS : le bloc `html` unique sert toutes les familles (classe `theme-<nom>[-<famille>]` sur `<html>`) et les deux modes (`color-scheme`, à poser par l'hôte). Le catalogue lui-même n'utilise pas `index.scss` (son `styles.scss` inclut le mixin avec le sélecteur `html.theme-importe`).
 
 Chaque fichier commence par un en-tête « Fichier généré par `npm run themes` — ne pas modifier » (source, date). **Ne pas éditer ces fichiers à la main** : relancer le script. La sortie est déterministe ; un fichier dont le contenu ne change pas n'est pas réécrit (la date de l'en-tête reste donc celle du dernier vrai changement ; les fins de ligne CRLF d'un checkout Windows ne comptent pas).
 

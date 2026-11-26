@@ -81,7 +81,7 @@ function sourceDe(nomMat, variables, nom) {
 }
 
 /**
- * Génère `_themes-<nom>.scss`.
+ * Génère `_themes-<nom>.scss` et son point d'entrée `index.scss`.
  * Retourne `{ fichiers, surcharges: Map nom Material → valeur, rapport: { surcharges, repliAttendu, repliInattendu } }`.
  */
 export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_DEFAUT, classes = [`theme-${nom}`] }) {
@@ -131,8 +131,24 @@ ${[...surcharges].map(([cle, valeur]) => `      ${cle}: ${valeur},\n`).join('')}
   );
 }
 `;
+  const index = `@use 'themes-${nom}';
+
+/// Point d'entrée Sass du thème : applique le thème Angular Material sur \`html\`.
+/// Le mixin ne référence que des variables CSS (--md-sys-*, --md-ref-*) : un seul bloc sert toutes les familles
+/// (classes \`theme-${nom}[-<famille>]\` posées sur \`<html>\`) et les deux modes (\`color-scheme\`).
+/// \`index.css\` doit être chargé en plus (liste \`styles\` d'angular.json).
+///
+/// Usage : \`@use './styles/<dossier>';\`, ou \`@use './styles/<dossier>' with ($densite: -2);\`
+///
+/// @param {Number} $densite [0] Échelle de densité Material (0 à -5).
+$densite: 0 !default;
+
+html {
+  @include themes-${nom}.theme($densite);
+}
+`;
   return {
-    fichiers: new Map([[`_themes-${nom}.scss`, scss]]),
+    fichiers: new Map([[`_themes-${nom}.scss`, scss], ['index.scss', index]]),
     surcharges,
     rapport: { surcharges: surcharges.size, repliAttendu, repliInattendu },
   };
