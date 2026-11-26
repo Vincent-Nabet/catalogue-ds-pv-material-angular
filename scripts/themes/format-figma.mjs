@@ -16,6 +16,8 @@ const HEX_ANCIEN = /^#[0-9a-f]{3,8}$/i;
 const EXTENSION_MODE = 'com.figma.modeName';
 const EXTENSION_LIEN = 'com.figma.aliasData';
 const EXEMPLES_MAX = 10;
+/** Borne d'une dimension en px : au-delà, `toFixed` passerait en notation exponentielle (`1e+21px`, CSS invalide). */
+const DIMENSION_MAX = 1e6;
 
 /** Graisses nommées (clé normalisée : minuscules, sans espace, tiret ni soulignement) → valeur numérique. */
 const GRAISSES = new Map([
@@ -158,6 +160,7 @@ function convertirJeton(jeton, segments, nom, incoherence) {
   if (typeInterne === 'fontWeight') return { type: 'fontWeight', valeur: convertirGraisse(valeur, nom) };
   if (typeInterne === 'dimension') {
     if (typeof valeur !== 'number' || !Number.isFinite(valeur)) throw new Error(`Jeton « ${nom} » : nombre attendu (${JSON.stringify(valeur)}).`);
+    if (Math.abs(valeur) > DIMENSION_MAX) throw new Error(`Jeton « ${nom} » : dimension démesurée (${valeur} ; au plus ${DIMENSION_MAX} px).`);
     return { type: 'dimension', valeur: `${Number(valeur.toFixed(4))}px` };
   }
   return { type: typeInterne, valeur };

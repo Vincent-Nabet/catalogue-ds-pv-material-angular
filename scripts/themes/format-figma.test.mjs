@@ -146,6 +146,9 @@ test('nombres : dimension en px, bruit flottant, négatifs, entiers ; non fini �
   assert.deepEqual(Object.values(arbre.Radius).map((j) => [j.$type, j.$value]), [['dimension', '57px'], ['dimension', '0.15px'], ['dimension', '-0.25px'], ['dimension', '0px'], ['dimension', '0.1px']]);
   assert.throws(() => adapte({ Radius: { A: { $type: 'number', $value: Number.POSITIVE_INFINITY } } }), /Radius\.A.*nombre/);
   assert.throws(() => adapte({ Radius: { A: { $type: 'number', $value: '12' } } }), /Radius\.A.*nombre/);
+  assert.throws(() => adapte({ Radius: { A: { $type: 'number', $value: 1e21 } } }), /Radius\.A.*démesurée/);
+  assert.throws(() => adapte({ Radius: { A: { $type: 'number', $value: -2e6 } } }), /Radius\.A.*démesurée/);
+  assert.equal(valeur({ Radius: { A: { $type: 'number', $value: 1e6 } } }, 'Radius.A.$value'), '1000000px');
 });
 
 test('graisses : par la valeur (jamais par le nom du jeton), nombre sous Weight, numérique, inconnue → erreur', () => {
