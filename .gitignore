@@ -45,3 +45,7 @@ Thumbs.db
 
 # Captures d'écran générées par `npm run captures`
 /captures
+
+# Fichiers temporaires
+/temp
+
