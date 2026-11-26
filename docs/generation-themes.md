@@ -62,6 +62,41 @@ Généré depuis l'export natif réel de Figma, le thème est **identique octet 
 
 Régénérer `src/styles/themes-app/` depuis l'export natif changerait donc `app.css` (ces deux valeurs et l'ordre de 12 lignes) : `tokens/` reste la source par défaut de `npm run themes`, et cette bascule est un chantier à part, avec son propre commit.
 
+## Exporter depuis Figma (format natif)
+
+Procédure à suivre à chaque mise à jour du design system annoncée par les UX designers. Elle se fait dans le client Figma, par le développeur qui maintient le catalogue ; elle dure quelques minutes et ne demande ni plugin, ni IA, ni action du UX. (Les libellés des menus ci-dessous sont ceux donnés par l'équipe ; l'interface de Figma évolue, à confirmer sur votre client.)
+
+1. Ouvrir le fichier Figma du design system dans le client, puis le panneau **Variables** (variables locales du fichier).
+2. Collection **Semantics** : clic droit sur son nom → **« Export modes »**. Figma produit `Semantics.zip`, avec un fichier `<Mode>.tokens.json` par mode : `Light`, `Light Medium Contrast`, `Light High Contrast`, `Dark`, `Dark Medium Contrast`, `Dark High Contrast`, `Monochrome LT`, `Monochrome DT` (8 fichiers).
+3. Collection **Primitives** : clic droit sur son nom → **« Export mode »** (un seul mode, `Baseline`). Figma produit `Primitives.zip` (un fichier `Baseline.tokens.json`).
+4. Contrôler : 8 + 1 fichiers. **Ne pas renommer ni décompresser** les archives : le nom du fichier de chaque mode donne la famille de contraste (`Light` / `Dark` → Standard, `… Medium Contrast` → Contraste moyen, `… High Contrast` → Contraste élevé, `Monochrome LT` / `Monochrome DT` → Monochrome).
+5. Générer :
+
+   ```bash
+   npm run themes -- --source Primitives.zip --source Semantics.zip                       # options : --nom, --sortie, --palettes
+   npm run themes -- --source Primitives.zip --source Semantics.zip --sortie <dossier-tmp>  # pour essayer sans toucher au dépôt
+   ```
+
+   Puis relire le rapport (`Format : export natif Figma (2 sources)`, 4 familles, « 158 variables --mat-sys-* branchées », aucun avertissement imprévu) et `git diff src/styles/themes-app/`. **Ou** déposer les deux zips dans la page « Thèmes importés » (aperçu dans tout le catalogue, sans toucher au dépôt). Régénérer `themes-app/` depuis l'export natif change `app.css` : voir « Équivalence avec l'ancien format ».
+6. Dépannage : messages du générateur (script et page) et remèdes.
+
+   | Message | Cause | Remède |
+   |---|---|---|
+   | Export Figma incomplet : aucun fichier de primitives… | seul `Semantics.zip` a été fourni | ajouter `--source Primitives.zip` ; dans la page, sélectionner **les deux** archives ensemble (une nouvelle sélection remplace la précédente) |
+   | Export Figma incomplet : aucun mode sémantique… | seul `Primitives.zip` a été fourni | ajouter `Semantics.zip` |
+   | Famille incomplète : « … » n'a pas de mode sombre / clair | un mode manque dans l'export, ou un nom de fichier a été modifié | refaire l'export des 8 modes ; ne pas renommer les fichiers (mots reconnus : light / lt, dark / dt) |
+   | Jeton « … » : graisse « … » inconnue | un nom de graisse que la table ne connaît pas | utiliser un nom usuel (`Regular`, `Medium`, `SemiBold`, `Bold`…) ou un nombre dans Figma, sinon compléter la table dans `format-figma.mjs` (avec un test) |
+   | Jeton « … » : espace colorimétrique « display-p3 » non géré | le fichier Figma exporte en autre chose que sRGB | repasser le profil colorimétrique du fichier en sRGB, puis refaire l'export |
+   | Formats mélangés | un zip de l'ancien format et un export natif ont été donnés ensemble | n'en fournir qu'un seul format |
+   | Plusieurs fichiers de primitives | deux collections de primitives dans les sources | n'exporter que la collection `Primitives` (un mode, `Baseline`) |
+   | Mode « … » défini deux fois | deux fichiers se normalisent pareil (`Light` et `light`), par exemple un export donné deux fois | un seul fichier par mode |
+   | Avertissement : les primitives et les sémantiques ne semblent pas issues du même export | des valeurs sémantiques ne correspondent plus à la primitive visée (exports faits à des moments différents) | refaire **les deux** exports le même jour, depuis la même version du fichier |
+   | Avertissement : Groupe de rôles inconnu aplati / token non reconnu, non écrit | un nouveau groupe ou rôle dans Figma que le générateur ne connaît pas | si c'est voulu, ajouter le rôle dans `correspondance.mjs` (puis `color-roles.ts` pour la page Couleurs) |
+   | Avertissement : « hex » ne correspond pas à « components » | export retouché à la main ; `components` est retenu | ignorer ou refaire l'export |
+   | Avertissement : Fichier JSON ignoré (hors « *.tokens.json ») | un autre JSON dans l'archive | sans effet |
+   | Format de tokens non reconnu / Fichier de tokens non reconnu | l'archive ne contient pas d'export de Figma ni l'ancien format | vérifier les fichiers fournis |
+7. **Qui exporte et quand** : le développeur qui maintient le catalogue, à chaque mise à jour du design system annoncée par les UX designers. La page « Thèmes importés » reste utile comme **aperçu** (un designer ou un intégrateur qui a reçu les deux zips voit le résultat dans tout le catalogue sans toucher au dépôt) mais devient surtout un **outil de développeur**.
+
 ## Fichiers produits
 
 ```
