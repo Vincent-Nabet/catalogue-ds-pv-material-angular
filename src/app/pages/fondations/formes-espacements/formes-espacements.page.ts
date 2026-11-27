@@ -24,6 +24,15 @@ const SPACINGS = [
   'full',
 ];
 const LEVELS = [0, 1, 2, 3, 4, 5];
+/** Rôle de fond associé à chaque niveau d'élévation (maquette Figma, identique en clair et en sombre). */
+const LEVEL_SURFACES = [
+  'surface',
+  'surface-container-low',
+  'surface-container',
+  'surface-container-high',
+  'surface-container-high',
+  'surface-container-highest',
+];
 const STATES = [
   ['hover', 'Survol'],
   ['focus', 'Focus'],
@@ -139,9 +148,13 @@ const KEY = {
         <app-specimen
           [label]="'Niveau ' + level"
           [api]="'--mat-sys-level' + level"
-          [snippet]="'box-shadow: var(--mat-sys-level' + level + ');'"
+          [snippet]="levelSnippet(level)"
         >
-          <div class="carte" [style.box-shadow]="'var(--mat-sys-level' + level + ')'">
+          <div
+            class="carte"
+            [style.box-shadow]="'var(--mat-sys-level' + level + ')'"
+            [style.background]="'var(--mat-sys-' + surfaces[level] + ')'"
+          >
             Niveau {{ level }}
           </div>
         </app-specimen>
@@ -274,6 +287,7 @@ export class FormesEspacementsPage {
     ...detectedIds(this.found() ?? [], DS_PREFIX, 'spacing', SPACINGS),
   ]);
   protected readonly levels = LEVELS;
+  protected readonly surfaces = LEVEL_SURFACES;
   protected readonly states = STATES.map(([id, label]) => ({ id, label }));
   protected readonly keys = KEY;
   protected readonly prefix = `--${DS_PREFIX}-`;
@@ -294,6 +308,10 @@ export class FormesEspacementsPage {
 
   protected value(key: string): string {
     return this.values()[key] ?? '';
+  }
+
+  protected levelSnippet(level: number): string {
+    return `box-shadow: var(--mat-sys-level${level});\nbackground: var(--mat-sys-${LEVEL_SURFACES[level]});`;
   }
 
   constructor() {
