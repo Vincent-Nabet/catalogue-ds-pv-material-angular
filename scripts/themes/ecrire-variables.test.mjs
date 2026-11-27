@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import * as sass from 'sass';
 import { classer } from './correspondance.mjs';
 import { ecrireFichiers } from './ecrire-fichiers.mjs';
+import { ELEVATIONS } from './elevations.mjs';
 import { detecterFamilles } from './familles.mjs';
 import { formater, genererVariables, selecteurFamille } from './ecrire-variables.mjs';
 import { lireSource } from './lire-source.mjs';
@@ -61,6 +62,14 @@ test('chaque couleur résolue des 8 modes se retrouve au bon endroit', () => {
     }
   }
   assert.equal(verifiees, 4 * 63 + 4 * 1);
+});
+
+test('élévations : --md-sys-elevation-level0 à level5 écrites dans sys.css, valeurs de elevations.mjs', () => {
+  const sys = fichiers.get('md3/sys.css');
+  for (const niveau of [0, 1, 2, 3, 4, 5]) {
+    assert.ok(sys.includes(`  --md-sys-elevation-level${niveau}: ${ELEVATIONS[niveau]};\n`), `level${niveau}`);
+    assert.ok(variables.has(`--md-sys-elevation-level${niveau}`));
+  }
 });
 
 test('typographie, formes, opacités et espacements', () => {

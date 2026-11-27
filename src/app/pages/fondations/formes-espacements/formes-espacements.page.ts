@@ -140,7 +140,9 @@ const KEY = {
     <app-specimen-section
       title="Élévations"
       [description]="
-        designSystem() ? 'Absentes des tokens : valeurs de la palette de repli de Material.' : ''
+        designSystem()
+          ? 'Absentes des tokens : ombres MD3 à deux couches relevées dans la maquette Figma (scripts/themes/elevations.mjs).'
+          : ''
       "
       minWidth="180px"
     >

@@ -1,5 +1,5 @@
 /* Fichier généré par `npm run themes` — ne pas modifier.
- * Source : tokens — 2026-11-26 */
+ * Source : Primitives.zip + Semantics.zip — 2026-11-27 */
 
 @use '@angular/material' as mat;
 
@@ -8,7 +8,7 @@
 $classes: ('theme-app', 'theme-app-medium-contrast', 'theme-app-high-contrast', 'theme-app-monochrome');
 
 /// Thème Angular Material branché sur les variables CSS de `index.css` (--md-sys-*, --md-ref-*).
-/// Les valeurs de la palette de repli (chartreuse) ne subsistent que pour les variables sans source dans les tokens.
+/// Les valeurs de la palette de repli (chartreuse) ne subsistent que pour les variables sans source (ni tokens ni élévations).
 ///
 /// Usage : charger `index.css`, puis `html { @include themes-app.theme(); }`
 /// (clair/sombre : `color-scheme` ; contraste : classes `theme-app-*`).
@@ -191,4 +191,10 @@ $classes: ('theme-app', 'theme-app-medium-contrast', 'theme-app-high-contrast', 
       pressed-state-layer-opacity: var(--md-sys-state-pressed-state-layer-opacity),
     )
   );
+  --mat-sys-level0: var(--md-sys-elevation-level0);
+  --mat-sys-level1: var(--md-sys-elevation-level1);
+  --mat-sys-level2: var(--md-sys-elevation-level2);
+  --mat-sys-level3: var(--md-sys-elevation-level3);
+  --mat-sys-level4: var(--md-sys-elevation-level4);
+  --mat-sys-level5: var(--md-sys-elevation-level5);
 }

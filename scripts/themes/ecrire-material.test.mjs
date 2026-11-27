@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { controlerMaterial, genererMaterial, palettesMaterial, validerPaletteRepli } from './ecrire-material.mjs';
+import { ELEVATIONS } from './elevations.mjs';
 import { genererVariables } from './ecrire-variables.mjs';
 import { lireSource } from './lire-source.mjs';
 
@@ -20,22 +21,40 @@ test('fichier produit et mixin documenté', () => {
   assert.match(scss, /corner-large-top: var\(--md-sys-shape-corner-large\) var\(--md-sys-shape-corner-large\) 0 0/);
 });
 
-test('seules les variables sans équivalent dans les tokens restent en repli', () => {
+test('seules les variables sans source restent en repli', () => {
   assert.deepEqual(material.rapport.repliInattendu, []);
-  assert.deepEqual(material.rapport.repliAttendu.sort(), [
-    '--mat-sys-level0', '--mat-sys-level1', '--mat-sys-level2', '--mat-sys-level3', '--mat-sys-level4', '--mat-sys-level5',
-    '--mat-sys-neutral-variant20',
-  ]);
-  // 165 variables Material - 7 en repli.
-  assert.equal(material.rapport.surcharges, 165 - 7);
+  assert.deepEqual(material.rapport.repliAttendu, ['--mat-sys-neutral-variant20']);
+  // 165 variables Material - 1 en repli - 6 élévations (posées après `mat.theme()`).
+  assert.equal(material.rapport.surcharges, 165 - 1 - 6);
+  assert.equal(material.rapport.elevations, 6);
+});
+
+test('élévations : level0 à level5 reportées en var() sur le socle --md-sys-elevation-level<n>', () => {
+  for (const niveau of [0, 1, 2, 3, 4, 5]) {
+    assert.equal(material.surcharges.get(`level${niveau}`), `var(--md-sys-elevation-level${niveau})`);
+    assert.ok(scss.includes(`--mat-sys-level${niveau}: var(--md-sys-elevation-level${niveau});`), `level${niveau}`);
+  }
+});
+
+test('table des élévations : niveaux 0 à 5, niveaux 1 à 5 à deux couches', () => {
+  assert.deepEqual(Object.keys(ELEVATIONS), ['0', '1', '2', '3', '4', '5']);
+  assert.equal(ELEVATIONS[0], 'none');
+  const couche = /^0 \d+px \d+px \d+(?:px)? rgba\(0,0,0,\.\d+\)$/;
+  for (const niveau of [1, 2, 3, 4, 5]) {
+    const couches = ELEVATIONS[niveau].split(/,\s*(?=0 )/);
+    assert.equal(couches.length, 2, `niveau ${niveau}`);
+    for (const c of couches) assert.match(c, couche, `niveau ${niveau}`);
+  }
 });
 
 test('compilation témoin : chaque surcharge est la valeur finale, rien de littéral hors repli attendu', () => {
   const { css, ecarts } = controlerMaterial({ nom: 'app', scss, surcharges: material.surcharges });
   assert.deepEqual(ecarts, []);
-  const litterales = [...css.matchAll(/--mat-sys-([\w-]+):\s*([^;]+);/g)]
-    .filter(([, cle, valeur]) => !/var\(--(md|app)-/.test(valeur) && !/^(neutral-variant20|level[0-5])$/.test(cle))
-    .map(([, cle, valeur]) => `${cle}: ${valeur}`);
+  // Dernière déclaration de chaque variable : `mat.theme()` émet d'abord ses ombres de repli (level*), que le mixin redéfinit ensuite.
+  const finales = new Map([...css.matchAll(/--mat-sys-([\w-]+):\s*([^;]+);/g)].map(([, cle, valeur]) => [cle, valeur]));
+  const litterales = [...finales]
+    .filter(([cle, valeur]) => !/var\(--(md|app)-/.test(valeur) && !/^neutral-variant20$/.test(cle))
+    .map(([cle, valeur]) => `${cle}: ${valeur}`);
   assert.deepEqual(litterales, []);
   assert.match(css, /--mat-sys-neutral-variant20: #[0-9a-f]{6};/);
 });

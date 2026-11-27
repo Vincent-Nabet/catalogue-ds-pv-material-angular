@@ -56,7 +56,7 @@ test('--nom pv : dossier, fichiers et contenu sans « app »', () => {
 
 test('rapport : comptes et section Material', () => {
   const texte = formaterRapport(generer({ source: tokens, sortie: join(temp, 'rapport') }));
-  assert.match(texte, /MD3 : 142/);
+  assert.match(texte, /MD3 : 148/);
   assert.match(texte, /custom : 41/);
   assert.match(texte, /147 : alias de couleur sans opacité/);
   assert.match(texte, /non reconnus : 0/);
