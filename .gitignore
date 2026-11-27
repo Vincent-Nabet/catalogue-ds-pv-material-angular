@@ -49,3 +49,9 @@ Thumbs.db
 # Fichiers temporaires
 /temp
 
+
+*storybook.log
+storybook-static
+
+# Réglages locaux de Claude Code
+.claude/settings.local.json

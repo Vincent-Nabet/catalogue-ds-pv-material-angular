@@ -10,7 +10,9 @@
     "lint": "ng lint",
     "a11y": "node scripts/a11y.mjs",
     "captures": "node scripts/captures.mjs",
-    "themes": "node scripts/themes/generer-themes.mjs"
+    "themes": "node scripts/themes/generer-themes.mjs",
+    "storybook": "ng run poc-ds-isagri:storybook",
+    "build-storybook": "ng run poc-ds-isagri:build-storybook"
   },
   "private": true,
   "packageManager": "npm@11.20.0",
@@ -41,6 +43,17 @@
     "sass": "^1.104.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "8.74.0",
-    "vitest": "^5.1.2"
+    "vitest": "^5.1.2",
+    "storybook": "11.0.0-rc.1",
+    "@storybook/angular-vite": "11.0.0-rc.1",
+    "@storybook/addon-a11y": "11.0.0-rc.1",
+    "@storybook/addon-docs": "11.0.0-rc.1",
+    "@types/node": "^24",
+    "@angular-devkit/build-angular": "^22.3.0",
+    "@angular-devkit/architect": "^0.2203.0",
+    "@angular-devkit/core": "^22.3.0",
+    "@analogjs/vite-plugin-angular": "^2.7.3",
+    "vite": "^8.4.0",
+    "eslint-plugin-storybook": "11.0.0-rc.1"
   }
 }
