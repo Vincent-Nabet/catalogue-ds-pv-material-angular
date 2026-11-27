@@ -11,14 +11,14 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as sass from 'sass';
 import { OPACITES_ETAT, variableOpacite } from './correspondance.mjs';
-import { ELEVATIONS } from './elevations.mjs';
+import { variableElevation } from './elevations.mjs';
 
 const MATERIAL = fileURLToPath(new URL('../../node_modules/@angular/material', import.meta.url));
 const NODE_MODULES = fileURLToPath(new URL('../../node_modules', import.meta.url));
 
 export const PALETTE_REPLI_DEFAUT = 'chartreuse';
 
-/** Variables Material sans source (ni tokens ni table d'élévations), laissées à la palette de repli. */
+/** Variables Material sans source (ni tokens ni élévations), laissées à la palette de repli. */
 const REPLI_ATTENDU = /^neutral-variant20$/;
 
 const COINS = { top: (v) => `${v} ${v} 0 0`, start: (v) => `${v} 0 0 ${v}`, end: (v) => `0 ${v} ${v} 0` };
@@ -78,7 +78,7 @@ function sourceDe(nomMat, variables, nom) {
   }
 
   const niveau = NIVEAU.exec(nomMat);
-  if (niveau) return ELEVATIONS[niveau[1]];
+  if (niveau) return a(variableElevation(niveau[1]));
 
   const etat = ETAT.exec(nomMat);
   if (etat && etat[1] in OPACITES_ETAT) return a(variableOpacite(etat[1]));
@@ -108,7 +108,7 @@ export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_D
   }
 
   // `mat.theme()` n'accepte pour `level*` qu'un numéro de niveau (il en tire une ombre MD2) : les ombres
-  // de la table sont donc posées en déclarations, après lui, sur le même sélecteur.
+  // du socle (`--md-sys-elevation-level<n>`) sont donc reportées en déclarations `var()`, après lui, sur le même sélecteur.
   const niveaux = [...surcharges].filter(([cle]) => NIVEAU.test(cle));
   const elevations = niveaux.map(([cle, valeur]) => `  --mat-sys-${cle}: ${valeur};\n`).join('');
 
@@ -119,7 +119,7 @@ export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_D
 $classes: (${classes.map((c) => `'${c}'`).join(', ')}${classes.length === 1 ? ',' : ''});
 
 /// Thème Angular Material branché sur les variables CSS de \`index.css\` (--md-sys-*, --md-ref-*).
-/// Les valeurs de la palette de repli (${paletteRepli}) ne subsistent que pour les variables sans source (ni tokens ni table d'élévations).
+/// Les valeurs de la palette de repli (${paletteRepli}) ne subsistent que pour les variables sans source (ni tokens ni élévations).
 ///
 /// Usage : charger \`index.css\`, puis \`html { @include themes-${nom}.theme(); }\`
 /// (clair/sombre : \`color-scheme\` ; contraste : classes \`theme-${nom}-*\`).

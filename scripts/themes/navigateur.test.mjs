@@ -19,7 +19,7 @@ test('tokens/ : 4 familles, aucun avertissement, CSS sans :root', () => {
   assert.deepEqual(rapport.avertissements, []);
   assert.deepEqual(rapport.modesIgnores, []);
   assert.equal(rapport.modes, 8);
-  assert.equal(rapport.md3, 142);
+  assert.equal(rapport.md3, 148);
   assert.equal(rapport.custom, 41);
   assert.equal(rapport.police, 'Poppins');
   assert.doesNotMatch(css, /:root/);
@@ -138,7 +138,7 @@ test('natif, deux zips : mêmes familles et même rapport que tokens/, CSS équi
   const resultat = depuisNatif(sourcesNatives());
   assert.deepEqual(resultat.familles, ancien.familles);
   assert.deepEqual(resultat.rapport, { ...ancien.rapport, format: 'natif', ignores: ancien.rapport.ignores - 2 });
-  assert.deepEqual([resultat.rapport.modes, resultat.rapport.md3, resultat.rapport.custom], [8, 142, 41]);
+  assert.deepEqual([resultat.rapport.modes, resultat.rapport.md3, resultat.rapport.custom], [8, 148, 41]);
   assert.deepEqual(resultat.rapport.avertissements, []);
   assert.equal(ancien.rapport.format, 'ancien');
   const comparaison = comparerSorties(ancien.css, resultat.css).get('css');

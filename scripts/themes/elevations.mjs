@@ -28,3 +28,10 @@ export const ELEVATIONS = {
   4: '0 2px 3px 0 rgba(0,0,0,.3), 0 6px 10px 4px rgba(0,0,0,.15)',
   5: '0 4px 4px 0 rgba(0,0,0,.3), 0 8px 12px 6px rgba(0,0,0,.15)',
 };
+
+/**
+ * Variable `--md-sys-*` du socle qui porte l'ombre du niveau `n` (écrite dans `md3/sys.css`).
+ * Attention : en MD3, `md.sys.elevation.level<n>` désigne une hauteur en dp ; ici la variable porte
+ * l'ombre complète (`box-shadow`), qui est ce qu'Angular Material en tire.
+ */
+export const variableElevation = (n) => `--md-sys-elevation-level${n}`;

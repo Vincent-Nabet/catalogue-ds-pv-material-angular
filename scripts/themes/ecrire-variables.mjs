@@ -4,6 +4,7 @@
 // de contraste est une classe `theme-<nom>[-<famille>]`. Les tokens non couleur sont identiques dans
 // les modes : le script le vérifie et ne les écrit qu'une fois.
 import { classer, OPACITES_ETAT, variableOpacite } from './correspondance.mjs';
+import { ELEVATIONS, variableElevation } from './elevations.mjs';
 import { detecterFamilles } from './familles.mjs';
 import { resoudreMode } from './resoudre-tokens.mjs';
 
@@ -101,6 +102,8 @@ export function genererVariables(source, { nom, palettes = false, portee }) {
   const formes = declarations('md3/sys', (j) => j.variable.startsWith('--md-sys-shape-'));
   const etats = Object.entries(OPACITES_ETAT).map(([etat, valeur]) => [variableOpacite(etat), valeur]);
 
+  const elevations = Object.entries(ELEVATIONS).map(([niveau, ombre]) => [variableElevation(niveau), ombre]);
+
   const fichiers = new Map([
     ['index.css', ['md3/ref.css', 'md3/sys.css', 'md3/couleurs.css', `${nom}.css`].map((f) => `@import '${f}';\n`).join('')],
     ['md3/ref.css', bloc(racine, reference.jetons.filter((j) => j.fichier === 'md3/ref').map((j) => [j.variable, j.valeur]))],
@@ -108,6 +111,7 @@ export function genererVariables(source, { nom, palettes = false, portee }) {
       section('Formes', bloc(racine, formes)),
       section('Typographie', bloc(racine, typescale)),
       section("Opacités d'état (valeurs MD3 : les tokens n'en fournissent pas)", bloc(racine, etats)),
+      section("Élévations (ombres relevées dans Figma, cf. elevations.mjs : les tokens n'en fournissent pas)", bloc(racine, elevations)),
     ].join('\n')],
     ['md3/couleurs.css', blocsCouleurs('md3/couleurs')],
     [`${nom}.css`, [
@@ -119,9 +123,9 @@ export function genererVariables(source, { nom, palettes = false, portee }) {
   // Couleur d'aperçu d'une famille (pastille du sélecteur de thème du catalogue) : primary clair.
   const apercu = (famille) => parMode.get(famille.clair).jetons.find((j) => j.variable === '--md-sys-color-primary')?.valeur.toLowerCase() ?? '#808080';
 
-  const variables = new Set([...reference.jetons.map((j) => j.variable), ...etats.map(([v]) => v)]);
+  const variables = new Set([...reference.jetons.map((j) => j.variable), ...etats.map(([v]) => v), ...elevations.map(([v]) => v)]);
   const rapport = {
-    md3: reference.jetons.filter((j) => j.cible === 'md3').length + etats.length,
+    md3: reference.jetons.filter((j) => j.cible === 'md3').length + etats.length + elevations.length,
     custom: reference.jetons.filter((j) => j.cible === 'custom').length,
     ignores: reference.ignores,
     inconnus: reference.inconnus,
