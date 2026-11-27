@@ -11,17 +11,19 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as sass from 'sass';
 import { OPACITES_ETAT, variableOpacite } from './correspondance.mjs';
+import { ELEVATIONS } from './elevations.mjs';
 
 const MATERIAL = fileURLToPath(new URL('../../node_modules/@angular/material', import.meta.url));
 const NODE_MODULES = fileURLToPath(new URL('../../node_modules', import.meta.url));
 
 export const PALETTE_REPLI_DEFAUT = 'chartreuse';
 
-/** Variables Material sans équivalent dans les tokens, laissées à la palette de repli. */
-const REPLI_ATTENDU = /^(neutral-variant20|level[0-5])$/;
+/** Variables Material sans source (ni tokens ni table d'élévations), laissées à la palette de repli. */
+const REPLI_ATTENDU = /^neutral-variant20$/;
 
 const COINS = { top: (v) => `${v} ${v} 0 0`, start: (v) => `${v} 0 0 ${v}`, end: (v) => `0 ${v} ${v} 0` };
 const STYLE_TYPO = /^((?:display|headline|title|body|label)-(?:large|medium|small))(?:-(font|weight|size|tracking|line-height|weight-prominent))?$/;
+const NIVEAU = /^level([0-5])$/;
 const ETAT = /^(hover|focus|pressed|dragged)-state-layer-opacity$/;
 
 /** Palettes Material prédéfinies (`mat.$<nom>-palette`), lues dans les sources installées. */
@@ -75,6 +77,9 @@ function sourceDe(nomMat, variables, nom) {
     return rayon && coin[2] ? COINS[coin[2]](rayon) : rayon;
   }
 
+  const niveau = NIVEAU.exec(nomMat);
+  if (niveau) return ELEVATIONS[niveau[1]];
+
   const etat = ETAT.exec(nomMat);
   if (etat && etat[1] in OPACITES_ETAT) return a(variableOpacite(etat[1]));
   return null;
@@ -82,7 +87,7 @@ function sourceDe(nomMat, variables, nom) {
 
 /**
  * Génère `_themes-<nom>.scss` et son point d'entrée `index.scss`.
- * Retourne `{ fichiers, surcharges: Map nom Material → valeur, rapport: { surcharges, repliAttendu, repliInattendu } }`.
+ * Retourne `{ fichiers, surcharges: Map nom Material → valeur, rapport: { surcharges, elevations, repliAttendu, repliInattendu } }`.
  */
 export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_DEFAUT, classes = [`theme-${nom}`] }) {
   validerPaletteRepli(paletteRepli);
@@ -102,6 +107,11 @@ export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_D
     throw new Error('Variable --md-ref-typeface-plain absente : la typographie Material ne peut pas être branchée.');
   }
 
+  // `mat.theme()` n'accepte pour `level*` qu'un numéro de niveau (il en tire une ombre MD2) : les ombres
+  // de la table sont donc posées en déclarations, après lui, sur le même sélecteur.
+  const niveaux = [...surcharges].filter(([cle]) => NIVEAU.test(cle));
+  const elevations = niveaux.map(([cle, valeur]) => `  --mat-sys-${cle}: ${valeur};\n`).join('');
+
   const scss = `@use '@angular/material' as mat;
 
 /// Classes \`theme-${nom}[-<famille>]\` des familles de contraste générées (une par paire clair/sombre).
@@ -109,7 +119,7 @@ export function genererMaterial({ nom, variables, paletteRepli = PALETTE_REPLI_D
 $classes: (${classes.map((c) => `'${c}'`).join(', ')}${classes.length === 1 ? ',' : ''});
 
 /// Thème Angular Material branché sur les variables CSS de \`index.css\` (--md-sys-*, --md-ref-*).
-/// Les valeurs de la palette de repli (${paletteRepli}) ne subsistent que pour les variables sans source dans les tokens.
+/// Les valeurs de la palette de repli (${paletteRepli}) ne subsistent que pour les variables sans source (ni tokens ni table d'élévations).
 ///
 /// Usage : charger \`index.css\`, puis \`html { @include themes-${nom}.theme(); }\`
 /// (clair/sombre : \`color-scheme\` ; contraste : classes \`theme-${nom}-*\`).
@@ -127,9 +137,9 @@ ${police.map(([cle, variable]) => `        ${cle}: var(${variable}),\n`).join(''
       density: $densite,
     ),
     (
-${[...surcharges].map(([cle, valeur]) => `      ${cle}: ${valeur},\n`).join('')}    )
+${[...surcharges].filter(([cle]) => !NIVEAU.test(cle)).map(([cle, valeur]) => `      ${cle}: ${valeur},\n`).join('')}    )
   );
-}
+${elevations}}
 `;
   const index = `@use 'themes-${nom}';
 
@@ -150,7 +160,7 @@ html {
   return {
     fichiers: new Map([[`_themes-${nom}.scss`, scss], ['index.scss', index]]),
     surcharges,
-    rapport: { surcharges: surcharges.size, repliAttendu, repliInattendu },
+    rapport: { surcharges: surcharges.size - niveaux.length, elevations: niveaux.length, repliAttendu, repliInattendu },
   };
 }
 

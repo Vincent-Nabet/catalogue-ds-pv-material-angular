@@ -85,6 +85,7 @@ export function formaterRapport(r) {
     `  non reconnus : ${r.variables.inconnus.length}`,
     'Thème Angular Material :',
     `  variables --mat-sys-* branchées sur les tokens : ${r.material.surcharges}`,
+    `  variables d'élévation (scripts/themes/elevations.mjs) : ${r.material.elevations}`,
     `  variables en repli (palette Material) : ${r.material.repliAttendu.length + r.material.repliInattendu.length}`,
   ];
   const avertissements = [
