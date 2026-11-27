@@ -49,3 +49,6 @@ Thumbs.db
 # Fichiers temporaires
 /temp
 
+
+*storybook.log
+storybook-static
