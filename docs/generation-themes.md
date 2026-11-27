@@ -165,9 +165,10 @@ Règle générale : `TOKENS-MD3.md` (kebab-case) + exceptions explicites dans `s
 html { @include themes-app.theme(); }    // $densite : 0 (défaut) à -5
 ```
 
-avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <surcharges>)` : la palette de repli et la typographie sont la configuration, et la table de **158 surcharges** `--mat-sys-*` pointe vers `var(--md-sys-*)` (couleurs, typographie y compris les variables composites `--mat-sys-body-large`, coins `corner-*-top/-start/-end`, opacités d'état). Changer de classe de contraste ou de `color-scheme` suffit, sans code Material par mode.
+avec `index.css` chargé dans la page. Le mixin appelle `mat.theme(<config>, <surcharges>)` : la palette de repli et la typographie sont la configuration, et la table de **158 surcharges** `--mat-sys-*` pointe vers `var(--md-sys-*)` (couleurs, typographie y compris les variables composites `--mat-sys-body-large`, coins `corner-*-top/-start/-end`, opacités d'état) ; les 6 ombres d'élévation sont posées juste après, en déclarations (voir « Élévations »). Changer de classe de contraste ou de `color-scheme` suffit, sans code Material par mode.
 
-- **Palette de repli** : `mat.theme()` exige une palette. Presque toutes ses valeurs sont remplacées ; elle ne sert plus qu'aux **7 variables sans équivalent dans les tokens** : `neutral-variant20` (voile du `mat-sidenav`) et `level0` à `level5` (élévations). `chartreuse` est la plus proche de l'olive `#86A315` ; le choix a peu d'impact visuel.
+- **Palette de repli** : `mat.theme()` exige une palette. Presque toutes ses valeurs sont remplacées ; elle ne sert plus qu'à **1 variable sans source** : `neutral-variant20` (voile du `mat-sidenav`). `chartreuse` est la plus proche de l'olive `#86A315` ; le choix a peu d'impact visuel.
+- **Élévations (`--mat-sys-level0` à `level5`)** : ni les tokens ni l'export natif des variables de Figma ne contiennent les ombres. Elles viennent de la maquette (styles d'effet `M3/Elevation Light/1-5` et `M3/Elevation Dark/1-5`, identiques en clair et en sombre) et sont **notées à la main** dans [`scripts/themes/elevations.mjs`](../scripts/themes/elevations.mjs) : ombres MD3 à deux couches (niveaux 1 à 5), `none` pour le niveau 0, couleur littérale `rgba(0,0,0,…)`. Le script ne les cherche dans aucune API. `mat.theme()` n'accepte pour `level*` qu'un numéro de niveau (il en tire une ombre MD2) : le mixin pose donc les ombres en déclarations `--mat-sys-level<n>` **après** `mat.theme()`, sur le même sélecteur. Elles s'appliquent aussi aux thèmes importés (même mixin). *Si le design change* : relire les styles d'effet dans Figma, reporter les valeurs dans `elevations.mjs` (CSS : offset X, offset Y, flou = « radius » de Figma, étalement, noir à l'opacité voulue ; couche à 30 % d'abord), puis relancer `npm run themes` avec la même source que la génération précédente (celle de l'en-tête de `app.css`).
 - **`neutral10` ← `Neutral.900`** (`#1A1A1A`, identique dans les 8 modes) : ne colore que le texte des options du `<select>` natif dans `mat-form-field`.
 - La table des surcharges est construite à partir des `--mat-sys-*` que la version installée de Material émet (compilation d'un thème témoin) ; le script recompile ensuite le mixin et **vérifie que chaque surcharge est la valeur finale**. Une variable Material sans source (nouvelle version de Material) est listée dans le rapport.
 
@@ -251,6 +252,7 @@ scripts/themes/
   correspondance.mjs     chemin de token → variable CSS (ou ignoré / inconnu) ; opacités d'état
   ecrire-variables.mjs   étape 1 : fichiers CSS
   ecrire-material.mjs    étape 2 : fichier SCSS + contrôle par compilation Sass
+  elevations.mjs         ombres d'élévation (level0 à level5) relevées dans Figma, à jour à la main
   ecrire-fichiers.mjs    en-tête, écriture idempotente, suppression des fichiers périmés
   valider-css.mjs        contrôle ligne à ligne du CSS injecté dans la page (import dans le navigateur)
   navigateur.mjs         point d'entrée du navigateur : zip(s) (octets) → { css, familles, rapport } ; types : navigateur.d.mts
