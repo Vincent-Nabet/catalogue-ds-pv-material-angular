@@ -1,4 +1,4 @@
-import { definePreview } from '@storybook/angular-vite'
+import { definePreview } from '@storybook/angular-vite';
 import addonA11y from '@storybook/addon-a11y';
 import addonDocs from '@storybook/addon-docs';
 import { DEFAULT_THEME_ID, DENSITIES, SCHEMES, THEMES } from '../src/app/core/theme/themes';
@@ -60,8 +60,8 @@ export default definePreview({
   parameters: {
     controls: {
       matchers: {
-       color: /(background|color)$/i,
-       date: /Date$/i,
+        color: /(background|color)$/i,
+        date: /Date$/i,
       },
     },
   },
