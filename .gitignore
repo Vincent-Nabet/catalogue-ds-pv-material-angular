@@ -52,3 +52,6 @@ Thumbs.db
 
 *storybook.log
 storybook-static
+
+# Réglages locaux de Claude Code
+.claude/settings.local.json
